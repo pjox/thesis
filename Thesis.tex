@@ -43,8 +43,8 @@
   unicode,
   ]{hyperref}
 \hypersetup{
-  pdftitle=On Modern NLP Methods for Document Enriching,
-  pdfauthor=Pedro Javier Ortiz Suárez
+  pdftitle=On Language Modeling and its Applications for Contemporary and Historical French,
+  pdfauthor=Pedro Ortiz Suarez
 }
 
 \usepackage{bookmark}
@@ -58,6 +58,7 @@
 % if present, will be initialized. DOIs and URLs will be preserved.
 
 \usepackage[%
+  natbib       = true,
   autocite     = plain,
   backend      = biber,
   doi          = true,
@@ -67,7 +68,7 @@
   maxbibnames  = 99,
   maxcitenames = 99,
   sortcites    = true,
-  style        = numeric,
+  style        = authoryear,
   ]{biblatex}
 
 \input{bibliography-mimosis}
@@ -78,7 +79,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \ifxetexorluatex
-  \setmainfont{Minion Pro}
+  \setmainfont[Ligatures=TeX,Numbers=OldStyle]{TeX Gyre Pagella} % Palatino clone
+  \linespread{1.05} % a bit more for Palatino
+  \RequirePackage{unicode-math}
+  \setmathfont{TeX Gyre Pagella Math}
 \else
   \usepackage[lf]{ebgaramond}
   \usepackage[oldstyle,scale=0.7]{sourcecodepro}
@@ -107,12 +111,21 @@
 \makeglossaries
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Custom Commands and Environments
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{fontawesome}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Incipit
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\title{On Modern NLP Methods for Document Enriching}
+\title{On Language Modeling and its Applications for Contemporary and Historical French}
 %\subtitle{A minimal, modern \LaTeX{} package for typesetting your thesis}
-\author{Pedro Javier Ortiz Suárez}
+\author{Pedro Ortiz Suarez}
 
 \begin{document}
 
@@ -131,6 +144,7 @@
 \part{Data}
 \chapter{OSCAR}
 \section{goclassy}
+\include{Sources/Data/Goclassy}
 \chapter{Modern French Data}
 \section{LEM17}
 \section{presto max}
@@ -174,6 +188,8 @@
 \endgroup
 
 \printindex
+
+\nocite{*}
 \printbibliography
 
 \end{document}
