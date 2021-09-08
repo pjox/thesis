@@ -162,7 +162,7 @@
 % Proper typesetting of units
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\RequirePackage[binary-units=true]{siunitx}
+\RequirePackage{siunitx}
 
 \sisetup{%
   detect-all           = true,
@@ -170,7 +170,6 @@
   detect-mode          = true,
   detect-shape         = true,
   detect-weight        = true,
-  detect-inline-weight = math,
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -202,17 +201,17 @@
 % Ordinals
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\ifxetexorluatex
-  \newcommand  {\st}{{\addfontfeatures{VerticalPosition=Ordinal}\textup{st}}\xspace}
-  \newcommand  {\rd}{{\addfontfeatures{VerticalPosition=Ordinal}\textup{rd}}\xspace}
-  \newcommand  {\nd}{{\addfontfeatures{VerticalPosition=Ordinal}\textup{nd}}\xspace}
-  \renewcommand{\th}{{\addfontfeatures{VerticalPosition=Ordinal}\textup{th}}\xspace}
-\else
-  \newcommand  {\st}{\textsuperscript{\textup{st}}\xspace}
-  \newcommand  {\rd}{\textsuperscript{\textup{rd}}\xspace}
-  \newcommand  {\nd}{\textsuperscript{\textup{nd}}\xspace}
-  \renewcommand{\th}{\textsuperscript{\textup{th}}\xspace}
-\fi
+% \ifxetexorluatex
+%   \newcommand  {\st}{{\addfontfeatures{VerticalPosition=Ordinal}\textup{st}}\xspace}
+%   \newcommand  {\rd}{{\addfontfeatures{VerticalPosition=Ordinal}\textup{rd}}\xspace}
+%   \newcommand  {\nd}{{\addfontfeatures{VerticalPosition=Ordinal}\textup{nd}}\xspace}
+%   \renewcommand{\th}{{\addfontfeatures{VerticalPosition=Ordinal}\textup{th}}\xspace}
+% \else
+\newcommand  {\st}{\textsuperscript{\textup{st}}\xspace}
+\newcommand  {\rd}{\textsuperscript{\textup{rd}}\xspace}
+\newcommand  {\nd}{\textsuperscript{\textup{nd}}\xspace}
+\renewcommand{\th}{\textsuperscript{\textup{th}}\xspace}
+% \fi
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Penalties

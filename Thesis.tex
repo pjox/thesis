@@ -18,7 +18,7 @@
 % correctly.
 \usepackage{etoolbox}
 
-\usepackage[binary-units=true]{siunitx}
+\usepackage{siunitx}
 \DeclareSIUnit\px{px}
 
 \sisetup{%
@@ -27,7 +27,6 @@
   detect-mode          = true,
   detect-shape         = true,
   detect-weight        = true,
-  detect-inline-weight = math,
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -63,16 +62,16 @@
   backend      = biber,
   doi          = true,
   url          = true,
-  giveninits   = true,
   hyperref     = true,
   maxbibnames  = 99,
-  maxcitenames = 99,
+  maxcitenames = 2,
   sortcites    = true,
   style        = authoryear,
   ]{biblatex}
 
 \input{bibliography-mimosis}
 \addbibresource{Thesis.bib}
+%\addbibresource{anthology.bib}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Fonts
@@ -130,7 +129,7 @@
 \begin{document}
 
 \frontmatter
-\include{Sources/Title/title}
+\include{Sources/Title/Title}
 \include{Sources/Abstract}
 
 \tableofcontents
@@ -189,7 +188,6 @@
 
 \printindex
 
-\nocite{*}
 \printbibliography
 
 \end{document}
