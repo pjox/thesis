@@ -41,19 +41,19 @@ It is important to note that none of these projects distributed their classified
         \node[nod] (CC) at (0,0) {Common Crawl};
 
         \node[minimum width=2cm, text width=2cm,text centered] (TEX1) at (2.5,3.45) {\small Compressed Files};
-        \node (GZ1) at (2.5,2.3) {\Huge \faFileArchiveO};
-        \node (GZ2) at (2.5,1) {\Huge \faFileArchiveO};
-        \node (GZ3) at (2.5, -0.3) {\Huge \faFileArchiveO};
+        \node (GZ1) at (2.5,2.3) {\Huge \faFileArchive[regular]};
+        \node (GZ2) at (2.5,1) {\Huge \faFileArchive[regular]};
+        \node (GZ3) at (2.5, -0.3) {\Huge \faFileArchive[regular]};
         \node (DGZ) at (2.5, -1.2) {\Huge $\vdots$};
-        \node (GZ4) at (2.5,-2.3) {\Huge \faFileArchiveO};
+        \node (GZ4) at (2.5,-2.3) {\Huge \faFileArchive[regular]};
 
 
         \node[minimum width=1cm, text width=1cm,text centered] (TEX1) at (4.5,3.45) {\small WET Files};
-        \node (T1) at (4.5,2.3) {\Huge \faFileText};
-        \node (T2) at (4.5,1) {\Huge \faFileText};
-        \node (T3) at (4.5, -0.3) {\Huge \faFileText};
+        \node (T1) at (4.5,2.3) {\Huge \faFile*};
+        \node (T2) at (4.5,1) {\Huge \faFile*};
+        \node (T3) at (4.5, -0.3) {\Huge \faFile*};
         \node (DT) at (4.5, -1.2) {\Huge $\vdots$};
-        \node (T4) at (4.5,-2.3) {\Huge \faFileText};
+        \node (T4) at (4.5,-2.3) {\Huge \faFile*};
 
         \node[ft] (F1) at (7,2.3) {fastText};
         \node[ft] (F2) at (7,1) {fastText};
@@ -62,11 +62,11 @@ It is important to note that none of these projects distributed their classified
         \node[ft] (F4) at (7,-2.3) {fastText};
 
         \node[minimum width=2.3cm, text width=2.3cm,text centered] (TEX1) at (10.25,3.45) {\small Filtered Files Language Tags};
-        \node (TA1) at (10.25,2.3) {\Huge \faFileTextO $\,$ \faTags};
-        \node (TA2) at (10.25,1) {\Huge \faFileTextO $\,$ \faTags};
-        \node (TA3) at (10.25, -0.3) {\Huge \faFileTextO $\,$ \faTags};
+        \node (TA1) at (10.25,2.3) {\Huge \faFile*[regular] $\,$ \faTags};
+        \node (TA2) at (10.25,1) {\Huge \faFile*[regular] $\,$ \faTags};
+        \node (TA3) at (10.25, -0.3) {\Huge \faFile*[regular] $\,$ \faTags};
         \node (DTA) at (10.25, -1.2) {\Huge $\vdots$};
-        \node (TA4) at (10.25,-2.3) {\Huge \faFileTextO $\,$ \faTags};
+        \node (TA4) at (10.25,-2.3) {\Huge \faFile*[regular] $\,$ \faTags};
 
 
         \node[minimum width=2.3cm, text width=2.3cm,text centered] (TEX1) at (15,3.45) {\small Files Classified by Language};
@@ -127,7 +127,7 @@ It is important to note that none of these projects distributed their classified
         \draw[arr] (TA3.0)--(FF);
         \draw[arr] (TA4.0)--(FF);
     \end{tikzpicture}
-    \caption{A scheme of the \emph{goclassy} pipeline. The red square represents the Compressed WET files stored on Amazon Web Services. The {\faFileArchiveO} icons represent the gzip files stored locally, the {\faFileText} represent one of the 50K WET files. The {\faFileTextO} represents the filtered file and the {\faTags} represents a file of language tags, one tag per line in \faFileTextO. The {\faLanguage} represents one of the 166 classified files. Each arrow represents an asynchronous non blocking worker and dotted arrows represent a line filtering process.}
+    \caption{A scheme of the \emph{goclassy} pipeline. The red square represents the Compressed WET files stored on Amazon Web Services. The {\faFileArchive[regular]} icons represent the gzip files stored locally, the {\faFile*} represent one of the 50K WET files. The {\faFile*[regular]} represents the filtered file and the {\faTags} represents a file of language tags, one tag per line in \faFile*[regular]. The {\faLanguage} represents one of the 166 classified files. Each arrow represents an asynchronous non blocking worker and dotted arrows represent a line filtering process.}
     \label{fig:D1}
 \end{figure*}
 

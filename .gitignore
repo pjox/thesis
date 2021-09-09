@@ -282,3 +282,6 @@ TSWLatexianTemp*
 
 # VSCode
 .vscode/
+
+# Apple
+.DS_Store
