@@ -1,6 +1,6 @@
 %!TEX TS-program = lualatex
 %!TEX encoding = UTF-8 Unicode
-%!BIB program = biber
+%!BIB program = bibtex
 
 \documentclass{mimosis}
 
@@ -48,30 +48,6 @@
 
 \usepackage{bookmark}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Bibliography
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% I like the bibliography to be extremely plain, showing only a numeric
-% identifier and citing everything in simple brackets. The first names,
-% if present, will be initialized. DOIs and URLs will be preserved.
-
-\usepackage[%
-  natbib       = true,
-  autocite     = plain,
-  backend      = biber,
-  doi          = true,
-  url          = true,
-  hyperref     = true,
-  maxbibnames  = 99,
-  maxcitenames = 2,
-  sortcites    = true,
-  style        = authoryear,
-  ]{biblatex}
-
-\input{bibliography-mimosis}
-\addbibresource{Thesis.bib}
-%\addbibresource{anthology.bib}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Fonts
@@ -188,6 +164,8 @@
 
 \printindex
 
-\printbibliography
+% Entries for the entire Anthology, followed by custom entries
+\bibliography{anthology, Thesis}
+\bibliographystyle{acl_natbib}
 
 \end{document}

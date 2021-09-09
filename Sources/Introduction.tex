@@ -22,8 +22,8 @@ on---some adjustments may be necessary, though.
 
 I was not satisfied with the available templates for \LaTeX{} and wanted
 to heed the style advice given by people such as Robert
-Bringhurst~\cite{Bringhurst12} or Edward R.\
-Tufte~\cite{Tufte90,Tufte01}. While there \emph{are} some packages out
+Bringhurst~ or Edward R.\
+Tufte~. While there \emph{are} some packages out
 there that attempt to emulate these styles, I found them to be either
 too bloated, too playful, or too constraining. This template attempts to
 produce a beautiful look without having to resort to any sort of hacks.
@@ -54,21 +54,21 @@ it easier to select proper fonts.
   \centering
   \begin{tabular}{ll}
     \toprule
-    \textbf{Package}      & \textbf{Purpose}\\
+    \textbf{Package}          & \textbf{Purpose}                                       \\
     \midrule
-      \texttt{amsmath}          & Basic mathematical typography\\
-      \texttt{amsthm}           & Basic mathematical environments for proofs etc.\\
-      \texttt{booktabs}         & Typographically light rules for tables\\
-      \texttt{bookmarks}        & Bookmarks in the resulting PDF\\
-      \texttt{dsfont}           & Double-stroke font for mathematical concepts\\
-      \texttt{graphicx}         & Graphics\\
-      \texttt{hyperref}         & Hyperlinks\\
-      \texttt{multirow}         & Permits table content to span multiple rows or columns\\ 
-      \texttt{paralist}         & Paragraph~(`in-line') lists and compact enumerations\\
-      \texttt{scrlayer-scrpage} & Page headings\\
-      \texttt{setspace}         & Line spacing\\
-      \texttt{siunitx}          & Proper typesetting of units\\
-      \texttt{subcaption} & Proper sub-captions for figures\\
+    \texttt{amsmath}          & Basic mathematical typography                          \\
+    \texttt{amsthm}           & Basic mathematical environments for proofs etc.        \\
+    \texttt{booktabs}         & Typographically light rules for tables                 \\
+    \texttt{bookmarks}        & Bookmarks in the resulting PDF                         \\
+    \texttt{dsfont}           & Double-stroke font for mathematical concepts           \\
+    \texttt{graphicx}         & Graphics                                               \\
+    \texttt{hyperref}         & Hyperlinks                                             \\
+    \texttt{multirow}         & Permits table content to span multiple rows or columns \\
+    \texttt{paralist}         & Paragraph~(`in-line') lists and compact enumerations   \\
+    \texttt{scrlayer-scrpage} & Page headings                                          \\
+    \texttt{setspace}         & Line spacing                                           \\
+    \texttt{siunitx}          & Proper typesetting of units                            \\
+    \texttt{subcaption}       & Proper sub-captions for figures                        \\
     \bottomrule
   \end{tabular}
   \caption{%
@@ -95,13 +95,13 @@ If you want to show multiple equations and align them, use the
 \verb|align| environment:
 %
 \begin{align}
-    V &:= \{ 1, 2, \dots \}\\
-    E &:= \big\{ \left(u,v\right) \mid \dist\left(p_u, p_v\right) \leq \epsilon \big\}
+  V & := \{ 1, 2, \dots \}                                                            \\
+  E & := \big\{ \left(u,v\right) \mid \dist\left(p_u, p_v\right) \leq \epsilon \big\}
 \end{align}
 %
 Define new mathematical operators using \verb|\DeclareMathOperator|.
 Some operators are already pre-defined by the template, such as the
-distance between two objects. Please see the template for some examples. 
+distance between two objects. Please see the template for some examples.
 %
 Moreover, this template contains a correct differential operator. Use \verb|\diff| to typeset the differential of integrals:
 %

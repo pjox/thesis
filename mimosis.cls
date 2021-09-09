@@ -247,3 +247,51 @@
 \renewcommand*{\chapterformat}{%
   \fontsize{50}{55}\selectfont\thechapter\autodot\enskip
 }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Bibliography ACL
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{natbib}
+% for citation commands in the .tex, authors can use:
+% \citep, \citet, and \citeyearpar for compatibility with natbib, or
+% \cite, \newcite, and \shortcite for compatibility with older ACL .sty files
+\renewcommand\cite{\citep}	% to get "(Author Year)" with natbib    
+\newcommand\shortcite{\citeyearpar}% to get "(Year)" with natbib    
+\newcommand\newcite{\citet}	% to get "Author (Year)" with natbib    
+
+% Bibliography
+
+% Don't put a label in the bibliography at all.  Just use the unlabeled format
+% instead.
+\def\thebibliography#1{\vskip\parskip%
+\vskip\baselineskip%
+\def\baselinestretch{1}%
+\ifx\@currsize\normalsize\@normalsize\else\@currsize\fi%
+\vskip-\parskip%
+\vskip-\baselineskip%
+\chapter*{Bibliography\@mkboth
+ {Bibliography}{Bibliography}}\list
+ {}{\setlength{\labelwidth}{0pt}\setlength{\leftmargin}{\parindent}
+ \setlength{\itemindent}{-\parindent}}
+ \def\newblock{\hskip .11em plus .33em minus -.07em}
+ \sloppy\clubpenalty4000\widowpenalty4000
+ \sfcode`\.=1000\relax}
+\let\endthebibliography=\endlist
+
+
+% Allow for a bibliography of sources of attested examples
+\def\thesourcebibliography#1{\vskip\parskip%
+\vskip\baselineskip%
+\def\baselinestretch{1}%
+\ifx\@currsize\normalsize\@normalsize\else\@currsize\fi%
+\vskip-\parskip%
+\vskip-\baselineskip%
+\section*{Sources of Attested Examples\@mkboth
+ {Sources of Attested Examples}{Sources of Attested Examples}}\list
+ {}{\setlength{\labelwidth}{0pt}\setlength{\leftmargin}{\parindent}
+ \setlength{\itemindent}{-\parindent}}
+ \def\newblock{\hskip .11em plus .33em minus -.07em}
+ \sloppy\clubpenalty4000\widowpenalty4000
+ \sfcode`\.=1000\relax}
+\let\endthesourcebibliography=\endlist
