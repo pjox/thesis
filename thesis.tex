@@ -1,0 +1,173 @@
+%!TEX TS-program = lualatex
+%!TEX encoding = UTF-8 Unicode
+%!BIB program = bibtex
+
+\documentclass{mimosis}
+
+\usepackage{metalogo}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Some of my favourite personal adjustments
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% These are the adjustments that I consider necessary for typesetting
+% a nice thesis. However, they are *not* included in the template, as
+% I do not want to force you to use them.
+
+% This ensures that I am able to typeset bold font in table while still aligning the numbers
+% correctly.
+\usepackage{etoolbox}
+
+\usepackage{siunitx}
+\DeclareSIUnit\px{px}
+
+\sisetup{%
+  detect-all           = true,
+  detect-family        = true,
+  detect-mode          = true,
+  detect-shape         = true,
+  detect-weight        = true,
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Hyperlinks & bookmarks
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[%
+  unicode,
+  colorlinks = true,
+  citecolor  = RoyalBlue,
+  linkcolor  = RoyalBlue,
+  urlcolor   = RoyalBlue,
+  unicode,
+  ]{hyperref}
+\hypersetup{
+  pdftitle=On Language Modeling and its Applications for Contemporary and Historical French,
+  pdfauthor=Pedro Ortiz Suarez
+}
+
+\usepackage{bookmark}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Fonts
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\ifxetexorluatex
+  \setmainfont[Ligatures=TeX,Numbers=OldStyle]{TeX Gyre Pagella} % Palatino clone
+  \linespread{1.05} % a bit more for Palatino
+  \RequirePackage{unicode-math}
+  \setmathfont{TeX Gyre Pagella Math}
+\else
+  \usepackage[lf]{ebgaramond}
+  \usepackage[oldstyle,scale=0.7]{sourcecodepro}
+  \singlespacing
+\fi
+
+\renewcommand{\th}{\textsuperscript{\textup{th}}\xspace}
+
+\newacronym[description={Principal component analysis}]{PCA}{PCA}{principal component analysis}
+\newacronym                                            {SNF}{SNF}{Smith normal form}
+\newacronym[description={Topological data analysis}]   {TDA}{TDA}{topological data analysis}
+
+\newglossaryentry{LaTeX}{%
+  name        = {\LaTeX},
+  description = {A document preparation system},
+  sort        = {LaTeX},
+}
+
+\newglossaryentry{Real numbers}{%
+  name        = {$\real$},
+  description = {The set of real numbers},
+  sort        = {Real numbers},
+}
+
+\makeindex
+\makeglossaries
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Custom Commands and Environments
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\usepackage{fontawesome}
+\usepackage{fontawesome5}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Incipit
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{On Language Modeling and its Applications for Contemporary and Historical French}
+%\subtitle{A minimal, modern \LaTeX{} package for typesetting your thesis}
+\author{Pedro Ortiz Suarez}
+
+\begin{document}
+
+\frontmatter
+\include{sources/title/title}
+\include{sources/abstract}
+
+\tableofcontents
+
+\mainmatter
+
+\include{Sources/Introduction}
+
+%%%% This is just a draft !!!
+
+\part{Data}
+\chapter{OSCAR}
+\section{goclassy}
+\include{sources/data/goclassy}
+\include{sources/data/ungoliant}
+\chapter{Modern French Data}
+\section{LEM17}
+\section{presto max}
+\section{presto gold}
+\chapter{Ancient/Medieval French Data}
+\section{BERTrade Corpus}
+\chapter{Other Data}
+
+\part{Models}
+\chapter{CamemBERT}
+\chapter{FrELMo}
+\chapter{D'Alembert}
+\chapter{BERTrade}
+
+\part{Downstream tasks}
+\chapter{Parsing}
+\chapter{POS Tagging}
+\chapter{Named-Entity Recognition}
+\chapter{Text Normalization}
+\chapter{Document Structuration}
+
+\part{Real World Application}
+\chapter{Le Petit Larousse}
+\chapter{BASNUM}
+\chapter{Scientific Papers}
+\chapter{Modern French Treebank}
+\chapter{Named-Entity Recognition corpora}
+
+
+% This ensures that the subsequent sections are being included as root
+% items in the bookmark structure of your PDF reader.
+\bookmarksetup{startatroot}
+\backmatter
+
+\begingroup
+\let\clearpage\relax
+\glsaddall
+\printglossary[type=\acronymtype]
+\newpage
+\printglossary
+\endgroup
+
+\printindex
+
+% Entries for the entire Anthology, followed by custom entries
+\bibliography{anthology, thesis}
+\bibliographystyle{acl_natbib}
+
+\end{document}
