@@ -18,6 +18,79 @@
   year   = {2009}
 }
 
+@inproceedings{clark-etal-2020-electra,
+  title     = {ELECTRA: Pre-training Text Encoders as Discriminators Rather Than Generators},
+  author    = {Kevin Clark and Minh-Thang Luong and Quoc V. Le and Christopher D. Manning},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2020},
+  url       = {https://openreview.net/forum?id=r1xMH1BtvB}
+}
+
+@article{caswell-etal-2021-quality,
+  author     = {Isaac Caswell and
+               Julia Kreutzer and
+               Lisa Wang and
+               Ahsan Wahab and
+               Daan van Esch and
+               Nasanbayar Ulzii{-}Orshikh and
+               Allahsera Tapo and
+               Nishant Subramani and
+               Artem Sokolov and
+               Claytone Sikasote and
+               Monang Setyawan and
+               Supheakmungkol Sarin and
+               Sokhar Samb and
+               Beno{\^{\i}}t Sagot and
+               Clara Rivera and
+               Annette Rios and
+               Isabel Papadimitriou and
+               Salomey Osei and
+               Pedro Javier Ortiz Su{\'{a}}rez and
+               Iroro Orife and
+               Kelechi Ogueji and
+               Rubungo Andre Niyongabo and
+               Toan Q. Nguyen and
+               Mathias M{\"{u}}ller and
+               Andr{\'{e}} M{\"{u}}ller and
+               Shamsuddeen Hassan Muhammad and
+               Nanda Muhammad and
+               Ayanda Mnyakeni and
+               Jamshidbek Mirzakhalov and
+               Tapiwanashe Matangira and
+               Colin Leong and
+               Nze Lawson and
+               Sneha Kudugunta and
+               Yacine Jernite and
+               Mathias Jenny and
+               Orhan Firat and
+               Bonaventure F. P. Dossou and
+               Sakhile Dlamini and
+               Nisansa de Silva and
+               Sakine {\c{C}}abuk Balli and
+               Stella Biderman and
+               Alessia Battisti and
+               Ahmed Baruwa and
+               Ankur Bapna and
+               Pallavi Baljekar and
+               Israel Abebe Azime and
+               Ayodele Awokoya and
+               Duygu Ataman and
+               Orevaoghene Ahia and
+               Oghenefego Ahia and
+               Sweta Agrawal and
+               Mofetoluwa Adeyemi},
+  title      = {Quality at a Glance: An Audit of Web-Crawled Multilingual Datasets},
+  journal    = {CoRR},
+  volume     = {abs/2103.12028},
+  year       = {2021},
+  url        = {https://arxiv.org/abs/2103.12028},
+  eprinttype = {arXiv},
+  eprint     = {2103.12028},
+  timestamp  = {Wed, 24 Mar 2021 15:50:40 +0100},
+  biburl     = {https://dblp.org/rec/journals/corr/abs-2103-12028.bib},
+  bibsource  = {dblp computer science bibliography, https://dblp.org}
+}
+
 @article{joulin-etal-2016-fasttext,
   author     = {Armand Joulin and
                Edouard Grave and
@@ -111,6 +184,19 @@
   year      = {2017}
 }
 
+@article{xiong-etal-2021-nystromformer,
+  title        = {Nyströmformer: A Nyström-based Algorithm for Approximating Self-Attention},
+  volume       = {35},
+  url          = {https://ojs.aaai.org/index.php/AAAI/article/view/17664},
+  abstractnote = {Transformers have emerged as a powerful tool for a broad range of natural language processing tasks. A key component that drives the impressive performance of Transformers is the self-attention mechanism that encodes the influence or dependence of other tokens on each specific token. While beneficial, the quadratic complexity of self-attention on the input sequence length has limited its application to longer sequences - a topic being actively studied in the community. To address this limitation, we propose Nyströmformer - a model that exhibits favorable scalability as a function of sequence length. Our idea is based on adapting the Nyström method to approximate standard self-attention with O(n) complexity. The scalability of Nyströmformer enables application to longer sequences with thousands of tokens. We perform evaluations on multiple downstream tasks on the GLUE benchmark and IMDB reviews with standard sequence length, and find that our Nyströmformer performs comparably, or in a few cases, even slightly better, than standard self-attention. On longer sequence tasks in the Long Range Arena (LRA) benchmark, Nyströmformer performs favorably relative to other efficient self-attention methods. Our code is available at https://github.com/mlpen/Nystromformer.},
+  number       = {16},
+  journal      = {Proceedings of the AAAI Conference on Artificial Intelligence},
+  author       = {Xiong, Yunyang and Zeng, Zhanpeng and Chakraborty, Rudrasis and Tan, Mingxing and Fung, Glenn and Li, Yin and Singh, Vikas},
+  year         = {2021},
+  month        = {May},
+  pages        = {14138-14148}
+}
+
 @inproceedings{yang-etal-2019-xlnet,
   author    = {Yang, Zhilin and Dai, Zihang and Yang, Yiming and Carbonell, Jaime and Salakhutdinov, Russ R and Le, Quoc V},
   booktitle = {Advances in Neural Information Processing Systems},
@@ -121,6 +207,18 @@
   url       = {https://proceedings.neurips.cc/paper/2019/file/dc6a7e655d7e5840e66733e9ee67cc69-Paper.pdf},
   volume    = {32},
   year      = {2019}
+}
+
+@inproceedings{zaheer-etal-2020-big,
+  author    = {Zaheer, Manzil and Guruganesh, Guru and Dubey, Kumar Avinava and Ainslie, Joshua and Alberti, Chris and Ontanon, Santiago and Pham, Philip and Ravula, Anirudh and Wang, Qifan and Yang, Li and Ahmed, Amr},
+  booktitle = {Advances in Neural Information Processing Systems},
+  editor    = {H. Larochelle and M. Ranzato and R. Hadsell and M. F. Balcan and H. Lin},
+  pages     = {17283--17297},
+  publisher = {Curran Associates, Inc.},
+  title     = {Big Bird: Transformers for Longer Sequences},
+  url       = {https://proceedings.neurips.cc/paper/2020/file/c8512d142a2d849725f31a9a7a361ab9-Paper.pdf},
+  volume    = {33},
+  year      = {2020}
 }
 
 @inproceedings{zhu-etal-2015-aligning,
@@ -137,6 +235,5 @@
   issn      = {2380-7504},
   month     = {Dec}
 }
-
 
 @Comment{jabref-meta: databaseType:bibtex;}
