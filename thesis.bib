@@ -1,5 +1,56 @@
 % Encoding: UTF-8
 
+@article{arivazhagan-etal-2019-massively,
+  author        = {{Arivazhagan}, Naveen and {Bapna}, Ankur and {Firat}, Orhan and {Lepikhin}, Dmitry and {Johnson}, Melvin and {Krikun}, Maxim and {Chen}, Mia Xu and {Cao}, Yuan and {Foster}, George and {Cherry}, Colin and {Macherey}, Wolfgang and {Chen}, Zhifeng and {Wu}, Yonghui},
+  title         = {{Massively Multilingual Neural Machine Translation in the Wild: Findings and Challenges}},
+  journal       = {arXiv e-prints},
+  keywords      = {Computer Science - Computation and Language, Computer Science - Machine Learning},
+  year          = 2019,
+  month         = jul,
+  eid           = {arXiv:1907.05019},
+  pages         = {arXiv:1907.05019},
+  archiveprefix = {arXiv},
+  eprint        = {1907.05019},
+  primaryclass  = {cs.CL},
+  adsurl        = {https://ui.adsabs.harvard.edu/abs/2019arXiv190705019A},
+  adsnote       = {Provided by the SAO/NASA Astrophysics Data System}
+}
+
+@article{blumofe-etal-1999-scheduling,
+  author     = {Blumofe, Robert D. and Leiserson, Charles E.},
+  title      = {Scheduling Multithreaded Computations by Work Stealing},
+  year       = {1999},
+  issue_date = {Sept. 1999},
+  publisher  = {Association for Computing Machinery},
+  address    = {New York, NY, USA},
+  volume     = {46},
+  number     = {5},
+  issn       = {0004-5411},
+  url        = {https://doi.org/10.1145/324133.324234},
+  doi        = {10.1145/324133.324234},
+  abstract   = {This paper studies the problem of efficiently schedulling fully strict (i.e., well-structured)
+multithreaded computations on parallel computers. A popular and practical method of
+scheduling this kind of dynamic MIMD-style computation is “work stealing,” in which
+processors needing work steal computational threads from other processors. In this
+paper, we give the first provably good work-stealing scheduler for multithreaded computations
+with dependencies.Specifically, our analysis shows that the expected time to execute
+a fully strict computation on P processors using our work-stealing scheduler is T1/P
++ O(T ∞ , where T1 is the minimum serial execution time of the multithreaded computation
+and (T ∞ is the minimum execution time with an infinite number of processors. Moreover,
+the space required by the execution is at most S1P, where S1 is the minimum serial
+space requirement. We also show that the expected total communication of the algorithm
+is at most O(PT ∞( 1 + nd)Smax), where Smax is the size of the largest activation
+record of any thread and nd is the maximum number of times that any thread synchronizes
+with its parent. This communication bound justifies the folk wisdom that work-stealing
+schedulers are more communication efficient than their work-sharing counterparts.
+All three of these bounds are existentially optimal to within a constant factor.},
+  journal    = {J. ACM},
+  month      = sep,
+  pages      = {720–748},
+  numpages   = {29},
+  keywords   = {multithreading, work stealing, critical-path length, randomized algorithm, multiprocessor, thread scheduling}
+}
+
 @inproceedings{brown-etal-2020-language,
   author    = {Brown, Tom and Mann, Benjamin and Ryder, Nick and Subbiah, Melanie and Kaplan, Jared D and Dhariwal, Prafulla and Neelakantan, Arvind and Shyam, Pranav and Sastry, Girish and Askell, Amanda and Agarwal, Sandhini and Herbert-Voss, Ariel and Krueger, Gretchen and Henighan, Tom and Child, Rewon and Ramesh, Aditya and Ziegler, Daniel and Wu, Jeffrey and Winter, Clemens and Hesse, Chris and Chen, Mark and Sigler, Eric and Litwin, Mateusz and Gray, Scott and Chess, Benjamin and Clark, Jack and Berner, Christopher and McCandlish, Sam and Radford, Alec and Sutskever, Ilya and Amodei, Dario},
   booktitle = {Advances in Neural Information Processing Systems},
@@ -18,6 +69,22 @@
   year   = {2009}
 }
 
+@article{caswell-etal-2021-quality,
+  author        = {{Caswell}, Isaac and {Kreutzer}, Julia and {Wang}, Lisa and {Wahab}, Ahsan and {van Esch}, Daan and {Ulzii-Orshikh}, Nasanbayar and {Tapo}, Allahsera and {Subramani}, Nishant and {Sokolov}, Artem and {Sikasote}, Claytone and {Setyawan}, Monang and {Sarin}, Supheakmungkol and {Samb}, Sokhar and {Sagot}, Beno{\^\i}t and {Rivera}, Clara and {Rios}, Annette and {Papadimitriou}, Isabel and {Osei}, Salomey and {Ortiz Su{\'a}rez}, Pedro Javier and {Orife}, Iroro and {Ogueji}, Kelechi and {Niyongabo}, Rubungo Andre and {Nguyen}, Toan Q. and {M{\"u}ller}, Mathias and {M{\"u}ller}, Andr{\'e} and {Hassan Muhammad}, Shamsuddeen and {Muhammad}, Nanda and {Mnyakeni}, Ayanda and {Mirzakhalov}, Jamshidbek and {Matangira}, Tapiwanashe and {Leong}, Colin and {Lawson}, Nze and {Kudugunta}, Sneha and {Jernite}, Yacine and {Jenny}, Mathias and {Firat}, Orhan and {Dossou}, Bonaventure F.~P. and {Dlamini}, Sakhile and {de Silva}, Nisansa and {{\c{C}}abuk Ball{\i}}, Sakine and {Biderman}, Stella and {Battisti}, Alessia and {Baruwa}, Ahmed and {Bapna}, Ankur and {Baljekar}, Pallavi and {Abebe Azime}, Israel and {Awokoya}, Ayodele and {Ataman}, Duygu and {Ahia}, Orevaoghene and {Ahia}, Oghenefego and {Agrawal}, Sweta and {Adeyemi}, Mofetoluwa},
+  title         = {{Quality at a Glance: An Audit of Web-Crawled Multilingual Datasets}},
+  journal       = {arXiv e-prints},
+  keywords      = {Computer Science - Computation and Language, Computer Science - Artificial Intelligence},
+  year          = 2021,
+  month         = mar,
+  eid           = {arXiv:2103.12028},
+  pages         = {arXiv:2103.12028},
+  archiveprefix = {arXiv},
+  eprint        = {2103.12028},
+  primaryclass  = {cs.CL},
+  adsurl        = {https://ui.adsabs.harvard.edu/abs/2021arXiv210312028C},
+  adsnote       = {Provided by the SAO/NASA Astrophysics Data System}
+}
+
 @inproceedings{clark-etal-2020-electra,
   title     = {ELECTRA: Pre-training Text Encoders as Discriminators Rather Than Generators},
   author    = {Kevin Clark and Minh-Thang Luong and Quoc V. Le and Christopher D. Manning},
@@ -26,88 +93,52 @@
   url       = {https://openreview.net/forum?id=r1xMH1BtvB}
 }
 
-@article{caswell-etal-2021-quality,
-  author     = {Isaac Caswell and
-               Julia Kreutzer and
-               Lisa Wang and
-               Ahsan Wahab and
-               Daan van Esch and
-               Nasanbayar Ulzii{-}Orshikh and
-               Allahsera Tapo and
-               Nishant Subramani and
-               Artem Sokolov and
-               Claytone Sikasote and
-               Monang Setyawan and
-               Supheakmungkol Sarin and
-               Sokhar Samb and
-               Beno{\^{\i}}t Sagot and
-               Clara Rivera and
-               Annette Rios and
-               Isabel Papadimitriou and
-               Salomey Osei and
-               Pedro Javier Ortiz Su{\'{a}}rez and
-               Iroro Orife and
-               Kelechi Ogueji and
-               Rubungo Andre Niyongabo and
-               Toan Q. Nguyen and
-               Mathias M{\"{u}}ller and
-               Andr{\'{e}} M{\"{u}}ller and
-               Shamsuddeen Hassan Muhammad and
-               Nanda Muhammad and
-               Ayanda Mnyakeni and
-               Jamshidbek Mirzakhalov and
-               Tapiwanashe Matangira and
-               Colin Leong and
-               Nze Lawson and
-               Sneha Kudugunta and
-               Yacine Jernite and
-               Mathias Jenny and
-               Orhan Firat and
-               Bonaventure F. P. Dossou and
-               Sakhile Dlamini and
-               Nisansa de Silva and
-               Sakine {\c{C}}abuk Balli and
-               Stella Biderman and
-               Alessia Battisti and
-               Ahmed Baruwa and
-               Ankur Bapna and
-               Pallavi Baljekar and
-               Israel Abebe Azime and
-               Ayodele Awokoya and
-               Duygu Ataman and
-               Orevaoghene Ahia and
-               Oghenefego Ahia and
-               Sweta Agrawal and
-               Mofetoluwa Adeyemi},
-  title      = {Quality at a Glance: An Audit of Web-Crawled Multilingual Datasets},
-  journal    = {CoRR},
-  volume     = {abs/2103.12028},
-  year       = {2021},
-  url        = {https://arxiv.org/abs/2103.12028},
-  eprinttype = {arXiv},
-  eprint     = {2103.12028},
-  timestamp  = {Wed, 24 Mar 2021 15:50:40 +0100},
-  biburl     = {https://dblp.org/rec/journals/corr/abs-2103-12028.bib},
-  bibsource  = {dblp computer science bibliography, https://dblp.org}
+@article{fan-etal-2020-beyond,
+  author        = {{Fan}, Angela and {Bhosale}, Shruti and {Schwenk}, Holger and {Ma}, Zhiyi and {El-Kishky}, Ahmed and {Goyal}, Siddharth and {Baines}, Mandeep and {Celebi}, Onur and {Wenzek}, Guillaume and {Chaudhary}, Vishrav and {Goyal}, Naman and {Birch}, Tom and {Liptchinsky}, Vitaliy and {Edunov}, Sergey and {Grave}, Edouard and {Auli}, Michael and {Joulin}, Armand},
+  title         = {{Beyond English-Centric Multilingual Machine Translation}},
+  journal       = {arXiv e-prints},
+  keywords      = {Computer Science - Computation and Language, Computer Science - Machine Learning},
+  year          = 2020,
+  month         = oct,
+  eid           = {arXiv:2010.11125},
+  pages         = {arXiv:2010.11125},
+  archiveprefix = {arXiv},
+  eprint        = {2010.11125},
+  primaryclass  = {cs.CL},
+  adsurl        = {https://ui.adsabs.harvard.edu/abs/2020arXiv201011125F},
+  adsnote       = {Provided by the SAO/NASA Astrophysics Data System}
+}
+
+@article{gao-etal-2020-the,
+  author        = {{Gao}, Leo and {Biderman}, Stella and {Black}, Sid and {Golding}, Laurence and {Hoppe}, Travis and {Foster}, Charles and {Phang}, Jason and {He}, Horace and {Thite}, Anish and {Nabeshima}, Noa and {Presser}, Shawn and {Leahy}, Connor},
+  title         = {{The Pile: An 800GB Dataset of Diverse Text for Language Modeling}},
+  journal       = {arXiv e-prints},
+  keywords      = {Computer Science - Computation and Language},
+  year          = 2020,
+  month         = dec,
+  eid           = {arXiv:2101.00027},
+  pages         = {arXiv:2101.00027},
+  archiveprefix = {arXiv},
+  eprint        = {2101.00027},
+  primaryclass  = {cs.CL},
+  adsurl        = {https://ui.adsabs.harvard.edu/abs/2021arXiv210100027G},
+  adsnote       = {Provided by the SAO/NASA Astrophysics Data System}
 }
 
 @article{joulin-etal-2016-fasttext,
-  author     = {Armand Joulin and
-               Edouard Grave and
-               Piotr Bojanowski and
-               Matthijs Douze and
-               Herv{\'{e}} J{\'{e}}gou and
-               Tom{\'{a}}s Mikolov},
-  title      = {FastText.zip: Compressing text classification models},
-  journal    = {CoRR},
-  volume     = {abs/1612.03651},
-  year       = {2016},
-  url        = {http://arxiv.org/abs/1612.03651},
-  eprinttype = {arXiv},
-  eprint     = {1612.03651},
-  timestamp  = {Mon, 28 Dec 2020 11:31:02 +0100},
-  biburl     = {https://dblp.org/rec/journals/corr/JoulinGBDJM16.bib},
-  bibsource  = {dblp computer science bibliography, https://dblp.org}
+  author        = {{Joulin}, Armand and {Grave}, Edouard and {Bojanowski}, Piotr and {Douze}, Matthijs and {J{\'e}gou}, H{\'e}rve and {Mikolov}, Tomas},
+  title         = {{FastText.zip: Compressing text classification models}},
+  journal       = {arXiv e-prints},
+  keywords      = {Computer Science - Computation and Language, Computer Science - Machine Learning},
+  year          = 2016,
+  month         = dec,
+  eid           = {arXiv:1612.03651},
+  pages         = {arXiv:1612.03651},
+  archiveprefix = {arXiv},
+  eprint        = {1612.03651},
+  primaryclass  = {cs.CL},
+  adsurl        = {https://ui.adsabs.harvard.edu/abs/2016arXiv161203651J},
+  adsnote       = {Provided by the SAO/NASA Astrophysics Data System}
 }
 
 @inproceedings{mikolov-etal-2013-distributed,
@@ -234,6 +265,22 @@
   doi       = {10.1109/ICCV.2015.11},
   issn      = {2380-7504},
   month     = {Dec}
+}
+
+@ARTICLE{biderman-etal-2020-pitfalls,
+       author = {{Biderman}, Stella and {Scheirer}, Walter J.},
+        title = "{Pitfalls in Machine Learning Research: Reexamining the Development Cycle}",
+      journal = {arXiv e-prints},
+     keywords = {Computer Science - Machine Learning, Statistics - Methodology, Statistics - Machine Learning},
+         year = 2020,
+        month = nov,
+          eid = {arXiv:2011.02832},
+        pages = {arXiv:2011.02832},
+archivePrefix = {arXiv},
+       eprint = {2011.02832},
+ primaryClass = {cs.LG},
+       adsurl = {https://ui.adsabs.harvard.edu/abs/2020arXiv201102832B},
+      adsnote = {Provided by the SAO/NASA Astrophysics Data System}
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

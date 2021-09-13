@@ -64,6 +64,8 @@
   \singlespacing
 \fi
 
+\usepackage{microtype}
+
 \renewcommand{\th}{\textsuperscript{\textup{th}}\xspace}
 
 \newacronym[description={Principal component analysis}]{PCA}{PCA}{principal component analysis}
@@ -90,10 +92,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %\usepackage{fontawesome}
+\usepackage{arydshln}
 \usepackage{fontawesome5}
 \usepackage{tikz}
 \usetikzlibrary{positioning}
 
+\usepackage{stackengine}
+\def\ucr{\scalebox{1}{\stackinset{c}{}{c}{-.1pt}{%
+  \textcolor{white}{\sffamily\bfseries\small ?}}{%
+  \rotatebox{45}{$\blacksquare$}}}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Incipit
@@ -121,6 +128,8 @@
 \chapter{OSCAR}
 \section{goclassy}
 \include{sources/data/goclassy}
+\include{sources/data/quality}
+\include{sources/data/full_tables}
 \include{sources/data/ungoliant}
 \chapter{Modern French Data}
 \section{LEM17}
@@ -144,10 +153,7 @@
 \chapter{Document Structuration}
 
 \part{Real World Application}
-\chapter{Le Petit Larousse}
 \chapter{BASNUM}
-\chapter{Scientific Papers}
-\chapter{Modern French Treebank}
 \chapter{Named-Entity Recognition corpora}
 
 

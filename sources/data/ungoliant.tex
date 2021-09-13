@@ -34,7 +34,7 @@ OSCAR was built using \emph{goclassy}, a high-performance asynchronous pipeline 
 
 While goclassy's source code is easily readable thanks to the choice of an uncluttered language and a pragmatic approach, the lack of structure in both the source and the project itself makes goclassy difficult to extend and maintain.
 
-The pipeline is not functional out-of-the-box, as the user has to provide the compressed shards from CommonCrawl, manually install fasttext \citep{joulin-etal-2016-fasttex,joulin-etal-2017-bag} and create specific directories by themselves, since only partial instructions are given in the supplied README file.
+The pipeline is not functional out-of-the-box, as the user has to provide the compressed shards from CommonCrawl, manually install fasttext \citep{joulin-etal-2016-fasttext,joulin-etal-2017-bag} and create specific directories by themselves, since only partial instructions are given in the supplied README file.
 
 goclassy also makes heavy use of I/O, as data is saved and loaded repeatedly between steps; as an example, the identification step stores language identification data and individual sentences in two files, before generating the final files (one per language). Despite these limitations, goclassy's performance is good due to Go's emphasis on easy and efficient parallelization and inherent speed. The pipeline uses clever handling of file descriptors, limiting I/O calls cost in some parts.
 
@@ -414,29 +414,29 @@ This approach still has drawbacks, in particular when looking for the correspond
         % Text Node
         \draw (442,132) node [anchor=north west][inner sep=0.75pt]   [align=left] {{\footnotesize sentences}};
         % Text Node
-        \draw (441,153) node [anchor=north west][inner sep=0.75pt]   [align=left] {{\scriptsize {\fontfamily{pcr}\selectfont lang}}};
+        \draw (441,153) node [anchor=north west][inner sep=0.75pt]   [align=left] {{\scriptsize {lang}}};
         % Text Node
         \draw (462,153) node [anchor=north west][inner sep=0.75pt]   [align=left] {\begin{minipage}[lt]{19.86pt}\setlength\topsep{0pt}
                 \begin{flushright}
-                    {\scriptsize {\fontfamily{pcr}\selectfont len}}
+                    {\scriptsize {len}}
                 \end{flushright}
 
             \end{minipage}};
         % Text Node
-        \draw (511,153) node [anchor=north west][inner sep=0.75pt]   [align=left] {{\scriptsize {\fontfamily{pcr}\selectfont lang}}};
+        \draw (511,153) node [anchor=north west][inner sep=0.75pt]   [align=left] {{\scriptsize {lang}}};
         % Text Node
         \draw (532,153) node [anchor=north west][inner sep=0.75pt]   [align=left] {\begin{minipage}[lt]{19.86pt}\setlength\topsep{0pt}
                 \begin{flushright}
-                    {\scriptsize {\fontfamily{pcr}\selectfont len}}
+                    {\scriptsize {len}}
                 \end{flushright}
 
             \end{minipage}};
         % Text Node
-        \draw (581,153) node [anchor=north west][inner sep=0.75pt]   [align=left] {{\scriptsize {\fontfamily{pcr}\selectfont lang}}};
+        \draw (581,153) node [anchor=north west][inner sep=0.75pt]   [align=left] {{\scriptsize {lang}}};
         % Text Node
         \draw (602,153) node [anchor=north west][inner sep=0.75pt]   [align=left] {\begin{minipage}[lt]{19.86pt}\setlength\topsep{0pt}
                 \begin{flushright}
-                    {\scriptsize {\fontfamily{pcr}\selectfont len}}
+                    {\scriptsize {len}}
                 \end{flushright}
 
             \end{minipage}};

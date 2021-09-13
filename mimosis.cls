@@ -176,6 +176,7 @@
 % Mathematics
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\RequirePackage{amssymb}
 \RequirePackage{amsmath}
 \RequirePackage{amsthm}
 \RequirePackage{dsfont}
