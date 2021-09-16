@@ -60,11 +60,11 @@ Corpora collected by web crawlers are known to be noisy~\citep{junczys-dowmunt-2
 Cleaning and filtering web-crawls can boost general language modeling~\citep{gao-etal-2020-the,brown-etal-2020-language,raffel-etal-2020-exploring} and downstream task performance~\citep{moore-lewis-2010-intelligent,xu-koehn-2017-zipporah,khayrallah-koehn-2018-impact,brown-etal-2020-language}.
 
 % zaricna2015word
-As the scale of ML research grows, it becomes increasingly difficult to validate automatically collected and curated datasets \citep{biderman-etal-2020-pitfalls,prabhu2020large,bender2021dangers}.
+As the scale of ML research grows, it becomes increasingly difficult to validate automatically collected and curated datasets \citep{biderman-etal-2020-pitfalls,birhane-etal-2021-large,bender-etal-2021-on}.
 %Data Quality Considerations for Big Data and Machine Learning: Going Beyond Data Cleaning and Transformations \citep{gudivada2017data}
-Several works have focused on advancing methodologies and best practices to address these challenges. \citet{bender2018data} introduced data statements, a documentary framework for NLP datasets that seeks to provide a universal minimum bar for dataset description. Similar work has focused on
+Several works have focused on advancing methodologies and best practices to address these challenges. \citet{bender-friedman-2018-data} introduced data statements, a documentary framework for NLP datasets that seeks to provide a universal minimum bar for dataset description. Similar work has focused on
 % been done on systematizing documentation in other areas in data science and machine learning, including work focusing on 
-online news \citep{kevin-etal-2018-information}, data ethics \citep{sun2019mithralabel}, and data exploration \citep{holland2018dataset}, as well as generalist work such as \citep{gebru2018datasheets}. There is a large literature on filtering text data for various NLP tasks, e.g. \cite{axelrod-etal-2011-domain,moore-lewis-2010-intelligent,wang2018denoising,kamholz-etal-2014-panlex,junczys-dowmunt-2018-dual,caswell-etal-2020-language}.
+online news \citep{kevin-etal-2018-information}, data ethics \citep{sun-etal-2019-mithralabel}, and data exploration \citep{holland-etal-2018-the}, as well as generalist work such as \citep{gebru-etal-2018-datasheets}. There is a large literature on filtering text data for various NLP tasks, e.g. \cite{axelrod-etal-2011-domain,moore-lewis-2010-intelligent,wang-etal-2018-denoising,kamholz-etal-2014-panlex,junczys-dowmunt-2018-dual,caswell-etal-2020-language}.
 
 Closest to our work is the analysis of a highly multilingual (non-publicly available) web-crawl and LangID related quality issues by \citet{caswell-etal-2020-language}.
 %, performing a highly multilingual web-crawl and then systematically analyzing the LangID related quality issues. 
@@ -105,7 +105,7 @@ with the focus only on the presence of in-language content.
 % \paragraph{Nutrition Labels \& datasheets}
 % \begin{itemize}
 %     \item Datasheets for Datasets 
-%     \item The Dataset Nutrition Label: A Framework To Drive Higher Data Quality Standards \cite{holland2018dataset}
+%     \item The Dataset Nutrition Label: A Framework To Drive Higher Data Quality Standards \cite{holland-etal-2018-the}
 % \end{itemize}
 
 
@@ -127,12 +127,12 @@ Human annotators evaluated the quality of document alignments for six languages 
 % Latin, Chinese, Arabic, Burmese script
 The quality of the extracted parallel sentences was evaluated in a machine translation (MT) task on six European (\texttt{da}, \texttt{cr}, \texttt{sl}, \texttt{sk}, \texttt{lt}, \texttt{et}) languages of the TED corpus~\citep{qi-etal-2018-pre}, where it compared favorably to systems built on crawled sentences from WikiMatrix and ParaCrawl v6. %, yielding BLEU scores in a range between 15 and 38.  
 
-\paragraph{Multilingual C4 (mC4)~\citep{xue-etal-2021-mt5}} is a document-level dataset used for training the mT5 language model. It consists of monolingual text in 101 languages and is generated from 71 CC snapshots. It filters out pages that contain less than three lines of at least 200 characters and pages that contain bad words~\citep{emerick2018list}. Since this is a document-level dataset, we split it by sentence and deduplicate it before rating. For language identification, it uses CLD3~\citep{botha-etal-2017-natural}, a small feed-forward neural network that was trained to detect 107 languages.
+\paragraph{Multilingual C4 (mC4)~\citep{xue-etal-2021-mt5}} is a document-level dataset used for training the mT5 language model. It consists of monolingual text in 101 languages and is generated from 71 CC snapshots. It filters out pages that contain less than three lines of at least 200 characters and pages that contain bad words~\citep{emerick-2018-list}. Since this is a document-level dataset, we split it by sentence and deduplicate it before rating. For language identification, it uses CLD3~\citep{botha-etal-2017-natural}, a small feed-forward neural network that was trained to detect 107 languages.
 % \footnote{\url{https://github.com/LDNOOBW/}}
 % \footnote{\url{https://github.com/google/cld3/}}
 The mT5 language model pre-trained on mC4
 %\footnote{Upsampling lower-resource languages.} 
-is evaluated on 6 tasks of the XTREME benchmark~\citep{hu2020xtreme} covering a variety of languages and outperforms other multilingual pre-trained language models such as mBERT~\citep{devlin-etal-2019-bert} and XLM\nobreakdash-R~\citep{conneau-etal-2020-unsupervised}.%\footnote{mBERT is trained on Wikipedia, {XML\nobreakdash-R} on CommonCrawl.} 
+is evaluated on 6 tasks of the XTREME benchmark~\citep{hu-etal-2020-xtreme} covering a variety of languages and outperforms other multilingual pre-trained language models such as mBERT~\citep{devlin-etal-2019-bert} and XLM\nobreakdash-R~\citep{conneau-etal-2020-unsupervised}.%\footnote{mBERT is trained on Wikipedia, {XML\nobreakdash-R} on CommonCrawl.} 
 
 \paragraph{OSCAR~\citep{ortiz-suarez-etal-2019-asynchronous, ortiz-suarez-etal-2020-monolingual}}is a set of monolingual corpora extracted from CC snapshots, specifically from the plain text \emph{WET} format distributed by CC which removes all the HTML tags and converts the text formatting to UTF-8. It is deduplicated and follows the same approach as~\citet{grave-etal-2018-learning} by using FastText LangID
 %~\citep{joulin-etal-2016-fasttext, joulin-etal-2017-bag} 
@@ -327,7 +327,7 @@ While Table~\ref{tab:results} gives means and numbers of corpora passing certain
 
 \paragraph{Why haven't these problems been reported before?}
 The findings above are averaged on a per-language basis (i.e. macro-average), and therefore give low and high-resource languages equal weight. If we instead estimate the quality on a per-sentence basis, i.e. down-weight the the lower-resource languages in the computation of the average, the numbers paint a more optimistic picture (``micro'' block in table~\ref{tab:results}). This is especially relevant for the monolingual datasets because they contain audits for English, which makes up for 43\% of all sentences in OSCAR and 36\% in mC4. To illustrate the effect of this imbalance: A random sample from the entire mC4 dataset will with over 63\% chance be from one of the 8 largest languages (\texttt{en}, \texttt{ru}, \texttt{es}, \texttt{de}, \texttt{fr}, \texttt{it}, \texttt{pt}, \texttt{pl}, $>$100M sentences each),%\footnote{mC4 contains 22\% \texttt{und} sentences, i.e. sentences with undefined language.} 
-of which all have near perfect quality. Analogously, evaluation and tuning of web mining pipelines and resulting corpora in downstream applications focused largely on higher-resource languages (section~\ref{sec:crawls}), so the low quality of underrepresented languages might go unnoticed if there is no dedicated evaluation, or no proficient speakers are involved in the curation~\citep{masakhane}.
+of which all have near perfect quality. Analogously, evaluation and tuning of web mining pipelines and resulting corpora in downstream applications focused largely on higher-resource languages (section~\ref{sec:crawls}), so the low quality of underrepresented languages might go unnoticed if there is no dedicated evaluation, or no proficient speakers are involved in the curation~\citep{nekoto-etal-2020-participatory}.
 
 %We report the ratios for above described labels for the overall corpus mean, the mean across the smallest 20\% and 50\% of languages. This includes only the languages that we found volunteers for, with a higher coverage of the smallest ones.
 %We find that the overall percentage of correct sentences varies between 30\% and 77\% across corpora. For parallel corpora this rate is lower because it requires getting two languages and their alignment right, so any errors in the language detection and alignment pipeline propagate further. In total, 20 of the 41 rated languages in CCAligned contain less than 20\% correct sentence pairs. mC4 seems to perform better in this regard, with only 2 of the 30 rated languages containing under 20\% correct sentences, perhaps due to more rigorous filtering.
@@ -433,7 +433,7 @@ The biggest winners were Lingala, whose precision climbs from 8\% to 80\%, and O
 % Besides general data quality issues, we found a range of problems and inconsistencies with language codes, ranging from serious mislabelings to small transgressions against standard conventions. 
 
 %In order to use data for any practical application, it is important to have a 
-Standardized and unambiguous representations of language codes are important for practical data use and exchange. The standard for unambiguous language codes used by most academic and industry applications is BCP-47~\citep{phillips2006tags}, which would  enhance transparency and interoperability if adopted consistently. % since it allows to add subtags for scripts or regional varieties. 
+Standardized and unambiguous representations of language codes are important for practical data use and exchange. The standard for unambiguous language codes used by most academic and industry applications is BCP-47~\citep{phillips-etal-2005-tags}, which would  enhance transparency and interoperability if adopted consistently. % since it allows to add subtags for scripts or regional varieties. 
 %, which builds off the two-letter ISO639-2 codes and three-letter ISO639\nobreakdash-3 codes. Codes may additionally specify ISO15924 script subtags to indicate that a nonstandard script is used (e.g. \texttt{hi-Latn} for Hindi written in Latin script), ISO3166-1 country codes to indicate regional varieties (e.g. \texttt{fr-CA} for Canadian French), or extensions for private use (e.g. \texttt{ca-x-val} for Valencian Catalan). Some BCP-47 codes represent groups of languages---for instance, \texttt{kg} represents the Kongo language, and \texttt{kng}, \texttt{ldi}, \texttt{kwy}, and \texttt{yom} represent particular varieties of Kongo.
 
 We find a variety of errors in language code usage, ranging from serious mislabelings to small transgressions against standard conventions. . For this analysis, we also include the JW300~\citep{agic-vulic-2019-jw300} dataset, a multilingual dataset crawled from \url{jw.org}. %, which was otherwise not audited in this paper. 
@@ -510,7 +510,7 @@ Similarly, if low-quality datasets are used as benchmarks they may exaggerate mo
 
 \paragraph{Trust in incorrect ``facts''} % and trust} %, algorithmic trust and automation bias}
 We found many instances of parallel-looking sentences that are actually not semantically similar (appendix table~\ref{tab:not_actually_parallel}). They can cause models to produce plausible ``translations" that are factually wrong, but users may still trust them (\textit{algorithmic trust}) without verifying the information. %This is relevant for \textit{algorithmic trust}, when users increasingly trust the outputs of computers and ``algorithms" without verifying the information. 
-Similarly, \textit{automation bias} \citep{skitka1999does},
+Similarly, \textit{automation bias} \citep{skitka-etal-1999-does},
 %from social psychology which refers to the bias of 
 referring to humans favoring decisions made by automated systems over decisions made by humans, might amplify the issues of inaccurate translations caused by misaligned sentences.
 %One variant of this issue that occurs frequently in some datasets is pornographic content.
@@ -537,11 +537,11 @@ Of the five multilingual corpora evaluated, we consistently found severe issues 
 
 We therefore strongly recommend looking at samples of any dataset before using it or releasing it to the public. As we have shown, one does not need to be proficient in a language to see when there are serious quality issues, and a quick scan of 100 (or fewer!) sentences can be sufficient to detect major problems. Moreover, going through and annotating a small sample of data can bring useful insights about new ways to filter or use it.
 
-If data quality issues are found, a wide variety of techniques can be explored, like filtering on length-ratio, LangID, TF-IDF wordlists \cite{caswell-etal-2020-language} or dictionaries~\citep{kamholz-etal-2014-panlex}; to neural approaches like LM scoring \cite{axelrod-etal-2011-domain,moore-lewis-2010-intelligent,wang2018denoising}. Unfortunately, none of these provides a quick and easy fix, especially for low-resource languages -- data cleaning is no trivial task!
+If data quality issues are found, a wide variety of techniques can be explored, like filtering on length-ratio, LangID, TF-IDF wordlists \cite{caswell-etal-2020-language} or dictionaries~\citep{kamholz-etal-2014-panlex}; to neural approaches like LM scoring \cite{axelrod-etal-2011-domain,moore-lewis-2010-intelligent,wang-etal-2018-denoising}. Unfortunately, none of these provides a quick and easy fix, especially for low-resource languages -- data cleaning is no trivial task!
 
-Noisy datasets are however by no means useless, at least if they contain some usable content. Therefore an alternative to filtering can be documentation~\citep{bender2021dangers}. This can take the form of a per-language quality score and notes about known issues,
+Noisy datasets are however by no means useless, at least if they contain some usable content. Therefore an alternative to filtering can be documentation~\citep{bender-etal-2021-on}. This can take the form of a per-language quality score and notes about known issues,
 % ({ \it``language xx has high percentage non-linguistic content'' } etc.), 
-a datasheet \citep{gebru2018datasheets} or nutrition label \citep{holland2018dataset}. However, we suggest researchers not release corpora with near-zero in-language content, as this may give the mistaken impression of usable resources.
+a datasheet \citep{gebru-etal-2018-datasheets} or nutrition label \citep{holland-etal-2018-the}. However, we suggest researchers not release corpora with near-zero in-language content, as this may give the mistaken impression of usable resources.
 %even where that is not actually the case.
 
 Finally, we encourage the community to continue conducting evaluations and audits of public datasets -- similar to system comparison papers.

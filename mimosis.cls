@@ -32,6 +32,7 @@
 
 \ifxetexorluatex
   \RequirePackage{fontspec}
+  \newfontfamily{\NotoEmoji} {NotoColorEmoji.ttf}[Renderer=Harfbuzz]
 \else
   \RequirePackage[utf8]{inputenc}
 \fi
