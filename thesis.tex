@@ -95,12 +95,36 @@
 \usepackage{arydshln}
 \usepackage{fontawesome5}
 \usepackage{tikz}
+\usepackage{colortbl}
+\definecolor{Gray}{gray}{0.925}
 \usetikzlibrary{positioning}
 
 \usepackage{stackengine}
 \def\ucr{\scalebox{1}{\stackinset{c}{}{c}{-.1pt}{%
   \textcolor{white}{\sffamily\bfseries\small ?}}{%
   \rotatebox{45}{$\blacksquare$}}}}
+
+\newcommand{\camembert}{CamemBERT\xspace}
+\newcommand{\camembertoscar}{CamemBERT\textsubscript{OSCAR}\xspace}
+\newcommand{\camembertccnet}{CamemBERT\textsubscript{CCNet}\xspace}
+\newcommand{\roberta}{RoBERTa\xspace}
+\newcommand{\bert}{BERT\xspace}
+\newcommand{\mbert}{mBERT\xspace}
+\newcommand{\ccnet}{CCNet\xspace}
+\newcommand{\Cabernet}{CaBeRnet\xspace}
+
+
+\newcolumntype{P}[1]{>{\RaggedRight\hspace{0pt}}p{#1}}
+
+\newcommand{\ELMooscar}{ELMo\textsubscript{OSCAR}\xspace}
+\newcommand{\ELMowiki}{ELMo\textsubscript{Wikipedia}\xspace}
+\newcommand{\ELMococa}{ELMo\textsubscript{\Cabernet}\xspace}
+\newcommand{\ELMocaber}{ELMo\textsubscript{\Cabernet}\xspace}
+
+
+\newcommand{\ELMocbt}{ELMo\textsubscript{CBT}\xspace}
+\newcommand{\ELMocoscar}{ELMo\textsubscript{OSCAR+\Cabernet}\xspace}
+\newcommand{\ELMocabercar}{ELMo\textsubscript{OSCAR+\Cabernet}\xspace}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Incipit
@@ -131,6 +155,7 @@
 \include{sources/data/quality}
 \include{sources/data/full_tables}
 \include{sources/data/ungoliant}
+\include{sources/data/cabernet}
 \chapter{Modern French Data}
 \section{LEM17}
 \section{presto max}
