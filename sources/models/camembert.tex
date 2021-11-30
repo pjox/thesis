@@ -1,54 +1,17 @@
-\renewcommand{\camembert}{CamemBERT\xspace}
-\newcommand{\camemberts}{CamemBERTs\xspace}
-\renewcommand{\camembertoscar}{CamemBERT\xspace}%{CamemBERT\textsubscript{OSCAR}\xspace}
-\renewcommand{\camembertccnet}{CamemBERT\textsubscript{CCNet}\xspace}
-\newcommand{\camembertwiki}{CamemBERT\textsuperscript{4GB}\hspace{-1.2em}\textsubscript{Wikipedia}\xspace}
-\newcommand{\camembertccnetmini}{CamemBERT\textsuperscript{4GB}\hspace{-1.2em}\textsubscript{CCNet}\xspace}
-\newcommand{\camembertoscarmini}{CamemBERT\textsuperscript{4GB}\xspace}
-%\newcommand{\camembertbase}{CamemBERT\textsubscript{BASE}\xspace}
-\newcommand{\camembertccnetlarge}{CamemBERT\textsubscript{LARGE}\xspace}
-\newcommand{\camembertlarge}{CamemBERT\textsubscript{LARGE}\xspace}
-\newcommand{\camembertccnetlong}{CamemBERT\textsubscript{500k / CCNet}\xspace}
-\newcommand{\camembertoscarlong}{CamemBERT\textsuperscript{500k}\hspace{-1.4em}\textsubscript{OSCAR}\xspace}
-\newcommand{\camembertoscarswm}{CamemBERT\textsubscript{\it subword}\xspace}
-\newcommand{\camembertccnetswm}{CamemBERT\textsubscript{CCNet-{\it subword}}\xspace}
-%XLM-R\textsubscript{BASE} \cite{conneau2019xlmr} & 80.1 & 270M \\
-\renewcommand{\roberta}{RoBERTa\xspace}
-\renewcommand{\bert}{BERT\xspace}
-\renewcommand{\mbert}{mBERT\xspace}
-\renewcommand{\comment}[1]{{\color{red}#1}}
-\newcommand{\bertbase}{BERT\textsubscript{BASE}\xspace}
-\newcommand{\bertlarge}{BERT\textsubscript{LARGE}\xspace}
-
-\newcommand{\lm}[1]{{\color{red}\textbf{LM}: #1}}
-\newcommand{\bm}[1]{{\color{blue}\textbf{BM}: #1}}
-\newcommand{\po}[1]{{\color{orange}\textbf{PO}: #1}}
-\newcommand{\bs}[1]{{\color{PineGreen}\textbf{BS}: #1}}
-\newcommand{\ds}[1]{{\color{purple}\textbf{DS}: #1}}
-
-\renewcommand{\ccnet}{CCNet\xspace}
-\newcommand{\oscar}{OSCAR\xspace}
-\newcommand{\xlmEnFr}{XLM\textsubscript{EN-FR}\xspace}
-\newcommand{\xlmmultimlm}{XLM\textsubscript{17-MLM-1280}\xspace}
-\newcommand{\xlmmlmtlm}{XLM\textsubscript{MLM-TLM}\xspace}
+%\renewcommand{\camembertoscar}{CamemBERT\xspace}%{CamemBERT\textsubscript{OSCAR}\xspace}
 
 \section{Introduction}
 %\footnote{Requests via: \url{https://camembert-model.fr/}}
 
-Pretrained word representations have a long history in Natural Language Processing (NLP), from non-contextual \cite{brown1992class,ando2005framework,mikolov2013distributed,pennington2014glove} to contextual word embeddings \cite{peters2018deep,akbik2018contextual}.
-Word representations are usually obtained by training language model architectures on large amounts of textual data and then fed as an input to more complex task-specific architectures.
-More recently, these specialized architectures have been replaced altogether by large-scale pretrained language models which are {\em fine-tuned} for each application considered.
-This shift has resulted in large improvements in performance over a wide range of tasks \cite{devlin2019bert,radford2019language,liu2019roberta,raffel2019exploring}.
+Pretrained word representations have a long history in Natural Language Processing (NLP), from non-contextual \citep{brown-etal-1992-class,ando-zhang-2005-framework,mikolov-etal-2013-distributed,pennington-etal-2014-glove} to contextual word embeddings \citep{peters-etal-2018-deep,akbik-etal-2018-contextual}. Word representations are usually obtained by training language model architectures on large amounts of textual data and then fed as an input to more complex task-specific architectures. More recently, these specialized architectures have been replaced altogether by large-scale pretrained language models which are \emph{fine-tuned} for each application considered. This shift has resulted in large improvements in performance over a wide range of tasks \cite{devlin-etal-2019-bert,radford-etal-2019-language,liu-etal-2019-roberta,raffel2019exploring}.
 
 These transfer learning methods exhibit clear advantages over more traditional task-specific approaches. In particular, they can be trained in an \emph{unsupervized} manner, thereby taking advantage of the information contained in large amounts of raw text.
-Yet they come with implementation challenges, namely the amount of data and computational resources needed for pretraining, which can reach hundreds of gigabytes of text and require hundreds of GPUs \cite{yang2019xlnet,liu2019roberta}.
-This has limited the availability of these state-of-the-art models to the English language, at least in the monolingual setting.
-This is particularly inconvenient as it hinders their practical use in NLP systems. It also prevents us from investigating their language modelling capacity, for instance in the case of morphologically rich languages.
+Yet they come with implementation challenges, namely the amount of data and computational resources needed for pretraining, which can reach hundreds of gigabytes of text and require hundreds of GPUs \citep{yang2019xlnet,liu-etal-2019-roberta}. This has limited the availability of these state-of-the-art models to the English language, at least in the monolingual setting. This is particularly inconvenient as it hinders their practical use in NLP systems. It also prevents us from investigating their language modelling capacity, for instance in the case of morphologically rich languages.
 
 Although multilingual models give remarkable results, they are often larger, and their results, as we will observe for French, can lag behind their monolingual counterparts for high-resource languages. %\cite{lample2019cross,conneau2019xlmr}.
 
 In order to reproduce and validate results that have so far only been obtained for English, we take advantage of the newly available multilingual corpora OSCAR \cite{ortiz2019asynchronous} to train a monolingual language model for French, dubbed \camembert. We also train alternative versions of \camembert on different smaller corpora with different levels of homogeneity in genre and style in order to assess the impact of these parameters on downstream task performance.
-\camembert uses the \roberta architecture \cite{liu2019roberta}, an improved variant of the high-performing and widely used \bert architecture \cite{devlin2019bert}.
+\camembert uses the \roberta architecture \cite{liu-etal-2019-roberta}, an improved variant of the high-performing and widely used \bert architecture \cite{devlin-etal-2019-bert}.
 
 We evaluate our model on four different downstream tasks for French: part-of-speech (POS) tagging, dependency parsing, named entity recognition (NER) and natural language inference (NLI).
 \camembert improves on the state of the art in all four tasks compared to previous monolingual and multilingual approaches including \mbert, XLM and XLM-R, which confirms the effectiveness of large pretrained language models for French.
@@ -86,10 +49,10 @@ We make the following contributions:
 \subsection{Contextual Language Models}
 \paragraph{From non-contextual to contextual word embeddings}
 The first neural word vector representations were non-contextualized word embeddings, most notably
-word2vec \cite{mikolov2013distributed}, GloVe \cite{pennington2014glove} and fastText \cite{mikolov2018advances}, which were designed to be used as input to task-specific neural architectures.
-Contextualized word representations such as ELMo \cite{peters2018deep} and flair \cite{akbik2018contextual}, improved the representational power of word embeddings by taking context into account. Among other reasons, they improved the performance of models on many tasks by handling words polysemy.
+word2vec \citep{mikolov-etal-2013-distributed}, GloVe \cite{pennington-etal-2014-glove} and fastText \cite{mikolov2018advances}, which were designed to be used as input to task-specific neural architectures.
+Contextualized word representations such as ELMo \cite{peters-etal-2018-deep} and flair \cite{akbik-etal-2018-contextual}, improved the representational power of word embeddings by taking context into account. Among other reasons, they improved the performance of models on many tasks by handling words polysemy.
 This paved the way for larger contextualized models that replaced downstream architectures altogether in most tasks. Trained with language modeling objectives, these approaches range from LSTM-based architectures such as \cite{dai2015semisupervised}, to the successful transformer-based architectures such
-as GPT2 \cite{radford2019language}, \bert \cite{devlin2019bert}, \roberta \cite{liu2019roberta} and more recently ALBERT \cite{lan2019albert} and T5 \cite{raffel2019exploring}.
+as GPT2 \cite{radford-etal-2019-language}, \bert \cite{devlin-etal-2019-bert}, \roberta \cite{liu-etal-2019-roberta} and more recently ALBERT \cite{lan2019albert} and T5 \cite{raffel2019exploring}.
 
 
 \paragraph{Non-English contextualized models}
@@ -102,7 +65,7 @@ A few non-English monolingual models have been released: ELMo models for Japanes
 However, to the best of our knowledge, no particular effort has been made toward training models for languages other than English at a scale similar to the latest English models (e.g.~\roberta trained on more than 100GB of data).
 
 \paragraph{BERT and RoBERTa}
-Our approach is based on \roberta \cite{liu2019roberta} which itself is based on \bert \cite{devlin2019bert}.
+Our approach is based on \roberta \cite{liu-etal-2019-roberta} which itself is based on \bert \cite{devlin-etal-2019-bert}.
 \bert is a multi-layer bidirectional Transformer encoder trained with a masked language modeling (MLM) objective, inspired by the Cloze task \cite{taylor1953cloze}.
 It comes in two sizes: the \bertbase architecture and the \bertlarge architecture. The \bertbase architecture is 3 times smaller and therefore faster and easier to use while \bertlarge achieves increased performance on downstream tasks.
 \roberta improves the original implementation of \bert by identifying key design choices for better performance, using dynamic masking, removing the next sentence prediction task, training with larger batches, on more data, and for longer.
@@ -168,9 +131,9 @@ We also report the results of \mbox{XLM-R} \cite{conneau2019xlmr}.
 
 %and the English and French Masked Language Model \footnote{we plan to release experiments on XLM-17 and XLM-R} version of XLM referred as \xlmEnFr \cite{lample2019cross}, in order to demonstrate the usefulness of a dedicated version of \bert for French. \xlmEnFr provides us the performance of a multilingual masked language model pretrained on a smaller corpora which is the concatenation of Wikipedia English and French. We finetune those models using the same architecture enhancement and optimization process as we do on \camembert. We then compare our models to UDify \cite{kondratyuk201975} and UDPipe Future+\mbert+Flair \cite{straka2019evaluating}. UDify is a multitask and multilingual model based on \mbert while UDPipe Future+\mbert+Flair is just the original UDPipe Future implementation using \mbert and Flair as contextualized word embeddings. UDify pushed dependency parsing and POS to the extreme case of training one single model based on \mbert for all UD languages reaching state-of-the-art results for many treebanks. 
 
-%Most of the advances in NER have been achieved on English, particularly focusing on the CoNLL 2003 \cite{tjong2003introduction} and the Ontonotes v5 \cite{pradhan2012conll,pradhan2013towards} English corpora. NER is a task that was traditionally tackled using Conditional Random Fields (CRF) \cite{lafferty2001conditional} which are quite suited for NER; CRFs were later used as decoding layers for Bi-LSTM architectures \cite{huang2015bidirectional,lample2016neural} showing considerable improvements over CRFs alone. These Bi-LSTM-CRF architectures were later enhanced with contextualised word embeddings which yet again brought major improvements to the task \cite{peters2018deep,akbik2018contextual}. Finally, large pretrained architectures settled the current state of the art showing a small yet important improvement over previous NER-specific architectures \cite{devlin2019bert,baevski2019cloze}.
+%Most of the advances in NER have been achieved on English, particularly focusing on the CoNLL 2003 \cite{tjong2003introduction} and the Ontonotes v5 \cite{pradhan2012conll,pradhan2013towards} English corpora. NER is a task that was traditionally tackled using Conditional Random Fields (CRF) \cite{lafferty2001conditional} which are quite suited for NER; CRFs were later used as decoding layers for Bi-LSTM architectures \cite{huang2015bidirectional,lample2016neural} showing considerable improvements over CRFs alone. These Bi-LSTM-CRF architectures were later enhanced with contextualised word embeddings which yet again brought major improvements to the task \cite{peters-etal-2018-deep,akbik-etal-2018-contextual}. Finally, large pretrained architectures settled the current state of the art showing a small yet important improvement over previous NER-specific architectures \cite{devlin-etal-2019-bert,baevski2019cloze}.
 
-% In non-English NER the CoNLL 2002 shared task included NER corpora for Spanish and Dutch corpora \cite{tjong2002introduction} while the CoNLL 2003 included a German corpus \cite{tjong2003introduction}. Here the recent efforts of \cite{strakova2019neural} settled the state of the art for Spanish and Dutch, while \cite{akbik2018contextual} did it for German.
+% In non-English NER the CoNLL 2002 shared task included NER corpora for Spanish and Dutch corpora \cite{tjong2002introduction} while the CoNLL 2003 included a German corpus \cite{tjong2003introduction}. Here the recent efforts of \cite{strakova2019neural} settled the state of the art for Spanish and Dutch, while \cite{akbik-etal-2018-contextual} did it for German.
 
 %The NER-annotated FTB contains more than 12k sentences and more than 350k tokens extracted from articles of the newspaper \textit{Le Monde} published between 1989 and 1995. In total, it contains 11,636 entity mentions distributed among 7 different types of entities, namely: 2025 mentions of ``Person'', 3761 of ``Location'', 2382 of ``Organisation'', 3357 of ``Company'', 67 of ``Product'', 15 of ``POI'' (Point of Interest) and 29 of ``Fictional Character''. 
 
@@ -211,7 +174,7 @@ We also report the results of \mbox{XLM-R} \cite{conneau2019xlmr}.
 
 %{\color{red} Add analysis on tokenization differences between OSCAR and CCNet}
 %\bm{former previous work for 'as embedding' is commented here : SHOULD BE INTEGRATED SOMEWHERE IN PART 3}
-%As it is the case with contextualized word embeddings like ELMo \cite{peters2018deep} and Flair \cite{akbik2018contextual}, one can use a frozen version of transformer models like BERT or RoBERTa as if they were feature based embeddings, notable examples of this type of utilization are the original BERT paper, in which the authors use BERT in this way to do NER \cite{devlin2019bert}; the work of \newcite{straka2019evaluating} in which the English BERT and \mbert are plugged as feature-based embeddings to the UDPipe Future architecture obtaining state-of-the-art for part-of-speech tagging and dependency parsing across a wide range of languages; and the work of \newcite{strakova2019neural} which again uses both the English BERT and \mbert as feature based embeddings coupled with \newcite{lample2016neural} architecture. \bm{I remove the SOTA mention here as it's not the right place} % obtaining state-of-the-art results for both flat and nested NER in 5 different languages. 
+%As it is the case with contextualized word embeddings like ELMo \cite{peters-etal-2018-deep} and Flair \cite{akbik-etal-2018-contextual}, one can use a frozen version of transformer models like BERT or RoBERTa as if they were feature based embeddings, notable examples of this type of utilization are the original BERT paper, in which the authors use BERT in this way to do NER \cite{devlin-etal-2019-bert}; the work of \newcite{straka2019evaluating} in which the English BERT and \mbert are plugged as feature-based embeddings to the UDPipe Future architecture obtaining state-of-the-art for part-of-speech tagging and dependency parsing across a wide range of languages; and the work of \newcite{strakova2019neural} which again uses both the English BERT and \mbert as feature based embeddings coupled with \newcite{lample2016neural} architecture. \bm{I remove the SOTA mention here as it's not the right place} % obtaining state-of-the-art results for both flat and nested NER in 5 different languages. 
 %In order to obtain a representation for a given token, all these implementations first compute the representations of the subwords of a token by taking the mean of the representations given by the four last layers, and then generate the representation for the token by taking the mean of the representations of the subwords of a given token.
 
 
@@ -223,7 +186,7 @@ In this section, we describe the pretraining data, architecture, training object
 \subsection{Training data}
 %\paragraph{Data description}
 %\lm{Should we say "We train a model on OSCAR", put a real emphasis on OSCAR, and then rapidly, say in section 5, we compare also to CCNET and Wikipedia}
-Pretrained language models benefits from being trained on large datasets \cite{devlin2018mbert,liu2019roberta,raffel2019exploring}. %can be significantly improved by using more data
+Pretrained language models benefits from being trained on large datasets \cite{devlin2018mbert,liu-etal-2019-roberta,raffel2019exploring}. %can be significantly improved by using more data
 We therefore use the French part of the OSCAR corpus \cite{ortiz2019asynchronous}, a pre-filtered and pre-classified version of Common Crawl.\footnote{\url{https://commoncrawl.org/about/}} %and compare two pre-classified and pre-filtered versions of it: OSCAR \cite{ortiz2019asynchronous} and CCNet \cite{wenzek2019ccnet}. 
 %%We also compare, controlling for the data set size, these two dataset to the French Wikipedia dataset. 
 
@@ -276,14 +239,14 @@ We train our models using WWM by using whitespaces in the initial untokenized te
 WWM is implemented by first randomly sampling 15\% of the words in the sequence and then considering all subword tokens in each of this 15\% for candidate replacement. This amounts to a proportion of selected tokens that is close to the original 15\%.
 These tokens are then either replaced by \texttt{<MASK>} tokens (80\%), left unchanged (10\%) or replaced by a random token.
 
-Subsequent work has shown that the next sentence prediction (NSP) task originally used in \bert does not improve downstream task performance \cite{lample2019cross,liu2019roberta}, thus we also remove it.
+Subsequent work has shown that the next sentence prediction (NSP) task originally used in \bert does not improve downstream task performance \cite{lample2019cross,liu-etal-2019-roberta}, thus we also remove it.
 j
 
 %\subsection{Optimisation} 
 %integrated to experimental setup
 
 \paragraph{Optimisation}
-Following \citep{liu2019roberta}, we optimize the model using Adam \cite{kingma2014adam} ($\beta_1 = 0.9$, $\beta_2 = 0.98$) for 100k steps with large batch sizes of 8192 sequences, each sequence containing at most 512 tokens.
+Following \citep{liu-etal-2019-roberta}, we optimize the model using Adam \cite{kingma2014adam} ($\beta_1 = 0.9$, $\beta_2 = 0.98$) for 100k steps with large batch sizes of 8192 sequences, each sequence containing at most 512 tokens.
 We enforce each sequence to only contain complete paragraphs (which correspond to lines in the our pretraining dataset).
 
 \paragraph{Pretraining}
@@ -299,7 +262,7 @@ These two complementary approaches shed light on the quality of the pretrained h
 
 
 \paragraph{Fine-tuning}
-For each task, we append the relevant predictive layer on top of \camembert's  architecture. Following the work done on \bert \cite{devlin2019bert}, for sequence tagging and sequence labeling we append a linear layer that respectively takes as input the last hidden representation of the \texttt{<s>} special token and the last hidden representation of the first subword token of each word.
+For each task, we append the relevant predictive layer on top of \camembert's  architecture. Following the work done on \bert \cite{devlin-etal-2019-bert}, for sequence tagging and sequence labeling we append a linear layer that respectively takes as input the last hidden representation of the \texttt{<s>} special token and the last hidden representation of the first subword token of each word.
 For dependency parsing, we plug a bi-affine graph predictor head as inspired by \citet{dozat2017deep}. We refer the reader to this article for more details on this module.
 We fine-tune on XNLI by adding a classification head composed of one hidden layer with a non-linearity and one linear projection layer, with input dropout for both.
 
@@ -313,7 +276,7 @@ The NLI experiments use the fairseq library following the \roberta implementatio
 \paragraph{Embeddings}
 
 %\lm{This is the Experimental setup section, I would put more emphasis on our method instead of the litterature}
-%As it is the case with contextualized word embeddings like ELMo \cite{peters2018deep} and Flair \cite{akbik2018contextual}, one can use a frozen version of transformer models like BERT or RoBERTa as if they were feature based embeddings, notable examples of this type of utilization are the original BERT paper, in which the authors use BERT in this way to do NER \cite{devlin2019bert}; the work of \newcite{straka2019evaluating} in which the English BERT and \mbert are plugged as feature-based embeddings to the UDPipe Future architecture obtaining state-of-the-art for part-of-speech tagging and dependency parsing across a wide range of languages; and the work of \newcite{strakova2019neural} which again uses both the English BERT and \mbert as feature based embeddings coupled with \newcite{lample2016neural} architecture. \bm{I remove the SOTA mention here as it's not the right place} % obtaining state-of-the-art results for both flat and nested NER in 5 different languages. 
+%As it is the case with contextualized word embeddings like ELMo \cite{peters-etal-2018-deep} and Flair \cite{akbik-etal-2018-contextual}, one can use a frozen version of transformer models like BERT or RoBERTa as if they were feature based embeddings, notable examples of this type of utilization are the original BERT paper, in which the authors use BERT in this way to do NER \cite{devlin-etal-2019-bert}; the work of \newcite{straka2019evaluating} in which the English BERT and \mbert are plugged as feature-based embeddings to the UDPipe Future architecture obtaining state-of-the-art for part-of-speech tagging and dependency parsing across a wide range of languages; and the work of \newcite{strakova2019neural} which again uses both the English BERT and \mbert as feature based embeddings coupled with \newcite{lample2016neural} architecture. \bm{I remove the SOTA mention here as it's not the right place} % obtaining state-of-the-art results for both flat and nested NER in 5 different languages. 
 %In order to obtain a representation for a given token, all these implementations first compute the representations of the subwords of a token by taking the mean of the representations given by the four last layers, and then generate the representation for the token by taking the mean of the representations of the subwords of a given token.
 Following \citet{strakova2019neural} and \citet{straka2019evaluating} for \mbert and the English BERT, we make use of \camembert in a feature-based embeddings setting.
 In order to obtain a representation for a given token, we first compute the average of each sub-word’s representations in the last four layers of the Transformer, and then average the resulting sub-word vectors.
@@ -322,7 +285,7 @@ In order to obtain a representation for a given token, we first compute the aver
 We evaluate \camembert in the embeddings setting for POS tagging, dependency parsing and NER; using the open-source implementations of \newcite{straka2019evaluating} and \newcite{strakova2019neural}.\footnote{UDPipe Future is available at \url{https://github.com/CoNLL-UD-2018/UDPipe-Future}, and the code for nested NER is available at \url{https://github.com/ufal/acl2019_nested_ner}.}
 
 
-%We also experiment training a BASE model longer for 500k steps, \camembertccnetlong, as advised in \cite{liu2019roberta}. 
+%We also experiment training a BASE model longer for 500k steps, \camembertccnetlong, as advised in \cite{liu-etal-2019-roberta}. 
 %Finally we trained a LARGE model for 100k steps, \camembertccnetlarge. Note that the LARGE model's performance was still improving after 100k steps, but as LARGE models are significantly slower to train, we didn't train for more, for practical constraints.
 %The model trained longer and the large models are trained using CCNet due to the cleaner nature of CCNet.
 
@@ -416,7 +379,7 @@ In this section, we measure the performance of our models by evaluating them on 
             Model                                             & Acc.             & \#Params \\
             \midrule
             %BiLSTM-max \cite{conneau2018xnli} & 68.3 & - \\
-            \mbert \cite{devlin2019bert}                      & 76.9             & 175M     \\
+            \mbert \cite{devlin-etal-2019-bert}                      & 76.9             & 175M     \\
             \xlmmlmtlm \cite{lample2019cross}                 & \underline{80.2} & 250M     \\
             XLM-R\textsubscript{BASE} \cite{conneau2019xlmr}  & 80.1             & 270M     \\
             \tabucline[\hbox {$\scriptstyle \cdot$}]{-}
@@ -434,7 +397,7 @@ In this section, we measure the performance of our models by evaluating them on 
 
 
 
-%We report the scores of our \camembertccnetlong and \camembertccnetlarge models for all tasks. As mentioned above, \camembertccnetlong was trained 500k steps, whereas \camembertccnetlarge was trained only 100k steps, but is a LARGE model in the sense of \cite{devlin2019bert}. Both models are trained on CCNet and use whole-word masking.
+%We report the scores of our \camembertccnetlong and \camembertccnetlarge models for all tasks. As mentioned above, \camembertccnetlong was trained 500k steps, whereas \camembertccnetlarge was trained only 100k steps, but is a LARGE model in the sense of \cite{devlin-etal-2019-bert}. Both models are trained on CCNet and use whole-word masking.
 
 \paragraph{POS tagging and dependency parsing}
 For POS tagging and dependency parsing, we compare \camembert with other models in the two settings: \textit{fine-tuning} and as \textit{feature-based embeddings}.
@@ -448,7 +411,7 @@ Despite a much simpler optimisation process and no task specific architecture, f
 \camembert also reaches better performance  than other multilingual pretrained models such as \mbert and \xlmmlmtlm on all treebanks.%\footnote{We expected higher scores for \xlmmultimlm than \mbert given its better reported performance on the XNLI benchmark. Although we applied the exact same fine-tuning procedure to \camembert, \xlmmultimlm and \mbert, its performance in POS and dependency parsing is in some cases significantly lower}.
 
 \camembert achieves overall slightly better results than the previous state-of-the-art and task-specific architecture UDPipe Future+\mbert+Flair, except for POS tagging on Sequoia and POS tagging on Spoken, where \camembert lags by 0.03\% and 0.14\% UPOS respectively.
-UDPipe Future+\mbert+Flair uses the contextualized string embeddings Flair \citep{akbik2018contextual}, which are in fact pretrained contextualized character-level word embeddings specifically designed to handle misspelled words as well as subword structures such as prefixes and suffixes. This design choice might explain the difference in score for POS tagging with CamemBERT, especially for the Spoken treebank where words are not capitalized, a factor that might pose a problem for CamemBERT which was trained on capitalized data, but that might be properly handle by Flair on the UDPipe Future+\mbert+Flair model.
+UDPipe Future+\mbert+Flair uses the contextualized string embeddings Flair \citep{akbik-etal-2018-contextual}, which are in fact pretrained contextualized character-level word embeddings specifically designed to handle misspelled words as well as subword structures such as prefixes and suffixes. This design choice might explain the difference in score for POS tagging with CamemBERT, especially for the Spoken treebank where words are not capitalized, a factor that might pose a problem for CamemBERT which was trained on capitalized data, but that might be properly handle by Flair on the UDPipe Future+\mbert+Flair model.
 
 %\camembert also demonstrates higher performances than \mbert on those tasks. We observe a larger error reduction for parsing than for tagging.% For POS tagging, we observe error reductions of respectively 0.71\% for GSD, 0.81\% for Sequoia,  0.7\% for Spoken and 0.28\% for ParTUT. For parsing, we observe error reductions in LAS of 2.96\% for GSD, 3.33\%  for Sequoia, 1.70\% for Spoken and 1.65\% for ParTUT. 
 \paragraph{Named-Entity Recognition}
@@ -482,7 +445,7 @@ Additionally XLM-R also handles 100 languages, and the authors show that when re
 
 \paragraph{Summary of \camembert's results}
 \camembert improves the state of the art for the 4 downstream tasks considered, thereby confirming on French the usefulness of Transformer-based models. We obtain these results when using \camembert as a fine-tuned model or when used as contextual embeddings with task-specific architectures.
-This questions the need for more complex downstream architectures, similar to what was shown for English \cite{devlin2019bert}.
+This questions the need for more complex downstream architectures, similar to what was shown for English \cite{devlin-etal-2019-bert}.
 Additionally, this suggests that \camembert is also able to produce high-quality representations out-of-the-box without further tuning.
 
 \begin{table*}[ht]

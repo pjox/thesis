@@ -326,7 +326,7 @@ Table 4 reports some more in-depth lexical and morphological statistics across c
 This section reports the method of experiments designed to better understand the computational impact of the quality, size and linguistic balance of ELMo's \citep{peters-etal-2018-deep} pre-training (§\ref{MethodTRAIN}) and their evaluations tasks (§\ref{MethodEVAL}).
 
 \paragraph{Embeddings from Language Models} ELMo is an LSTM-based language model. More precisely, it uses a bidirectional language model, which combines a both forward and a backward LSTM-based language models. ELMo also computes a context-independent token representation via a CNN over characters.
-Methodologically, we selected ELMo which not only performs generally better on sequence tagging than other architectures, but which is also better suited to pre-train on small corpora because of its smaller number of parameters (93.6 million) compared to the RoBERTa-base architecture used for CamBERT (BERTbase, 12,110 million - Transformer) \citep{2019arXiv}.
+Methodologically, we selected ELMo which not only performs generally better on sequence tagging than other architectures, but which is also better suited to pre-train on small corpora because of its smaller number of parameters (93.6 million) compared to the RoBERTa-base architecture used for CamBERT (BERTbase, 12,110 million - Transformer) \citep{martin-etal-2020-camembert}.
 
 \subsection{ELMo Pre-traing \& Fine-tuning Method}\label{MethodTRAIN}
 
@@ -344,7 +344,7 @@ Hence, the pure pre-traing (i.e. Method 1) yields the following four language mo
 % ELMo in particular uses a biLM consisting of LSTM layers, that is, it concatenates both a forward and a backward language model generating a contextualized bi-directional representation of each token in a given sentence.
 
 % All the training experiments are performed with a fully trained model for 10 epochs. As is was done for the original English ELMo \citep{peters-etal-2018-deep}.
-% Hence, all our FRrELMo-based language models build on top of the UDPipe Future parser and tagger \citep{straka2018udpipe} as implemented in \citet{straka2019evaluating} which is open source and freely available.\footnote{https://github.com/CoNLL-UD-2018/UDPipe-Future}
+% Hence, all our FRrELMo-based language models build on top of the UDPipe Future parser and tagger \citep{straka-2018-udpipe} as implemented in \citet{straka2019evaluating} which is open source and freely available.\footnote{https://github.com/CoNLL-UD-2018/UDPipe-Future}
 % \fi
 
 %\paragraph{The UDPipe Future architecture} is a multi-task model that predicts POS tags, lemmas and dependency trees jointly. It consists of an embedding step containing: character level word-embeddings that are trained along the rest of the network, pre-trained word-embeddings\footnote{We use the French fastText embeddings distributed by \citep{Grave:2018}.}, a randomly initialized word embeddings that are trained along the rest of the network, and contextualized word-embeddings for which we plug our customly trained ELMos.
@@ -360,10 +360,10 @@ Hence, the pure pre-traing (i.e. Method 1) yields the following four language mo
 
 \subsection{Base evaluation systems}
 
-\textbf{UDPipe Future} \citep{straka2018udpipe} is an LSTM based model ranked 3\textsuperscript{rd} in dependency parsing and 6\textsuperscript{th} in POS tagging during the CoNLL~2018 shared task \citep{seker2018universal}. We report the scores as they appear in \citet{kondratyuk201975}'s paper.
+\textbf{UDPipe Future} \citep{straka-2018-udpipe} is an LSTM based model ranked 3\textsuperscript{rd} in dependency parsing and 6\textsuperscript{th} in POS tagging during the CoNLL~2018 shared task \citep{seker-etal-2018-universal}. We report the scores as they appear in \citet{kondratyuk-straka-2019-75}'s paper.
 We add to UDPipe Future, five differently trained ELMo language model pre-trained on the qualitatively and quantitatively different corpora under comparison. Additionally, we also test the impact of the \Cabernet Corpus on ELMo fine-tuning.
 
-\textbf{The LSTM-CRF} is a model originally concived by \citet{lample2016neural} is just a Bi-LSTM pre-appended by both character level word embeddings and pre-trained word embeddings and pos-appended by a CRF decoder layer. For our experiments, we use the implementation of \citep{strakova-etal-2019-neural} which is readily available\footnote{Available at \url{https://github.com/ufal/acl2019_nested_ner}.} and it is designed to easily pre-append contextualized word-embeddings to the model.
+\textbf{The LSTM-CRF} is a model originally concived by \citet{lample-etal-2016-neural} is just a Bi-LSTM pre-appended by both character level word embeddings and pre-trained word embeddings and pos-appended by a CRF decoder layer. For our experiments, we use the implementation of \citep{strakova-etal-2019-neural} which is readily available\footnote{Available at \url{https://github.com/ufal/acl2019_nested_ner}.} and it is designed to easily pre-append contextualized word-embeddings to the model.
 
 \subsection{Evaluation Tasks}\label{MethodEVAL}
 
@@ -390,22 +390,22 @@ To test for word-level representation obtained through the different pre-trainin
 
 %To build a state-of-the at baseline, we fist evaluate \camembert 
 
-Experiments were run using the Universal Dependencies (UD) paradigm and its corresponding UD POS-tag set \citep{petrov2011universal} and UD treebank collection version 2.2 \citep{ud22}, which was used for the CoNLL 2018 shared task.
+Experiments were run using the Universal Dependencies (UD) paradigm and its corresponding UD POS-tag set \citep{petrov-etal-2012-universal} and UD treebank collection version 2.2 \citep{nivre-etal-2018-universal}, which was used for the CoNLL 2018 shared task.
 
 Different terms of comparisons were considered on the two downstream tasks of part-of-speech (POS) tagging and dependency parsing.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{Treebanks test data-set}
 We perform our work on the four freely available French UD treebanks in UD~v2.2: GSD, Sequoia, Spoken, and ParTUT, presented in Table \ref{treebanks-tab}.
 
-\textbf{GSD} treebank \citep{mcdonald13} is the second-largest tree-bank available for French after the FTB (described in subsection \ref{ner-section}), it contains data from blogs, news, reviews, and Wikipedia.
+\textbf{GSD} treebank \citep{mcdonald-etal-2013-universal} is the second-largest tree-bank available for French after the FTB (described in subsection \ref{ner-section}), it contains data from blogs, news, reviews, and Wikipedia.
 
 \textbf{Sequoia} tree-bank %\footnote{\url{https://deep-sequoia.inria.fr}} %candito2012le,
-\citep{candito2014deep} comprises more than 3000 sentences, from the French Europarl, the regional newspaper \emph{L’Est Républicain}, the French Wikipedia and documents from the European Medicines Agency.
+\citep{candito-etal-2014-deep} comprises more than 3000 sentences, from the French Europarl, the regional newspaper \emph{L’Est Républicain}, the French Wikipedia and documents from the European Medicines Agency.
 
 \textbf{Spoken} was automatically converted from the Rhapsodie tree-bank  %\footnote{\url{https://www.projet-rhapsodie.fr}} 
-\citep{lacheret14} with manual corrections. It consists of 57 sound samples of spoken French with phonetic transcription aligned with sound (word boundaries, syllables, and phonemes), syntactic and prosodic annotations.
+\citep{lacheret-etal-2014-rhapsodie} with manual corrections. It consists of 57 sound samples of spoken French with phonetic transcription aligned with sound (word boundaries, syllables, and phonemes), syntactic and prosodic annotations.
 
-Finally, \textbf{ParTUT} is a conversion of a multilingual parallel treebank developed at the University of Turin, and consisting of a variety of text genres, including talks, legal texts, and Wikipedia articles, among others; ParTUT data is derived from the already-existing parallel treebank, Par(allel)TUT \citep{sanguinetti2015PartTUT}. Table~\ref{treebanks-tab} contains a summary comparing the sizes of the treebanks.%\footnote{\url{https://universaldependencies.org}}.
+Finally, \textbf{ParTUT} is a conversion of a multilingual parallel treebank developed at the University of Turin, and consisting of a variety of text genres, including talks, legal texts, and Wikipedia articles, among others; ParTUT data is derived from the already-existing parallel treebank, Par(allel)TUT \citep{sanguinetti-Bosco-2015-parttut}. Table~\ref{treebanks-tab} contains a summary comparing the sizes of the treebanks.%\footnote{\url{https://universaldependencies.org}}.
 
 \begin{table}
     \centering
@@ -426,13 +426,13 @@ Finally, \textbf{ParTUT} is a conversion of a multilingual parallel treebank dev
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{State-of-the-art}
 
-For POS-tagging and Parsing we select as a baseline UDPipe Future (2.0), without any additional contextualized embeddings \citep{straka2018udpipe}. This model was ranked 3rd in dependency parsing and 6th in POS-tagging during the CoNLL~2018 shared task \citep{seker2018universal}. Notably, UDPipe Future provides us a strong baseline that does not make use of any pre-trained contextual embedding.
+For POS-tagging and Parsing we select as a baseline UDPipe Future (2.0), without any additional contextualized embeddings \citep{straka-2018-udpipe}. This model was ranked 3rd in dependency parsing and 6th in POS-tagging during the CoNLL~2018 shared task \citep{seker-etal-2018-universal}. Notably, UDPipe Future provides us a strong baseline that does not make use of any pre-trained contextual embedding.
 
-We report on Table \ref{tab:fine-tuning_results} the published results on UDify by \cite{kondratyuk201975}, a multitask and multilingual model based on \mbert that is near state-of-the-art on all UD languages including French for both POS-tagging and dependency parsing.
+We report on Table \ref{tab:fine-tuning_results} the published results on UDify by \cite{kondratyuk-straka-2019-75}, a multitask and multilingual model based on \mbert that is near state-of-the-art on all UD languages including French for both POS-tagging and dependency parsing.
 
-%On the other hand, UDify, UDPipe Future + mBERT \citep{straka2019evaluating} and \camembert \citep{2019arXiv} represent different terms of comparison for state-of-the-art results on Parsing and POS-tagging.
+%On the other hand, UDify, UDPipe Future + mBERT \citep{straka2019evaluating} and \camembert \citep{martin-etal-2020-camembert} represent different terms of comparison for state-of-the-art results on Parsing and POS-tagging.
 
-%We compare our models to  \citep{kondratyuk201975}, 
+%We compare our models to  \citep{kondratyuk-straka-2019-75}, 
 
 Finally, it is also relevant to compare our results with \camembert on the selected tasks, because compared to UDify it is the work that pushed the furthest the performance in fine-tuning end-to-end a \bert-based model.
 
@@ -515,14 +515,14 @@ The tree-bank, shows a large proportion of the entity mentions that are multi-wo
 
 % Most of the advances in NER haven been achieved in English, particularly focusing on the CoNLL 2003 \citep{tjong2003introduction} and the Ontonotes v5 \citep{pradhan2012conll,pradhan2013towards} English corpora. 
 
-%Importantly, NER task was traditionally tackled using Conditional Random Fields (CRF) \citep{lafferty2001conditional}, CRFs were later used as decoding layers for Bi-LSTM architectures \citep{huang2015bidirectional,lample2016neural} showing considerable improvements over CRFs alone. Later, these Bi-LSTM-CRF architectures were enhanced with contextualised word-embeddings which yet again brought major improvements to the task \citep{peters-etal-2018-deep,akbik2018contextual}. Finally, large pre-trained architectures settled the current state of the art showing a small yet important improvement over previous NER-specific architectures \citep{devlin2019bert,baevski2019cloze}.
+%Importantly, NER task was traditionally tackled using Conditional Random Fields (CRF) \citep{lafferty2001conditional}, CRFs were later used as decoding layers for Bi-LSTM architectures \citep{huang2015bidirectional,lample-etal-2016-neural} showing considerable improvements over CRFs alone. Later, these Bi-LSTM-CRF architectures were enhanced with contextualised word-embeddings which yet again brought major improvements to the task \citep{peters-etal-2018-deep,akbik2018contextual}. Finally, large pre-trained architectures settled the current state of the art showing a small yet important improvement over previous NER-specific architectures \citep{devlin2019bert,baevski2019cloze}.
 
 %\notemumu{@Pedro : voir si ce paragraphe est necessaire ou pas : je l'ai commenté pour l'instant, OUI ! Ça m'interesse } ok ! on le remet !
 %In non-English NER the CoNLL 2002 shared task included NER corpora for Spanish and Dutch corpora \citep{tjong2002introduction} while the CoNLL 2003 included a German corpus \citep{tjong2003introduction}. Here the recent efforts of \citep{strakova-etal-2019-neural} settled the state of the art for Spanish and Dutch, while \citep{akbik2018contextual} did it for German.
 
 English has received the most attention in NER in the past, with some recent developments in German, Dutch and Spanish by \citet{strakova-etal-2019-neural}. In French, no extensive work has been done due to the limited availability of NER corpora. We compare our model with the stable baselines settled by \citep{dupont-2017-exploration}, who trained both CRF and BiLSTM-CRF architectures on the FTB and enhanced them using heuristics and pre-trained word-embeddings.
 
-And additional term of comparison was identified in a recently released state-of-the-art language model for French, CamemBERT \citep{2019arXiv}, based on the RoBERTa architecture pre-trained on the French sub-corpus of the newly available multilingual corpus OSCAR \citep{ortiz-suarez-etal-2019-asynchronous}.
+And additional term of comparison was identified in a recently released state-of-the-art language model for French, CamemBERT \citep{martin-etal-2020-camembert}, based on the RoBERTa architecture pre-trained on the French sub-corpus of the newly available multilingual corpus OSCAR \citep{ortiz-suarez-etal-2019-asynchronous}.
 
 %Mumu add summary camembert ? Peut êtr epas nécessaire  à discuter vaec Pedro
 
@@ -553,7 +553,7 @@ And additional term of comparison was identified in a recently released state-of
             \midrule
 
             \multicolumn{4}{l}{\textit{State-of-the-art Models}}                                                                                                       \\
-            \camembert \citep{2019arXiv}            & 88.35                                & 87.46                               & 87.93                               \\ %baseline state of the art 
+            \camembert \citep{martin-etal-2020-camembert}            & 88.35                                & 87.46                               & 87.93                               \\ %baseline state of the art 
             \bottomrule
         \end{tabular}}
     \caption{NER Results on French Treebank (FTB): \textbf{best scores}, \underline{second to best}.}
@@ -632,7 +632,7 @@ All in all, our evaluations confirm the effectiveness of large ELMo-based langua
 The paper investigates the relevance of different types of corpora on ELMo's pre-training and fine-tuning. It confirms the effectiveness and quality of word-embeddings obtained through balanced and linguistically representative corpora. %while POS-tagging beats state-of-the art results.
 
 %All our FRrELMo-based language models build on UDPipe Future parser and tagger, 
-By adding to UDPipe Future 5 differently trained ELMo language models that were pre-trained on qualitatively and quantitatively different corpora, our French Balanced Reference Corpus \Cabernet unexpectedly establishes a new state-of-the-art for POS-tagging over previous monolingual \citep{straka2018udpipe} and multilingual approaches \citep{straka2019evaluating,kondratyuk201975}.
+By adding to UDPipe Future 5 differently trained ELMo language models that were pre-trained on qualitatively and quantitatively different corpora, our French Balanced Reference Corpus \Cabernet unexpectedly establishes a new state-of-the-art for POS-tagging over previous monolingual \citep{straka-2018-udpipe} and multilingual approaches \citep{straka2019evaluating,kondratyuk-straka-2019-75}.
 
 The proposed evaluation methods are showing that the two newly built corpora that are published here are not only relevant for neural NLP and language modeling in French, but that corpus balance shows to be a significant predictor of ELMo's accuracy on Spoken test data-set and for NER tasks.
 

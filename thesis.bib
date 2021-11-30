@@ -1,5 +1,16 @@
 % Encoding: UTF-8
 
+@article{ando-zhang-2005-framework,
+  author  = {Rie Kubota Ando and Tong Zhang},
+  title   = {A Framework for Learning Predictive Structures from Multiple Tasks and Unlabeled Data},
+  journal = {Journal of Machine Learning Research},
+  year    = {2005},
+  volume  = {6},
+  number  = {61},
+  pages   = {1817-1853},
+  url     = {http://jmlr.org/papers/v6/ando05a.html}
+}
+
 @article{arivazhagan-etal-2019-massively,
   author        = {{Arivazhagan}, Naveen and {Bapna}, Ankur and {Firat}, Orhan and {Lepikhin}, Dmitry and {Johnson}, Melvin and {Krikun}, Maxim and {Chen}, Mia Xu and {Cao}, Yuan and {Foster}, George and {Cherry}, Colin and {Macherey}, Wolfgang and {Chen}, Zhifeng and {Wu}, Yonghui},
   title         = {{Massively Multilingual Neural Machine Translation in the Wild: Findings and Challenges}},
@@ -113,21 +124,21 @@
   url        = {https://doi.org/10.1145/324133.324234},
   doi        = {10.1145/324133.324234},
   abstract   = {This paper studies the problem of efficiently schedulling fully strict (i.e., well-structured)
-multithreaded computations on parallel computers. A popular and practical method of
-scheduling this kind of dynamic MIMD-style computation is “work stealing,” in which
-processors needing work steal computational threads from other processors. In this
-paper, we give the first provably good work-stealing scheduler for multithreaded computations
-with dependencies.Specifically, our analysis shows that the expected time to execute
-a fully strict computation on P processors using our work-stealing scheduler is T1/P
-+ O(T ∞ , where T1 is the minimum serial execution time of the multithreaded computation
-and (T ∞ is the minimum execution time with an infinite number of processors. Moreover,
-the space required by the execution is at most S1P, where S1 is the minimum serial
-space requirement. We also show that the expected total communication of the algorithm
-is at most O(PT ∞( 1 + nd)Smax), where Smax is the size of the largest activation
-record of any thread and nd is the maximum number of times that any thread synchronizes
-with its parent. This communication bound justifies the folk wisdom that work-stealing
-schedulers are more communication efficient than their work-sharing counterparts.
-All three of these bounds are existentially optimal to within a constant factor.},
+                multithreaded computations on parallel computers. A popular and practical method of
+                scheduling this kind of dynamic MIMD-style computation is “work stealing,” in which
+                processors needing work steal computational threads from other processors. In this
+                paper, we give the first provably good work-stealing scheduler for multithreaded computations
+                with dependencies.Specifically, our analysis shows that the expected time to execute
+                a fully strict computation on P processors using our work-stealing scheduler is T1/P
+                + O(T ∞ , where T1 is the minimum serial execution time of the multithreaded computation
+                and (T ∞ is the minimum execution time with an infinite number of processors. Moreover,
+                the space required by the execution is at most S1P, where S1 is the minimum serial
+                space requirement. We also show that the expected total communication of the algorithm
+                is at most O(PT ∞( 1 + nd)Smax), where Smax is the size of the largest activation
+                record of any thread and nd is the maximum number of times that any thread synchronizes
+                with its parent. This communication bound justifies the folk wisdom that work-stealing
+                schedulers are more communication efficient than their work-sharing counterparts.
+                All three of these bounds are existentially optimal to within a constant factor.},
   journal    = {J. ACM},
   month      = sep,
   pages      = {720–748},
@@ -393,6 +404,19 @@ All three of these bounds are existentially optimal to within a constant factor.
   year      = {2013}
 }
 
+@misc{nivre-etal-2018-universal,
+  title     = {Universal Dependencies 2.2},
+  author    = {Nivre, Joakim and Abrams, Mitchell and Agi{\'c}, {\v Z}eljko and Ahrenberg, Lars and Antonsen, Lene and Aranzabe, Maria Jesus and Arutie, Gashaw and Asahara, Masayuki and Ateyah, Luma and Attia, Mohammed and Atutxa, Aitziber and Augustinus, Liesbeth and Badmaeva, Elena and Ballesteros, Miguel and Banerjee, Esha and Bank, Sebastian and Barbu Mititelu, Verginica and Bauer, John and Bellato, Sandra and Bengoetxea, Kepa and Bhat, Riyaz Ahmad and Biagetti, Erica and Bick, Eckhard and Blokland, Rogier and Bobicev, Victoria and B{\"o}rstell, Carl and Bosco, Cristina and Bouma, Gosse and Bowman, Sam and Boyd, Adriane and Burchardt, Aljoscha and Candito, Marie and Caron, Bernard and Caron, Gauthier and Cebiro{\u g}lu Eryi{\u g}it, G{\"u}l{\c s}en and Celano, Giuseppe G. A. and Cetin, Savas and Chalub, Fabricio and Choi, Jinho and Cho, Yongseok and Chun, Jayeol and Cinkov{\'a}, Silvie and Collomb, Aur{\'e}lie and {\c C}{\"o}ltekin, {\c C}a{\u g}r{\i} and Connor, Miriam and Courtin, Marine and Davidson, Elizabeth and de Marneffe, Marie-Catherine and de Paiva, Valeria and Diaz de Ilarraza, Arantza and Dickerson, Carly and Dirix, Peter and Dobrovoljc, Kaja and Dozat, Timothy and Droganova, Kira and Dwivedi, Puneet and Eli, Marhaba and Elkahky, Ali and Ephrem, Binyam and Erjavec, Toma{\v z} and Etienne, Aline and Farkas, Rich{\'a}rd and Fernandez Alcalde, Hector and Foster, Jennifer and Freitas, Cl{\'a}udia and Gajdo{\v s}ov{\'a}, Katar{\'{\i}}na and Galbraith, Daniel and Garcia, Marcos and G{\"a}rdenfors, Moa and Gerdes, Kim and Ginter, Filip and Goenaga, Iakes and Gojenola, Koldo and G{\"o}k{\i}rmak, Memduh and Goldberg, Yoav and G{\'o}mez Guinovart, Xavier and Gonz{\'a}les Saavedra, Berta and Grioni,
+               Matias and Gr{\=
+               u}z{\={\i}}tis, Normunds and Guillaume, Bruno and Guillot-Barbance, C{\'e}line and Habash, Nizar and Haji{\v c}, Jan and Haji{\v c} jr., Jan and H{\`a} M{\~y}, Linh and Han, Na-Rae and Harris, Kim and Haug, Dag and Hladk{\'a}, Barbora and Hlav{\'a}{\v c}ov{\'a}, Jaroslava and Hociung, Florinel and Hohle, Petter and Hwang, Jena and Ion, Radu and Irimia, Elena and Jel{\'{\i}}nek, Tom{\'a}{\v s} and Johannsen, Anders and J{\o}rgensen, Fredrik and Ka{\c s}{\i}kara, H{\"u}ner and Kahane, Sylvain and Kanayama, Hiroshi and Kanerva, Jenna and Kayadelen, Tolga and Kettnerov{\'a}, V{\'a}clava and Kirchner, Jesse and Kotsyba, Natalia and Krek, Simon and Kwak, Sookyoung and Laippala, Veronika and Lambertino, Lorenzo and Lando, Tatiana and Larasati, Septina Dian and Lavrentiev, Alexei and Lee, John and L{\^e} H{\`{\^o}}ng, Phương and Lenci, Alessandro and Lertpradit, Saran and Leung, Herman and Li, Cheuk Ying and Li, Josie and Li, Keying and Lim, {KyungTae} and Ljube{\v s}i{\'c}, Nikola and Loginova, Olga and Lyashevskaya, Olga and Lynn, Teresa and Macketanz, Vivien and Makazhanov, Aibek and Mandl, Michael and Manning, Christopher and Manurung, Ruli and M{\u a}r{\u a}nduc, C{\u a}t{\u a}lina and Mare{\v c}ek, David and Marheinecke, Katrin and Mart{\'{\i}}nez Alonso, H{\'e}ctor and Martins, Andr{\'e} and Ma{\v s}ek, Jan and Matsumoto, Yuji and {McDonald}, Ryan and Mendon{\c c}a, Gustavo and Miekka, Niko and Missil{\"a}, Anna and Mititelu, C{\u a}t{\u a}lin and Miyao, Yusuke and Montemagni, Simonetta and More, Amir and Moreno Romero, Laura and Mori, Shinsuke and Mortensen, Bjartur and Moskalevskyi, Bohdan and Muischnek, Kadri and Murawaki, Yugo and M{\"u}{\"u}risep, Kaili and Nainwani, Pinkey and Navarro Hor{\~n}iacek, Juan Ignacio and Nedoluzhko,
+               Anna and Ne{\v s}pore-B{\=e}rzkalne, Gunta and Nguy{\~{\^e}}n Th{\d i}, Lương and Nguy{\~{\^e}}n Th{\d i} Minh, Huy{\`{\^e}}n and Nikolaev, Vitaly and Nitisaroj, Rattima and Nurmi, Hanna and Ojala, Stina and Ol{\'u}{\`o}kun, Ad{\'e}day{\d o}̀ and Omura, Mai and Osenova, Petya and {\"O}stling, Robert and {\O}vrelid, Lilja and Partanen, Niko and Pascual, Elena and Passarotti, Marco and Patejuk, Agnieszka and Peng, Siyao and Perez, Cenel-Augusto and Perrier, Guy and Petrov, Slav and Piitulainen, Jussi and Pitler, Emily and Plank, Barbara and Poibeau, Thierry and Popel, Martin and Pretkalni{\c n}a, Lauma and Pr{\'e}vost, Sophie and Prokopidis, Prokopis and Przepi{\'o}rkowski, Adam and Puolakainen, Tiina and Pyysalo, Sampo and R{\"a}{\"a}bis, Andriela and Rademaker, Alexandre and Ramasamy, Loganathan and Rama, Taraka and Ramisch, Carlos and Ravishankar, Vinit and Real, Livy and Reddy, Siva and Rehm, Georg and Rie{\ss}ler, Michael and Rinaldi, Larissa and Rituma, Laura and Rocha, Luisa and Romanenko, Mykhailo and Rosa, Rudolf and Rovati, Davide and Roșca, Valentin and Rudina, Olga and Sadde, Shoval and Saleh, Shadi and Samard{\v z}i{\'c}, Tanja and Samson, Stephanie and Sanguinetti,
+               Manuela and Saul{\={\i}}te, Baiba and Sawanakunanon, Yanin and Schneider, Nathan and Schuster, Sebastian and Seddah, Djam{\'e} and Seeker, Wolfgang and Seraji, Mojgan and Shen, Mo and Shimada, Atsuko and Shohibussirri, Muh and Sichinava, Dmitry and Silveira, Natalia and Simi, Maria and Simionescu, Radu and Simk{\'o}, Katalin and {\v S}imkov{\'a}, M{\'a}ria and Simov, Kiril and Smith, Aaron and Soares-Bastos, Isabela and Stella, Antonio and Straka, Milan and Strnadov{\'a}, Jana and Suhr, Alane and Sulubacak, Umut and Sz{\'a}nt{\'o}, Zsolt and Taji, Dima and Takahashi, Yuta and Tanaka, Takaaki and Tellier, Isabelle and Trosterud, Trond and Trukhina, Anna and Tsarfaty, Reut and Tyers, Francis and Uematsu, Sumire and Ure{\v s}ov{\'a}, Zde{\v n}ka and Uria, Larraitz and Uszkoreit, Hans and Vajjala, Sowmya and van Niekerk, Daniel and van Noord, Gertjan and Varga, Viktor and Vincze, Veronika and Wallin, Lars and Washington, Jonathan North and Williams, Seyi and Wir{\'e}n, Mats and Woldemariam, Tsegay and Wong, Tak-sum and Yan, Chunxiao and Yavrumyan, Marat M. and Yu, Zhuoran and {\v Z}abokrtsk{\'y}, Zden{\v e}k and Zeldes, Amir and Zeman, Daniel and Zhang, Manying and Zhu, Hanzhi},
+  url       = {http://hdl.handle.net/11234/1-2837},
+  note      = {{LINDAT}/{CLARIAH}-{CZ} digital library at the Institute of Formal and Applied Linguistics ({{\'U}FAL}), Faculty of Mathematics and Physics, Charles University},
+  copyright = {Licence Universal Dependencies v2.2},
+  year      = {2018}
+}
+
 @inproceedings{ortiz-suarez-etal-2019-asynchronous,
   author    = {Pedro Javier {Ortiz Su{\'a}rez} and Beno{\^i}t Sagot and Laurent Romary},
   booktitle = {Proceedings of the Workshop on Challenges in the Management of Large Corpora (CMLC-7) 2019. Cardiff, 22nd July 2019},
@@ -459,6 +483,26 @@ All three of these bounds are existentially optimal to within a constant factor.
   url     = {http://jmlr.org/papers/v21/20-074.html}
 }
 
+@inbook{sanguinetti-Bosco-2015-parttut,
+  author    = {Sanguinetti, Manuela
+               and Bosco, Cristina},
+  editor    = {Basili, Roberto
+               and Bosco, Cristina
+               and Delmonte, Rodolfo
+               and Moschitti, Alessandro
+               and Simi, Maria},
+  title     = {PartTUT: The Turin University Parallel Treebank},
+  booktitle = {Harmonization and Development of Resources and Tools for Italian Natural Language Processing within the PARLI Project},
+  year      = {2015},
+  publisher = {Springer International Publishing},
+  address   = {Cham},
+  pages     = {51--69},
+  abstract  = {In this paper, we introduce an ongoing project for the development of a parallel treebank for Italian, English and French. The treebank is annotated in a dependency format, namely the one designed in the Turin University Treebank (TUT), hence the choice to call such new resource Par(allel)TUT. The project aims at creating a resource which can be useful in particular for translation research. Therefore, beyond constantly enriching the treebank with new and heterogeneous data, so as to build a dynamic and balanced multilingual treebank, the current stage of the project is devoted to the design of a tool for the alignment of data, which takes into account syntactic knowledge as annotated in this kind of resource. The paper focuses in particular on the study of translational divergences and their implications for the development of the alignment tool. The paper provides an overview of the treebank, with its current content and the peculiarities of the annotation format, the description of the classes of translational divergences which could be encountered in the treebank, together with a proposal for their alignment.},
+  isbn      = {978-3-319-14206-7},
+  doi       = {10.1007/978-3-319-14206-7_3},
+  url       = {https://doi.org/10.1007/978-3-319-14206-7_3}
+}
+
 @article{skitka-etal-1999-does,
   title    = {Does automation bias decision-making?},
   journal  = {International Journal of Human-Computer Studies},
@@ -483,10 +527,10 @@ All three of these bounds are existentially optimal to within a constant factor.
   url       = {https://doi.org/10.1145/3357384.3357853},
   doi       = {10.1145/3357384.3357853},
   abstract  = {Using inappropriate datasets for data science tasks can be harmful, especially for
-applications that impact humans. Targeting data ethics, we demonstrate MithraLabel,
-a system for generating task-specific information about a dataset, in the form of
-a set of visual widgets, as a flexible "nutritional label" that provides a user with
-information to determine the fitness of the dataset for the task at hand.},
+               applications that impact humans. Targeting data ethics, we demonstrate MithraLabel,
+               a system for generating task-specific information about a dataset, in the form of
+               a set of visual widgets, as a flexible "nutritional label" that provides a user with
+               information to determine the fitness of the dataset for the task at hand.},
   booktitle = {Proceedings of the 28th ACM International Conference on Information and Knowledge Management},
   pages     = {2893–2896},
   numpages  = {4},
@@ -532,7 +576,7 @@ information to determine the fitness of the dataset for the task at hand.},
   year      = {2019}
 }
 
-@inproceedings{zaheer-etal-2020-big,
+ @inproceedings{zaheer-etal-2020-big,
   author    = {Zaheer, Manzil and Guruganesh, Guru and Dubey, Kumar Avinava and Ainslie, Joshua and Alberti, Chris and Ontanon, Santiago and Pham, Philip and Ravula, Anirudh and Wang, Qifan and Yang, Li and Ahmed, Amr},
   booktitle = {Advances in Neural Information Processing Systems},
   editor    = {H. Larochelle and M. Ranzato and R. Hadsell and M. F. Balcan and H. Lin},
