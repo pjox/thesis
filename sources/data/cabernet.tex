@@ -395,7 +395,7 @@ Experiments were run using the Universal Dependencies (UD) paradigm and its corr
 Different terms of comparisons were considered on the two downstream tasks of part-of-speech (POS) tagging and dependency parsing.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{Treebanks test data-set}
-We perform our work on the four freely available French UD treebanks in UD~v2.2: GSD, Sequoia, Spoken, and ParTUT, presented in Table \ref{treebanks-tab}.
+We perform our work on the four freely available French UD treebanks in UD~v2.2: GSD, Sequoia, Spoken, and ParTUT, presented in Table \ref{treebanks-tab-cabernet}.
 
 \textbf{GSD} treebank \citep{mcdonald-etal-2013-universal} is the second-largest tree-bank available for French after the FTB (described in subsection \ref{ner-section}), it contains data from blogs, news, reviews, and Wikipedia.
 
@@ -405,7 +405,7 @@ We perform our work on the four freely available French UD treebanks in UD~v2.2:
 \textbf{Spoken} was automatically converted from the Rhapsodie tree-bank  %\footnote{\url{https://www.projet-rhapsodie.fr}} 
 \citep{lacheret-etal-2014-rhapsodie} with manual corrections. It consists of 57 sound samples of spoken French with phonetic transcription aligned with sound (word boundaries, syllables, and phonemes), syntactic and prosodic annotations.
 
-Finally, \textbf{ParTUT} is a conversion of a multilingual parallel treebank developed at the University of Turin, and consisting of a variety of text genres, including talks, legal texts, and Wikipedia articles, among others; ParTUT data is derived from the already-existing parallel treebank, Par(allel)TUT \citep{sanguinetti-Bosco-2015-parttut}. Table~\ref{treebanks-tab} contains a summary comparing the sizes of the treebanks.%\footnote{\url{https://universaldependencies.org}}.
+Finally, \textbf{ParTUT} is a conversion of a multilingual parallel treebank developed at the University of Turin, and consisting of a variety of text genres, including talks, legal texts, and Wikipedia articles, among others; ParTUT data is derived from the already-existing parallel treebank, Par(allel)TUT \citep{sanguinetti-Bosco-2015-parttut}. Table~\ref{treebanks-tab-cabernet} contains a summary comparing the sizes of the treebanks.%\footnote{\url{https://universaldependencies.org}}.
 
 \begin{table}
     \centering
@@ -420,7 +420,7 @@ Finally, \textbf{ParTUT} is a conversion of a multilingual parallel treebank dev
             ParTUT   & 27 658  & 28 594  & 1 020     & Oral Wiki. Legal         \\
             \bottomrule
         \end{tabular}}
-    \caption{Sizes of the 4 treebanks used in the evaluations of POS-tagging and dependency parsing. \label{treebanks-tab}}
+    \caption{Sizes of the 4 treebanks used in the evaluations of POS-tagging and dependency parsing. \label{treebanks-tab-cabernet}}
 \end{table}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -507,7 +507,7 @@ Finally, it is also relevant to compare our results with \camembert on the selec
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{Treebanks test data-set}
-The benchmark data set from the French Treebank (FTB)  \citep{abeille:03} was selected in its 2008 version, as introduced by \citet{cc-clustering:09short} and complemented with NER annotations by \citet{sagot2012annotation}\footnote{The NER-annotated FTB contains approximately than 12k sentences, and more than 350k tokens were extracted from articles of \textit{Le Monde} newspaper (1989 - 1995). As a whole, it encompasses 11,636 entity mentions distributed among 7 different types : 2025 mentions of ``Person'', 3761 of ``Location'', 2382 of ``Organisation'', 3357 of ``Company'', 67 of ``Product'', 15 of ``POI'' (Point of Interest) and 29 of ``Fictional Character''.}.
+The benchmark data set from the French Treebank (FTB)  \citep{abeille-etal-2003-building} was selected in its 2008 version, as introduced by \citet{candito-crabbe-2009-improving} and complemented with NER annotations by \citet{sagot-etal-2012-annotation}\footnote{The NER-annotated FTB contains approximately than 12k sentences, and more than 350k tokens were extracted from articles of \emph{Le Monde} newspaper (1989 - 1995). As a whole, it encompasses 11,636 entity mentions distributed among 7 different types : 2025 mentions of ``Person'', 3761 of ``Location'', 2382 of ``Organisation'', 3357 of ``Company'', 67 of ``Product'', 15 of ``POI'' (Point of Interest) and 29 of ``Fictional Character''.}.
 The tree-bank, shows a large proportion of the entity mentions that are multi-word entities. We therefore report the three metrics that are commonly used to evaluate models: precision, recall, and F1 score. %Specifically, (1) precision measures account for  the percentage of entities found by the system that are correctly tagged, (2) recall measures sand for the percentage of named entities present in the corpus that are found, and (3) F1 score measure combines both precision and recall measures giving a global measure of a model's performance.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -536,24 +536,24 @@ And additional term of comparison was identified in a recently released state-of
         \begin{tabular}{lccc}
             \toprule
             %\multicolumn{4}{c}{\textsc{NER - Results}}  \\\midrule
-            \textsc{NER - Results} on FTB           & Precision                            & Recall                              & F1                                  \\
+            \textsc{NER - Results} on FTB                 & Precision                            & Recall                              & F1                                  \\
             \midrule
-            \multicolumn{4}{l}{\textit{Baselines Models}}                                                                                                              \\
-            SEM (CRF) \citep{dupont-2017-exploration} & 87.89                                & 82.34                               & 85.02                               \\ %baseline 
-            LSTM-CRF \citep{dupont-2017-exploration}  & 87.23                                & 83.96                               & 85.57                               \\ \midrule %baseline 2
-            LSTM-CRF  test models                   & 85.87                                & 81.35                               & 83.55                               \\
-            \:+FastText                             & 88.53                                & 84.63                               & 86.53                               \\
-            \:+FastText+\ELMocbt                    & 79.77                                & 77.63                               & 78.69                               \\
-            \:+FastText+\ELMowiki                   & 88.87                                & 87.56                               & 88.21                               \\
+            \multicolumn{4}{l}{\textit{Baselines Models}}                                                                                                                    \\
+            SEM (CRF) \citep{dupont-2017-exploration}     & 87.89                                & 82.34                               & 85.02                               \\ %baseline 
+            LSTM-CRF \citep{dupont-2017-exploration}      & 87.23                                & 83.96                               & 85.57                               \\ \midrule %baseline 2
+            LSTM-CRF  test models                         & 85.87                                & 81.35                               & 83.55                               \\
+            \:+FastText                                   & 88.53                                & 84.63                               & 86.53                               \\
+            \:+FastText+\ELMocbt                          & 79.77                                & 77.63                               & 78.69                               \\
+            \:+FastText+\ELMowiki                         & 88.87                                & 87.56                               & 88.21                               \\
             % \:+FastText+\ELMococa                  & 88.82                 & 87.82                 & 88.32                 \\
-            \:+FastText+\ELMocaber                  & \underline{88.91}                    & 87.22                               & 88.06                               \\
-            \:+FastText+\ELMooscar                  & 88.89                                & \underline{88.43}                   & \underline{88.66}                   \\\midrule %
+            \:+FastText+\ELMocaber                        & \underline{88.91}                    & 87.22                               & 88.06                               \\
+            \:+FastText+\ELMooscar                        & 88.89                                & \underline{88.43}                   & \underline{88.66}                   \\\midrule %
             %\:+FastText+\ELMocoscar                & \cellcolor[gray]{0.8} \emph{\textbf{88.93}} & \underline{88.08}     & \underline{88.50}     \\
-            \:+FastText+\ELMocabercar               & \cellcolor[gray]{0.8} \textbf{90.70} & \cellcolor[gray]{0.8}\textbf{89.12} & \cellcolor[gray]{0.8}\textbf{89.93} \\
+            \:+FastText+\ELMocabercar                     & \cellcolor[gray]{0.8} \textbf{90.70} & \cellcolor[gray]{0.8}\textbf{89.12} & \cellcolor[gray]{0.8}\textbf{89.93} \\
             \midrule
 
-            \multicolumn{4}{l}{\textit{State-of-the-art Models}}                                                                                                       \\
-            \camembert \citep{martin-etal-2020-camembert}            & 88.35                                & 87.46                               & 87.93                               \\ %baseline state of the art 
+            \multicolumn{4}{l}{\textit{State-of-the-art Models}}                                                                                                             \\
+            \camembert \citep{martin-etal-2020-camembert} & 88.35                                & 87.46                               & 87.93                               \\ %baseline state of the art 
             \bottomrule
         \end{tabular}}
     \caption{NER Results on French Treebank (FTB): \textbf{best scores}, \underline{second to best}.}
@@ -632,14 +632,14 @@ All in all, our evaluations confirm the effectiveness of large ELMo-based langua
 The paper investigates the relevance of different types of corpora on ELMo's pre-training and fine-tuning. It confirms the effectiveness and quality of word-embeddings obtained through balanced and linguistically representative corpora. %while POS-tagging beats state-of-the art results.
 
 %All our FRrELMo-based language models build on UDPipe Future parser and tagger, 
-By adding to UDPipe Future 5 differently trained ELMo language models that were pre-trained on qualitatively and quantitatively different corpora, our French Balanced Reference Corpus \Cabernet unexpectedly establishes a new state-of-the-art for POS-tagging over previous monolingual \citep{straka-2018-udpipe} and multilingual approaches \citep{straka2019evaluating,kondratyuk-straka-2019-75}.
+By adding to UDPipe Future 5 differently trained ELMo language models that were pre-trained on qualitatively and quantitatively different corpora, our French Balanced Reference Corpus \Cabernet unexpectedly establishes a new state-of-the-art for POS-tagging over previous monolingual \citep{straka-2018-udpipe} and multilingual approaches \citep{straka-strakova-2019-evaluating,kondratyuk-straka-2019-75}.
 
 The proposed evaluation methods are showing that the two newly built corpora that are published here are not only relevant for neural NLP and language modeling in French, but that corpus balance shows to be a significant predictor of ELMo's accuracy on Spoken test data-set and for NER tasks.
 
-Other perspective uses of \Cabernet involve it use as a corpus offering a reference point for lexical frequency measures, like association measures. Its comparability with English COCA further grants the cross-linguistic validity of measures like Point-wise Mutual Information or DICE's Coefficient. The representativeness probed through our experimental approach are key aspects that allow such measures to be tested against psycho-linguistic and neuro-linguistic data as shown in previous neuro-imaging studies \citep{Fabre:2018}.
+Other perspective uses of \Cabernet involve it use as a corpus offering a reference point for lexical frequency measures, like association measures. Its comparability with English COCA further grants the cross-linguistic validity of measures like Point-wise Mutual Information or DICE's Coefficient. The representativeness probed through our experimental approach are key aspects that allow such measures to be tested against psycho-linguistic and neuro-linguistic data as shown in previous neuro-imaging studies \citep{bhattasali-etal-2018-processing}.
 
 The results obtained for the parsing tasks on ParTUT open a new perspective for the development of the French Balanced Reference Corpus, involving the enhancement of the terminological coverage of \Cabernet. A sixth sub-part could be included to cover technical domains like legal and medical ones, and thereby enlarge the specialized lexical coverage of \Cabernet.
-Further developments of this resource would involve an extension to cover user-generated content, ranging from well written blogs, tweets to more variable written productions like newspaper's comment or forums, as present in the CoMeRe corpus \citep{chanier:comere}.%\footnote{More on CoMere corpus at \url{https://repository.ortolang.fr/api/content/comere/v2/comere.html}.}
+Further developments of this resource would involve an extension to cover user-generated content, ranging from well written blogs, tweets to more variable written productions like newspaper's comment or forums, as present in the CoMeRe corpus \citep{chanier-etal-2014-the}.%\footnote{More on CoMere corpus at \url{https://repository.ortolang.fr/api/content/comere/v2/comere.html}.}
 The computational experiments conducted here also show that pre-training language models like ELMo on a very small sample like the French Children Book Test corpus or \Cabernet yields unexpected results. This opens a perspective for languages that have smaller training corpora. ELMo could be a better suited language model for those languages than it is for others having larger size resources.
 
 Results on the NER task show that size - usually presented as the more important factor to enhance the precision of representation of word-embeddings - matters less than linguistic representativeness, as achieved through corpus linguistic balance. \ELMocoscar sets state-of-the art results in NER (i.e. Precision, Recall and F1) that are superior than those obtained with a 30 times larger corpus, like OSCAR.
