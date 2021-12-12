@@ -102,9 +102,9 @@ For both of these tasks we run our experiments using the Universal Dependencies 
     \caption{Statistics on the treebanks used in POS tagging, dependency parsing, and NER (FTB).}\label{treebanks-tab}
 \end{table}
 
-We also evaluate our model in NER, which is a sequence labeling task predicting which words refer to real-world objects, such as people, locations, artifacts and organisations. We use the French Treebank\footnote{This dataset has only been stored and used on Inria's servers after signing the research-only agreement.} (FTB) \citep{abeille:03} in its 2008 version introduced by \citet{cc-clustering:09short} and with NER annotations by \citet{sagot2012annotation}. The FTB contains more than 11 thousand entity mentions distributed among 7 different entity types. A brief overview of the FTB can also be found in Table \ref{treebanks-tab}.
+We also evaluate our model in NER, which is a sequence labeling task predicting which words refer to real-world objects, such as people, locations, artifacts and organisations. We use the French Treebank\footnote{This dataset has only been stored and used on Inria's servers after signing the research-only agreement.} (FTB) \citep{abeille-etal-2003-building} in its 2008 version introduced by \citet{candito-crabbe-2009-improving} and with NER annotations by \citet{sagot-etal-2012-annotation}. The FTB contains more than 11 thousand entity mentions distributed among 7 different entity types. A brief overview of the FTB can also be found in Table \ref{treebanks-tab}.
 
-Finally, we evaluate our model on NLI, using the French part of the XNLI dataset \cite{conneau2018xnli}. NLI consists in predicting whether a hypothesis sentence is entailed, neutral or contradicts a premise sentence. The XNLI dataset is the extension of the Multi-Genre NLI (MultiNLI) corpus \cite{williams2018broad} to 15 languages by translating the validation and test sets manually into each of those languages.
+Finally, we evaluate our model on NLI, using the French part of the XNLI dataset \cite{conneau-etal-2018-xnli}. NLI consists in predicting whether a hypothesis sentence is entailed, neutral or contradicts a premise sentence. The XNLI dataset is the extension of the Multi-Genre NLI (MultiNLI) corpus \cite{williams-etal-2018-broad} to 15 languages by translating the validation and test sets manually into each of those languages.
 The English training set is machine translated for all languages other than English.
 The dataset is composed of 122k train, 2490 development and 5010 test examples for each language.
 As usual, NLI performance is evaluated using accuracy.
@@ -115,25 +115,25 @@ In dependency parsing and POS-tagging we compare our model with:
 
 \begin{itemize}
     \item \emph{\mbert}: The multilingual cased version of \bert (see Section~\ref{contextualmodelsforotherlanguages}). We fine-tune \mbert on each of the treebanks with an additional layer for POS-tagging and dependency parsing, in the same conditions as our \camembert model.
-    \item \emph{\xlmmlmtlm}: A multilingual pretrained language model from \citet{conneau-lample-2019-cross}, which showed better performance than \mbert on NLI. We use the version available in the Hugging's Face transformer library \cite{Wolf2019HuggingFacesTS}; like \mbert, we fine-tune it in the same conditions as our model.
-    \item \emph{UDify} \cite{kondratyuk201975}: A multitask and multilingual model based on \mbert, UDify is trained simultaneously on 124 different UD treebanks, creating a single POS tagging and dependency parsing model that works across 75 different languages. We report the scores from \citet{kondratyuk201975} paper.
-    \item \emph{UDPipe Future} \citep{straka2018udpipe}: An LSTM-based model ranked 3\textsuperscript{rd} in dependency parsing and 6\textsuperscript{th} in POS tagging at the CoNLL~2018 shared task \citep{seker-etal-2018-universal}. We report the scores from \citet{kondratyuk201975} paper.
-    \item \emph{UDPipe Future + \mbert + Flair} \citep{straka2019evaluating}: The original UDPipe Future implementation using \mbert and Flair as feature-based contextualized word embeddings. We report the scores from \citet{straka2019evaluating} paper.
+    \item \emph{\xlmmlmtlm}: A multilingual pretrained language model from \citet{conneau-lample-2019-cross}, which showed better performance than \mbert on NLI. We use the version available in the Hugging's Face transformer library \cite{wolf-etal-2019-huggingface}; like \mbert, we fine-tune it in the same conditions as our model.
+    \item \emph{UDify} \cite{kondratyuk-straka-2019-75}: A multitask and multilingual model based on \mbert, UDify is trained simultaneously on 124 different UD treebanks, creating a single POS tagging and dependency parsing model that works across 75 different languages. We report the scores from \citet{kondratyuk-straka-2019-75} paper.
+    \item \emph{UDPipe Future} \citep{straka-2018-udpipe}: An LSTM-based model ranked 3\textsuperscript{rd} in dependency parsing and 6\textsuperscript{th} in POS tagging at the CoNLL~2018 shared task \citep{seker-etal-2018-universal}. We report the scores from \citet{kondratyuk-straka-2019-75} paper.
+    \item \emph{UDPipe Future + \mbert + Flair} \citep{straka-strakova-2019-evaluating}: The original UDPipe Future implementation using \mbert and Flair as feature-based contextualized word embeddings. We report the scores from \citet{straka-strakova-2019-evaluating} paper.
 \end{itemize}
 
-%UDPipe Future+\mbert+Flair settles the state-of-the-art for most UD languages including French for both Universal POS tagging and dependency parsing. Finally, we compare our model to UDPipe Future \cite{straka2018udpipe}, a  model ranked 3rd in dependency parsing and 6th in POS tagging during the CoNLL~2018 shared task \cite{seker-etal-2018-universal}. UDPipe Future acts as a strong baseline that does not make use of any pretrained contextual embedding. 
+%UDPipe Future+\mbert+Flair settles the state-of-the-art for most UD languages including French for both Universal POS tagging and dependency parsing. Finally, we compare our model to UDPipe Future \cite{straka-2018-udpipe}, a  model ranked 3rd in dependency parsing and 6th in POS tagging during the CoNLL~2018 shared task \cite{seker-etal-2018-universal}. UDPipe Future acts as a strong baseline that does not make use of any pretrained contextual embedding. 
 
-In French, no extensive work has been done on NER due to the limited availability of annotated corpora. Thus we compare our model with the only recent available baselines set by \citet{dupont2018exploration}, who trained both CRF \citep{lafferty2001conditional} and BiLSTM-CRF \citep{lample2016neural} architectures on the FTB and enhanced them using heuristics and pretrained word embeddings. Additionally, as for POS and dependency parsing, we compare our model to a fine-tuned version of \mbert for the NER task.
+In French, no extensive work has been done on NER due to the limited availability of annotated corpora. Thus we compare our model with the only recent available baselines set by \citet{dupont-2017-exploration}, who trained both CRF \citep{lafferty-etal-2001-conditional} and BiLSTM-CRF \citep{lample-etal-2016-neural} architectures on the FTB and enhanced them using heuristics and pretrained word embeddings. Additionally, as for POS and dependency parsing, we compare our model to a fine-tuned version of \mbert for the NER task.
 
-For XNLI, we provide the scores of \mbert which has been reported for French by \citet{wu2019beto}.
+For XNLI, we provide the scores of \mbert which has been reported for French by \citet{wu-dredze-2019-beto}.
 We report scores from \xlmmlmtlm (described above), the best model from \citet{conneau-lample-2019-cross}. %\xlmmlmtlm is smaller than \xlmmultimlm from the same authors (12 layers, hidden size 1024, 8 attention heads, 270M parameters vs.~550M parameters) but authors did not report scores for \xlmmultimlm on XNLI.
 We also report the results of \mbox{XLM-R} \cite{conneau-etal-2020-unsupervised}.
 
-%and the English and French Masked Language Model \footnote{we plan to release experiments on XLM-17 and XLM-R} version of XLM referred as \xlmEnFr \cite{conneau-lample-2019-cross}, in order to demonstrate the usefulness of a dedicated version of \bert for French. \xlmEnFr provides us the performance of a multilingual masked language model pretrained on a smaller corpora which is the concatenation of Wikipedia English and French. We finetune those models using the same architecture enhancement and optimization process as we do on \camembert. We then compare our models to UDify \cite{kondratyuk201975} and UDPipe Future+\mbert+Flair \cite{straka2019evaluating}. UDify is a multitask and multilingual model based on \mbert while UDPipe Future+\mbert+Flair is just the original UDPipe Future implementation using \mbert and Flair as contextualized word embeddings. UDify pushed dependency parsing and POS to the extreme case of training one single model based on \mbert for all UD languages reaching state-of-the-art results for many treebanks. 
+%and the English and French Masked Language Model \footnote{we plan to release experiments on XLM-17 and XLM-R} version of XLM referred as \xlmEnFr \cite{conneau-lample-2019-cross}, in order to demonstrate the usefulness of a dedicated version of \bert for French. \xlmEnFr provides us the performance of a multilingual masked language model pretrained on a smaller corpora which is the concatenation of Wikipedia English and French. We finetune those models using the same architecture enhancement and optimization process as we do on \camembert. We then compare our models to UDify \cite{kondratyuk-straka-2019-75} and UDPipe Future+\mbert+Flair \cite{straka-strakova-2019-evaluating}. UDify is a multitask and multilingual model based on \mbert while UDPipe Future+\mbert+Flair is just the original UDPipe Future implementation using \mbert and Flair as contextualized word embeddings. UDify pushed dependency parsing and POS to the extreme case of training one single model based on \mbert for all UD languages reaching state-of-the-art results for many treebanks. 
 
-%Most of the advances in NER have been achieved on English, particularly focusing on the CoNLL 2003 \cite{tjong2003introduction} and the Ontonotes v5 \cite{pradhan2012conll,pradhan2013towards} English corpora. NER is a task that was traditionally tackled using Conditional Random Fields (CRF) \cite{lafferty2001conditional} which are quite suited for NER; CRFs were later used as decoding layers for Bi-LSTM architectures \cite{huang2015bidirectional,lample2016neural} showing considerable improvements over CRFs alone. These Bi-LSTM-CRF architectures were later enhanced with contextualised word embeddings which yet again brought major improvements to the task \cite{peters-etal-2018-deep,akbik-etal-2018-contextual}. Finally, large pretrained architectures settled the current state of the art showing a small yet important improvement over previous NER-specific architectures \cite{devlin-etal-2019-bert,baevski2019cloze}.
+%Most of the advances in NER have been achieved on English, particularly focusing on the CoNLL 2003 \cite{tjong2003introduction} and the Ontonotes v5 \cite{pradhan2012conll,pradhan2013towards} English corpora. NER is a task that was traditionally tackled using Conditional Random Fields (CRF) \cite{lafferty-etal-2001-conditional} which are quite suited for NER; CRFs were later used as decoding layers for Bi-LSTM architectures \cite{huang2015bidirectional,lample-etal-2016-neural} showing considerable improvements over CRFs alone. These Bi-LSTM-CRF architectures were later enhanced with contextualised word embeddings which yet again brought major improvements to the task \cite{peters-etal-2018-deep,akbik-etal-2018-contextual}. Finally, large pretrained architectures settled the current state of the art showing a small yet important improvement over previous NER-specific architectures \cite{devlin-etal-2019-bert,baevski2019cloze}.
 
-% In non-English NER the CoNLL 2002 shared task included NER corpora for Spanish and Dutch corpora \cite{tjong2002introduction} while the CoNLL 2003 included a German corpus \cite{tjong2003introduction}. Here the recent efforts of \cite{strakova2019neural} settled the state of the art for Spanish and Dutch, while \cite{akbik-etal-2018-contextual} did it for German.
+% In non-English NER the CoNLL 2002 shared task included NER corpora for Spanish and Dutch corpora \cite{tjong2002introduction} while the CoNLL 2003 included a German corpus \cite{tjong2003introduction}. Here the recent efforts of \cite{strakova-etal-2019-neural} settled the state of the art for Spanish and Dutch, while \cite{akbik-etal-2018-contextual} did it for German.
 
 %The NER-annotated FTB contains more than 12k sentences and more than 350k tokens extracted from articles of the newspaper \textit{Le Monde} published between 1989 and 1995. In total, it contains 11,636 entity mentions distributed among 7 different types of entities, namely: 2025 mentions of ``Person'', 3761 of ``Location'', 2382 of ``Organisation'', 3357 of ``Company'', 67 of ``Product'', 15 of ``POI'' (Point of Interest) and 29 of ``Fictional Character''. 
 
@@ -151,16 +151,16 @@ We also report the results of \mbox{XLM-R} \cite{conneau-etal-2020-unsupervised}
 
 
 % \subsection{Named Entity Recognition}\label{ner-section}
-% Named Entity Recognition (NER) is a sequence labeling task that consists in predicting which words refer to real-world objects, such as people, locations, artifacts and organisations. We use the French Treebank\footnote{This dataset has only been stored and used on Inria's servers after signing the research-only agreement.} (FTB)  \cite{abeille:03} in its 2008 version introduced by \newcite{cc-clustering:09short} and with NER annotations by \newcite{sagot2012annotation}.
+% Named Entity Recognition (NER) is a sequence labeling task that consists in predicting which words refer to real-world objects, such as people, locations, artifacts and organisations. We use the French Treebank\footnote{This dataset has only been stored and used on Inria's servers after signing the research-only agreement.} (FTB)  \cite{abeille-etal-2003-building} in its 2008 version introduced by \newcite{candito-crabbe-2009-improving} and with NER annotations by \newcite{sagot-etal-2012-annotation}.
 % The NER-annotated FTB contains more than 12k sentences and more than 350k tokens extracted from articles of the newspaper \textit{Le Monde} published between 1989 and 1995. In total, it contains 11,636 entity mentions distributed among 7 different types of entities, namely: 2025 mentions of ``Person'', 3761 of ``Location'', 2382 of ``Organisation'', 3357 of ``Company'', 67 of ``Product'', 15 of ``POI'' (Point of Interest) and 29 of ``Fictional Character''. 
 
 % A large proportion of the entity mentions in the treebank are multi-word entities. We therefore report the 3 metrics that are commonly used to evaluate models: precision, recall, and F1 score. Here precision measures the percentage of entities found by the system that are correctly tagged, recall measures the percentage of named entities present in the corpus that are found and the F1 score combines both precision and recall measures giving a general idea of a model's performance.
 
 % \subsection{Natural Language Inference}
-% We evaluate our model on Natural Language Inference (NLI), using the French part of the XNLI dataset \cite{conneau2018xnli}.
+% We evaluate our model on Natural Language Inference (NLI), using the French part of the XNLI dataset \cite{conneau-etal-2018-xnli}.
 % NLI consists in predicting whether a hypothesis sentence is entailed, neutral or contradicts a premise sentence.
 
-% The XNLI dataset is the extension of the Multi-Genre NLI (MultiNLI) corpus \cite{williams2018broad} to 15 languages by translating the validation and test sets manually into each of those languages.
+% The XNLI dataset is the extension of the Multi-Genre NLI (MultiNLI) corpus \cite{williams-etal-2018-broad} to 15 languages by translating the validation and test sets manually into each of those languages.
 % The English training set is machine translated for all languages.
 % The dataset is composed of 122k train, 2490 valid and 5010 test examples.
 % As usual, NLI performance is evaluated using accuracy.
@@ -174,7 +174,7 @@ We also report the results of \mbox{XLM-R} \cite{conneau-etal-2020-unsupervised}
 
 %{\color{red} Add analysis on tokenization differences between OSCAR and CCNet}
 %\bm{former previous work for 'as embedding' is commented here : SHOULD BE INTEGRATED SOMEWHERE IN PART 3}
-%As it is the case with contextualized word embeddings like ELMo \cite{peters-etal-2018-deep} and Flair \cite{akbik-etal-2018-contextual}, one can use a frozen version of transformer models like BERT or RoBERTa as if they were feature based embeddings, notable examples of this type of utilization are the original BERT paper, in which the authors use BERT in this way to do NER \cite{devlin-etal-2019-bert}; the work of \newcite{straka2019evaluating} in which the English BERT and \mbert are plugged as feature-based embeddings to the UDPipe Future architecture obtaining state-of-the-art for part-of-speech tagging and dependency parsing across a wide range of languages; and the work of \newcite{strakova2019neural} which again uses both the English BERT and \mbert as feature based embeddings coupled with \newcite{lample2016neural} architecture. \bm{I remove the SOTA mention here as it's not the right place} % obtaining state-of-the-art results for both flat and nested NER in 5 different languages. 
+%As it is the case with contextualized word embeddings like ELMo \cite{peters-etal-2018-deep} and Flair \cite{akbik-etal-2018-contextual}, one can use a frozen version of transformer models like BERT or RoBERTa as if they were feature based embeddings, notable examples of this type of utilization are the original BERT paper, in which the authors use BERT in this way to do NER \cite{devlin-etal-2019-bert}; the work of \newcite{straka-strakova-2019-evaluating} in which the English BERT and \mbert are plugged as feature-based embeddings to the UDPipe Future architecture obtaining state-of-the-art for part-of-speech tagging and dependency parsing across a wide range of languages; and the work of \newcite{strakova-etal-2019-neural} which again uses both the English BERT and \mbert as feature based embeddings coupled with \newcite{lample-etal-2016-neural} architecture. \bm{I remove the SOTA mention here as it's not the right place} % obtaining state-of-the-art results for both flat and nested NER in 5 different languages. 
 %In order to obtain a representation for a given token, all these implementations first compute the representations of the subwords of a token by taking the mean of the representations given by the four last layers, and then generate the representation for the token by taking the mean of the representations of the subwords of a given token.
 
 
@@ -187,10 +187,10 @@ In this section, we describe the pretraining data, architecture, training object
 %\paragraph{Data description}
 %\lm{Should we say "We train a model on OSCAR", put a real emphasis on OSCAR, and then rapidly, say in section 5, we compare also to CCNET and Wikipedia}
 Pretrained language models benefits from being trained on large datasets \cite{devlin-etal-2019-bert,liu-etal-2019-roberta,raffel-etal-2020-exploring}. %can be significantly improved by using more data
-We therefore use the French part of the OSCAR corpus \cite{ortiz-suarez-etal-2019-asynchronous}, a pre-filtered and pre-classified version of Common Crawl.\footnote{\url{https://commoncrawl.org/about/}} %and compare two pre-classified and pre-filtered versions of it: OSCAR \cite{ortiz-suarez-etal-2019-asynchronous} and CCNet \cite{wenzek2019ccnet}. 
+We therefore use the French part of the OSCAR corpus \cite{ortiz-suarez-etal-2019-asynchronous}, a pre-filtered and pre-classified version of Common Crawl.\footnote{\url{https://commoncrawl.org/about/}} %and compare two pre-classified and pre-filtered versions of it: OSCAR \cite{ortiz-suarez-etal-2019-asynchronous} and CCNet \cite{wenzek-etal-2020-ccnet}. 
 %%We also compare, controlling for the data set size, these two dataset to the French Wikipedia dataset. 
 
-\paragraph{OSCAR} is a set of monolingual corpora extracted from Common Crawl snapshots\iffalse, specifically from the plain text \emph{WET} format distributed by Common Crawl which removes all the HTML tags and converts the text formatting to UTF-8\fi{}. It follows the same approach as \cite{grave2018learning} by using a language classification model based on the fastText linear classifier \cite{grave2017bag,joulin2016fasttext} pretrained on Wikipedia, Tatoeba and SETimes, which supports 176 languages. No other filtering is done. We use a non-shuffled version of the French data, which amounts to 138GB of raw text and 32.7B tokens after subword tokenization.% (more details in Table~\ref{table:oscar_vs_ccnet}).
+\paragraph{OSCAR} is a set of monolingual corpora extracted from Common Crawl snapshots\iffalse, specifically from the plain text \emph{WET} format distributed by Common Crawl which removes all the HTML tags and converts the text formatting to UTF-8\fi{}. It follows the same approach as \cite{grave-etal-2018-learning} by using a language classification model based on the fastText linear classifier \cite{joulin-etal-2017-bag,joulin-etal-2016-fasttext} pretrained on Wikipedia, Tatoeba and SETimes, which supports 176 languages. No other filtering is done. We use a non-shuffled version of the French data, which amounts to 138GB of raw text and 32.7B tokens after subword tokenization.% (more details in Table~\ref{table:oscar_vs_ccnet}).
 
 %% WIKIPEDIA
 
@@ -199,12 +199,12 @@ We therefore use the French part of the OSCAR corpus \cite{ortiz-suarez-etal-201
 
 %RANDOM SAMPLES  ref section 5 
 
-%Both OSCAR and CCNet are sets of monolingual corpora extracted from Common Crawl snapshots, specifically from the plain text \emph{WET} format distributed by Common Crawl which removes all the HTML tags and converts the text formatting to UTF-8. OSCAR and CCnet follow the same approach as \newcite{grave2018learning} by using a language classification model for the fastText linear classifier \cite{joulin2016fasttext,grave2017bag} pretrained on Wikipedia, Tatoeba and SETimes, which supports 176 different languages.
+%Both OSCAR and CCNet are sets of monolingual corpora extracted from Common Crawl snapshots, specifically from the plain text \emph{WET} format distributed by Common Crawl which removes all the HTML tags and converts the text formatting to UTF-8. OSCAR and CCnet follow the same approach as \newcite{grave-etal-2018-learning} by using a language classification model for the fastText linear classifier \cite{joulin-etal-2016-fasttext,joulin-etal-2017-bag} pretrained on Wikipedia, Tatoeba and SETimes, which supports 176 different languages.
 
 %Even though the pipeline are similar and they both obtain a similar amount of data in total for all the languages, 3.2 TB on both cases, there are a number on improvements made in the CCNet pipeline that can contribute to the quality of the documents inside each monolingual corpora. Mainly, CCNET is filtered with a language model trained on Wikipedia by removing sentences with low perplexity and classified in three parts \emph{head, middle and tail} based on this perplexity. 
 
-%For instance, deduplication is performed before classification, by first normalizing the text so that the deduplication process can get rid of common website elements such as menus, cookie warnings and contact information \cite{wenzek2019ccnet}. Moreover CCNet adds an additional step for filtering ``bad'' content. They use a 5-gram Kneser-Ney model \cite{heafield2011kenlm} trained on Wikipedia (after SentencePiece tokenization) in order to filter out paragraphs with low perplexity. They split the the corpus of each language in three even parts which they call \emph{head, middle and tail}, where \emph{head} is the part with highest perplexity according to their language model. Although this steps filters out bad content, it introduce a bias towards Wikipedia-like texts in the \emph{head} part of the pretraining data. 
-%OSCAR, by contrast, does not perform any language model based filtering. This results in OSCAR being much closer to the original raw Crawl, and more diverse in terms of domain, genre and text quality than CCNet. We point to \cite{wenzek2019ccnet,ortiz-suarez-etal-2019-asynchronous} for more descriptions of the data.  %performs deduplication after the language classification step and does not introduce any specialized filtering scheme, they just choose to keep the paragraphs having 100 or more characters. This results in OSCAR being much closer to the original raw Crawl, and more diverse in terms of domain, genre and text quality than CCNet.
+%For instance, deduplication is performed before classification, by first normalizing the text so that the deduplication process can get rid of common website elements such as menus, cookie warnings and contact information \cite{wenzek-etal-2020-ccnet}. Moreover CCNet adds an additional step for filtering ``bad'' content. They use a 5-gram Kneser-Ney model \cite{heafield2011kenlm} trained on Wikipedia (after SentencePiece tokenization) in order to filter out paragraphs with low perplexity. They split the the corpus of each language in three even parts which they call \emph{head, middle and tail}, where \emph{head} is the part with highest perplexity according to their language model. Although this steps filters out bad content, it introduce a bias towards Wikipedia-like texts in the \emph{head} part of the pretraining data. 
+%OSCAR, by contrast, does not perform any language model based filtering. This results in OSCAR being much closer to the original raw Crawl, and more diverse in terms of domain, genre and text quality than CCNet. We point to \cite{wenzek-etal-2020-ccnet,ortiz-suarez-etal-2019-asynchronous} for more descriptions of the data.  %performs deduplication after the language classification step and does not introduce any specialized filtering scheme, they just choose to keep the paragraphs having 100 or more characters. This results in OSCAR being much closer to the original raw Crawl, and more diverse in terms of domain, genre and text quality than CCNet.
 
 
 %For CCNet, we use the \textsc{head} split (top 33\% of documents in terms of filtering perplexity) of the French data. This amounts to 135GB of raw text, which we then tokenise into 31.9B SentencePiece tokens. For OSCAR we use a non shuffled version of the French data which amounts to 138GB of raw text and 32.7B SentencePiece tokens, see table~\ref{table:oscar_vs_ccnet}.
@@ -212,8 +212,8 @@ We therefore use the French part of the OSCAR corpus \cite{ortiz-suarez-etal-201
 
 
 \subsection{Pre-processing}
-We segment the input text data into subword units using SentencePiece \cite{kudo2018sentencepiece}.
-SentencePiece is an extension of Byte-Pair encoding (BPE) \cite{sennrich2016neural} and WordPiece \cite{kudo2018subword} that does not require pre-tokenization (at the word or token level), thus removing the need for language-specific tokenisers.
+We segment the input text data into subword units using SentencePiece \cite{kudo-richardson-2018-sentencepiece}.
+SentencePiece is an extension of Byte-Pair encoding (BPE) \cite{sennrich-etal-2016-neural} and WordPiece \cite{kudo-2018-subword} that does not require pre-tokenization (at the word or token level), thus removing the need for language-specific tokenisers.
 We use a vocabulary size of 32k subword tokens. These subwords are learned on $10^7$ sentences sampled randomly from the pretraining dataset.
 We do not use subword regularisation (i.e.~sampling from multiple possible segmentations) for the sake of simplicity.
 
@@ -221,9 +221,9 @@ We do not use subword regularisation (i.e.~sampling from multiple possible segme
 \subsection{Language Modeling}
 
 \paragraph{Transformer}
-Similar to \roberta and \bert, \camembert is a multi-layer bidirectional Transformer \cite{vaswani2017attention}. Given the widespread usage of Transformers, we do not describe them here and refer the reader to \citep{vaswani2017attention}.
+Similar to \roberta and \bert, \camembert is a multi-layer bidirectional Transformer \cite{vaswani-etal-2017-attention}. Given the widespread usage of Transformers, we do not describe them here and refer the reader to \citep{vaswani-etal-2017-attention}.
 \camembert uses the original architectures of \bertbase (12 layers, 768 hidden dimensions, 12 attention heads, 110M parameters) and \bertlarge (24 layers, 1024 hidden dimensions, 16 attention heads, 335M parameters).
-\camembert is very similar to \roberta, the main difference being the use of whole-word masking and the usage of SentencePiece tokenization \cite{kudo2018sentencepiece} instead of WordPiece \cite{schuster2012japanese}.
+\camembert is very similar to \roberta, the main difference being the use of whole-word masking and the usage of SentencePiece tokenization \cite{kudo-richardson-2018-sentencepiece} instead of WordPiece \cite{schuster-nakajima-2012-japanese}.
 
 \paragraph{Pretraining Objective}
 We train our model on the Masked Language Modeling (MLM) task.
@@ -232,7 +232,7 @@ Given an input text sequence composed of $N$ tokens $x_1, ..., x_N$, we select 1
 Following the \roberta approach, we dynamically mask tokens instead of fixing them statically for the whole dataset during preprocessing. This improves variability and makes the model more robust when training for multiple epochs.
 
 Since we use SentencePiece to tokenize our corpus, the input tokens to the model are a mix of whole words and subwords.
-An upgraded version of \bert\footnote{\url{https://github.com/google-research/bert/blob/master/README.md}} and \citet{joshi2019spanbert} have shown that masking whole words instead of individual subwords leads to improved performance.
+An upgraded version of \bert\footnote{\url{https://github.com/google-research/bert/blob/master/README.md}} and \citet{joshi-etal-2020-spanbert} have shown that masking whole words instead of individual subwords leads to improved performance.
 Whole-word Masking (WWM) makes the training task more difficult because the model has to predict a whole word rather than predicting only part of the word given the rest.
 We train our models using WWM by using whitespaces in the initial untokenized text as word delimiters.
 
@@ -246,11 +246,11 @@ j
 %integrated to experimental setup
 
 \paragraph{Optimisation}
-Following \citep{liu-etal-2019-roberta}, we optimize the model using Adam \cite{kingma2014adam} ($\beta_1 = 0.9$, $\beta_2 = 0.98$) for 100k steps with large batch sizes of 8192 sequences, each sequence containing at most 512 tokens.
+Following \citep{liu-etal-2019-roberta}, we optimize the model using Adam \cite{kingma-ba-2015-adam} ($\beta_1 = 0.9$, $\beta_2 = 0.98$) for 100k steps with large batch sizes of 8192 sequences, each sequence containing at most 512 tokens.
 We enforce each sequence to only contain complete paragraphs (which correspond to lines in the our pretraining dataset).
 
 \paragraph{Pretraining}
-We use the \roberta implementation in the fairseq library \cite{ott2019fairseq}.
+We use the \roberta implementation in the fairseq library \cite{ott-etal-2019-fairseq}.
 Our learning rate is warmed up for 10k steps up to a peak value of $0.0007$ instead of the original $0.0001$ given our large batch size, and then fades to zero with polynomial decay.
 Unless otherwise specified, our models use the BASE architecture, and are pretrained for 100k backpropagation steps on 256 Nvidia V100 GPUs (32GB each) for a day.
 We do not train our models for longer due to practical considerations, even though the performance still seemed to be increasing.
@@ -263,26 +263,26 @@ These two complementary approaches shed light on the quality of the pretrained h
 
 \paragraph{Fine-tuning}
 For each task, we append the relevant predictive layer on top of \camembert's  architecture. Following the work done on \bert \cite{devlin-etal-2019-bert}, for sequence tagging and sequence labeling we append a linear layer that respectively takes as input the last hidden representation of the \texttt{<s>} special token and the last hidden representation of the first subword token of each word.
-For dependency parsing, we plug a bi-affine graph predictor head as inspired by \citet{dozat2017deep}. We refer the reader to this article for more details on this module.
+For dependency parsing, we plug a bi-affine graph predictor head as inspired by \citet{dozat-manning-2017-deep}. We refer the reader to this article for more details on this module.
 We fine-tune on XNLI by adding a classification head composed of one hidden layer with a non-linearity and one linear projection layer, with input dropout for both.
 
-We fine-tune \camembert independently for each task and each dataset. We optimize the model using the Adam optimiser \cite{kingma2014adam} with a fixed learning rate. We run a grid search on a combination of learning rates and batch sizes. We select the best model on the validation set out of the 30 first epochs.
+We fine-tune \camembert independently for each task and each dataset. We optimize the model using the Adam optimiser \cite{kingma-ba-2015-adam} with a fixed learning rate. We run a grid search on a combination of learning rates and batch sizes. We select the best model on the validation set out of the 30 first epochs.
 For NLI we use the default hyper-parameters provided by the authors of RoBERTa on the MNLI task.\footnote{More details at \url{https://github.com/pytorch/fairseq/blob/master/examples/roberta/README.glue.md}.}
 Although this might have pushed the performances even further, we do not apply any regularisation techniques such as weight decay, learning rate warm-up or discriminative fine-tuning, except for NLI. We show that fine-tuning \camembert in a straightforward manner leads to state-of-the-art results on all tasks and outperforms the existing \bert-based models in all cases.
-The POS tagging, dependency parsing, and NER experiments are run using Hugging Face's Transformer library extended to support \camembert and dependency parsing \cite{Wolf2019HuggingFacesTS}.
+The POS tagging, dependency parsing, and NER experiments are run using Hugging Face's Transformer library extended to support \camembert and dependency parsing \cite{wolf-etal-2019-huggingface}.
 The NLI experiments use the fairseq library following the \roberta implementation.
 
 
 \paragraph{Embeddings}
 
 %\lm{This is the Experimental setup section, I would put more emphasis on our method instead of the litterature}
-%As it is the case with contextualized word embeddings like ELMo \cite{peters-etal-2018-deep} and Flair \cite{akbik-etal-2018-contextual}, one can use a frozen version of transformer models like BERT or RoBERTa as if they were feature based embeddings, notable examples of this type of utilization are the original BERT paper, in which the authors use BERT in this way to do NER \cite{devlin-etal-2019-bert}; the work of \newcite{straka2019evaluating} in which the English BERT and \mbert are plugged as feature-based embeddings to the UDPipe Future architecture obtaining state-of-the-art for part-of-speech tagging and dependency parsing across a wide range of languages; and the work of \newcite{strakova2019neural} which again uses both the English BERT and \mbert as feature based embeddings coupled with \newcite{lample2016neural} architecture. \bm{I remove the SOTA mention here as it's not the right place} % obtaining state-of-the-art results for both flat and nested NER in 5 different languages. 
+%As it is the case with contextualized word embeddings like ELMo \cite{peters-etal-2018-deep} and Flair \cite{akbik-etal-2018-contextual}, one can use a frozen version of transformer models like BERT or RoBERTa as if they were feature based embeddings, notable examples of this type of utilization are the original BERT paper, in which the authors use BERT in this way to do NER \cite{devlin-etal-2019-bert}; the work of \newcite{straka-strakova-2019-evaluating} in which the English BERT and \mbert are plugged as feature-based embeddings to the UDPipe Future architecture obtaining state-of-the-art for part-of-speech tagging and dependency parsing across a wide range of languages; and the work of \newcite{strakova-etal-2019-neural} which again uses both the English BERT and \mbert as feature based embeddings coupled with \newcite{lample-etal-2016-neural} architecture. \bm{I remove the SOTA mention here as it's not the right place} % obtaining state-of-the-art results for both flat and nested NER in 5 different languages. 
 %In order to obtain a representation for a given token, all these implementations first compute the representations of the subwords of a token by taking the mean of the representations given by the four last layers, and then generate the representation for the token by taking the mean of the representations of the subwords of a given token.
-Following \citet{strakova2019neural} and \citet{straka2019evaluating} for \mbert and the English BERT, we make use of \camembert in a feature-based embeddings setting.
+Following \citet{strakova-etal-2019-neural} and \citet{straka-strakova-2019-evaluating} for \mbert and the English BERT, we make use of \camembert in a feature-based embeddings setting.
 In order to obtain a representation for a given token, we first compute the average of each sub-word’s representations in the last four layers of the Transformer, and then average the resulting sub-word vectors.
 %compute the representations of the subwords of a token by taking the mean of the representations given by the four last layers, and then generate the representation for the token by taking the mean of the representations of the subwords of a given token.
 
-We evaluate \camembert in the embeddings setting for POS tagging, dependency parsing and NER; using the open-source implementations of \newcite{straka2019evaluating} and \newcite{strakova2019neural}.\footnote{UDPipe Future is available at \url{https://github.com/CoNLL-UD-2018/UDPipe-Future}, and the code for nested NER is available at \url{https://github.com/ufal/acl2019_nested_ner}.}
+We evaluate \camembert in the embeddings setting for POS tagging, dependency parsing and NER; using the open-source implementations of \newcite{straka-strakova-2019-evaluating} and \newcite{strakova-etal-2019-neural}.\footnote{UDPipe Future is available at \url{https://github.com/CoNLL-UD-2018/UDPipe-Future}, and the code for nested NER is available at \url{https://github.com/ufal/acl2019_nested_ner}.}
 
 
 %We also experiment training a BASE model longer for 500k steps, \camembertccnetlong, as advised in \cite{liu-etal-2019-roberta}. 
@@ -332,10 +332,10 @@ In this section, we measure the performance of our models by evaluating them on 
             \midrule
             \mbert  (fine-tuned)                                   & 97.48                                              & 89.73                                                  & 98.41                                                 & 91.24                                                  & 96.02             & 78.63             & 97.35             & 91.37             \\
             \xlmmlmtlm (fine-tuned)                                & 98.13                                              & 90.03                                                  & 98.51                                                 & 91.62                                                  & 96.18             & 80.89             & 97.39             & 89.43             \\ % 10138744 new XLM %& 97.71             & -                 & 98.51          & 91.62             & 95.29             & 74.17             & 96.84             & 89.22             \\ % 10138744 new XLM  % partut sequoia parsing 10138787 
-            UDify \cite{kondratyuk201975}                          & 97.83                                              & \underline{91.45}                                      & 97.89                                                 & 90.05                                                  & 96.23             & 80.01             & 96.12             & 88.06             \\
+            UDify \cite{kondratyuk-straka-2019-75}                          & 97.83                                              & \underline{91.45}                                      & 97.89                                                 & 90.05                                                  & 96.23             & 80.01             & 96.12             & 88.06             \\
             %\xlmEnFr & 97.51 & 93.49 & 90.72 & 98.30 &  93.62 & 91.565.42 & 96.53 & 93.03 & 90.64 \\ 
-            UDPipe Future \cite{straka2018udpipe}                  & 97.63                                              & 88.06                                                  & 98.79                                                 & 90.73                                                  & 95.91             & 77.53             & 96.93             & 89.63             \\
-            \: + mBERT + Flair  (emb.) \cite{straka2019evaluating} & \underline{97.98}                                  & 90.31                                                  & \textbf{99.32}                                        & 93.81                                                  & \textbf{97.23}    & \underline{81.40} & \underline{97.64} & \underline{92.47} \\
+            UDPipe Future \cite{straka-2018-udpipe}                  & 97.63                                              & 88.06                                                  & 98.79                                                 & 90.73                                                  & 95.91             & 77.53             & 96.93             & 89.63             \\
+            \: + mBERT + Flair  (emb.) \cite{straka-strakova-2019-evaluating} & \underline{97.98}                                  & 90.31                                                  & \textbf{99.32}                                        & 93.81                                                  & \textbf{97.23}    & \underline{81.40} & \underline{97.64} & \underline{92.47} \\
             \tabucline[\hbox {$\scriptstyle \cdot$}]{-}
             \camembert (fine-tuned)                                & \textbf{98.18}                                     & \textbf{92.57}                                         & \underline{99.29}                                     & \textbf{94.20}                                         & 96.99             & 81.37             & \textbf{97.65}    & \textbf{93.43}    \\ % 10125734 : POS best seed PARSING gsd 10126431 PARSING other : 10126429
             UDPipe Future \mbox{+ \camembert} (embeddings)         & 97.96                                              & 90.57                                                  & 99.25                                                 & \underline{93.89}                                      & \underline{97.09} & \textbf{81.81}    & 97.50             & 92.32             \\
@@ -354,8 +354,8 @@ In this section, we measure the performance of our models by evaluating them on 
             \toprule
             Model                                  & F1                \\
             \midrule
-            SEM (CRF) \cite{dupont2018exploration} & 85.02             \\
-            LSTM-CRF \cite{dupont2018exploration}  & 85.57             \\
+            SEM (CRF) \cite{dupont-2017-exploration} & 85.02             \\
+            LSTM-CRF \cite{dupont-2017-exploration}  & 85.57             \\
             \mbert (fine-tuned)                    & 87.35             \\
             \tabucline[\hbox {$\scriptstyle \cdot$}]{-}
             \camembert (fine-tuned)                & \underline{89.08} \\% 10129644  %91.30 dev 10129153 (2 seeds only)
@@ -378,7 +378,7 @@ In this section, we measure the performance of our models by evaluating them on 
             \toprule
             Model                                             & Acc.             & \#Params \\
             \midrule
-            %BiLSTM-max \cite{conneau2018xnli} & 68.3 & - \\
+            %BiLSTM-max \cite{conneau-etal-2018-xnli} & 68.3 & - \\
             \mbert \cite{devlin-etal-2019-bert}               & 76.9             & 175M     \\
             \xlmmlmtlm \cite{conneau-lample-2019-cross}                 & \underline{80.2} & 250M     \\
             XLM-R\textsubscript{BASE} \cite{conneau-etal-2020-unsupervised}  & 80.1             & 270M     \\
@@ -423,7 +423,7 @@ Using \camembert as embeddings to the traditional LSTM+CRF architecture gives sl
 This demonstrates that although \camembert can be used successfully without any task-specific architecture, it can still produce high quality contextualized embeddings that might be useful in scenarios where powerful downstream architectures exist.
 
 
-%Previous work with \mbert showed increased performance in NER for German, Dutch and Spanish when it is used as contextualised word embedding for an NER-specific model \cite{strakova2019neural}.
+%Previous work with \mbert showed increased performance in NER for German, Dutch and Spanish when it is used as contextualised word embedding for an NER-specific model \cite{strakova-etal-2019-neural}.
 %Our results show that it can also be fine-tuning without adding any additional architecture and with better results than the baselines.
 %Even though it gives worse results than our fine-tuned \camembert and our ``\camembert as embeddings'' architecture, it is still interesting to achieve this kind of performance by just fine-tuning a pretrained language model. 
 
@@ -495,7 +495,7 @@ In this section we investigate the influence of the homogeneity and size of the 
 In order to investigate the need for homogeneous clean data versus more diverse and possibly noisier data, we use alternative sources of pretraining data in addition to \oscar:
 \begin{itemize}
     \item \textbf{Wikipedia}, which is homogeneous in terms of genre and style. We use the official 2019 French Wikipedia dumps\footnote{ \url{https://dumps.wikimedia.org/backup-index.html}.}. We remove HTML tags and tables using Giuseppe Attardi's  \emph{WikiExtractor}.\footnote{ \url{https://github.com/attardi/wikiextractor}.}
-    \item \textbf{\ccnet} \cite{wenzek2019ccnet}, a dataset extracted from Common Crawl with a different filtering process than for \oscar. It was built using a language model trained on Wikipedia, in order to filter out bad quality texts such as code or tables.\footnote{We use the \textsc{head} split, which corresponds to the top 33\% of documents in terms of filtering perplexity.} As this filtering step biases the noisy data from Common Crawl to more Wikipedia-like text, we expect \ccnet to act as a middle ground between the unfiltered ``noisy'' \oscar dataset, and the ``clean'' Wikipedia dataset. As a result of the different filtering processes, \ccnet contains longer documents on average compared to \oscar with smaller---and often noisier---documents weeded out.
+    \item \textbf{\ccnet} \cite{wenzek-etal-2020-ccnet}, a dataset extracted from Common Crawl with a different filtering process than for \oscar. It was built using a language model trained on Wikipedia, in order to filter out bad quality texts such as code or tables.\footnote{We use the \textsc{head} split, which corresponds to the top 33\% of documents in terms of filtering perplexity.} As this filtering step biases the noisy data from Common Crawl to more Wikipedia-like text, we expect \ccnet to act as a middle ground between the unfiltered ``noisy'' \oscar dataset, and the ``clean'' Wikipedia dataset. As a result of the different filtering processes, \ccnet contains longer documents on average compared to \oscar with smaller---and often noisier---documents weeded out.
 \end{itemize}
 Table~\ref{table:corpora_statistics} summarizes statistics of these different corpora.
 
@@ -544,27 +544,27 @@ However, even with a BASE architecture and 4GB of training data, the validation 
 
 \section{Discussion}
 
-Since the pre-publication of this work \cite{martinetal2019Camembert},
+Since the pre-publication of this work \cite{martin-etal-2020-camembert},
 many monolingual language models have appeared, e.g.
-\cite{le_at_al2019flaubert,FinBert2019,RobBERT2020}, for as much as 30
-languages \cite{horvyteam:2020:arxiv}. In almost all tested
+\cite{le-etal-2020-flaubert-unsupervised,virtanen-etal-2019-multilingual,delobelle-etal-2020-robbert}, for as much as 30
+languages \cite{nozza-etal-2020-what}. In almost all tested
 configurations they displayed better results than multilingual
-language models such as \mbert \cite{pires_et_al2019multilingual}.
-Interestingly, \newcite{le_at_al2019flaubert} showed that using their
+language models such as \mbert \cite{pires-etal-2019-multilingual}.
+Interestingly, \newcite{le-etal-2020-flaubert-unsupervised} showed that using their
 FlauBert, a RoBERTa-based language model for French, which was trained on less
 but more edited data, in conjunction to \camembert in an ensemble
 system could improve the performance of a parsing model and  establish
 a new state-of-the-art in constituency parsing of French, highlighting thus
 the complementarity of both models.\footnote{We refer the reader to
-    \cite{le_at_al2019flaubert} for a comprehensive benchmark and details
+    \cite{le-etal-2020-flaubert-unsupervised} for a comprehensive benchmark and details
     therein.}
 As it was the case for English when \bert was first released, the
 availability of similar scale language models for French enabled
 interesting applications, such as large scale anonymization of legal
 texts, where \camembert-based models established a new
-state-of-the-art on this task \cite{bennesty:2019:anonym}, or the first
+state-of-the-art on this task \cite{benesty-2019-ner}, or the first
 large question answering experiments on a French Squad data set that
-was released very recently \cite{fquad:2020:arXiv} where the authors matched human performance using \camembertlarge.
+was released very recently \cite{dhoffschmidt-etal-2020-fquad} where the authors matched human performance using \camembertlarge.
 Being the first pre-trained language model that used the open-source Common Crawl Oscar
 corpus and given its impact on the community,
 \camembert paved the way for many works on monolingual language
@@ -602,7 +602,7 @@ as fine-tuning remains open and we leave it for future work.
 Pretrained on pure open-source corpora, \camembert is freely available and distributed with the MIT license via popular NLP libraries (\href{https://github.com/pytorch/fairseq}{\texttt{fairseq}} and \href{https://github.com/huggingface/transformers}{\texttt{huggingface}}) as well as on our website \href{https://camembert-model.fr}{\texttt{camembert-model.fr}}.
 
 %\ds{Say something like: Since the beginning of this work, more monolingual models have appeared such as FlauBERT, finish bert... - ds: I'm on it}
-%We will publish an updated version in the near future where we will explore and release models trained for longer, with additional downstream tasks, baselines (e.g. XLM) and analysis, we will also train additional models with potentially cleaner corpora such as CCNet \cite{wenzek2019ccnet} for more accurate performance evaluation and more complete ablation.
+%We will publish an updated version in the near future where we will explore and release models trained for longer, with additional downstream tasks, baselines (e.g. XLM) and analysis, we will also train additional models with potentially cleaner corpora such as CCNet \cite{wenzek-etal-2020-ccnet} for more accurate performance evaluation and more complete ablation.
 
 
 \section*{Appendix}
@@ -693,7 +693,7 @@ Table~\ref{tab:ablation} compares models trained with the BASE and LARGE archite
 These models were trained with the \ccnet corpus (135GB) for practical reasons.
 We confirm the positive influence of larger models on the NLI and NER tasks. The LARGE architecture leads to respectively 19.7\% error reduction and 23.7\%.
 To our surprise, on POS tagging and dependency parsing, having three time more parameters doesn't lead to a significant  difference compared to the BASE model.
-\newcite{tenney-etal-2019-bert} and \newcite{jawahar2019does} have shown that low-level syntactic capabilities are learnt in lower layers of \bert while higher level semantic representations are found in upper layers of \bert.
+\newcite{tenney-etal-2019-bert} and \newcite{jawahar-etal-2019-bert} have shown that low-level syntactic capabilities are learnt in lower layers of \bert while higher level semantic representations are found in upper layers of \bert.
 POS tagging and dependency parsing probably do not benefit from adding more layers as the lower layers of the BASE architecture already capture what is necessary to complete these tasks.
 
 
