@@ -100,10 +100,43 @@
 \definecolor{Gray}{gray}{0.925}
 \usetikzlibrary{positioning}
 
+\usepackage{siunitx}
+    \sisetup{
+        binary-units=true,
+        detect-all,
+        detect-inline-weight=math,
+        group-separator=\text{\,},
+    }
+	\DeclareSIUnit{\quantity}{\relax}
+	\DeclareSIUnit{\words}{words}
+	\DeclareSIUnit{\sentences}{sentences}
+
+  \usepackage[keeplayout]{covington}  % Gloses interlinéaires
+  % Hotfix for covington in doc classes without chapters
+  \makeatletter
+      \let\cl@chapter\relax
+  \makeatother
+  \setglossoptions{
+      %fsi=\small,
+      fsii=\small,
+      fsiii=\small,
+  }
+
+\usepackage{cleveref}
+
+\usepackage{tikz-dependency}
+
+\usepackage{pgfplots}
+    \pgfplotsset{compat=1.17}
+    \usetikzlibrary{backgrounds}
+
+
 \usepackage{stackengine}
 \def\ucr{\scalebox{1}{\stackinset{c}{}{c}{-.1pt}{%
   \textcolor{white}{\sffamily\bfseries\small ?}}{%
   \rotatebox{45}{$\blacksquare$}}}}
+
+\let\tablefontsize\normalsize
 
 \newcommand{\camembert}{CamemBERT\xspace}
 \newcommand{\camembertoscar}{CamemBERT\textsubscript{OSCAR}\xspace}
@@ -219,6 +252,7 @@
 \include{sources/models/frelmo}
 \chapter{D'Alembert}
 \chapter{BERTrade}
+\include{sources/models/bertrade}
 
 \part{Evaluation}
 \chapter{Language Modeling}

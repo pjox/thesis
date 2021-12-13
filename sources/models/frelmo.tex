@@ -14,7 +14,7 @@ Unfortunately, most named entity annotated French corpora are oral transcripts, 
 
 \newcite{sagot-etal-2012-annotation} describe the addition to the French Treebank (FTB) \citep{abeille-etal-2003-building} in its FTB-UC version \citep{candito-etal-2010-statistical} of a new, freely available annotation layer providing named entity information in terms of span and type (NER) as well as reference (NE linking), using the Wikipedia-based \aleda \cite{sagot-stern-2012-aleda} as a reference entity database. This was the first freely available French corpus annotated with referential named entity information and the first freely available such corpus for the written journalistic genre. However, this annotation is provided in the form of an XML-annotated text with sentence boundaries but no tokenization. This corpus will be referred to as FTB-NE in the rest of the article.
 
-Since the publication of that named entity FTB annotation layer, the field has evolved in many ways. Firstly, most treebanks are now available as part of the \emph{Universal Dependencies} (UD)\footnote{\url{https://universaldependencies.org}} treebank collection. Secondly, neural approaches have considerably improved the state of the art in natural language processing in general and in NER in particular. In this regard, the emergence of contextual language models has played a major role. However, surprisingly few neural French NER systems have been published.\footnote{We are only aware of the \emph{entity-fishing} NER (and NE linking) system developed by Patrice Lopez, a \href{https://github.com/kermitt2/entity-fishing}{freely available} yet unpublished system.} This might be because large contextual language models for French have only been made available very recently \cite{martin-etal-2020-camembert}. But it is also the result of the fact that getting access to the FTB with its named entity layer as well as using this corpus were not straightforward tasks. 
+Since the publication of that named entity FTB annotation layer, the field has evolved in many ways. Firstly, most treebanks are now available as part of the \emph{Universal Dependencies} (UD)\footnote{\url{https://universaldependencies.org}} treebank collection. Secondly, neural approaches have considerably improved the state of the art in natural language processing in general and in NER in particular. In this regard, the emergence of contextual language models has played a major role. However, surprisingly few neural French NER systems have been published.\footnote{We are only aware of the \emph{entity-fishing} NER (and NE linking) system developed by Patrice Lopez, a \href{https://github.com/kermitt2/entity-fishing}{freely available} yet unpublished system.} This might be because large contextual language models for French have only been made available very recently \cite{martin-etal-2020-camembert}. But it is also the result of the fact that getting access to the FTB with its named entity layer as well as using this corpus were not straightforward tasks.
 
 For a number of technical reasons, re-aligning the XML-format named entity FTB annotation layer created by \newcite{sagot-etal-2012-annotation} with the ``official'' version of the FTB or, later, with the version of the FTB provided in the Universal Dependency (UD) framework was not a straightforward task.\footnote{Note that the UD version of the FTB is freely downloadable, but does not include the original tokens or lemmas. Only people with access to the original FTB can restore this information, as required by the  intellectual property status of the source text.} Moreover, due to the intellectual property status of the source text in the FTB, the named entity annotations could only be provided to people having signed the FTB license, which prevented them from being made freely downloadable online.
 
@@ -36,25 +36,25 @@ Yet information about the named entity annotation guidelines, process and result
 
 
 \newcite{sagot-etal-2012-annotation} annotated the FTB with the span, absolute type\footnote{
-  Every mention of \emph{France} is annotated as a \texttt{Location} with subtype \texttt{Country}, as given in \aleda database, even if in context the mentioned entity is a political organization, the French people, a sports team, etc.}, sometimes subtype and \aleda unique identifier of each named entity mention.\footnote{Only proper nouns are considered as named entity mentions, thereby excluding other types of referential expressions.} Annotations are restricted to person, location, organization and company names, as well as a few product names.\footnote{More precisely, we used a tagset of 7 base NE types: \texttt{Person}, \texttt{Location}, \texttt{Organization}, \texttt{Company}, \texttt{Product}, \texttt{POI} (Point of Interest) and \texttt{FictionChar}.} There are no nested entities. Non capitalized entity mentions (e.g.~\emph{banque mondiale} `World Bank') are annotated only if they can be disambiguated independently of their context. Entity mentions that require the context to be disambiguated (e.g.~\emph{Banque centrale}) are only annotated if they are capitalized.
-  \footnote{So for instance, in \emph{université de Nantes} `Nantes university', only \emph{Nantes} is annotated, as a city, as \emph{université} is written in lowercase letters. However, \emph{Université de Nantes} `Nantes University' is wholly annotated as an organization. It is non-ambiguous because \emph{Université} is capitalized. \emph{Université de Montpellier} `Montpellier University' being ambiguous when the text of the FTB was written and when the named entity annotations were produced, only \emph{Montpellier} is annotated, as a city.}
-  For person names, grammatical or contextual words around the mention are not included in the mention (e.g.~in \emph{M.~Jacques Chirac} or \emph{le Président Jacques Chirac}, only \emph{Jacques Chirac} is included in the mention).
+    Every mention of \emph{France} is annotated as a \texttt{Location} with subtype \texttt{Country}, as given in \aleda database, even if in context the mentioned entity is a political organization, the French people, a sports team, etc.}, sometimes subtype and \aleda unique identifier of each named entity mention.\footnote{Only proper nouns are considered as named entity mentions, thereby excluding other types of referential expressions.} Annotations are restricted to person, location, organization and company names, as well as a few product names.\footnote{More precisely, we used a tagset of 7 base NE types: \texttt{Person}, \texttt{Location}, \texttt{Organization}, \texttt{Company}, \texttt{Product}, \texttt{POI} (Point of Interest) and \texttt{FictionChar}.} There are no nested entities. Non capitalized entity mentions (e.g.~\emph{banque mondiale} `World Bank') are annotated only if they can be disambiguated independently of their context. Entity mentions that require the context to be disambiguated (e.g.~\emph{Banque centrale}) are only annotated if they are capitalized.
+\footnote{So for instance, in \emph{université de Nantes} `Nantes university', only \emph{Nantes} is annotated, as a city, as \emph{université} is written in lowercase letters. However, \emph{Université de Nantes} `Nantes University' is wholly annotated as an organization. It is non-ambiguous because \emph{Université} is capitalized. \emph{Université de Montpellier} `Montpellier University' being ambiguous when the text of the FTB was written and when the named entity annotations were produced, only \emph{Montpellier} is annotated, as a city.}
+For person names, grammatical or contextual words around the mention are not included in the mention (e.g.~in \emph{M.~Jacques Chirac} or \emph{le Président Jacques Chirac}, only \emph{Jacques Chirac} is included in the mention).
 
 
 Tags used for the annotation have the following information:
 \begin{itemize}
-\item the identifier of the NE in the \aleda database (\texttt{eid} attribute); when a named entity is not present in the database, the identifier is \texttt{null},\footnote{Specific conventions for entities that have merged, changed name, ceased to exist as such (e.g.~\emph{Tchequoslovaquie}) or evolved in other ways are described in \newcite{sagot-etal-2012-annotation}.}
-\item the normalized named of the named entity as given in \aleda; for locations it is their name as given in GeoNames and for the others, it is the title of the corresponding French Wikipedia article,
-\item the type and, when relevant, the subtype of the entity.
+    \item the identifier of the NE in the \aleda database (\texttt{eid} attribute); when a named entity is not present in the database, the identifier is \texttt{null},\footnote{Specific conventions for entities that have merged, changed name, ceased to exist as such (e.g.~\emph{Tchequoslovaquie}) or evolved in other ways are described in \newcite{sagot-etal-2012-annotation}.}
+    \item the normalized named of the named entity as given in \aleda; for locations it is their name as given in GeoNames and for the others, it is the title of the corresponding French Wikipedia article,
+    \item the type and, when relevant, the subtype of the entity.
 \end{itemize}
 Here are two annotation examples:\\
 \noindent{\small\texttt{<ENAMEX type="Organization" eid="1000000000016778"
-name="Confédération française démocratique du travail">CFDT</ENAMEX>\\
-<ENAMEX type="Location"
-sub\_type="Country"
-eid="2000000001861060" name="Japan">Japon</ENAMEX>}}
+        name="Confédération française démocratique du travail">CFDT</ENAMEX>\\
+        <ENAMEX type="Location"
+        sub\_type="Country"
+        eid="2000000001861060" name="Japan">Japon</ENAMEX>}}
 
-\newcite{sagot-etal-2012-annotation} annotated the 2007 version of the FTB treebank (with the exception of sentences that did not receive any functional annotation), i.e.~12,351 sentences comprising 350,931 tokens. The annotation process consisted in a manual correction and validation of the output of a rule- and heuristics-based named entity recognition and linking tool in an XML editor. 
+\newcite{sagot-etal-2012-annotation} annotated the 2007 version of the FTB treebank (with the exception of sentences that did not receive any functional annotation), i.e.~12,351 sentences comprising 350,931 tokens. The annotation process consisted in a manual correction and validation of the output of a rule- and heuristics-based named entity recognition and linking tool in an XML editor.
 Only a single person annotated the corpus, despite the limitations of such a protocol, as acknowledged by \newcite{sagot-etal-2012-annotation}.
 
 In total, 5,890 of the 12,351 sentences contain at least a named entity mention. 11,636 mentions were annotated, which are distributed as follows:
@@ -109,51 +109,51 @@ Leaving aside French and English, the CoNLL 2002 shared task included NER corpor
     \centering\small
     \begin{tabular}{lrrr}
         \toprule
-        \textsc{Model} & \textsc{Precision} & \textsc{Recall} & \textsc{F1-Score} \\ 
+        \textsc{Model}                                                 & \textsc{Precision} & \textsc{Recall}   & \textsc{F1-Score} \\
         \midrule
-        \multicolumn{4}{c}\emph{baseline}\\
+        \multicolumn{4}{c}\emph{baseline}                                                                                           \\
         %         LNSAI &  84.64 & 68.51 & 75.73\\
-        SEM (CRF) & 87.18 & 80.48 & 83.70\\
+        SEM (CRF)                                                      & 87.18              & 80.48             & 83.70             \\
         \midrule
-        LSTM-seq2seq & 85.10 & 81.87 & 83.45\\
-        + FastText & 86.98 & 83.07 & 84.98\\ 
-        + FastText + FrELMo & 89.49 & 87.48 & 88.47\\
-        + FastText + CamemBERT\textsubscript{OSCAR-BASE-WWM} & 89.79 & 88.86 & 89.32\\
-        + FastText + CamemBERT\textsubscript{OSCAR-BASE-WWM} + FrELMo & 90.00 & 88.60 & 89.30\\
-        + FastText + CamemBERT\textsubscript{CCNET-BASE-WWM} & 90.31 & 89.29 & 89.80\\
-        + FastText + CamemBERT\textsubscript{CCNET-BASE-WWM} + FrELMo & 90.11 & 88.86 & 89.48\\
-        + FastText + CamemBERT\textsubscript{OSCAR-BASE-SWM} & 90.09 & 89.46 & 89.77\\
-        + FastText + CamemBERT\textsubscript{OSCAR-BASE-SWM} + FrELMo & 90.11 & 88.95 & 89.53\\
-        + FastText + CamemBERT\textsubscript{CCNET-BASE-SWM} & 90.31 & 89.38 & 89.84\\
-        + FastText + CamemBERT\textsubscript{CCNET-BASE-SWM} + FrELMo & 90.64 & 89.46 & \underline{90.05}\\
-        + FastText + CamemBERT\textsubscript{CCNET-500K-WWM} & \underline{90.68} & 89.03 & 89.85\\
-        + FastText + CamemBERT\textsubscript{CCNET-500K-WWM} + FrELMo & 90.13 & 88.34 & 89.23\\
-        + FastText + CamemBERT\textsubscript{CCNET-LARGE-WWM} & 90.39 & 88.51 & 89.44\\
-        + FastText + CamemBERT\textsubscript{CCNET-LARGE-WWM} + FrELMo & 89.72 & 88.17 & 88.94\\
+        LSTM-seq2seq                                                   & 85.10              & 81.87             & 83.45             \\
+        + FastText                                                     & 86.98              & 83.07             & 84.98             \\
+        + FastText + FrELMo                                            & 89.49              & 87.48             & 88.47             \\
+        + FastText + CamemBERT\textsubscript{OSCAR-BASE-WWM}           & 89.79              & 88.86             & 89.32             \\
+        + FastText + CamemBERT\textsubscript{OSCAR-BASE-WWM} + FrELMo  & 90.00              & 88.60             & 89.30             \\
+        + FastText + CamemBERT\textsubscript{CCNET-BASE-WWM}           & 90.31              & 89.29             & 89.80             \\
+        + FastText + CamemBERT\textsubscript{CCNET-BASE-WWM} + FrELMo  & 90.11              & 88.86             & 89.48             \\
+        + FastText + CamemBERT\textsubscript{OSCAR-BASE-SWM}           & 90.09              & 89.46             & 89.77             \\
+        + FastText + CamemBERT\textsubscript{OSCAR-BASE-SWM} + FrELMo  & 90.11              & 88.95             & 89.53             \\
+        + FastText + CamemBERT\textsubscript{CCNET-BASE-SWM}           & 90.31              & 89.38             & 89.84             \\
+        + FastText + CamemBERT\textsubscript{CCNET-BASE-SWM} + FrELMo  & 90.64              & 89.46             & \underline{90.05} \\
+        + FastText + CamemBERT\textsubscript{CCNET-500K-WWM}           & \underline{90.68}  & 89.03             & 89.85             \\
+        + FastText + CamemBERT\textsubscript{CCNET-500K-WWM} + FrELMo  & 90.13              & 88.34             & 89.23             \\
+        + FastText + CamemBERT\textsubscript{CCNET-LARGE-WWM}          & 90.39              & 88.51             & 89.44             \\
+        + FastText + CamemBERT\textsubscript{CCNET-LARGE-WWM} + FrELMo & 89.72              & 88.17             & 88.94             \\
         \midrule
-        \multicolumn{4}{c}\emph{LSTM-CRF + embeddings}\\
-        LSTM-CRF & 85.87 & 81.35 & 83.55\\
-        + FastText & 88.53 & 84.63 & 86.53\\
-        + FastText + FrELMo & 88.89 & 88.43 & 88.66\\
-        + FastText + CamemBERT\textsubscript{OSCAR-BASE-WWM} & 90.47 & 88.51 & 89.48\\
-        + FastText + CamemBERT\textsubscript{OSCAR-BASE-WWM} + FrELMo & 89.70 & 88.77 & 89.24\\
-        + FastText + CamemBERT\textsubscript{CCNET-BASE-WWM} & 90.24 & 89.46 & 89.85\\
-        + FastText + CamemBERT\textsubscript{CCNET-BASE-WWM} + FrELMo & 89.38 & 88.69 & 89.03\\
-        + FastText + CamemBERT\textsubscript{OSCAR-BASE-SWM} & \textbf{90.96} & \underline{89.55} & \textbf{90.25}\\
-        + FastText + CamemBERT\textsubscript{OSCAR-BASE-SWM} + FrELMo & 89.44 & 88.51 & 88.98\\
-        + FastText + CamemBERT\textsubscript{CCNET-BASE-SWM} & 90.09 & 88.69 & 89.38\\
-        + FastText + CamemBERT\textsubscript{CCNET-BASE-SWM} + FrELMo & 88.18 & 87.65 & 87.92\\
-        + FastText + CamemBERT\textsubscript{CCNET-500K-WWM} & 89.46 & 88.69 & 89.07\\
-        + FastText + CamemBERT\textsubscript{CCNET-500K-WWM} + FrELMo & 90.11 & 88.86 & 89.48\\
-        + FastText + CamemBERT\textsubscript{CCNET-LARGE-WWM} & 89.19 & 88.34 & 88.76\\
-        + FastText + CamemBERT\textsubscript{CCNET-LARGE-WWM} + FrELMo & 89.03 & 88.34 & 88.69\\
+        \multicolumn{4}{c}\emph{LSTM-CRF + embeddings}                                                                              \\
+        LSTM-CRF                                                       & 85.87              & 81.35             & 83.55             \\
+        + FastText                                                     & 88.53              & 84.63             & 86.53             \\
+        + FastText + FrELMo                                            & 88.89              & 88.43             & 88.66             \\
+        + FastText + CamemBERT\textsubscript{OSCAR-BASE-WWM}           & 90.47              & 88.51             & 89.48             \\
+        + FastText + CamemBERT\textsubscript{OSCAR-BASE-WWM} + FrELMo  & 89.70              & 88.77             & 89.24             \\
+        + FastText + CamemBERT\textsubscript{CCNET-BASE-WWM}           & 90.24              & 89.46             & 89.85             \\
+        + FastText + CamemBERT\textsubscript{CCNET-BASE-WWM} + FrELMo  & 89.38              & 88.69             & 89.03             \\
+        + FastText + CamemBERT\textsubscript{OSCAR-BASE-SWM}           & \textbf{90.96}     & \underline{89.55} & \textbf{90.25}    \\
+        + FastText + CamemBERT\textsubscript{OSCAR-BASE-SWM} + FrELMo  & 89.44              & 88.51             & 88.98             \\
+        + FastText + CamemBERT\textsubscript{CCNET-BASE-SWM}           & 90.09              & 88.69             & 89.38             \\
+        + FastText + CamemBERT\textsubscript{CCNET-BASE-SWM} + FrELMo  & 88.18              & 87.65             & 87.92             \\
+        + FastText + CamemBERT\textsubscript{CCNET-500K-WWM}           & 89.46              & 88.69             & 89.07             \\
+        + FastText + CamemBERT\textsubscript{CCNET-500K-WWM} + FrELMo  & 90.11              & 88.86             & 89.48             \\
+        + FastText + CamemBERT\textsubscript{CCNET-LARGE-WWM}          & 89.19              & 88.34             & 88.76             \\
+        + FastText + CamemBERT\textsubscript{CCNET-LARGE-WWM} + FrELMo & 89.03              & 88.34             & 88.69             \\
         \midrule
-        \multicolumn{4}{c}\emph{fine-tuning}\\
-        mBERT & 80.35 & 84.02 & 82.14\\ %% Qu'est-ce que c'est ?
-        
-        CamemBERT\textsubscript{OSCAR-BASE-WWM}  & 89.36 & 89.18 & 89.27\\
-        CamemBERT\textsubscript{CCNET-500K-WWM}  & 89.35 & 88.81 & 89.08 \\
-        CamemBERT\textsubscript{CCNET-LARGE-WWM}  & 88.76 & \textbf{89.58} & 89.39\\
+        \multicolumn{4}{c}\emph{fine-tuning}                                                                                        \\
+        mBERT                                                          & 80.35              & 84.02             & 82.14             \\ %% Qu'est-ce que c'est ?
+
+        CamemBERT\textsubscript{OSCAR-BASE-WWM}                        & 89.36              & 89.18             & 89.27             \\
+        CamemBERT\textsubscript{CCNET-500K-WWM}                        & 89.35              & 88.81             & 89.08             \\
+        CamemBERT\textsubscript{CCNET-LARGE-WWM}                       & 88.76              & \textbf{89.58}    & 89.39             \\
         %CamemBERT\textsubscript{CCNet} & 88.32 & 86.87 & 87.59\\ 
         %CamemBERT\textsubscript{OSCAR} & 86.79 & 87.91 & 87.34\\ 
         \bottomrule
@@ -167,25 +167,25 @@ Leaving aside French and English, the CoNLL 2002 shared task included NER corpor
     \centering\small
     \begin{tabular}{lrrr}
         \toprule
-        \textsc{Model} & \textsc{Precision} & \textsc{Recall} & \textsc{F1-Score} \\ 
+        \textsc{Model}                                         & \textsc{Precision} & \textsc{Recall}   & \textsc{F1-Score} \\
         \midrule
-        \multicolumn{4}{c}\emph{shuf 1}\\
-        SEM(dev) & 92.96 & 87.84 & 90.33\\
-        LSTM-CRF+CamemBERT\textsubscript{OSCAR-BASE-SWM}(dev) & \underline{93.77} & \underline{94.00} & \underline{93.89}\\
-        SEM(test) & 91.88 & 87.14 & 89.45\\
-        LSTM-CRF+CamemBERT\textsubscript{OSCAR-BASE-SWM}(test) & \textbf{92.59} & \textbf{93.96} & \textbf{93.27}\\
+        \multicolumn{4}{c}\emph{shuf 1}                                                                                     \\
+        SEM(dev)                                               & 92.96              & 87.84             & 90.33             \\
+        LSTM-CRF+CamemBERT\textsubscript{OSCAR-BASE-SWM}(dev)  & \underline{93.77}  & \underline{94.00} & \underline{93.89} \\
+        SEM(test)                                              & 91.88              & 87.14             & 89.45             \\
+        LSTM-CRF+CamemBERT\textsubscript{OSCAR-BASE-SWM}(test) & \textbf{92.59}     & \textbf{93.96}    & \textbf{93.27}    \\
         \midrule
-        \multicolumn{4}{c}\emph{shuf 2}\\
-        SEM(dev) & 91.67 & 85.96 & 88.73\\
-        LSTM-CRF+CamemBERT\textsubscript{OSCAR-BASE-SWM}(dev) & \underline{93.15} & \underline{94.21} & \underline{93.68}\\
-        SEM(test) & 90.57 & 87.76 & 89.14\\
-        LSTM-CRF+CamemBERT\textsubscript{OSCAR-BASE-SWM}(test) & \textbf{92.63} & \textbf{94.31} & \textbf{93.46}\\
+        \multicolumn{4}{c}\emph{shuf 2}                                                                                     \\
+        SEM(dev)                                               & 91.67              & 85.96             & 88.73             \\
+        LSTM-CRF+CamemBERT\textsubscript{OSCAR-BASE-SWM}(dev)  & \underline{93.15}  & \underline{94.21} & \underline{93.68} \\
+        SEM(test)                                              & 90.57              & 87.76             & 89.14             \\
+        LSTM-CRF+CamemBERT\textsubscript{OSCAR-BASE-SWM}(test) & \textbf{92.63}     & \textbf{94.31}    & \textbf{93.46}    \\
         \midrule
-        \multicolumn{4}{c}\emph{shuf 3}\\
-        SEM(dev) & 92.53 & 88.75 & 90.60\\
-        LSTM-CRF+CamemBERT\textsubscript{OSCAR-BASE-SWM}(dev) & \underline{94.85} & \underline{95.82} & \underline{95.34}\\
-        SEM(test) & 90.68 & 85.00 & 87.74\\
-        LSTM-CRF+CamemBERT\textsubscript{OSCAR-BASE-SWM}(test) & \textbf{91.30} & \textbf{92.67} & \textbf{91.98}\\
+        \multicolumn{4}{c}\emph{shuf 3}                                                                                     \\
+        SEM(dev)                                               & 92.53              & 88.75             & 90.60             \\
+        LSTM-CRF+CamemBERT\textsubscript{OSCAR-BASE-SWM}(dev)  & \underline{94.85}  & \underline{95.82} & \underline{95.34} \\
+        SEM(test)                                              & 90.68              & 85.00             & 87.74             \\
+        LSTM-CRF+CamemBERT\textsubscript{OSCAR-BASE-SWM}(test) & \textbf{91.30}     & \textbf{92.67}    & \textbf{91.98}    \\
         \bottomrule
     \end{tabular}
     \caption{Results on the test set for the best development set scores.}
