@@ -155,6 +155,21 @@
 \newcommand{\xlmmlmtlm}{XLM\textsubscript{MLM-TLM}\xspace}
 
 
+\newcommand{\secref}[1]{\StrSubstitute{\getrefnumber{#1}}{.}{ }}
+\newcommand{\elmooscar}{ELMo\textsubscript{OSCAR}\xspace}
+\newcommand{\elmooscars}{ELMo\textsubscript{OSCAR}'s\xspace}
+\newcommand{\elmowiki}{ELMo\textsubscript{Wikipedia}\xspace}
+\newcommand{\elmowikis}{ELMo\textsubscript{Wikipedia}'s\xspace}
+\newcommand{\elmooscarone}{ELMo\textsubscript{OSCAR(1)}\xspace}
+\newcommand{\elmowikione}{ELMo\textsubscript{Wikipedia(1)}\xspace}
+\newcommand{\elmooscarthree}{ELMo\textsubscript{OSCAR(3)}\xspace}
+\newcommand{\elmowikithree}{ELMo\textsubscript{Wikipedia(3)}\xspace}
+\newcommand{\elmooscarfive}{ELMo\textsubscript{OSCAR(5)}\xspace}
+\newcommand{\elmowikifive}{ELMo\textsubscript{Wikipedia(5)}\xspace}
+\newcommand{\elmooscarten}{ELMo\textsubscript{OSCAR(10)}\xspace}
+\newcommand{\elmowikiten}{ELMo\textsubscript{Wikipedia(10)}\xspace}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Incipit
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -197,7 +212,9 @@
 \chapter{D'Alembert}
 \chapter{BERTrade}
 
-\part{Downstream tasks}
+\part{Evaluation}
+\chapter{Language Modeling}
+\include{sources/evaluation/monolingual}
 \chapter{Parsing}
 \chapter{POS Tagging}
 \chapter{Named-Entity Recognition}

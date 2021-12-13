@@ -416,6 +416,22 @@
   bibsource = {dblp computer science bibliography, https://dblp.org}
 }
 
+@article{hochreiter-schmidhuber-1997-long,
+  author   = {Hochreiter, Sepp and Schmidhuber, Jürgen},
+  title    = {{Long Short-Term Memory}},
+  journal  = {Neural Computation},
+  volume   = {9},
+  number   = {8},
+  pages    = {1735-1780},
+  year     = {1997},
+  month    = {11},
+  abstract = {{Learning to store information over extended time intervals by recurrent backpropagation takes a very long time, mostly because of insufficient, decaying error backflow. We briefly review Hochreiter's (1991) analysis of this problem, then address it by introducing a novel, efficient, gradient based method called long short-term memory (LSTM). Truncating the gradient where this does not do harm, LSTM can learn to bridge minimal time lags in excess of 1000 discrete-time steps by enforcing constant error flow through constant error carousels within special units. Multiplicative gate units learn to open and close access to the constant error flow. LSTM is local in space and time; its computational complexity per time step and weight is O. 1. Our experiments with artificial data involve local, distributed, real-valued, and noisy pattern representations. In comparisons with real-time recurrent learning, back propagation through time, recurrent cascade correlation, Elman nets, and neural sequence chunking, LSTM leads to many more successful runs, and learns much faster. LSTM also solves complex, artificial long-time-lag tasks that have never been solved by previous recurrent network algorithms.}},
+  issn     = {0899-7667},
+  doi      = {10.1162/neco.1997.9.8.1735},
+  url      = {https://doi.org/10.1162/neco.1997.9.8.1735},
+  eprint   = {https://direct.mit.edu/neco/article-pdf/9/8/1735/813796/neco.1997.9.8.1735.pdf}
+}
+
 @article{holland-etal-2018-the,
   author        = {{Holland}, Sarah and {Hosny}, Ahmed and {Newman}, Sarah and {Joseph}, Joshua and {Chmielinski}, Kasia},
   title         = {{The Dataset Nutrition Label: A Framework To Drive Higher Data Quality Standards}},
@@ -493,11 +509,22 @@
 }
 
 @inproceedings{lan-etal-2020-albert,
-  title     = {ALBERT: A Lite BERT for Self-supervised Learning of Language Representations},
-  author    = {Zhenzhong Lan and Mingda Chen and Sebastian Goodman and Kevin Gimpel and Piyush Sharma and Radu Soricut},
-  booktitle = {International Conference on Learning Representations},
+  author    = {Zhenzhong Lan and
+               Mingda Chen and
+               Sebastian Goodman and
+               Kevin Gimpel and
+               Piyush Sharma and
+               Radu Soricut},
+  title     = {{ALBERT:} {A} Lite {BERT} for Self-supervised Learning of Language
+               Representations},
+  booktitle = {8th International Conference on Learning Representations, {ICLR} 2020,
+               Addis Ababa, Ethiopia, April 26-30, 2020},
+  publisher = {OpenReview.net},
   year      = {2020},
-  url       = {https://openreview.net/forum?id=H1eA7AEtvS}
+  url       = {https://openreview.net/forum?id=H1eA7AEtvS},
+  timestamp = {Thu, 07 May 2020 17:11:48 +0200},
+  biburl    = {https://dblp.org/rec/conf/iclr/LanCGGSS20.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
 }
 
 @article{liu-etal-2019-roberta,
@@ -557,7 +584,7 @@
   adsnote       = {Provided by the SAO/NASA Astrophysics Data System}
 }
 
-@inproceedings{ortiz-suarez-etal-2019-asynchronous,
+ @inproceedings{ortiz-suarez-etal-2019-asynchronous,
   author    = {Pedro Javier {Ortiz Su{\'a}rez} and Beno{\^i}t Sagot and Laurent Romary},
   booktitle = {Proceedings of the Workshop on Challenges in the Management of Large Corpora (CMLC-7) 2019. Cardiff, 22nd July 2019},
   title     = {Asynchronous pipelines for processing huge corpora on medium to low resource infrastructures},
@@ -572,7 +599,7 @@
   language  = {en}
 }
 
- @article{parker-etal-2011-english,
+@article{parker-etal-2011-english,
   title   = {English gigaword fifth edition, linguistic data consortium},
   author  = {Parker, Robert and Graff, David and Kong, Junbo and Chen, Ke and Maeda, Kazuaki},
   journal = {Technical report, Technical Report. Linguistic Data Consortium},
@@ -715,6 +742,22 @@
   abstract = {Here is the first comprehensive statement of a research method and its theory which were introduced briefly during a workshop at the 1953 AEJ convention. Included are findings from three pilot studies and two experiments in which “cloze procedure” results are compared with those of two readability formulas.}
 }
 
+@article{trinh-le-2018-a,
+  author        = {{Trinh}, Trieu H. and {Le}, Quoc V.},
+  title         = {{A Simple Method for Commonsense Reasoning}},
+  journal       = {arXiv e-prints},
+  keywords      = {Computer Science - Artificial Intelligence, Computer Science - Computation and Language, Computer Science - Machine Learning},
+  year          = 2018,
+  month         = jun,
+  eid           = {arXiv:1806.02847},
+  pages         = {arXiv:1806.02847},
+  archiveprefix = {arXiv},
+  eprint        = {1806.02847},
+  primaryclass  = {cs.AI},
+  adsurl        = {https://ui.adsabs.harvard.edu/abs/2018arXiv180602847T},
+  adsnote       = {Provided by the SAO/NASA Astrophysics Data System}
+}
+
 @inproceedings{vaswani-etal-2017-attention,
   author    = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N and Kaiser, \L ukasz and Polosukhin, Illia},
   booktitle = {Advances in Neural Information Processing Systems},
@@ -809,6 +852,32 @@
   doi       = {10.1109/ICCV.2015.11},
   issn      = {2380-7504},
   month     = {Dec}
+}
+
+@inproceedings{buch-kromann-2003-the,
+  title={The Danish dependency treebank and the dtag treebank tool},
+  author={Buch-Kromann, Matthias},
+  booktitle={2nd Workshop on Treebanks and Linguistic Theories (TLT), Sweden},
+  pages={217--220},
+  year={2003}
+}
+
+@inproceedings{desrochers-etal-2016-a,
+author = {Desrochers, Spencer and Paradis, Chad and Weaver, Vincent M.},
+title = {A Validation of DRAM RAPL Power Measurements},
+year = {2016},
+isbn = {9781450343053},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/2989081.2989088},
+doi = {10.1145/2989081.2989088},
+abstract = {Recent Intel processors support the Running Average Power Level (RAPL) interface, which among other things provides estimated energy measurements for the CPUs, integrated GPU, and DRAM. These measurements are easily accessible by the user, and can be gathered by a wide variety of tools, including the Linux perf_event interface. This allows unprecedented easy access to energy information when designing and optimizing energy-aware code.While greatly useful, on most systems these RAPL measurements are estimated values, generated on the fly by an on-chip energy model. The values are not documented well, and the results (especially the DRAM results) have undergone only limited validation.We validate the DRAM RAPL results on both desktop and server Haswell machines, with multiple types of DDR3 and DDR4 memory. We instrument the hardware to gather actual power measurements and compare them to the RAPL values returned via Linux perf_event. We describe the many challenges encountered when instrumenting systems for detailed power measurement.We find that the RAPL results match overall energy and power trends, usually by a constant power offset. The results match best when the DRAM is being heavily utilized, but do not match as well in cases where the system is idle, or when an integrated GPU is using the memory.We also verify that Haswell server machines produce more accurate results, as they include actual power measurements gathered through the integrated voltage regulator.},
+booktitle = {Proceedings of the Second International Symposium on Memory Systems},
+pages = {455–470},
+numpages = {16},
+keywords = {DRAM Power, RAPL, DRAM Energy},
+location = {Alexandria, VA, USA},
+series = {MEMSYS '16}
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}
