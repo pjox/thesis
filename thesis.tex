@@ -169,6 +169,8 @@
 \newcommand{\elmooscarten}{ELMo\textsubscript{OSCAR(10)}\xspace}
 \newcommand{\elmowikiten}{ELMo\textsubscript{Wikipedia(10)}\xspace}
 
+\def\aleda{\textsf{Aleda}\xspace}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Incipit
@@ -190,12 +192,17 @@
 
 \include{sources/introduction}
 
-\part{Data}
-\chapter{OSCAR}
+\part{OSCAR}
+\chapter{Goclassy}
 \include{sources/data/goclassy}
+\chapter{Quality at Glance}
 \include{sources/data/quality}
 \include{sources/data/full_tables}
+\chapter{Ungoliant}
 \include{sources/data/ungoliant}
+
+\part{Data}
+\chapter{CaBeRnet}
 \include{sources/data/cabernet}
 \chapter{Modern French Data}
 \section{LEM17}
@@ -209,6 +216,7 @@
 \chapter{CamemBERT}
 \include{sources/models/camembert}
 \chapter{FrELMo}
+\include{sources/models/frelmo}
 \chapter{D'Alembert}
 \chapter{BERTrade}
 
