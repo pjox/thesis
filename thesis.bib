@@ -453,6 +453,23 @@
   adsnote       = {Provided by the SAO/NASA Astrophysics Data System}
 }
 
+@inproceedings{guibon-etal-2014-parsing,
+  title       = {{Parsing Poorly Standardized Language Dependency on Old French}},
+  author      = {Guibon, Ga{\"e}l and Tellier, Isabelle and Constant, Mathieu and Pr{\'e}vost, Sophie and Gerdes, Kim},
+  url         = {https://hal.archives-ouvertes.fr/hal-01250959},
+  booktitle   = {{Thirteenth International Workshop on Treebanks and Linguistic Theories (TLT13)}},
+  address     = {T{\"u}bingen, Germany},
+  editor      = {V. Henrich and E. Hinrichs and D.de Kok and P. Osenova \& A. Przepi{\'o}rkowski},
+  series      = {Proceedings of the Thirteenth International Workshop on Treebanks and Linguistic Theories (TLT13)},
+  pages       = {51-61},
+  year        = {2014},
+  month       = Dec,
+  keywords    = {POS labelling ; dependency parsing ; Old French ; machine learning ; corpus exploration},
+  pdf         = {https://hal.archives-ouvertes.fr/hal-01250959v2/file/guibon_al_TLT2014.pdf},
+  hal_id      = {hal-01250959},
+  hal_version = {v2}
+}
+
 @inproceedings{hill-etal-2016-the,
   author    = {Felix Hill and
                Antoine Bordes and
@@ -551,7 +568,7 @@
   adsnote       = {Provided by the SAO/NASA Astrophysics Data System}
 }
 
-@inproceedings{kingma-ba-2015-adam,
+ @inproceedings{kingma-ba-2015-adam,
   author    = {Diederik P. Kingma and
                Jimmy Ba},
   editor    = {Yoshua Bengio and
@@ -566,7 +583,16 @@
   bibsource = {dblp computer science bibliography, https://dblp.org}
 }
 
- @inproceedings{lafferty-etal-2001-conditional,
+@article{kroch-etal-2000-the,
+  title   = {The {Penn-Helsinki Parsed Corpus} of {Middle English} ({PPCME2})},
+  author  = {Anthony Kroch and Ann Taylor and Beatrice Santorini},
+  journal = {CD-ROM, second edition, release 4},
+  editor  = {Department of Linguistics, University of Pennsylvania},
+  url     = {http://www.ling.upenn.edu/ppche/ppche-release-2016/PPCME2-RELEASE-4},
+  year    = {2000}
+}
+
+@inproceedings{lafferty-etal-2001-conditional,
   author    = {Lafferty, John D. and McCallum, Andrew and Pereira, Fernando C. N.},
   title     = {Conditional Random Fields: Probabilistic Models for Segmenting and Labeling Sequence Data},
   year      = {2001},
@@ -598,6 +624,38 @@
   bibsource = {dblp computer science bibliography, https://dblp.org}
 }
 
+@article{lee-etal-2019-BioBERT,
+  author   = {Lee, Jinhyuk and Yoon, Wonjin and Kim, Sungdong and Kim, Donghyeon and Kim, Sunkyu and So, Chan Ho and Kang, Jaewoo},
+  title    = {{BioBERT: a pre-trained biomedical language representation model for biomedical text mining}},
+  journal  = {Bioinformatics},
+  volume   = {36},
+  number   = {4},
+  pages    = {1234-1240},
+  year     = {2019},
+  month    = {09},
+  abstract = {{Biomedical text mining is becoming increasingly important as the number of biomedical documents rapidly grows. With the progress in natural language processing (NLP), extracting valuable information from biomedical literature has gained popularity among researchers, and deep learning has boosted the development of effective biomedical text mining models. However, directly applying the advancements in NLP to biomedical text mining often yields unsatisfactory results due to a word distribution shift from general domain corpora to biomedical corpora. In this article, we investigate how the recently introduced pre-trained language model BERT can be adapted for biomedical corpora.We introduce BioBERT (Bidirectional Encoder Representations from Transformers for Biomedical Text Mining), which is a domain-specific language representation model pre-trained on large-scale biomedical corpora. With almost the same architecture across tasks, BioBERT largely outperforms BERT and previous state-of-the-art models in a variety of biomedical text mining tasks when pre-trained on biomedical corpora. While BERT obtains performance comparable to that of previous state-of-the-art models, BioBERT significantly outperforms them on the following three representative biomedical text mining tasks: biomedical named entity recognition (0.62\\% F1 score improvement), biomedical relation extraction (2.80\\% F1 score improvement) and biomedical question answering (12.24\\% MRR improvement). Our analysis results show that pre-training BERT on biomedical corpora helps it to understand complex biomedical texts.We make the pre-trained weights of BioBERT freely available at https://github.com/naver/biobert-pretrained, and the source code for fine-tuning BioBERT available at https://github.com/dmis-lab/biobert.}},
+  issn     = {1367-4803},
+  doi      = {10.1093/bioinformatics/btz682},
+  url      = {https://doi.org/10.1093/bioinformatics/btz682},
+  eprint   = {https://academic.oup.com/bioinformatics/article-pdf/36/4/1234/32527770/btz682.pdf}
+}
+
+@article{lee-kong-2014-a,
+  author   = {Lee, John and Kong, Yin Hei},
+  title    = {{A dependency treebank of Chinese Buddhist texts}},
+  journal  = {Digital Scholarship in the Humanities},
+  volume   = {31},
+  number   = {1},
+  pages    = {140-151},
+  year     = {2014},
+  month    = {09},
+  abstract = {{We present a dependency treebank of Buddhist Chinese texts, containing more than 50K characters drawn from four sutras in the Chinese Buddhist Canon. With dates of composition that span almost five centuries, these sutras bear witness to the evolution of the Chinese language. The treebank has been annotated using the part-of-speech tagset of the Penn Chinese Treebank, and the Stanford Dependencies for Chinese with slight modifications. The article first discusses the texts and the annotation framework of this treebank, and reports on inter-annotator agreement. It then describes the search platform, to which the treebank has been imported, and applies the treebank to an open question in Chinese historical linguistics—the emergence of the Chinese copula.}},
+  issn     = {2055-7671},
+  doi      = {10.1093/llc/fqu048},
+  url      = {https://doi.org/10.1093/llc/fqu048},
+  eprint   = {https://academic.oup.com/dsh/article-pdf/31/1/140/21517990/fqu048.pdf}
+}
+
 @article{liu-etal-2019-roberta,
   author        = {{Liu}, Yinhan and {Ott}, Myle and {Goyal}, Naman and {Du}, Jingfei and {Joshi}, Mandar and {Chen}, Danqi and {Levy}, Omer and {Lewis}, Mike and {Zettlemoyer}, Luke and {Stoyanov}, Veselin},
   title         = {{RoBERTa: A Robustly Optimized BERT Pretraining Approach}},
@@ -612,6 +670,29 @@
   primaryclass  = {cs.CL},
   adsurl        = {https://ui.adsabs.harvard.edu/abs/2019arXiv190711692L},
   adsnote       = {Provided by the SAO/NASA Astrophysics Data System}
+}
+
+@book{marchello-nizia-etal-1979-histoire,
+  url       = {http://www.sudoc.fr/000381160},
+  year      = {1979},
+  title     = {Histoire de la langue française aux XIVe et XVe siècles},
+  author    = {Marchello-Nizia, Christiane },
+  address   = {Paris},
+  publisher = {\#0, Bordas},
+  publisher = {\#4},
+  pages     = {1 vol. (378 p.)},
+  series    = {Collection Études},
+  isbn      = {2-04-001160-9}
+}
+
+@book{marchello-Nizia-etal-2020-grande,
+  author    = {Christiane Marchello-Nizia and Bernard Combettes and Sophie Prévost and Tobias Scheer},
+  doi       = {doi:10.1515/9783110348194},
+  url       = {https://doi.org/10.1515/9783110348194},
+  title     = {Grande Grammaire Historique du Français (GGHF)},
+  year      = {2020},
+  publisher = {De Gruyter Mouton},
+  isbn      = {9783110348194}
 }
 
 @inproceedings{mikolov-etal-2013-distributed,
@@ -686,6 +767,15 @@
   language  = {en}
 }
 
+@misc{oxford-2001-the,
+  title     = {The York-Helsinki parsed corpus of Old English poetry ({YCOEP})},
+  author    = {Oxford Text Archive},
+  url       = {http://hdl.handle.net/20.500.12024/2425},
+  note      = {Oxford Text Archive},
+  copyright = {Oxford Text Archive},
+  year      = {2001}
+}
+
 @article{parker-etal-2011-english,
   title   = {English gigaword fifth edition, linguistic data consortium},
   author  = {Parker, Robert and Graff, David and Kong, Junbo and Chen, Ke and Maeda, Kazuaki},
@@ -708,6 +798,18 @@
   month       = feb,
   day         = 15,
   abstract    = {This document describes the structure, content, construction, and semantics of language tags for use in cases where it is desirable to indicate the language used in an information object. It also describes how to register values for use in language tags and a construct for matching such language tags, including user defined extensions for private interchange. This document replaces RFC 3066 (which replaced RFC 1766).}
+}
+
+@book{prevost-stein-2013-syntactic,
+  address   = {Lyon/Stuttgart},
+  editor    = {Pr\'evost, Sophie and Stein, Achim},
+  keywords  = {korp-x, srcmf, mypubs-elecedit},
+  publisher = {ENS de Lyon; Lattice, Paris; ILR University of Stuttgart},
+  title     = {Syntactic Reference Corpus of Medieval French (SRCMF)},
+  url       = {http://srcmf.org},
+  edition   = {UPDATE VERSION NUMBER},
+  year      = {2013},
+  islrn     = {899-492-963-833-3}
 }
 
 @article{radford-etal-2018-improving,
@@ -735,6 +837,25 @@
   number  = {140},
   pages   = {1-67},
   url     = {http://jmlr.org/papers/v21/20-074.html}
+}
+
+@inbook{rocio-etal-2003-automated,
+  author    = {Rocio, Vitor
+               and Alves, M{\'a}rio Amado
+               and Lopes, J. Gabriel
+               and Xavier, Maria Francisca
+               and Vicente, Gra{\c{c}}a},
+  editor    = {Abeill{\'e}, Anne},
+  title     = {Automated Creation of a Medieval Portuguese Partial Treebank},
+  booktitle = {Treebanks: Building and Using Parsed Corpora},
+  year      = {2003},
+  publisher = {Springer Netherlands},
+  address   = {Dordrecht},
+  pages     = {211--227},
+  abstract  = {The growing trend towards corpus-based linguistics has led researchers to manually annotate large quantities of text. The human effort involved in this task is often enormous, and requires highly specialised linguistically trained manpower. According to our point of view, another approach should be followed, using this highly trained manpower in other activities, more rewarding and creative, in a constructive dialogue among the various kinds of expertise needed for overcoming our ignorance about languages. As an experiment, we used tools and linguistic resources previously built for Contemporary Portuguese for partially automating the process of partial annotation of a Medieval Portuguese corpus. In this paper, we describe the tools used (POS tagger, lexical analyser and partial parser) and demonstrate that the similarities between a language at two different time periods is sufficient for bootstrapping and acquiring lexical knowledge from the partially parsed, automatically annotated corpus.},
+  isbn      = {978-94-010-0201-1},
+  doi       = {10.1007/978-94-010-0201-1_12},
+  url       = {https://doi.org/10.1007/978-94-010-0201-1_12}
 }
 
 @article{rosset-etal-2005-interaction,
@@ -802,6 +923,20 @@
   abstract = {Computerized system monitors and decision aids are increasingly common additions to critical decision-making contexts such as intensive care units, nuclear power plants and aircraft cockpits. These aids are introduced with the ubiquitous goal of “reducing human error”. The present study compared error rates in a simulated flight task with and without a computer that monitored system states and made decision recommendations. Participants in non-automated settings out-performed their counterparts with a very but not perfectly reliable automated aid on a monitoring task. Participants with an aid made errors of omission (missed events when not explicitly prompted about them by the aid) and commission (did what an automated aid recommended, even when it contradicted their training and other 100% valid and available indicators). Possible causes and consequences of automation bias are discussed}
 }
 
+@phdthesis{stern-2013-identification,
+  title       = {{Identification automatique d'entit{\'e}s pour l'enrichissement de contenus textuels}},
+  author      = {Stern, Rosa},
+  url         = {https://tel.archives-ouvertes.fr/tel-00939420},
+  school      = {{Universit{\'e} Paris-Diderot - Paris VII}},
+  year        = {2013},
+  month       = Jun,
+  keywords    = {information extraction ; semantic web ; semantic annotation ; entities ; named entitiy recognition ; linking ; extraction d'information ; web s{\'e}mantique ; annotation s{\'e}mantique ; linked data ; entit{\'e}s ; reconnaissance d'entit{\'e}s nomm{\'e}es ; liage},
+  type        = {Theses},
+  pdf         = {https://tel.archives-ouvertes.fr/tel-00939420/file/these.pdf},
+  hal_id      = {tel-00939420},
+  hal_version = {v1}
+}
+
 @inproceedings{stern-sagot-2010-resources,
   title       = {{Resources for Named Entity Recognition and Resolution in News Wires}},
   author      = {Stern, Rosa and Sagot, Beno{\^i}t},
@@ -867,6 +1002,19 @@
   abstract = {Here is the first comprehensive statement of a research method and its theory which were introduced briefly during a workshop at the 1953 AEJ convention. Included are findings from three pilot studies and two experiments in which “cloze procedure” results are compared with those of two readability formulas.}
 }
 
+@inbook{traugott-pintzuk-2008-coding,
+  author    = {Elizabeth Closs Traugott and Susan Pintzuk},
+  editor    = {Susan M. Fitzmaurice and Donka Minkova},
+  doi       = {doi:10.1515/9783110211801.61},
+  url       = {https://doi.org/10.1515/9783110211801.61},
+  title     = {Coding the York-Toronto-Helsinki Parsed Corpus of
+               Old English Prose to investigate the syntaxpragmatics interface},
+  booktitle = {Studies in the History of the English Language IV: Empirical and Analytical Advances in the Study of English Language Change},
+  year      = {2008},
+  publisher = {De Gruyter Mouton},
+  pages     = {61--80}
+}
+
 @article{trinh-le-2018-a,
   author        = {{Trinh}, Trieu H. and {Le}, Quoc V.},
   title         = {{A Simple Method for Commonsense Reasoning}},
@@ -880,6 +1028,22 @@
   eprint        = {1806.02847},
   primaryclass  = {cs.AI},
   adsurl        = {https://ui.adsabs.harvard.edu/abs/2018arXiv180602847T},
+  adsnote       = {Provided by the SAO/NASA Astrophysics Data System}
+}
+
+ @article{turc-etal-2019-well,
+  author        = {{Turc}, Iulia and {Chang}, Ming-Wei and {Lee}, Kenton and {Toutanova}, Kristina},
+  title         = {{Well-Read Students Learn Better: On the Importance of Pre-training Compact Models}},
+  journal       = {arXiv e-prints},
+  keywords      = {Computer Science - Computation and Language},
+  year          = 2019,
+  month         = aug,
+  eid           = {arXiv:1908.08962},
+  pages         = {arXiv:1908.08962},
+  archiveprefix = {arXiv},
+  eprint        = {1908.08962},
+  primaryclass  = {cs.CL},
+  adsurl        = {https://ui.adsabs.harvard.edu/abs/2019arXiv190808962T},
   adsnote       = {Provided by the SAO/NASA Astrophysics Data System}
 }
 
@@ -977,20 +1141,6 @@
   doi       = {10.1109/ICCV.2015.11},
   issn      = {2380-7504},
   month     = {Dec}
-}
-
-@phdthesis{stern-2013-identification,
-  TITLE = {{Identification automatique d'entit{\'e}s pour l'enrichissement de contenus textuels}},
-  AUTHOR = {Stern, Rosa},
-  URL = {https://tel.archives-ouvertes.fr/tel-00939420},
-  SCHOOL = {{Universit{\'e} Paris-Diderot - Paris VII}},
-  YEAR = {2013},
-  MONTH = Jun,
-  KEYWORDS = {information extraction ; semantic web ; semantic annotation ; entities ; named entitiy recognition ; linking ; extraction d'information ; web s{\'e}mantique ; annotation s{\'e}mantique ; linked data ; entit{\'e}s ; reconnaissance d'entit{\'e}s nomm{\'e}es ; liage},
-  TYPE = {Theses},
-  PDF = {https://tel.archives-ouvertes.fr/tel-00939420/file/these.pdf},
-  HAL_ID = {tel-00939420},
-  HAL_VERSION = {v1},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

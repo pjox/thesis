@@ -91,7 +91,6 @@
 % Custom Commands and Environments
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\usepackage{fontawesome}
 \usepackage{arydshln}
 \usepackage{fontawesome5}
 \usepackage{tikz}
@@ -102,9 +101,7 @@
 
 \usepackage{siunitx}
     \sisetup{
-        binary-units=true,
         detect-all,
-        detect-inline-weight=math,
         group-separator=\text{\,},
     }
 	\DeclareSIUnit{\quantity}{\relax}
@@ -226,16 +223,16 @@
 \include{sources/introduction}
 
 \part{OSCAR}
-\chapter{Goclassy}
+%\chapter{Goclassy}
 \include{sources/data/goclassy}
-\chapter{Quality at Glance}
+%\chapter{Quality at Glance}
 \include{sources/data/quality}
 \include{sources/data/full_tables}
-\chapter{Ungoliant}
+%\chapter{Ungoliant}
 \include{sources/data/ungoliant}
 
 \part{Data}
-\chapter{CaBeRnet}
+%\chapter{CaBeRnet}
 \include{sources/data/cabernet}
 \chapter{Modern French Data}
 \section{LEM17}
@@ -243,22 +240,20 @@
 \section{presto gold}
 \chapter{Ancient/Medieval French Data}
 \section{BERTrade Corpus}
-\chapter{Other Data}
 
 \part{Models}
-\chapter{CamemBERT}
+%\chapter{CamemBERT}
 \include{sources/models/camembert}
-\chapter{FrELMo}
+%\chapter{FrELMo}
 \include{sources/models/frelmo}
 \chapter{D'Alembert}
-\chapter{BERTrade}
+%\chapter{BERTrade}
 \include{sources/models/bertrade}
 
 \part{Evaluation}
-\chapter{Language Modeling}
+%\chapter{Language Modeling}
 \include{sources/evaluation/monolingual}
-\chapter{Parsing}
-\chapter{POS Tagging}
+\chapter{Parsing \& POS Tagging}
 \chapter{Named-Entity Recognition}
 
 \part{Real World Application}
