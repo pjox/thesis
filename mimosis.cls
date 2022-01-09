@@ -21,7 +21,8 @@
            numbers=noenddot,
            titlepage,
            toc=bibliography,
-           toc=index,]{scrbook}
+           toc=index,
+           index=default,]{scrbook}
 
 \RequirePackage{ifpdf}
 \RequirePackage{ifxetex}
