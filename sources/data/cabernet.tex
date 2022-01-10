@@ -100,7 +100,6 @@ The academic genre was also built from different sources including technical and
 
 \begin{table}[ht]
     \centering\small
-    \resizebox{\linewidth}{!}{
         \begin{tabular}{lrrr}                                                                                      \\\toprule
             {\textsc{\Cabernet Sub-set}} & {\textsc{Tokens}} & {\textsc{Unique Forms}} & {\textsc{TTR}} \\\midrule
             Oral                         & 122 864 888       & 291 744                 & 0.0024         \\
@@ -109,7 +108,7 @@ The academic genre was also built from different sources including technical and
             Fiction                      & 198 343 802       & 983 195                 & 0.0050         \\
             Academic                     & 126 431 211       & 1 433 663               & 0.0113         \\
             \textit{Total}               & 711 792 861       & 2 558 513               & 0.0036         \\ \bottomrule
-        \end{tabular}}
+        \end{tabular}
     \caption{\label{Table_Morpho_CabernetSub} Comparison of number of unique forms in the different genres represented by \Cabernet partition. TTR: Type-Token Ration. Lemmatization and tokenization was performed as described in §\ref{sec:CompareCorpora}.}
 \end{table}
 %%%check !! 
@@ -147,7 +146,6 @@ Chapter heads, titles, notes and all types of editorial information were removed
 
 \begin{table}[ht]
     \centering\small
-    \resizebox{\linewidth}{!}{
         \begin{tabular}{lr}                                                             \\\toprule
             {\textsc{Children Book Test - fr}}           & { \textsc{words}} \\\midrule
             number of different lemmas                   & 25 139            \\
@@ -156,7 +154,7 @@ Chapter heads, titles, notes and all types of editorial information were removed
             Number of lemmas having more than one form : & 14 128            \\
             Percentage of lemmas with multiple forms     & 56.20             \\
             \bottomrule
-        \end{tabular}}
+        \end{tabular}
     \caption{\label{Table_DescribeCBTfr} Lexical statistics of French CBT, performed as described in §\ref{sec:CompareCorpora}}
 \end{table}
 
@@ -196,7 +194,6 @@ This corpus collects a selection of pages from Wikipedia-fr from a dump executed
 
 \begin{table}[ht]
     \centering
-    \scalebox{0.85}{
         \begin{tabular}{lrrr}                                                                                 \\\toprule
             {\textsc{corpus}} & { \textsc{wordforms}} & { \textsc{tokens}} & { \textsc{sentences}} \\\midrule
             OSCAR-fr          & 23 212 459 287        & 27 439 082 933     & 1 003 261 066         \\
@@ -204,7 +201,7 @@ This corpus collects a selection of pages from Wikipedia-fr from a dump executed
             \Cabernet         & 697 119 013           & 830 894 133        & 54 216 010            \\
             CBT-fr            & 5 697 584             & 6 910 201          & 317 239               \\\bottomrule
             %frWac       &  1,357,598,417  & 1,622,619,337  &  57,236,199  \\  
-        \end{tabular}}
+        \end{tabular}
     \caption{\label{Table_nb_Words} Comparing the corpora under study.}
 \end{table}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -228,7 +225,6 @@ To select a measure that would help quantifying the different corpora morphologi
 
 \begin{table}[ht]
     \centering
-    \resizebox{\linewidth}{!}{
         \begin{tabular}{lrrrr}
             \toprule
             \textsc{3 M samples}  & \textsc{CBT-fr} & \textsc{\Cabernet} & \textsc{Fr-Wiki} & \textsc{OSCAR} \\
@@ -239,7 +235,7 @@ To select a measure that would help quantifying the different corpora morphologi
             nb lemmas $>$ 1 form  & 14 128          & 15 927             & 15 182           & 16 480         \\
             \% lemmas  $>$ 1 form & 56.20           & 52.24              & 48.37            & 52.81          \\
             \bottomrule
-        \end{tabular}}
+        \end{tabular}
     \caption{Lexical statistics on morphological richness over randomly selected samples of 3 million words from each corpus. nb : number}
     \label{Table_MorphoRich}
 \end{table}
@@ -411,7 +407,6 @@ Finally, \textbf{ParTUT} is a conversion of a multilingual parallel treebank dev
 
 \begin{table}
     \centering
-    \resizebox{\linewidth}{!}{
         \begin{tabular}{lcccl}
             \toprule
             Treebank & Tokens  & Words   & Sentences & Genre                    \\
@@ -421,7 +416,7 @@ Finally, \textbf{ParTUT} is a conversion of a multilingual parallel treebank dev
             Spoken   & 34 972  & 34 972  & 2 786     & Oral transcip.           \\
             ParTUT   & 27 658  & 28 594  & 1 020     & Oral Wiki. Legal         \\
             \bottomrule
-        \end{tabular}}
+        \end{tabular}
     \caption{Sizes of the 4 treebanks used in the evaluations of POS-tagging and dependency parsing. \label{treebanks-tab-cabernet}}
 \end{table}
 
@@ -447,7 +442,6 @@ Finally, it is also relevant to compare our results with \camembert on the selec
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{table*}
     \small\centering
-    \resizebox{\linewidth}{!}{
         \begin{tabular}{ l  c  c  c @{\hspace{0.35cm}}  @{\hspace{0.35cm}} c  c  c @{\hspace{0.35cm}}  @{\hspace{0.35cm}} c  c  c  @{\hspace{0.35cm}}  @{\hspace{0.35cm}} c  c  c }
             \toprule
                                                         & \multicolumn{3}{c @{\hspace{0.5cm}}}{\textsc{GSD}} & \multicolumn{3}{c @{\hspace{0.7cm}}}{\textsc{Sequoia}} & \multicolumn{3}{c @{\hspace{0.7cm}}}{\textsc{Spoken}} & \multicolumn{3}{c @{\hspace{0.35cm}}}{\textsc{ParTUT}}                                                                                                                                                                                                                                                                                                                        \\
@@ -493,7 +487,7 @@ Finally, it is also relevant to compare our results with \camembert on the selec
             \camembert                                  & \emph{98.19}                                       & \emph{94.82}                                           & \emph{92.47}                                          & 99.21                                                  & \emph{95.56}                           & \emph{94.39}                           & 96.68                                      & 86.05                                  & 80.07                                  & 97.63             & 95.21                                  & \emph{92.90}                           \\
 
             \bottomrule
-        \end{tabular}}
+        \end{tabular}
     \caption{Final POS and dependency parsing scores on 4 French treebanks (French GSD, Spoken, Sequoia and ParTUT), reported on test sets (4 averaged runs) assuming gold tokenisation. Best scores in bold, second to best underlined, state-of-the-art results in italics.}
     %gray : 
     %light gray :
@@ -534,7 +528,6 @@ And additional term of comparison was identified in a recently released state-of
 
 \begin{table}
     \centering
-    \resizebox{\linewidth}{!}{
         \begin{tabular}{lccc}
             \toprule
             %\multicolumn{4}{c}{\textsc{NER - Results}}  \\\midrule
@@ -557,7 +550,7 @@ And additional term of comparison was identified in a recently released state-of
             \multicolumn{4}{l}{\textit{State-of-the-art Models}}                                                                                                             \\
             \camembert \citep{martin-etal-2020-camembert} & 88.35                                & 87.46                               & 87.93                               \\ %baseline state of the art 
             \bottomrule
-        \end{tabular}}
+        \end{tabular}
     \caption{NER Results on French Treebank (FTB): \textbf{best scores}, \underline{second to best}.}
 \end{table}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
