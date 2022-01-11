@@ -1,7 +1,7 @@
 \chapter{SinNer CLEF-HIPE2020}
 
 \section{Introduction}
-\label{sec:intro}
+\label{sec:intro_sinner}
 
 Among the aspects for which Natural Language Processing (NLP) can be useful for Digital Humanities (DH) figures prominently Named Entity Recognition. This task interests researchers for numerous reasons since the application can be pretty wide.
 We can cite genealogy or history for which finding mentions of persons and places in texts is very useful. Researchers in digital literature have shown a great interest in NER since it can help for instance to highlight the path of different characters in a book or in a book series. There can be cross-fertilization between NER and DH since some researchers showed that some particular properties of literature can help to build better NER systems \cite{brooke-etal-2016-bootstrapped}.
@@ -24,16 +24,16 @@ The results of our systems are described in Section \ref{sec:results} and in Sec
 \section{Related Work on Named Entity Recognition}
 \label{sec:sota}
 
-Named Entity Recognition came into light as a prerequisite for designing robust Information Extraction (IE) systems in the MUC conferences \cite{Grishman-1995}. This task soon began to be treated independently from IE since it can serve multiple purposes, like Information retrieval or Media Monitoring for instance \cite{Yangarber-2002}. As such, shared task specifically dedicated to NER started to rise like the CoNLL 2003 shared task \cite{Conll-2003}. Two main paths were followed by the community: (i) since NER was at first used for general purposes, domain extension start to gain interest \cite{Evans-2003}; (ii) since the majority of NER systems were designed for English, the extension to novel languages (including low resource languages) became of importance \cite{Rossler-2004}.
+Named Entity Recognition came into light as a prerequisite for designing robust Information Extraction (IE) systems in the MUC conferences \cite{grishman-sundheim-1995-design}. This task soon began to be treated independently from IE since it can serve multiple purposes, like Information retrieval or Media Monitoring for instance \cite{yangarber-etal-2002-unsupervised}. As such, shared task specifically dedicated to NER started to rise like the CoNLL 2003 shared task \cite{tjong-kim-sang-de-meulder-2003-introduction}. Two main paths were followed by the community: (i) since NER was at first used for general purposes, domain extension start to gain interest \cite{evans-2003-a}; (ii) since the majority of NER systems were designed for English, the extension to novel languages (including low resource languages) became of importance \cite{rossler-2004-adapting}.
 
-One can say that NER followed the different trends in NLP. The first approaches were based on gazeeters and handcrafted rules. Initially NER was considered to be solved by a patient process involving careful syntactic analysis \cite{Hobbs-1993}. Supervised learning approaches came to fashion with the increase of available data and the rise of shared tasks on NER. Decision trees and Markov models were soon outperformed by Condition Random Fields (CRF).
-%By taking advantage of the sequentiality of textual data, CRF helped to set new state-of-the-art results in the domain \cite{Finkel-2005}.
-Thanks to its ability to model dependencies and to take advantage of the sequentiality of textual data, CRF helped to set new state-of-the-art results in the domain \cite{Finkel-2005}.
-Since supervised learning results were bound by the size of training data, lighter approaches were tested in the beginning of the 2000's, among them we can cite weakly supervision \cite{Yangarber-2003} and active learning \cite{Shen-2004}.
+One can say that NER followed the different trends in NLP. The first approaches were based on gazeeters and handcrafted rules. Initially NER was considered to be solved by a patient process involving careful syntactic analysis \cite{hobbs-1993-generic}. Supervised learning approaches came to fashion with the increase of available data and the rise of shared tasks on NER. Decision trees and Markov models were soon outperformed by Condition Random Fields (CRF).
+%By taking advantage of the sequentiality of textual data, CRF helped to set new state-of-the-art results in the domain \cite{finkel-etal-2005-incorporating}.
+Thanks to its ability to model dependencies and to take advantage of the sequentiality of textual data, CRF helped to set new state-of-the-art results in the domain \cite{finkel-etal-2005-incorporating}.
+Since supervised learning results were bound by the size of training data, lighter approaches were tested in the beginning of the 2000's, among them we can cite weakly supervision \cite{yangarber-2003-counter} and active learning \cite{shen-etal-2004-multi}.
 
-During a time, most of promising approaches involved an addition to improve CRFs : word embeddings \cite{Passos-2014}, (bi-)LSTMs \cite{lample-etal-2016-neural} % \cite{Ma-2016}
-or contextual embeddings \cite{Peters-2018}.
-More recently, the improvements in contextual word embeddings made the CRFs disappear as standalone models for systems reaching state-of-the-art results, see \cite{Stanislawek-2019} for a review on the subject and a very interesting discussion on the limits attained by state-of-the-art systems, the \textit{Glass Ceiling}.
+During a time, most of promising approaches involved an addition to improve CRFs : word embeddings \cite{passos-etal-2014-lexicon}, (bi-)LSTMs \cite{lample-etal-2016-neural} % \cite{Ma-2016}
+or contextual embeddings \cite{peters-etal-2018-deep}.
+More recently, the improvements in contextual word embeddings made the CRFs disappear as standalone models for systems reaching state-of-the-art results, see \cite{stanislawek-etal-2019-named} for a review on the subject and a very interesting discussion on the limits attained by state-of-the-art systems, the \textit{Glass Ceiling}.
 
 \section{Dataset for the CLEF-HIPE shared task}
 \label{sec:dataset}
@@ -141,12 +141,12 @@ If we concatenate the tokens we get the sequence "Su. \_sss allemands" instead o
 
 \subsection{CRF model (run3)}
 
-SEM (Segmenteur-Étiqueteur Markovien)\footnote{available at: \url{https://github.com/YoannDupont/SEM}}\footnote{translates to: Markovian Tokenizer-Tagger (MTT).} \cite{dupont2017exploration} is a free NLP tool that relies on linear-chain CRFs \cite{lafferty2001conditional} to perform tagging. SEM uses \textsc{Wapiti} \cite{lavergne2010practical} v1.5.0\footnote{available at: \url{https://github.com/Jekub/Wapiti}} as linear-chain CRFs implementation. For this particular NER task, SEM uses the following features:
+SEM (Segmenteur-Étiqueteur Markovien)\footnote{available at: \url{https://github.com/YoannDupont/SEM}}\footnote{translates to: Markovian Tokenizer-Tagger (MTT).} \cite{dupont-2017-exploration} is a free NLP tool that relies on linear-chain CRFs \cite{lafferty-etal-2001-conditional} to perform tagging. SEM uses \textsc{Wapiti} \cite{lavergne-etal-2010-practical} v1.5.0\footnote{available at: \url{https://github.com/Jekub/Wapiti}} as linear-chain CRFs implementation. For this particular NER task, SEM uses the following features:
 \begin{itemize}
     \item token, prefix/suffix from 1 to 5 and a Boolean isDigit features in a [-2, 2] window; %TODO: prefix, character ?
     \item previous/next common noun in sentence;
     \item 10 gazetteers (including NE lists and trigger words for NEs) applied with some priority rules in a [-2, 2] window;
-    \item a ``fill-in-the-gaps'' gazetteers feature where tokens not found in any gazetteer are replaced by their POS, as described in \cite{raymond2010reconnaissance}. This feature used token unigrams and token bigrams in a [-2, 2] a window.
+    \item a ``fill-in-the-gaps'' gazetteers feature where tokens not found in any gazetteer are replaced by their POS, as described in \cite{raymond-fayolle-2010-reconnaissance}. This feature used token unigrams and token bigrams in a [-2, 2] a window.
     \item tag unigrams and bigrams.
 \end{itemize}
 
@@ -162,7 +162,7 @@ Another interest is that SEM has an NE mention broadcasting process. Mentions fo
 
 \subsection{Contextualized word embeddings}
 
-\emph{Embeddings from Language Models} (ELMo) \cite{Peters-2018} is a Language Model, i.e, a model that given a sequence of $N$ tokens, $(t_1, t_2, ..., t_N)$, computes the probability of the sequence
+\emph{Embeddings from Language Models} (ELMo) \cite{peters-etal-2018-deep} is a Language Model, i.e, a model that given a sequence of $N$ tokens, $(t_1, t_2, ..., t_N)$, computes the probability of the sequence
 by modeling the probability of token $t_k$ given the history $(t_1, ..., t_{k-1})$:
 \[
     p(t_1, t_2, \ldots, t_N) = \prod_{k=1}^N p({t_k} \mid t_1, t_2, \ldots, t_{k-1}).
@@ -197,17 +197,17 @@ When included in a downstream model, as it is the case in this paper, ELMo colla
 \end{align*}
 applying layer normalization to each biLM layer before weighting.
 
-Following \cite{Peters-2018}, we use in this paper ELMo models where $L=2$, i.e., the ELMo architecture involves a character-level CNN layer followed by a 2-layer biLSTM.
+Following \cite{peters-etal-2018-deep}, we use in this paper ELMo models where $L=2$, i.e., the ELMo architecture involves a character-level CNN layer followed by a 2-layer biLSTM.
 
 \subsection{ELMo-LSTM-CRF (run1 and run2)}
 
-The LSTM-CRF is a model originally proposed by Lample et al. \cite{lample-etal-2016-neural} it consists of a Bi-LSTM encoder pre-appended by both character level word embeddings and pre-trained word embeddings, and a CRF decoder layer. For our experiments, we follow the same approach as Ortiz Suárez et al. \cite{ortiz-suarez-etal-2020-establishing} by using the Bi-LSTM-CRF implementation of Straková et al. \cite{strakova2019neural} which is open source and readily available\footnote{Available at: \url{https://github.com/ufal/acl2019_nested_ner}.}, and pre-appending contextualized word-embeddings to the model. For French we pre-append the FrELMo model \cite{ortiz-suarez-etal-2020-establishing}, which is the standard ELMo \cite{Peters-2018} implementation\footnote{Available at: \url{https://github.com/allenai/bilm-tf}} trained on the French OSCAR\footnote{Available at: \url{https://oscar-corpus.com}} corpus \cite{ortiz-suarez-etal-2020-monolingual} \cite{ortiz2019asynchronous}. For German we pre-append the German ELMo \cite{GerElmo}, which is again the standard ELMo implementation but trained on the German Wikipedia.
+The LSTM-CRF is a model originally proposed by Lample et al. \cite{lample-etal-2016-neural} it consists of a Bi-LSTM encoder pre-appended by both character level word embeddings and pre-trained word embeddings, and a CRF decoder layer. For our experiments, we follow the same approach as Ortiz Suárez et al. \cite{ortiz-suarez-etal-2020-establishing} by using the Bi-LSTM-CRF implementation of Straková et al. \cite{strakova-etal-2019-neural} which is open source and readily available\footnote{Available at: \url{https://github.com/ufal/acl2019_nested_ner}.}, and pre-appending contextualized word-embeddings to the model. For French we pre-append the FrELMo model \cite{ortiz-suarez-etal-2020-establishing}, which is the standard ELMo \cite{peters-etal-2018-deep} implementation\footnote{Available at: \url{https://github.com/allenai/bilm-tf}} trained on the French OSCAR\footnote{Available at: \url{https://oscar-corpus.com}} corpus \cite{ortiz-suarez-etal-2020-monolingual} \cite{ortiz-suarez-etal-2019-asynchronous}. For German we pre-append the German ELMo \cite{may-2019-german}, which is again the standard ELMo implementation but trained on the German Wikipedia.
 
-Contrary to the approach of Ortiz Suárez et al. \cite{ortiz-suarez-etal-2020-establishing}, we do not use the CamemBERT model \cite{Martin:2020} for French or the German BERT \cite{chan2019german}. Both of these models are BERT-based and as such they are limited to a 512-token contextualized window. Moreover, they both use SentencePiece \cite{kudo2018sentencepiece} meaning that tokens are actually subwords, which considerably increases the number of tokens per sentence, specially for the longer ones, thus decreasing the contextual windows of both CamemBERT and the German BERT. SentencePiece also introduces the problem of a fixed-size vocabulary, which in the case of this shared task might negatively impact the performance of said models, as they could struggle handling OCR problems or just non-standard vocabulary. Since our main goal was to reconstruct the sentences and use long contextualized sequences we opted to use ELMo which can easily handle longer sequences with it's standard implementation and actually has a dynamic vocabulary thanks to the CNN character embedding layer, thus it might be better equipped to handle non-standard orthography and OCR problems.
+Contrary to the approach of Ortiz Suárez et al. \cite{ortiz-suarez-etal-2020-establishing}, we do not use the CamemBERT model \cite{martin-etal-2020-camembert} for French or the German BERT \cite{chan-etal-2019-german}. Both of these models are BERT-based and as such they are limited to a 512-token contextualized window. Moreover, they both use SentencePiece \cite{kudo-richardson-2018-sentencepiece} meaning that tokens are actually subwords, which considerably increases the number of tokens per sentence, specially for the longer ones, thus decreasing the contextual windows of both CamemBERT and the German BERT. SentencePiece also introduces the problem of a fixed-size vocabulary, which in the case of this shared task might negatively impact the performance of said models, as they could struggle handling OCR problems or just non-standard vocabulary. Since our main goal was to reconstruct the sentences and use long contextualized sequences we opted to use ELMo which can easily handle longer sequences with it's standard implementation and actually has a dynamic vocabulary thanks to the CNN character embedding layer, thus it might be better equipped to handle non-standard orthography and OCR problems.
 
 For the fixed word embeddings we used the Common Crawl-based FastText embeddings \cite{grave-etal-2018-learning} originally trained by Facebook as opposed to the embeddings provided by the HIPE shared task, as we obtained better dev scores using the original FastText embeddings for both French and German.
 
-We used the standard hyperparameters originally\footnote{\url{https://github.com/ufal/acl2019_nested_ner/blob/master/tagger.py\#L484}.} used by Straková et al. \cite{strakova2019neural}. Namely a batch size of 8, a dropout of 0.5, a learning rate of 0.001 and 10 epochs. The difference between run 1 and 2, is that run 1 uses the data as is, while run 2 uses the reconstructed sentences.
+We used the standard hyperparameters originally\footnote{\url{https://github.com/ufal/acl2019_nested_ner/blob/master/tagger.py\#L484}.} used by Straková et al. \cite{strakova-etal-2019-neural}. Namely a batch size of 8, a dropout of 0.5, a learning rate of 0.001 and 10 epochs. The difference between run 1 and 2, is that run 1 uses the data as is, while run 2 uses the reconstructed sentences.
 
 
 \section{Results and Discussion}
