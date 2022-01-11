@@ -94,6 +94,8 @@
 \usepackage{fontawesome5}
 \usepackage{tikz}
 \usepackage{tabu}
+\usepackage{tabularx}
+\newcolumntype{x}[1]{>{\centering\arraybackslash\hspace{0pt}}p{#1}}
 \usepackage{colortbl}
 \definecolor{Gray}{gray}{0.925}
 \usetikzlibrary{positioning}
@@ -239,10 +241,9 @@
 \include{sources/models/bertrade}
 
 \part{Evaluation}
-%\chapter{Language Modeling}
 \include{sources/evaluation/monolingual}
 \chapter{Parsing \& POS Tagging}
-\chapter{Named-Entity Recognition}
+\include{sources/evaluation/sinner}
 
 \part{Real World Application}
 \chapter{BASNUM}

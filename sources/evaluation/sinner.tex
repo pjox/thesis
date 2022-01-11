@@ -1,0 +1,349 @@
+\chapter{SinNer CLEF-HIPE2020}
+
+\section{Introduction}
+\label{sec:intro}
+
+Among the aspects for which Natural Language Processing (NLP) can be useful for Digital Humanities (DH) figures prominently Named Entity Recognition. This task interests researchers for numerous reasons since the application can be pretty wide.
+We can cite genealogy or history for which finding mentions of persons and places in texts is very useful. Researchers in digital literature have shown a great interest in NER since it can help for instance to highlight the path of different characters in a book or in a book series. There can be cross-fertilization between NER and DH since some researchers showed that some particular properties of literature can help to build better NER systems \cite{Brooke-2016}.
+Apart from literature, NER can also be used more generally to help refine queries to assist browsing in newspaper collections \cite{Neudecker-2014}.
+Like other NLP tasks, NER quality will suffer from different problems related to variations in the input data: variation in languages (multilinguality), variation in the quality of the data (OCR errors mainly) and specificity of the application domain (literature vs. epidemic surveillance for instance). These difficulties can be connected with the challenges for low-level NLP tasks highlighted by Dale \textit{et al.} \cite{Dale-2010}. In CLEF-HIPE shared task \cite{Ehrmann-2020}, the variation in language and in text quality will be the main problems even if the specificity of the application can be of great interest.
+
+NER in old documents represent an interesting challenge for NLP since it is usually necessary to process documents that show different kind of variations as compared to the particular laboratory conditions on which NER systems are trained.
+Most NER systems are usually designed to process clean data.
+Additionally, there is the multilingual issue since NER systems have been designed primarily for English, with assumptions on the availability of data on the one hand and on the universal nature of some linguistic properties on the other hand.
+
+The fact that the texts processed in Digital Humanities are usually not born-digital is very important since, even after OCR post-correction, it is very likely that some noise would be found in the text.
+Other difficulties will arise as well in those type of documents. The variation in language is one of them since contemporary English will clearly not be the most frequent language.  It is interesting for researchers to check how much diachronic variation has an influence on NER systems \cite{Ehrmann-2016a}.
+It makes it even more important to work on multilingual NER and to build architectures that need less training data \cite{Rahimi-2019}.
+More generally, NER in ancient texts represents a great opportunity for NLP to compare to main approaches to handle variation in texts: adapting the texts to an existing architecture via modernization or normalization \cite{Leaman-2016} or adapting the pipeline to non standard data (OCR noise, language variants\dots) via domain adaptation or data augmentation techniques \cite{Ghannay-2018}.
+
+In Section \ref{sec:sota} we present a brief state-of-the-art for Named Entity Recognition with a focus on digitized documents. Section \ref{sec:dataset} and \ref{sec:method} are respectively devoted to the description of the dataset of CLEF-HIPE 2020 shared task and the methods we developed to extract NE for French and German.
+The results of our systems are described in Section \ref{sec:results} and in Section \ref{sec:concl} we give some conclusions and perspectives for this work.
+
+
+\section{Related Work on Named Entity Recognition}
+\label{sec:sota}
+
+Named Entity Recognition came into light as a prerequisite for designing robust Information Extraction (IE) systems in the MUC conferences \cite{Grishman-1995}. This task soon began to be treated independently from IE since it can serve multiple purposes, like Information retrieval or Media Monitoring for instance \cite{Yangarber-2002}. As such, shared task specifically dedicated to NER started to rise like the CoNLL 2003 shared task \cite{Conll-2003}. Two main paths were followed by the community: (i) since NER was at first used for general purposes, domain extension start to gain interest \cite{Evans-2003}; (ii) since the majority of NER systems were designed for English, the extension to novel languages (including low resource languages) became of importance \cite{Rossler-2004}.
+
+One can say that NER followed the different trends in NLP. The first approaches were based on gazeeters and handcrafted rules. Initially NER was considered to be solved by a patient process involving careful syntactic analysis \cite{Hobbs-1993}. Supervised learning approaches came to fashion with the increase of available data and the rise of shared tasks on NER. Decision trees and Markov models were soon outperformed by Condition Random Fields (CRF).
+%By taking advantage of the sequentiality of textual data, CRF helped to set new state-of-the-art results in the domain \cite{Finkel-2005}.
+Thanks to its ability to model dependencies and to take advantage of the sequentiality of textual data, CRF helped to set new state-of-the-art results in the domain \cite{Finkel-2005}.
+Since supervised learning results were bound by the size of training data, lighter approaches were tested in the beginning of the 2000's, among them we can cite weakly supervision \cite{Yangarber-2003} and active learning \cite{Shen-2004}.
+
+During a time, most of promising approaches involved an addition to improve CRFs : word embeddings \cite{Passos-2014}, (bi-)LSTMs \cite{lample-etal-2016-neural} % \cite{Ma-2016}
+or contextual embeddings \cite{Peters-2018}.
+More recently, the improvements in contextual word embeddings made the CRFs disappear as standalone models for systems reaching state-of-the-art results, see \cite{Stanislawek-2019} for a review on the subject and a very interesting discussion on the limits attained by state-of-the-art systems, the \textit{Glass Ceiling}.
+
+\section{Dataset for the CLEF-HIPE shared task}
+\label{sec:dataset}
+
+The dataset of the CLEF-HIPE shared task contains newspaper articles of 17th-20th century. The text is an output of an OCR software, then tokenised and annotated with labels corresponding to each sub-task. This pecularity of historical documents will be detailed later in this section.
+The corpus provided for French and German both contained training data (train) and development data (dev) whereas, for English only development data was provided for the shared task. For this reason, we chose to work on French and German only.
+%In the development stage, we tried to train our model with the training data and then to evaluate our model with labeled dev data. The submitted results are based on models only trained with the training data.
+Table \ref{stats} shows some statistics of this dataset. The size of the train dataset was twice higher for French than for German whereas the development sets have roughly the same size. As usual in NER, persons (Pers) and locations (Loc) are the most frequent entity types.
+
+\begin{table}[!h]
+    \centering
+    \begin{tabular}{ @{\hspace{0.15cm}} l @{\hspace{0.15cm}}  @{\hspace{0.15cm}}  r @{\hspace{0.15cm}}  @{\hspace{0.15cm}} r @{\hspace{0.15cm}}  @{\hspace{0.15cm}} r  @{\hspace{0.2cm}}  @{\hspace{0.2cm}}  r @{\hspace{0.15cm}}  @{\hspace{0.15cm}} r @{\hspace{0.15cm}}  @{\hspace{0.15cm}} r @{\hspace{0.15cm}}  @{\hspace{0.15cm}} r @{\hspace{0.15cm}}  @{\hspace{0.15cm}} r @{\hspace{0.15cm}} }
+        \toprule
+                 & \multirow{2}{*}{Tokens} & \multirow{2}{*}{Documents} & \multirow{2}{*}{Segments} & \multicolumn{5}{c}{Labeled named entities}                            \\
+        \cmidrule{5-9}
+                 &                         &                            &                           & Pers                                       & Loc  & Org & Time & Prod \\
+        \midrule
+        Train Fr & 166217                  & 158                        & 19183                     & 3067                                       & 2513 & 833 & 273  & 198  \\
+        Dev Fr   & 37592                   & 43                         & 4423                      & 771                                        & 677  & 158 & 69   & 48   \\
+        Train De & 86960                   & 104                        & 10353                     & 1747                                       & 1170 & 358 & 118  & 112  \\
+        Dev De   & 36175                   & 40                         & 4186                      & 664                                        & 428  & 172 & 73   & 53   \\
+        \bottomrule
+    \end{tabular}
+    \caption{Statistics on the training and development data in French and German}
+    \label{stats}
+\end{table}
+
+Table \ref{extraitCorpus} shows an excerpt of the train dataset (CoNLL format).
+For each document, general information were provided. Among them, newspaper and date may have been features useful for recognising entities but we did not take advantage of it.
+Each document was composed of segments, starting with "\# segment \dots" corresponding to lines in the original documents. Each segment is tokenized in order to correspond to the CoNLL format with one token per line.
+These two notions, segments and tokens, are very important since they do not always match the type of unit usually processed in NLP pipelines.
+Segments seldom correspond to sentences so that there is a need to concatenate the segments to get the raw text and then segment it into sentences. This is very interesting since it gets us close to real-world conditions rather than laboratory conditions, and we show in Section \ref{sec:sequence_seg} that this segment vs. sentence question has an important influence on the results.
+Regarding tokens, the tokenization is obviously not perfect.
+We can see that there are non-standard words and bad tokenization due to the OCR output (in red in Table \ref{extraitCorpus}).
+If we concatenate the tokens we get the sequence "Su. \_sss allemands" instead of "Suisse allemande". These non-standard words make the Named Entity Recognition task more complicated and, again, more realistic.
+
+% \begin{figure}[h!]
+% \centering
+%\includegraphics[width=0.5\textwidth]{./ExtraitFrPartiel.png}
+% \caption{Example extracted from French training dataset}
+%\label{extraitCorpus}
+% \end{figure}
+\begin{table}%[!htbp]
+    \centering
+    \scriptsize
+    \scalebox{0.91}{
+        \begin{tabular}{l|ll|lll|l|ll|l}
+            TOKEN                               & \multicolumn{2}{c|}{NE-COARSE} & \multicolumn{3}{c|}{NE-FINE} & NE-NESTED     & \multicolumn{2}{c|}{NEL} & MISC                                                 \\
+                                                & LIT                            & METO                         & LIT           & METO                     & COMP &               & LIT     & METO &              \\
+
+            \multicolumn{10}{l}{\textcolor{blue}{\# language = fr}}                                                                                                                                               \\
+            \multicolumn{10}{l}{\textcolor{blue}{\# newspaper = EXP}}                                                                                                                                             \\
+            \multicolumn{10}{l}{\textcolor{blue}{\# date = 1918-04-22}}                                                                                                                                           \\
+            \multicolumn{10}{l}{\textcolor{blue}{\# document\_id = EXP-1918-04-22-a-i0077}}                                                                                                                       \\
+            \multicolumn{10}{l}{\textcolor{blue}{\# segment\_iiif\_link = \url{https://iiif.dhlab.epfl.ch/iiif_impresso}}\dots}                                                                                   \\%.../default.jpg}}} \\
+            Lettre                              & O                              & O                            & O             & O                        & O    & O             & \_      & \_   & \_           \\
+            de                                  & O                              & O                            & O             & O                        & O    & O             & \_      & \_   & \_           \\
+            la                                  & O                              & O                            & O             & O                        & O    & O             & \_      & \_   & \_           \\
+            \textbf{\textcolor{red}{Su}}        & B-loc                          & O                            & B-loc.adm.reg & O                        & O    & B-loc.adm.nat & Q689055 & \_   & NoSpaceAfter \\
+            \textbf{\textcolor{red}{.}}         & I-loc                          & O                            & I-loc.adm.reg & O                        & O    & I-loc.adm.nat & Q689055 & \_   & \_           \\
+            \textbf{\textcolor{red}{\_}}        & I-loc                          & O                            & I-loc.adm.reg & O                        & O    & I-loc.adm.nat & Q689055 & \_   & NoSpaceAfter \\
+            \textbf{\textcolor{red}{sss}}       & I-loc                          & O                            & I-loc.adm.reg & O                        & O    & I-loc.adm.nat & Q689055 & \_   & \_           \\
+            \textbf{\textcolor{red}{allemands}} & I-loc                          & O                            & I-loc.adm.reg & O                        & O    & O             & Q689055 & \_   & EndOfLine    \\
+
+            \multicolumn{10}{l}{\textcolor{blue}{\# segment\_iiif\_link = \url{https://iiif.dhlab.epfl.ch/iiif_impresso}}\dots}                                                                                   \\% .../default.jpg}}} \\
+
+            (                                   & O                              & O                            & O             & O                        & O    & O             & \_      & \_   & NoSpaceAfter \\
+            Nous                                & O                              & O                            & O             & O                        & O    & O             & \_      & \_   & \_           \\
+            serons                              & O                              & O                            & O             & O                        & O    & O             & \_      & \_   & \_           \\
+            heureux                             & O                              & O                            & O             & O                        & O    & O             & \_      & \_   & \_           \\
+            de                                  & O                              & O                            & O             & O                        & O    & O             & \_      & \_   & \_           \\
+            publier                             & O                              & O                            & O             & O                        & O    & O             & \_      & \_   & \_           \\
+            \dots                                                                                                                                                                                                 \\
+            %%%de &	O &	O &	O &	O &	O &	O &	\_ &	\_ &	\_ \\
+            %%%temps &	O &	O &	O &	O &	O &	O &	\_ &	\_ &	\_ \\
+            %%%à &	O &	O &	O &	O &	O &	O &	\_ &	\_ &	EndOfLine \\
+            %%%
+            %%%\multicolumn{10}{l}{\textcolor{blue}{\# segment\_iiif\_link = \url{https://iiif.dhlab.epfl.ch/iiif\_impresso/\dots}}}\\%_impresso/.../default.jpg}}} \\
+            %%%
+            %%%autre &	O &	O &	O &	O &	O &	O & 	\_ &	\_ &	NoSpaceAfter \\ 
+            %%%, &	O &	O &	O &	O &	O &	O &	\_ & 	\_ &	\_ \\
+            %%%sous &	O &	O &	O &	O &	O &	O &	\_ &	\_ &	\_ \\
+            %%%cette &	O &	O &	O &	O &	O &	O &	\_ &	\_ &	\_ \\ 
+            %%%rubrique &	O &	O &	O &	O &	O & 	O &	\_ & 	\_ &	NoSpaceAfter \\
+            %%%, &	O &	O &	O &	O &	O &	O & 	\_ &	\_ &	\_ \\
+        \end{tabular}
+    }
+    \caption{Example extracted from the French training dataset}
+    \label{extraitCorpus}
+\end{table}
+\vspace{-1cm}
+%\input{./parts/table2.tex}
+
+% \begin{figure}[h!]
+% \centering
+%\includegraphics[width=0.5\textwidth]{./exempleSuisseDetail.png}
+% \caption{Extracted from French training dataset}
+%\label{egNorm}
+% \end{figure}
+
+
+\section{CRFs and Contextualized Word Embeddings for NER}
+\label{sec:method}
+
+
+\subsection{CRF model (run3)}
+
+SEM (Segmenteur-Étiqueteur Markovien)\footnote{available at: \url{https://github.com/YoannDupont/SEM}}\footnote{translates to: Markovian Tokenizer-Tagger (MTT).} \cite{dupont2017exploration} is a free NLP tool that relies on linear-chain CRFs \cite{lafferty2001conditional} to perform tagging. SEM uses \textsc{Wapiti} \cite{lavergne2010practical} v1.5.0\footnote{available at: \url{https://github.com/Jekub/Wapiti}} as linear-chain CRFs implementation. For this particular NER task, SEM uses the following features:
+\begin{itemize}
+    \item token, prefix/suffix from 1 to 5 and a Boolean isDigit features in a [-2, 2] window; %TODO: prefix, character ?
+    \item previous/next common noun in sentence;
+    \item 10 gazetteers (including NE lists and trigger words for NEs) applied with some priority rules in a [-2, 2] window;
+    \item a ``fill-in-the-gaps'' gazetteers feature where tokens not found in any gazetteer are replaced by their POS, as described in \cite{raymond2010reconnaissance}. This feature used token unigrams and token bigrams in a [-2, 2] a window.
+    \item tag unigrams and bigrams.
+\end{itemize}
+
+We trained a CLEF HIPE specific model by optimizing L1 and L2 penalties on the development set. The metric used to estimate convergence of the model is the error on the development set ($1 - accuracy$).
+% Our best result on the development set was obtained using the rprop algorithm, a 0.1 L1 penalty and a 0.1 L2 penalty.
+For French, our optimal L1 and L2 penalties were 0.5 and 0.0001 respectively (default Wapiti parameters).
+For German, our optimal L1 and L2 penalties were 1.0 and 0.0001 respectively.
+
+One interest of SEM is that it has a built-in sentence tokenizer for French using a rule-based approach. By default, CLEF-HIPE provides a newline segmentation that is the output of the OCR. As a result, some NE mentions span across multiple segments, making it very hard to identify them correctly. It is to be expected that models trained (and labelling on) sentences would yield better performances than those trained (and labelling on) segments. SEM makes it simple to switch between different sequence segmentations, which allowed us to label sentences and output segments.
+SEM's sentence segmentation engine works using mainly local rules to determine whether a token is the last of a sequence (eg: is a dot preceded by a known title abbreviation?). It also uses non-local rules to remember whether a token is between parentheses or French quotes to not segment automatically within them. Since we work at token level, we had to adapt some rules to fit CLEF-HIPE tokenization. For example, SEM decides at tokenization stage whether a dot is a strong punctuation or part of a larger token, as for abbreviations. This has the advantage of making sentence segmentation easier. CLEF-HIPE tokenization systematically separates dots, so we adapted some sentence segmentation rules, for example: we decided not to consider a dot as a sentence terminator if the previous token was in a lexica of titles or functions. No specific handling of OCR errors were done.
+Another interest is that SEM has an NE mention broadcasting process. Mentions found at least once in a document are used as a gazetteer to tag unlabeled mentions within said document. When a new mention overlaps and is strictly longer than an already found mention, the new mention will replace the previous one in the document.
+
+
+\subsection{Contextualized word embeddings}
+
+\emph{Embeddings from Language Models} (ELMo) \cite{Peters-2018} is a Language Model, i.e, a model that given a sequence of $N$ tokens, $(t_1, t_2, ..., t_N)$, computes the probability of the sequence
+by modeling the probability of token $t_k$ given the history $(t_1, ..., t_{k-1})$:
+\[
+    p(t_1, t_2, \ldots, t_N) = \prod_{k=1}^N p({t_k} \mid t_1, t_2, \ldots, t_{k-1}).
+\]
+However, ELMo in particular uses a bidirectional language model (biLM) consisting of $L$ LSTM layers, that is, it combines both a forward and a backward language model jointly maximizing the log likelihood of the forward and backward directions:
+\begin{align*}
+     & \sum_{k=1}^N \left( \right. \log p({t_k} \mid t_1, \ldots, t_{k-1}; \Theta_x, \overrightarrow{\Theta}_{LSTM}, \Theta_s) \\
+     & + \log p({t_k} \mid t_{k+1}, \ldots, t_{N}; \Theta_x, \overleftarrow{\Theta}_{LSTM}, \Theta_s)
+    \left. \right).
+\end{align*}
+where at each position $k$, each LSTM layer $l$ outputs a context-dependent representation $\overrightarrow{\mathbf{h}}^{LM}_{k,l}$ with $l=1, \ldots, L$ for a forward LSTM, and $\overleftarrow{\mathbf{h}}^{LM}_{k,l}$ of $t_k$ given $(t_{k+1}, \ldots, t_N)$ for a backward LSTM.
+
+ELMo also computes a context-independent token representation $\mathbf{x}^{LM}_{k}$ via token embeddings or via a CNN over characters. ELMo then ties the parameters for the token representation ($\Theta_x$) and Softmax layer ($\Theta_s$) in the forward and backward direction while maintaining separate parameters for the LSTMs in each direction.
+
+ELMo is a task specific combination of the intermediate layer representations in the biLM, that is,
+for each token $t_k$, a $L$-layer biLM computes a set of $2L + 1$ representations
+\begin{align*}
+    R_k & =  \{\mathbf{x}^{LM}_{k}, \overrightarrow{\mathbf{h}}^{LM}_{k,l}, \overleftarrow{\mathbf{h}}^{LM}_{k,l} \ |\  l =1, \ldots, L \} \\
+        & =  \{\mathbf{h}^{LM}_{k,l}\ | \ l=0, \ldots, L\},
+\end{align*}
+where $\mathbf{h}^{LM}_{k,0}$ is the token layer and
+\[
+    \mathbf{h}^{LM}_{k,l} = [\overrightarrow{\mathbf{h}}^{LM}_{k,l}; \overleftarrow{\mathbf{h}}^{LM}_{k,l}],
+\]
+for each biLSTM layer.
+
+
+When included in a downstream model, as it is the case in this paper, ELMo collapses all $L$ layers in $R$ into a single vector $\mathbf{ELMo}_k = E(R_k; \mathbf{\Theta}_e)$, generally computing a task specific weighting of all biLM layers:
+\begin{align*}
+    \mathbf{ELMo}^{task}_k & = E(R_k; \Theta^{task})                                       \\
+                           & =\gamma^{task} \sum_{l=0}^L s^{task}_l \mathbf{h}^{LM}_{k,l}.
+\end{align*}
+applying layer normalization to each biLM layer before weighting.
+
+Following \cite{Peters-2018}, we use in this paper ELMo models where $L=2$, i.e., the ELMo architecture involves a character-level CNN layer followed by a 2-layer biLSTM.
+
+\subsection{ELMo-LSTM-CRF (run1 and run2)}
+
+The LSTM-CRF is a model originally proposed by Lample et al. \cite{lample-etal-2016-neural} it consists of a Bi-LSTM encoder pre-appended by both character level word embeddings and pre-trained word embeddings, and a CRF decoder layer. For our experiments, we follow the same approach as Ortiz Suárez et al. \cite{ortiz-suarez-etal-2020-establishing} by using the Bi-LSTM-CRF implementation of Straková et al. \cite{strakova2019neural} which is open source and readily available\footnote{Available at: \url{https://github.com/ufal/acl2019_nested_ner}.}, and pre-appending contextualized word-embeddings to the model. For French we pre-append the FrELMo model \cite{ortiz-suarez-etal-2020-establishing}, which is the standard ELMo \cite{Peters-2018} implementation\footnote{Available at: \url{https://github.com/allenai/bilm-tf}} trained on the French OSCAR\footnote{Available at: \url{https://oscar-corpus.com}} corpus \cite{ortiz-suarez-etal-2020-monolingual} \cite{ortiz2019asynchronous}. For German we pre-append the German ELMo \cite{GerElmo}, which is again the standard ELMo implementation but trained on the German Wikipedia.
+
+Contrary to the approach of Ortiz Suárez et al. \cite{ortiz-suarez-etal-2020-establishing}, we do not use the CamemBERT model \cite{Martin:2020} for French or the German BERT \cite{chan2019german}. Both of these models are BERT-based and as such they are limited to a 512-token contextualized window. Moreover, they both use SentencePiece \cite{kudo2018sentencepiece} meaning that tokens are actually subwords, which considerably increases the number of tokens per sentence, specially for the longer ones, thus decreasing the contextual windows of both CamemBERT and the German BERT. SentencePiece also introduces the problem of a fixed-size vocabulary, which in the case of this shared task might negatively impact the performance of said models, as they could struggle handling OCR problems or just non-standard vocabulary. Since our main goal was to reconstruct the sentences and use long contextualized sequences we opted to use ELMo which can easily handle longer sequences with it's standard implementation and actually has a dynamic vocabulary thanks to the CNN character embedding layer, thus it might be better equipped to handle non-standard orthography and OCR problems.
+
+For the fixed word embeddings we used the Common Crawl-based FastText embeddings \cite{grave-etal-2018-learning} originally trained by Facebook as opposed to the embeddings provided by the HIPE shared task, as we obtained better dev scores using the original FastText embeddings for both French and German.
+
+We used the standard hyperparameters originally\footnote{\url{https://github.com/ufal/acl2019_nested_ner/blob/master/tagger.py\#L484}.} used by Straková et al. \cite{strakova2019neural}. Namely a batch size of 8, a dropout of 0.5, a learning rate of 0.001 and 10 epochs. The difference between run 1 and 2, is that run 1 uses the data as is, while run 2 uses the reconstructed sentences.
+
+
+\section{Results and Discussion}
+\label{sec:results}
+
+\subsection{Official shared task results}
+
+The results of our 3 runs compared to the best run on the NERC-coarse shared-task for French and German are given in Table \ref{tab:results-raw} (strict scenario).
+For both tasks, we are the third best ranking team.
+% We are happy about those results as we
+We only did very minimal adaptation of existing systems. We did not modify tokenization for any language. The most notable change was to use custom sentence segmentation instead of given segments for French and using some additional lexica as features for our CRF model in German (for French, we only used existing SEM lexica). Other than that, we only optimized hyper-parameters on the dev set. This clearly illustrates the power of contextual embeddings and today's neural network architectures. This is encouraging in terms of usability of SotA models on real-world data.
+
+\begin{table}
+    \centering
+    \begin{tabular}{p{0.11\linewidth}x{0.11\linewidth}x{0.11\linewidth}x{0.11\linewidth}x{0.11\linewidth}x{0.11\linewidth}x{0.11\linewidth}}
+        \toprule
+        \multirow{2}{*}{\textsc{run}} & \multicolumn{3}{c}{\textsc{French}} & \multicolumn{3}{c}{\textsc{German}}                                                                             \\
+        \cmidrule(l{0.4cm}r{0.4cm}){2-4}\cmidrule(l{0.4cm}r{0.4cm}){5-7}
+                                      & P                                   & R                                   & F1               & P                & R                & F1               \\
+        \midrule
+        winner                        & 83.1                                & 84.9                                & 84.0             & 79.0             & 80.5             & 79.7             \\
+        run 1                         & \underline{77.8}                    & \underline{79.4}                    & \underline{78.6} & \underline{63.1} & \textbf{66.6}    & \underline{64.8} \\
+        run 2                         & \textbf{78.8}                       & \textbf{80.2}                       & \textbf{79.5}    & \textbf{65.8}    & \underline{65.8} & \textbf{65.8}    \\
+        run 3                         & 70.2                                & 57.9                                & 63.5             & 64.4             & 43.8             & 52.1             \\
+        \midrule
+        average                       & 70.2                                & 66.7                                & 67.6             & 63.8             & 58.1             & 60.0             \\
+        median                        & 71.5                                & 68.6                                & 68.6             & 66.8             & 57.7             & 64.5             \\
+        \bottomrule
+    \end{tabular}
+    \caption{Strict results for our systems compared to the winning system (micro measures)}
+    \label{tab:results-raw}
+\end{table}
+
+\subsection{Study of sequence segmentation}
+\label{sec:sequence_seg}
+
+%~ segments
+%~ processed 29854 tokens with 1532 phrases; found: 1476 phrases; correct: 1196.
+%~ accuracy: 96.58%; precision: 81.03%; recall: 78.07%; FB1: 79.52
+%~  loc: precision: 85.21%; recall: 87.52%; FB1: 86.35 568
+%~  org: precision: 70.62%; recall: 62.78%; FB1: 66.47 160
+%~  pers: precision: 80.24%; recall: 76.88%; FB1: 78.52 663
+%~  prod: precision: 62.96%; recall: 39.53%; FB1: 48.57 27
+%~  time: precision: 86.21%; recall: 78.12%; FB1: 81.97 58
+
+%~ sentences
+%~ processed 29854 tokens with 1365 phrases; found: 1319 phrases; correct: 1114.
+%~ accuracy: 97.61%; precision: 84.46%; recall: 81.61%; FB1: 83.01
+%~  loc: precision: 87.73%; recall: 87.08%; FB1: 87.41 538
+%~  org: precision: 71.33%; recall: 65.64%; FB1: 68.37 150
+%~  pers: precision: 84.64%; recall: 82.09%; FB1: 83.35 547
+%~  prod: precision: 75.86%; recall: 56.41%; FB1: 64.71 29
+%~  time: precision: 90.91%; recall: 87.72%; FB1: 89.29 55
+
+% \begin{table}
+% \centering
+% \begin{tabular}{|l|ccc|}
+% \hline
+% segmentation & P     & R     & F1    \\
+% \hline
+% segments     & 81.03 & 81.61 & 79.52 \\
+% sentences    & 84.46 & 84.46 & 83.01 \\
+% \hline
+% \end{tabular}
+% \caption{result difference between segments and SEM sentence segmentation on dev}
+% \label{tab:segment-vs-sentences}
+% \end{table}
+
+In this section, we evaluate the influence of sequence segmentation on system performances. This evaluation is done for French only, as we used SEM to provide sentence segmentation and SEM could only provide a proper sentence segmentation for that language. As can be seen in table \ref{tab:segment-vs-sentences}, sentence segmentation allows to improve results by 3.5 F1 points. This is due to the fact that some entities were split across multiple segments in the original data. Using a custom sentence segmentation allows to have entities in a single sequence. This segmentation is applied both with training data and evaluation data, so that our systems can access a more proper context for named entities. The cost of using another segmentation is relatively cheap, as SEM can process nearly 1GB of raw text per hour.
+
+A per entity comparison is also available in Table \ref{tab:segment-vs-sentences}.
+One can see that the improvement of sentence segmentation is not very significant for locations (Loc). It is due to two facts : (i) locations are usually small in number of tokens and therefore less prone to be separated in two segments and (ii) there was less room from improvement since they were the easiest entity type to detect (86.35\% F1-score).
+To the contrary, entities of type ``product'' (Prod), usually longer in tokens, were very hard to predict with only 48.57\% F1-measure and benefited the most from segmentation in sentences (+16 percentage points in F1-measure).
+
+
+%~ 2.52 -0.44  1.06
+%~ 0.71  2.86  1.90
+%~ 4.40  5.21  4.83
+%~ 12.90 16.88 16.14
+%~ 4.70  9.60  7.32
+
+\begin{table}
+    \scalebox{0.92}{
+        \begin{tabular}{@{\hspace{0.15cm}} l @{\hspace{0.2cm}}  @{\hspace{0.2cm}} r @{\hspace{0.15cm}}  @{\hspace{0.15cm}} r @{\hspace{0.2cm}}  @{\hspace{0.2cm}} r @{\hspace{0.15cm}}  @{\hspace{0.15cm}} r @{\hspace{0.2cm}}  @{\hspace{0.2cm}} r @{\hspace{0.15cm}}  @{\hspace{0.15cm}} r@ {\hspace{0.15cm}} }% YD: I like that one better
+            %\begin{tabular}{lclclcl}%Better aligned this way ?
+            \toprule
+            \multirow{2}{*}{\textsc{Type}} & \multicolumn{2}{c}{\textsc{P}} & \multicolumn{2}{c}{\textsc{R}} & \multicolumn{2}{c}{\textsc{F1}}                                                                                                \\
+            \cmidrule(l{-0.15cm}r{0.3cm}){2-3}\cmidrule(l{-0.15cm}r{0.3cm}){4-5}\cmidrule(l{-0.15cm}r{0.15cm}){6-7}
+                                           & \multicolumn{1}{c}{Segments}   & \multicolumn{1}{c}{Sentences}  & \multicolumn{1}{c}{Segments}    & \multicolumn{1}{c}{Sentences} & \multicolumn{1}{c}{Segments} & \multicolumn{1}{c}{Sentences} \\
+            \midrule
+            Loc                            & 85.21                          & 87.73 (+2.52)                  & 87.52                           & 87.08 (-0.44)                 & 86.35                        & 87.41 (+1.06)                 \\
+            Org                            & 70.62                          & 71.33 (+0.71)                  & 62.78                           & 65.64 (+2.86)                 & 66.47                        & 68.37 (+1.90)                 \\
+            Pers                           & 80.24                          & 84.64 (+4.40)                  & 76.88                           & 82.09 (+5.21)                 & 78.52                        & 83.35 (+4.83)                 \\
+            Prod                           & 62.96                          & 75.86 (+12.90)                 & 39.53                           & 56.41 (+16.88)                & 48.57                        & 64.71 (+16.14)                \\
+            Time                           & 86.21                          & 90.91 (+4.70)                  & 78.12                           & 87.72 (+9.60)                 & 81.97                        & 89.29 (+7.32)                 \\
+            \midrule
+            Global                         & 81.03                          & 84.46 (+3.43)                  & 81.61                           & 84.46 (+2.85)                 & 79.52                        & 83.01 (+3.49)                 \\
+            \bottomrule
+        \end{tabular}
+    }
+    \caption{Comparison between segments and sentences on French dev dataset (run 1), strict scenario}
+    \label{tab:segment-vs-sentences}
+\end{table}
+
+
+\subsection{To dev or not to dev?}
+\label{sec:todev-ornot}
+
+In Table \ref{tab:to-dev} we show the results that could have been obtained by training the Bi-LSTM model %TODO: checker si je dis pas de conneries
+on both train and dev dataset. We used the same hyperparameters as we did for our official run. Despite the fact that it does not ensure the robustness of the system, the added-value seem to be quite disappointing\footnote{In particular, if we consider that it would not have given us a better ranking on any language.}. In German the gain may be a bit more significant, probably due to the smaller size of the training dataset.
+
+\begin{table}
+    \centering
+    \begin{tabular}{lx{0.15\linewidth}x{0.15\linewidth}x{0.15\linewidth}x{0.15\linewidth}}
+        \toprule
+        \multirow{2}{*}{\textsc{metric}} & \multicolumn{2}{c}{\textsc{french}} & \multicolumn{2}{c}{\textsc{german}}                                     \\
+        \cmidrule(l{0.15cm}r{0.15cm}){2-3}\cmidrule(l{0.15cm}r{0.15cm}){4-5}
+                                         & not to dev                          & to dev                              & not to dev & to dev               \\
+        \midrule
+        P                                & 78.8                                & \textbf{79.5} (+0.7)                & 65.8       & \textbf{68.2} (+2.4) \\
+        R                                & 80.2                                & \textbf{80.7} (+0.5)                & 65.8       & \textbf{66.1} (+0.3) \\
+        F1                               & 79.5                                & \textbf{80.1} (+0.6)                & 65.8       & \textbf{67.1} (+1.3) \\
+        \bottomrule
+    \end{tabular}
+    \caption{Results obtained on the test set (strict metric) with only the train set (not to dev) and with train+dev sets (to dev) with our best system (run 2)\label{tab:to-dev}}
+
+\end{table}
+
+\section{Conclusion}
+\label{sec:concl}
+
+In this article we presented three methods developed for the Named Entity Recognition task in French and German historical newspapers.
+The first method relied on linear-chain CRFs while the other two methods use a Bidirectional LSTM and a bidirectional Language Model (ELMo).
+The later outperformed the CRF model and achieved rank 3 on the NER task in both French and German.
+We also showed that the type of sequences used has a significant influence on the results. When we segment in sentences rather than using the segments of the dataset as it is the results are systematically much better, with an exception for locations where the gain is marginal. This proves that sentence segmentation remains a key component of efficient NLP architectures, in particular for models taking advantage of the context.
+
+As a future work it would be interesting to assess the importance of noise in the data. For instance, by comparing the results of NER on texts obtained via different OCR tools.
+The influence of the qualitative jumps in the data, which is common in Digital Humanities, is an important aspect to evaluate the robustness of the system in real-world conditions rather than laboratory conditions.
+We also plan to provide an in-depth analysis of the impact of word embeddings and neural architecture, as we only provided our best results in this paper.
