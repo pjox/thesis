@@ -165,14 +165,14 @@ These texts precede the adoption of norms established by editors using Gutenberg
         \toprule
         {\textbf{Corpus}}                                  & {\textbf{Size / \si{\mebi\byte}}} \\ %& {\textbf{\# texts}}
         \midrule
-        BFM \citep{BFM2017BFMRessourcesMed}                & 20.7                              \\ %139
-        AND \citep{AND2005AngloNormanDictionary}           & 17.2                              \\ %73
-        NCA \citep{NCA2006NCACorpus}                       & 9.7                               \\ %271
-        Chartes Douai \citep{Douai2003AnciensDocsLing}     & 3.1                               \\ %1
-        OpenMedFr \citep{OMF2018OpenMedFr}                 & 1.7                               \\ %19
-        Geste \citep{geste2016GesteCorpus}                 & 1.5                               \\ %32
-        MCVF \citep{MCVF2008CorpusAnalyseVariation}        & 1.4                               \\ %17
-        Chartes Aube \citep{CHAube2006ChartesArchivesAube} & 0.2                               \\ %75
+        BFM \citep{guillot-etal-2018-base}                & 20.7                              \\ %139
+        AND \citep{rothwell-etal-2005-anglo}           & 17.2                              \\ %73
+        NCA \citep{kunstmann-stein-2007-le}                       & 9.7                               \\ %271
+        Chartes Douai \citep{glessen-2003-elaboration}     & 3.1                               \\ %1
+        OpenMedFr \citep{wrisley-2018-the}                 & 1.7                               \\ %19
+        Geste \citep{camps-etal-2019-geste}                 & 1.5                               \\ %32
+        MCVF \citep{martineau-2008-un}        & 1.4                               \\ %17
+        Chartes Aube \citep{reenen-etal-2007-chartes} & 0.2                               \\ %75
         \midrule
         Total                                              & 55.3                              \\ %627
         \bottomrule
@@ -221,9 +221,9 @@ The resulting corpus is quite heterogeneous: legal texts and verse literature ar
 \section{Experiments}
 \label{sec-experiments}
 We evaluate a set of alternative word representations on Old French, using their usefulness for POS-tagging and dependency parsing as a downstream evaluation.
-To that end, we use the annotated treebank of Old French (SRCMF,  \citet{prevost-stein-2013-syntactic}) as provided by the 2.7 version of the UD dataset \citep{zeman2020UniversalDependenciesa} as a reference treebank.
+To that end, we use the annotated treebank of Old French (SRCMF,  \citet{prevost-stein-2013-syntactic}) as provided by the 2.7 version of the UD dataset \citep{zeman-etal-2020-universal} as a reference treebank.
 
-Our parser/tagger probe uses \citet{dozat-manning-2018-simpler}'s neural graph parser made as reimplemented by \citet{le-etal-2020-flaubert} and \citet{grobol:hal-03223424}, using the same hyperparameters.
+Our parser/tagger probe uses \citet{dozat-manning-2018-simpler}'s neural graph parser made as reimplemented by \citet{le-etal-2020-flaubert} and \citet{grobol-crabbe-2021-analyse}, using the same hyperparameters.
 Word representations are obtained by concatenating subword embeddings, averaged over transformer layers together with character embeddings and non contextualized word embeddings.  %without weighting or scaling. 
 %returned by the various models with character embeddings and word embeddings learned together with the parsing model on the treebank train set.
 This representation is similar to those used by \citet{straka-strakova-2019-evaluating,ling-etal-2015-finding}.
@@ -339,7 +339,7 @@ for instance null subjects.
 We now try to take advantage of the raw Medieval French data described in section \ref{sec-data}.
 To that end, we explore two strategies: training a model from scratch and refining existing models by \enquote{post-training} them---running a few more training epochs on the Medieval French raw data.
 
-In the \enquote{from scratch} strategy we first train a BBPE sub-word tokenizer \citep{wang2020NeuralMachineTranslation}
+In the \enquote{from scratch} strategy we first train a BBPE sub-word tokenizer \citep{wang-cho-etal-2020-neural}
 on our raw corpus, then train a RoBERTa \citep{liu-etal-2019-roberta} masked language model.
 Taking inspiration from \citet{micheli-etal-2020-importance}, who worked in a setting close to ours: a small and noisy pre-training corpus used to create a model from scratch, we used a RoBERTa architecture.
 %Since there are no clear silver bullets when it comes to Transformer-based contextual embedding models, the RoBERTa architecture is chosen mostly for comparison with 
@@ -462,7 +462,7 @@ The post-trained models are those with MLM heads, which we did not reset before 
     \label{tab:carbon-bertrade}
 \end{table}
 
-In light of recent concerns about the power consumption and carbon footprint of deep learning models \citep{schwartz-2020-green, bender-etal-2021-on} we report the power consumption and carbon footprint of our main experiments following the approach of \citet{strubell-etal-2019-energy}. Two different configurations were used in our experiments, one for pre-training models from scratch (Pre-train) and another one for continuing the training of existing models (Post-train).
+In light of recent concerns about the power consumption and carbon footprint of deep learning models \citep{schwartz-etal-2020-green, bender-etal-2021-on} we report the power consumption and carbon footprint of our main experiments following the approach of \citet{strubell-etal-2019-energy}. Two different configurations were used in our experiments, one for pre-training models from scratch (Pre-train) and another one for continuing the training of existing models (Post-train).
 
 \paragraph{Pre-train:} We use a cluster of 4 machines each one having 8 GPU Nvidia Tesla V100 SXM2 32 Go, 384 of RAM, and two Intel Xeon Gold 6226 processors. One Nvidia Tesla V100 card is rated at around 300 W,\footnote{\href{https://www.nvidia.com/en-us/data-center/v100/}{ Nvidia Tesla V100 specification}} while the Xeon Gold 6226 processor is rated at 125 W,\footnote{\href{https://ark.intel.com/content/www/us/en/ark/products/193957/intel-xeon-gold-6226-processor-19-25m-cache-2-70-ghz.html}{Intel Xeon Gold 6226 specification}}. For the DRAM we can use the work of \citet{desrochers-etal-2016-a} to estimate the total power draw of 384GB of RAM at around 39W. The total power draw of this setting adds up to around 10756 W. We train 11 different models in this configuration.
 
