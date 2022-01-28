@@ -190,6 +190,8 @@
 \RequirePackage{amsmath}
 \RequirePackage{amsthm}
 \RequirePackage{dsfont}
+\RequirePackage{mathtools}
+\RequirePackage{mathrsfs}
 
 % Fix the spacing of \left and \right. Use these with the proper bracket
 % in order to ensure that they scale automatically.
