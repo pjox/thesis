@@ -1,22 +1,27 @@
 \chapter{Quality at Glance}
 
-\section{Introduction}
-Access to multilingual datasets for NLP research has vastly improved over the past years. A variety of web-derived collections for hundreds of languages is available for anyone to download, such as ParaCrawl~\citep{espla-etal-2019-paracrawl, banon-etal-2020-paracrawl}, WikiMatrix~\citep{schwenk-etal-2021-wikimatrix} CCAligned~\citep{el-kishky-etal-2020-ccaligned}, \mbox{OSCAR}~\citep{ortiz-suarez-etal-2019-asynchronous, ortiz-suarez-etal-2020-monolingual}, and several others.
-These have in turn enabled a variety of highly multilingual models, like mT5 \citep{xue-etal-2021-mt5}, M2M\nobreakdash-100 \citep{fan-etal-2020-beyond}, M4 \citep{arivazhagan-etal-2019-massively}.
-% Recent approaches that employ large-scale multilingual systems have shown potential for some generalization across typologically different languages \cite{pires-etal-2019-multilingual,papadimitriou-etal-2021-deep}. .
 
-Curating such datasets relies on the websites giving clues about the language of their contents (e.g. a language identifier in the URL) and on automatic language classification (LangID).
-%and filtering tools, and a range of evaluation sets and metrics to compile high-quality datasets. 
-It is commonly known that these automatically crawled and filtered datasets tend to have overall lower quality than hand-curated collections~\citep{koehn-etal-2020-findings}, but their quality is rarely measured directly, and is rather judged through the improvements they bring to downstream applications~\citep{schwenk-etal-2021-wikimatrix}.
+\section{Related Work}\label{sec:related}
 
-Building NLP technologies with automatically crawled datasets is promising. This is especially true for low-resource languages, because data scarcity is one of the major bottlenecks for deep learning approaches.
-However, there is a problem: There exists very little research on evaluating both data collections and automatic crawling and filtering tools for low-resource languages.
-As a result, although many low-resource languages are covered by the latest multilingual crawl data releases, their quality and thus usability is unknown.
+Corpora collected by web crawlers are known to be noisy~\citep{junczys-dowmunt-2019-microsoft,luccioni-viviano-2021-whats}. In highly multilingual settings, past work found that web-crawls of lower-resource languages have serious issues, especially with segment-level LangID~\citep{caswell-etal-2020-language}.
+%Repeated studies have shown that 
+Cleaning and filtering web-crawls can boost general language modeling~\citep{gao-etal-2020-the,brown-etal-2020-language,raffel-etal-2020-exploring} and downstream task performance~\citep{moore-lewis-2010-intelligent,rarrick-etal-2011-mt,xu-koehn-2017-zipporah,khayrallah-koehn-2018-impact,brown-etal-2020-language}.
 
-To shed light on the quality of data crawls for the lowest resource languages, we perform a manual data audit for 230 per-language subsets of five major crawled multilingual datasets:\footnote{Annotations are available for
-    \href{https://storage.googleapis.com/huggingface-nlp/datasets/masakhane_audit_annotations/masakhane_language_audit.zip}{download} (last accessed: 12 Oct 2021).}
-CCAligned~\citep{el-kishky-etal-2020-ccaligned}, ParaCrawl~\citep{espla-etal-2019-paracrawl,banon-etal-2020-paracrawl}, WikiMatrix~\citep{schwenk-etal-2021-wikimatrix}, OSCAR~\citep{ortiz-suarez-etal-2019-asynchronous, ortiz-suarez-etal-2020-monolingual} and mC4~\citep{xue-etal-2021-mt5}. We propose solutions for effective, low-effort data auditing (Section~\ref{sec:audit}), including an error taxonomy. Our quantitative analysis reveals surprisingly low amounts of valid in-language data, and identifies systematic issues across datasets and languages. In addition, we find that a large number of datasets is labeled with nontransparent or incorrect language codes (Section~\ref{sec:codes}). This leads us to reflect on the potential harm of low-quality data releases for low-resource languages (Section~\ref{sec:risk}), and provide a set of recommendations for future multilingual data releases (Section~\ref{sec:recommendation}).
+As the scale of ML research grows, it becomes increasingly difficult to validate automatically collected and curated datasets \citep{biderman-etal-2020-pitfalls,birhane-etal-2021-large,bender-etal-2021-on}.
+%Data Quality Considerations for Big Data and Machine Learning: Going Beyond Data Cleaning and Transformations \citep{gudivada2017data}
+Several works have focused on advancing methodologies and best practices to address these challenges. \citet{bender-friedman-2018-data} introduced data statements, a documentary framework for NLP datasets that seeks to provide a universal minimum bar for dataset description. Similar work has been done on systematizing documentation in other areas in data science and machine learning, including work focusing on
+online news \citep{kevin-etal-2018-information}, data ethics \citep{sun-etal-2019-mithralabel}, and data exploration \citep{holland-etal-2018-the}, as well as generalist work such as \citep{gebru-etal-2018-datasheets}. 
+Data quality is also implicitly documented by successes of filtering methods. There is a large literature on filtering data for various NLP tasks, e.g. \citet{axelrod-etal-2011-domain,moore-lewis-2010-intelligent,rarrick-etal-2011-mt,wang-etal-2018-denoising,kamholz-etal-2014-panlex,junczys-dowmunt-2018-dual,caswell-etal-2020-language}.
 
+Closest to our work is the analysis of a highly multilingual (non-publicly available) web-crawl and LangID related quality issues by \citet{caswell-etal-2020-language}.
+%, performing a highly multilingual web-crawl and then systematically analyzing the LangID related quality issues. 
+%However, though 
+They perform a brief analysis of the quality of OSCAR
+%, but omit analyses of any other public datasets, 
+with the focus only on the presence of in-language content.
+\citet{dodge-etal-2021-documenting} automatically documented and analyzed the contents and sources of C4~\citep{raffel-etal-2020-exploring}, the English counterpart of mC4, which surfaced the presence of machine-translated contents and NLP benchmark data.
+
+\section{Multilingual Corpora}\label{sec:crawls}
 
 \begin{table*}[th!]
     \centering
@@ -42,27 +47,7 @@ CCAligned~\citep{el-kishky-etal-2020-ccaligned}, ParaCrawl~\citep{espla-etal-201
 % CC: CommonCrawl; TED-6: da, cr, sl, sk, lt, et; TED-50: TODO cite Qi et al. 2018; WMT-5: cs, de, fi, lv, ro.
 %fastText: 176 languages, Wikipedia & Tatoeba
 
-\section{Related Work}\label{sec:related}
 
-Corpora collected by web crawlers are known to be noisy~\citep{junczys-dowmunt-2019-microsoft,luccioni-viviano-2021-whats}. In highly multilingual settings, past work found that web-crawls of lower-resource languages have serious issues, especially with segment-level LangID~\citep{caswell-etal-2020-language}.
-%Repeated studies have shown that 
-Cleaning and filtering web-crawls can boost general language modeling~\citep{gao-etal-2020-the,brown-etal-2020-language,raffel-etal-2020-exploring} and downstream task performance~\citep{moore-lewis-2010-intelligent,rarrick-etal-2011-mt,xu-koehn-2017-zipporah,khayrallah-koehn-2018-impact,brown-etal-2020-language}.
-
-As the scale of ML research grows, it becomes increasingly difficult to validate automatically collected and curated datasets \citep{biderman-etal-2020-pitfalls,birhane-etal-2021-large,bender-etal-2021-on}.
-%Data Quality Considerations for Big Data and Machine Learning: Going Beyond Data Cleaning and Transformations \citep{gudivada2017data}
-Several works have focused on advancing methodologies and best practices to address these challenges. \citet{bender-friedman-2018-data} introduced data statements, a documentary framework for NLP datasets that seeks to provide a universal minimum bar for dataset description. Similar work has been done on systematizing documentation in other areas in data science and machine learning, including work focusing on
-online news \citep{kevin-etal-2018-information}, data ethics \citep{sun-etal-2019-mithralabel}, and data exploration \citep{holland-etal-2018-the}, as well as generalist work such as \citep{gebru-etal-2018-datasheets}. 
-Data quality is also implicitly documented by successes of filtering methods. There is a large literature on filtering data for various NLP tasks, e.g. \citet{axelrod-etal-2011-domain,moore-lewis-2010-intelligent,rarrick-etal-2011-mt,wang-etal-2018-denoising,kamholz-etal-2014-panlex,junczys-dowmunt-2018-dual,caswell-etal-2020-language}.
-
-Closest to our work is the analysis of a highly multilingual (non-publicly available) web-crawl and LangID related quality issues by \citet{caswell-etal-2020-language}.
-%, performing a highly multilingual web-crawl and then systematically analyzing the LangID related quality issues. 
-%However, though 
-They perform a brief analysis of the quality of OSCAR
-%, but omit analyses of any other public datasets, 
-with the focus only on the presence of in-language content.
-\citet{dodge-etal-2021-documenting} automatically documented and analyzed the contents and sources of C4~\citep{raffel-etal-2020-exploring}, the English counterpart of mC4, which surfaced the presence of machine-translated contents and NLP benchmark data.
-
-\section{Multilingual Corpora}\label{sec:crawls}
 Table \ref{tab:corpora} provides an overview of the corpora of interest in this work. We selected the corpora for their multilinguality and the inclusion of understudied languages in NLP. With the exception of WikiMatrix and ParaCrawl, all corpora are derived from CommonCrawl (CC).\footnote{\url{http://commoncrawl.org/}} %s, and distinguish themselves by the choice of filtering methods, LangID and automatic alignment technology.
 %LangID is crucial to corpus creation, since any issues within might propagate, e.g. bias recognizing document types similar to what it was trained on, or errors in language identifiers.\footnote{\url{https://github.com/facebookresearch/fastText/issues/482}}
 

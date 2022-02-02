@@ -1,41 +1,5 @@
 \chapter{BERTrade}
 
-\section{Introduction}
-% Context
-There is a growing interest in digital humanities for automatic processing and annotation of historical texts. In this work, we study how to take advantage of current NLP models of the BERT family to advance the state of the art in processing historical languages, taking Old French (9th-13th century French) as a use case.
-
-Old French is one of the historical languages for which we have the largest amount of syntactically annotated data, and we expect that our results on these language states may be generalised and used as a source of inspiration for researchers currently developing annotated resources for other historical languages.
-
-Using contextual word embeddings as input representations has brought clear gains in performances for most of the NLP tasks for which they have been used.
-However, this has mostly been attested in languages where sufficient (raw) linguistic data is available.
-For less-resourced languages, the most common approach has been to leverage multilingual models such as mBERT \citep{devlin-etal-2019-bert}
-%\footnote{The multilingual model is only documented in the supplemental materials at e.g.\ \url{https://github.com/google-research/bert/blob/eedf5716ce/multilingual.md}}
-
-% Motivation
-Historical languages are typical cases where available linguistic data is limited, with no chance of acquiring new texts. They are also not normalized by spelling and institutional conventions and tend to be more heterogeneous than contemporary lesser-resourced languages.
-
-Old French is a particularly interesting language for this kind of study, since relatively to its limited amount of available raw text, its volume of \emph{annotated} linguistic data is quite high, due to the existence of the SRCMF dependency treebank \citep{prevost-stein-2013-syntactic} and its latest incarnation in the Universal Dependency project \citep{nivre-etal-2020-universal}, which boasts around \SI{17.7}{K\quantity} sentences\footnote{Putting it in the second place of all French language treebanks in number of sentences.}
-for around \SI{171}{K\quantity} words.
-% The existence of such data is crucial for the evaluation of contextual embeddings, which are essentially tools providing representations for downstream NLP tasks.
-
-Another interesting property of Old French is its proximity to a well-resourced language, namely contemporary French, for which monolingual contextual embeddings models exist and have been shown to be relevant for dependency parsing  \citep{le-etal-2020-flaubert,martin-etal-2020-camembert}.
-Last, but certainly not least, the design of an accurate syntactic parser for Old French would be a very valuable tool for computer-assisted linguistic studies.
-% Q: Mentionner Profiterole ? Pour justifier la période de nos textes.
-% A (LG): Je ne pense pas. Ici on justifie la période par l'utilisation de SRCMF comme probe : on utilise SRCMF donc on reprend la même période.
-Indeed, studying the historical variation of syntax in a language that lacks both native speakers and centralized standard variants can be very challenging, due to the prohibitive cost of manual annotation. Automatic syntactic annotations, either as a \enquote{silver-standard} truth or as a bootstrapping step towards manual annotation, can drastically reduce that cost.
-
-In this work, exploiting this currently unique situation of Old French among lesser-resourced and historical languages, we use dependency parsing and POS-tagging of Old French as probes of the relevance of contextual embeddings in a context of high heterogeneity and relative scarcity of data.
-More precisely, we consider several neural language models, some of which trained or fine-tuned on a new corpus of raw Old and Middle French texts, and use their internal representations of words as inputs to train taggers and parsers on the SRCMF treebank. The resulting tagging and parsing scores then serve as an evaluation of the quality and usefulness of these representations.
-We claim the following contributions:
-%
-\begin{itemize}
-    \item We provide empirical evidence that contextual embeddings are relevant for historical language processing, even when no data is available beyond the treebank used to train a parser.
-    \item We provide a comparative study of several strategies for obtaining such contextual embeddings. Specifically, we compare cases where raw data is available in the target language and cases where existing contextual embeddings are available for the contemporary counterpart of a historical language.
-    \item We release two publicly\footnote{\url{https://url.retained/for/anonymous/review}} available resources for Old French: BERTrade,\footnote{\emph{Bertrade de Laon}, also known as \emph{Berthe au Grand Pied} was the mother of Charlemagne.} a set of contextual word embedding models and a state-of-the-art POS-tagging and dependency parsing model.
-\end{itemize}
-
-The paper is organized as follows. Section~\ref{sec-related} provides an overview of related work that aims at taking advantage of the BERT family of language models in scenarios where the amount of data is limited. In Section~\ref{sec-data} we provide a description of the dataset we gathered to conduct our experiments, and finally we report experiments in Section~\ref{sec-experiments} involving reusing BERT from other languages and training BERT models on Old French.
-
 \section{Related work}
 \label{sec-related}
 Since the introduction of contextualized word representations \citep{peters-etal-2018-deep,akbik-etal-2018-contextual,devlin-etal-2019-bert} and the many improvements proposed for them in the consumption of computational resources \citep{clark-etal-2020-electra}, in the amount of data required to fine-tune them \citep{raffel-etal-2020-exploring}, and more recently in the length of the contextual window \citep{xiong-etal-2021-nystromformer}; there have also been important advancements from a digital humanities point of view on \emph{unsupervised domain adaptation} \citep{ramponi-plank-2020-neural}. In this case, one specializes a language model to a particular domain with unlabeled data in order to improve performance in downstream tasks. This can be achieved by  pre-training the models from scratch with specialized data \citep{beltagy-etal-2019-scibert} or by continuing the training of a general model with a new corpus \citep{lee-etal-2019-BioBERT, peng-etal-2019-transfer}. This last method has already been successfully implemented in the context of historical languages, in particular \citet{han-eisenstein-2019-unsupervised} showed that one can successfully adapt the original BERT \citep{devlin-etal-2019-bert} to Early Modern English by continuing the pre-training on historical raw texts.

@@ -1,26 +1,5 @@
 \chapter{SinNer CLEF-HIPE2020}
 
-\section{Introduction}
-\label{sec:intro_sinner}
-
-Among the aspects for which Natural Language Processing (NLP) can be useful for Digital Humanities (DH) figures prominently Named Entity Recognition. This task interests researchers for numerous reasons since the application can be pretty wide.
-We can cite genealogy or history for which finding mentions of persons and places in texts is very useful. Researchers in digital literature have shown a great interest in NER since it can help for instance to highlight the path of different characters in a book or in a book series. There can be cross-fertilization between NER and DH since some researchers showed that some particular properties of literature can help to build better NER systems \cite{brooke-etal-2016-bootstrapped}.
-Apart from literature, NER can also be used more generally to help refine queries to assist browsing in newspaper collections \cite{neudecker-etal-2014-large}.
-Like other NLP tasks, NER quality will suffer from different problems related to variations in the input data: variation in languages (multilinguality), variation in the quality of the data (OCR errors mainly) and specificity of the application domain (literature vs. epidemic surveillance for instance). These difficulties can be connected with the challenges for low-level NLP tasks highlighted by Dale \textit{et al.} \cite{dale-etal-2000-handbook}. In CLEF-HIPE shared task \cite{ehrmann-etal-2020-extended}, the variation in language and in text quality will be the main problems even if the specificity of the application can be of great interest.
-
-NER in old documents represent an interesting challenge for NLP since it is usually necessary to process documents that show different kind of variations as compared to the particular laboratory conditions on which NER systems are trained.
-Most NER systems are usually designed to process clean data.
-Additionally, there is the multilingual issue since NER systems have been designed primarily for English, with assumptions on the availability of data on the one hand and on the universal nature of some linguistic properties on the other hand.
-
-The fact that the texts processed in Digital Humanities are usually not born-digital is very important since, even after OCR post-correction, it is very likely that some noise would be found in the text.
-Other difficulties will arise as well in those type of documents. The variation in language is one of them since contemporary English will clearly not be the most frequent language.  It is interesting for researchers to check how much diachronic variation has an influence on NER systems \cite{ehrmann-etal-2016-diachronic}.
-It makes it even more important to work on multilingual NER and to build architectures that need less training data \cite{rahimi-etal-2019-massively}.
-More generally, NER in ancient texts represents a great opportunity for NLP to compare to main approaches to handle variation in texts: adapting the texts to an existing architecture via modernization or normalization \cite{leaman-etal-2016-taggerone} or adapting the pipeline to non standard data (OCR noise, language variants\dots) via domain adaptation or data augmentation techniques \cite{ghannay-etal-2018-end}.
-
-In Section \ref{sec:sota} we present a brief state-of-the-art for Named Entity Recognition with a focus on digitized documents. Section \ref{sec:dataset} and \ref{sec:method} are respectively devoted to the description of the dataset of CLEF-HIPE 2020 shared task and the methods we developed to extract NE for French and German.
-The results of our systems are described in Section \ref{sec:results} and in Section \ref{sec:concl} we give some conclusions and perspectives for this work.
-
-
 \section{Related Work on Named Entity Recognition}
 \label{sec:sota}
 

@@ -17,141 +17,289 @@ equally well use it for your honour thesis, bachelor thesis, and so
 on---some adjustments may be necessary, though.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Why?}
+\section{Goclassy}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-I was not satisfied with the available templates for \LaTeX{} and wanted
-to heed the style advice given by people such as Robert
-Bringhurst~ or Edward R.\
-Tufte~. While there \emph{are} some packages out
-there that attempt to emulate these styles, I found them to be either
-too bloated, too playful, or too constraining. This template attempts to
-produce a beautiful look without having to resort to any sort of hacks.
-I hope you like it.
+In recent years neural methods for Natural Language Processing (NLP) have consistently and repeatedly improved the state-of-the-art in a wide variety of NLP tasks such as parsing, PoS-tagging, named entity recognition, machine translation, text classification and reading comprehension among others. Probably the main contributing factor in this steady improvement for NLP models is the raise in usage of \emph{transfer learning} techniques in the field. These methods normally consist of taking a pre-trained model and reusing it, with little to no retraining, to solve a different task from the original one it was intended to solve; in other words, one \emph{transfers} the \emph{knowledge} from one task to another.
+
+Most of the transfer learning done in NLP nowadays is done in an unsupervised manner, that is, it normally consist of a  \emph{language model} that is fed unannotated plain text in a particular language; so that it \emph{extracts} or \emph{learns} the basic \emph{features} and patterns of the given language, the model is subsequently used on top of an specialised architecture designed to tackle a particular NLP task. Probably the best known example of this type of model are \emph{word embeddings} which consist of real-valued vector representations that are trained for each word on a given corpus. Some notorious examples of word embeddings are word2vec \citep{mikolov-etal-2013-distributed}, GloVe \citep{pennington-etal-2014-glove} and \mbox{fastText} \citep{mikolov-etal-2018-advances}. All these models are \emph{context-free}, meaning that a given word has one single vector representation that is independent of context, thus for a polysemous word like Washington, one would have one single representation that is reused for the city, the state and the US president.
+
+In order to overcome the problem of polysemy, \emph{contextual} models have recently appeared. Most notably ELMo \citep{peters-etal-2018-deep} which produces deep contextualised word representations out of the internal states of a deep bidirectional language model in order to model word use and how the usage varies across linguistic contexts. ELMo still needs to be used alongside a specialised architecture for each given downstream task, but newer architectures that can be fine-tuned have also appear. For these, the model is first fed unannotated data, and is then fine-tuned with annotated data to a particular downstream task without relying on any other architecture. The most remarkable examples of this type of model are GPT-1, GPT-2 \citep{radford-etal-2018-improving,radford-etal-2019-language}, BERT \citep{devlin-etal-2019-bert} and XLNet \citep{yang-etal-2019-xlnet}; the latter being the current state-of-the-art for multiple downstream tasks. All of these models are different arrangements of the Transformer architecture \citep{vaswani-etal-2017-attention} trained with different datasets, except for XLNet which is an instance of the Transformer-XL \citep{dai-etal-2019-transformer}.
+
+Even though these models have clear advantages, their main drawback is the amount of data that is needed to train them in order to obtain a functional and efficient model. For the first English version of word2vec, \citet{mikolov-etal-2013-distributed} used a one billion word dataset consisting of various news articles. Later \citet{al-rfou-etal-2013-polyglot} and then \citet{bojanowski-etal-2017-enriching} used the plain text from Wikipedia to train distributions of word2vec and fastText respectively, for languages other than English. Now, the problem of obtaining large quantities of data aggravates even more for contextual models, as they normally need multiple instances of a given word in order to capture all its different uses and in order to avoid overfitting due to the large quantity of hyperparameters that these models have. \citet{peters-etal-2018-deep} for example use a 5.5 billion token\footnote{Punctuation marks are counted as tokens.} dataset comprised of crawled news articles plus the English Wikipedia in order to train ELMo, \citet{devlin-etal-2019-bert} use a 3.3 billion word\footnote{Space sparated tokens.} corpus made by merging the English Wikipedia with the BooksCorpus \citep{zhu-etal-2015-aligning}, and \citet{radford-etal-2019-language} use a 40GB English corpus created by scraping outbound links from Reddit.\footnote{\url{https://www.reddit.com/}}
+
+While Wikipedia is freely available, and multiple pipelines exist\footnote{\url{https://github.com/attardi/wikiextractor}}\textsuperscript{,}\footnote{\url{https://github.com/hghodrati/wikifil}} to extract plain text from it, some of the bigger corpora mentioned above are not made available by the authors either due to copyright issues or probably because of the infrastructure needed to serve and distribute such big corpora. Moreover the vast majority of both these models and the corpora they are trained with are in English, meaning that the availability of high quality NLP for other languages, specially for low-resource languages, is rather limited.
+
+To address this problem, we choose Common Crawl\footnote{\url{http://commoncrawl.org/}}, which is a 20TB mutilingual free to use corpus composed of crawled websites from the internet, and we propose a highly parallel multithreaded asynchronous pipeline that applies well-known concurrency patterns, to clean and classify by language the whole Common Crawl corpus to a point where it is usable for Machine Learning and in particular for neural NLP applications. We optimise the pipeline so that the process can be completed in a sensible amount of time even in infrastructures where Input/Output (I/O) speeds become the main bottleneck.
+
+Knowing that even running our pipeline will not always be feasible, we also commit to publishing our own version of a classified by language, filtered and ready to use Common Crawl corpus upon publication of this article. We will set up an easy to use interface so that people can download a manageable amount of data on a desired target language.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{How?}
+\section{Monolingual approach}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The package tries to be easy to use. If you are satisfied with the
-default settings, just add
-%
-\begin{verbatim}
-\documentclass{mimosis}
-\end{verbatim}
-%
-at the beginning of your document. This is sufficient to use the class.
-It is possible to build your document using either \LaTeX|, \XeLaTeX, or
-\LuaLaTeX. I personally prefer one of the latter two because they make
-it easier to select proper fonts.
+One of the key elements that has pushed the state of the art considerably in neural NLP in recent years has been the introduction and spread of transfer learning methods to the field. These methods can normally be classified in two categories according to how they are used:
+\begin{itemize}
+    \item \emph{Feature-based} methods, which involve pre-training real-valued vectors (``embeddings'') at the word, sentence, or paragraph level; and using them in conjunction with a specific architecture for each individual downstream task.
+    \item \emph{Fine-tuning} methods, which introduce a minimal number of task-specific parameters, and instead copy the weights from a pre-trained network and then tune them to a particular downstream task.
+\end{itemize}
+Embeddings or language models can be divided into \emph{fixed}, meaning that they generate a single representation for each word in the vocabulary; and \emph{contextualized}, meaning that a representation is generated based on both the word and its surrounding context, so that a single word can have multiple representations, each one depending on how it is used.
+
+In practice, most fixed embeddings are used as feature-based models. The most notable examples are \emph{word2vec} \citep{mikolov-etal-2013-distributed}, \emph{GloVe} \citep{pennington-etal-2014-glove} and \emph{fastText} \citep{mikolov-etal-2018-advances}. All of them are extensively used in a variety of applications nowadays. On the other hand, contextualized word representations and language models have been developed using both feature-based architectures, the most notable examples being ELMo and Flair \citep{peters-etal-2018-deep,akbik-etal-2018-contextual}, and transformer based architectures, that are commonly used in a fine-tune setting, as is the case of GPT-1, GPT-2 \citep{radford-etal-2018-improving,radford-etal-2019-language}, BERT and its derivatives \citep{devlin-etal-2019-bert,liu-etal-2019-roberta,lan-etal-2020-albert} and more recently T5 \citep{raffel-etal-2020-exploring}. All of them have repeatedly improved the state-of-the art in many downstream NLP tasks over the last year.
+
+In general, the main advantage of using language models is that they are mostly built in an \emph{unsupervised} manner and they can be trained with raw, unannotated plain text. Their main drawback is that enormous quantities of data seem to be required to properly train them especially in the case of contextualized models, for which larger corpora are thought to be needed to properly address polysemy and cover the wide range of uses that commonly exist within languages.
+
+For gathering data in a wide range of languages, Wikipedia is a commonly used option. It has been used to train fixed embeddings \citep{al-rfou-etal-2013-polyglot,bojanowski-etal-2017-enriching} and more recently the multilingual BERT \citep{devlin-etal-2019-bert}, hereafter mBERT. However, for some languages, Wikipedia might not be large enough to train good quality contextualized word embeddings. Moreover, Wikipedia data all belong to the same specific genre and style. To address this problem, one can resort to crawled text from the internet; the largest and most widespread dataset of crawled text being Common Crawl.\footnote{\url{https://commoncrawl.org}} Such an approach generally solves the quantity and genre/style coverage problems but might introduce noise in the data, an issue which has earned the corpus some criticism, most notably by \citet{trinh-le-2018-a} and \citet{radford-etal-2019-language}. Using Common Crawl also leads to data management challenges as the corpus is distributed in the form of a large set of plain text each containing a large quantity of unclassified multilingual documents from different websites.
+
+
+In this paper we study the trade-off between quantity and quality of data for training contextualized representations. To this end, we use the OSCAR corpus \citep{ortiz-suarez-etal-2019-asynchronous}, a freely available\footnote{\url{https://oscar-corpus.com}} multilingual dataset obtained by performing language classification, filtering and cleaning of the whole Common Crawl corpus.\footnote{\href{http://commoncrawl.org/2018/11/november-2018-crawl-archive-now-available/}{Snapshot from November 2018}} OSCAR was created following the approach of \citet{grave-etal-2018-learning} but proposing a simple improvement on their filtering method. We then train OSCAR-based and Wikipedia-based ELMo contextualized word embeddings \citep{peters-etal-2018-deep} for 5 languages: Bulgarian, Catalan, Danish, Finnish and Indonesian. We evaluate the models by attaching them to the to UDPipe 2.0 architecture \citep{straka-2018-udpipe,straka-strakova-2019-evaluating} for dependency parsing and part-of-speech (POS) tagging. We show that the models using the OSCAR-based ELMo embeddings consistently outperform the Wikipedia-based ones, suggesting that big high-coverage noisy corpora might be better than small high-quality narrow-coverage corpora for training contextualized language representations\footnote{Both the Wikipedia- and the OSCAR-based embeddings for these 5 languages are available at: \url{https://oscar-corpus.com/\#models}.}. We also establish a new state of the art for both POS tagging and dependency parsing in 6 different treebanks covering all 5 languages.
+
+The  structure  of  the  paper  is  as  follows. In Section 2 we describe the recent related work. In Section 3  we present, compare and analyze the corpora used to train our contextualized embeddings, and the treebanks used to train our POS tagging and parsing models. In Section 4 we examine and describe in detail the model used for our contextualized word representations, as well as the parser and the tagger we chose to evaluate the impact of corpora in the embeddings' performance in downstream tasks. Finally we provide an analysis of our results in Section 5 and in Section 6 we present our conclusions.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Features}
+\section{Quality at Glance}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{table}
-  \centering
-  \begin{tabular}{ll}
-    \toprule
-    \textbf{Package}          & \textbf{Purpose}                                       \\
-    \midrule
-    \texttt{amsmath}          & Basic mathematical typography                          \\
-    \texttt{amsthm}           & Basic mathematical environments for proofs etc.        \\
-    \texttt{booktabs}         & Typographically light rules for tables                 \\
-    \texttt{bookmarks}        & Bookmarks in the resulting PDF                         \\
-    \texttt{dsfont}           & Double-stroke font for mathematical concepts           \\
-    \texttt{graphicx}         & Graphics                                               \\
-    \texttt{hyperref}         & Hyperlinks                                             \\
-    \texttt{multirow}         & Permits table content to span multiple rows or columns \\
-    \texttt{paralist}         & Paragraph~(`in-line') lists and compact enumerations   \\
-    \texttt{scrlayer-scrpage} & Page headings                                          \\
-    \texttt{setspace}         & Line spacing                                           \\
-    \texttt{siunitx}          & Proper typesetting of units                            \\
-    \texttt{subcaption}       & Proper sub-captions for figures                        \\
-    \bottomrule
-  \end{tabular}
-  \caption{%
-    A list of the most relevant packages required~(and automatically imported) by this template.
-  }
-  \label{tab:Packages}
-\end{table}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Access to multilingual datasets for NLP research has vastly improved over the past years. A variety of web-derived collections for hundreds of languages is available for anyone to download, such as ParaCrawl~\citep{espla-etal-2019-paracrawl, banon-etal-2020-paracrawl}, WikiMatrix~\citep{schwenk-etal-2021-wikimatrix} CCAligned~\citep{el-kishky-etal-2020-ccaligned}, \mbox{OSCAR}~\citep{ortiz-suarez-etal-2019-asynchronous, ortiz-suarez-etal-2020-monolingual}, and several others.
+These have in turn enabled a variety of highly multilingual models, like mT5 \citep{xue-etal-2021-mt5}, M2M\nobreakdash-100 \citep{fan-etal-2020-beyond}, M4 \citep{arivazhagan-etal-2019-massively}.
+% Recent approaches that employ large-scale multilingual systems have shown potential for some generalization across typologically different languages \cite{pires-etal-2019-multilingual,papadimitriou-etal-2021-deep}. .
 
-The template automatically imports numerous convenience packages that
-aid in your typesetting process. \autoref{tab:Packages} lists the
-most important ones. Let's briefly discuss some examples below. Please
-refer to the source code for more demonstrations.
+Curating such datasets relies on the websites giving clues about the language of their contents (e.g. a language identifier in the URL) and on automatic language classification (LangID).
+%and filtering tools, and a range of evaluation sets and metrics to compile high-quality datasets. 
+It is commonly known that these automatically crawled and filtered datasets tend to have overall lower quality than hand-curated collections~\citep{koehn-etal-2020-findings}, but their quality is rarely measured directly, and is rather judged through the improvements they bring to downstream applications~\citep{schwenk-etal-2021-wikimatrix}.
+
+Building NLP technologies with automatically crawled datasets is promising. This is especially true for low-resource languages, because data scarcity is one of the major bottlenecks for deep learning approaches.
+However, there is a problem: There exists very little research on evaluating both data collections and automatic crawling and filtering tools for low-resource languages.
+As a result, although many low-resource languages are covered by the latest multilingual crawl data releases, their quality and thus usability is unknown.
+
+To shed light on the quality of data crawls for the lowest resource languages, we perform a manual data audit for 230 per-language subsets of five major crawled multilingual datasets:\footnote{Annotations are available for
+    \href{https://storage.googleapis.com/huggingface-nlp/datasets/masakhane_audit_annotations/masakhane_language_audit.zip}{download} (last accessed: 12 Oct 2021).}
+CCAligned~\citep{el-kishky-etal-2020-ccaligned}, ParaCrawl~\citep{espla-etal-2019-paracrawl,banon-etal-2020-paracrawl}, WikiMatrix~\citep{schwenk-etal-2021-wikimatrix}, OSCAR~\citep{ortiz-suarez-etal-2019-asynchronous, ortiz-suarez-etal-2020-monolingual} and mC4~\citep{xue-etal-2021-mt5}. We propose solutions for effective, low-effort data auditing (Section~\ref{sec:audit}), including an error taxonomy. Our quantitative analysis reveals surprisingly low amounts of valid in-language data, and identifies systematic issues across datasets and languages. In addition, we find that a large number of datasets is labeled with nontransparent or incorrect language codes (Section~\ref{sec:codes}). This leads us to reflect on the potential harm of low-quality data releases for low-resource languages (Section~\ref{sec:risk}), and provide a set of recommendations for future multilingual data releases (Section~\ref{sec:recommendation}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Typesetting mathematics}
+\section{Ungoliant}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-This template uses \verb|amsmath| and \verb|amssymb|, which are the
-de-facto standard for typesetting mathematics. Use numbered equations
-using the \verb|equation| environment.
-%
-If you want to show multiple equations and align them, use the
-\verb|align| environment:
-%
-\begin{align}
-  V & := \{ 1, 2, \dots \}                                                            \\
-  E & := \big\{ \left(u,v\right) \mid \dist\left(p_u, p_v\right) \leq \epsilon \big\}
-\end{align}
-%
-Define new mathematical operators using \verb|\DeclareMathOperator|.
-Some operators are already pre-defined by the template, such as the
-distance between two objects. Please see the template for some examples.
-%
-Moreover, this template contains a correct differential operator. Use \verb|\diff| to typeset the differential of integrals:
-%
-\begin{equation}
-  f(u) := \int_{v \in \domain}\dist(u,v)\diff{v}
-\end{equation}
-%
-You can see that, as a courtesy towards most mathematicians, this
-template gives you the possibility to refer to the real numbers~$\real$
-and the domain~$\domain$ of some function. Take a look at the source for
-more examples. By the way, the template comes with spacing fixes for the
-automated placement of brackets.
+With the increasing interest in language modeling in recent years in Natural Language Processing (NLP) \citep{rogers-etal-2020-primer}, particularly concerning contextualized word representations\footnote{In which one takes a unnanotated large textual corpus in a particular language and tries to predict a missing word in order to learn a vector space representation for it.} \citep{peters-etal-2018-deep,devlin-etal-2019-bert}, there has also been an explosion in interest for large raw corpora, as some of these latest models require almost 1TiB of raw text for pre-training \citep{raffel-etal-2020-exploring,brown-etal-2020-language}.
+
+While most of these language models were initially trained in English \citep{devlin-etal-2019-bert,yang-etal-2019-xlnet,clark-etal-2020-electra,zaheer-etal-2020-big,xiong-etal-2021-nystromformer} and consequently most of the large corpora used to pre-train them were in English, there has been a recent push to produce larger high quality corpora for other languages, namely those of \citet{grave-etal-2018-learning}, CCNet \citep{wenzek-etal-2020-ccnet}, Multilingual C4 (mC4) \citep{xue-etal-2021-mt5} and OSCAR \citep{ortiz-suarez-etal-2019-asynchronous,ortiz-suarez-etal-2020-monolingual} for pre-training language models, as well as, Paracrawl \citep{espla-etal-2019-paracrawl,banon-etal-2020-paracrawl}, CCAligned \citep{el-kishky-etal-2020-ccaligned} and WikiMatrix \citep{schwenk-etal-2021-wikimatrix} which are parallel corpora for training Machine Translation (MT) models. Of these, only OSCAR, Paracrawl, CCaligned and WikiMatrix are freely available and easily downloadable.
+
+In this paper we propose a new multilingual corpus for language modeling, and for that we take inspiration in the OSCAR corpus and its pipeline goclassy\footnote{\url{https://github.com/oscar-corpus/goclassy}} \citep{ortiz-suarez-etal-2019-asynchronous,ortiz-suarez-etal-2020-monolingual}, but we propose a new pipeline \emph{Ungoliant}\footnote{\url{https://github.com/oscar-corpus/ungoliant}} that is faster, modular, parametrizable and well-documented. We then use it to produce a new corpus similar to OSCAR, yet larger, based on recent data containing mentions of last years' events such as the COVID-19 pandemic, the 2020–2021 United States racial unrest, the Australian wildfires, the Beirut explosion and Brexit among others. Moreover, contrarily to OSCAR, our corpus retains metadata information at the document level. We release our pipeline under an Apache 2.0 open source license and we publish the corpus under a research-only use license following the licensing schemes proposed by OSCAR \citep{ortiz-suarez-etal-2019-asynchronous,ortiz-suarez-etal-2020-monolingual} and Paracrawl \citep{espla-etal-2019-paracrawl,banon-etal-2020-paracrawl}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Typesetting text}
+\section{Towards}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Along with the standard environments, this template offers
-\verb|paralist| for lists within paragraphs.
-%
-Here's a quick example: The American constitution speaks, among others, of
-%
-\begin{inparaenum}[(i)]
-  \item life
-  \item liberty
-  \item the pursuit of happiness.
-\end{inparaenum}
-%
-These should be added in equal measure to your own conduct. To typeset
-units correctly, use the \verb|siunitx| package. For example, you might
-want to restrict your daily intake of liberty to \SI{750}{\milli\gram}.
+The demand for large corpora has considerably increased in recent years with the advent of semi-supervised learning methods in Natural Language Processing (NLP), such as \emph{word embeddings} \cite{mikolov-etal-2013-distributed,pennington-etal-2014-glove,mikolov-etal-2018-advances}, \emph{contextualized word representations} \cite{howard-ruder-2018-universal,peters-etal-2018-deep,devlin-etal-2019-bert} and more recently \emph{very large generative language models} like GPT-3, T5, GPT-Neo \cite{raffel-etal-2020-exploring,brown-etal-2020-language,black-etal-2021-gpt}. While there have been some recent efforts to manually curate such corpora\footnote{\url{https://bigscience.huggingface.co}} \cite{gao-etal-2020-pile}, the common approach to collect large amounts of raw textual data still relies primarily on crawled web text \cite{ortiz-suarez-etal-2019-asynchronous,ortiz-suarez-etal-2020-monolingual,xue-etal-2021-mt5,el-kishky-etal-2020-ccaligned,espla-etal-2019-paracrawl,banon-etal-2020-paracrawl,gao-etal-2020-pile}, and although some of the initial concerns of using crawled data \cite{trinh-le-2018-a,radford-etal-2019-language} have been addressed in recent years \cite{ortiz-suarez-etal-2020-monolingual,martin-etal-2020-camembert} there a many concerns that still need to be tackled \cite{caswell-etal-2020-language} specially for multilingual data \cite{caswell-etal-2021-quality}.
 
-Likewise, as a small pet peeve of mine, I offer specific operators for
-\emph{ordinals}. Use \verb|\th| to typeset things like July~4\th
-correctly. Or, if you are referring to the 2\nd edition of a book,
-please use \verb|\nd|. Likewise, if you came in 3\rd in a marathon, use
-\verb|\rd|. This is my 1\st rule.
+In this demand for large raw textual corpora we can observe a clear back and forth in the type of data used to pre-train these models. On one hand some authors have opted for highly curated or edited data like Wikipedia such as \newcite{al-rfou-etal-2013-polyglot} and \newcite{bojanowski-etal-2017-enriching} for static word embeddings, the 1B Word Benchmark \cite{chelba-etal-2014-one} for ELMo \cite{peters-etal-2018-deep}, and the BookCorpus \cite{zhu-etal-2015-aligning} and Wikipedia for BERT \cite{devlin-etal-2019-bert}. On the other hand projects like those of \newcite{pennington-etal-2014-glove} or \newcite{grave-etal-2018-learning} used crawled data for the pre-training of fixed word embeddings, CamemBERT \cite{martin-etal-2020-camembert} a contextualized model for French successfully used only Crawled data for pre-training, and even large generative language models like T5 have used mainly crawled data successfully \cite{raffel-etal-2020-exploring}. We can of course also see examples of projects successfully using a mix of both manually curated and automatically crawled data such as RoBERTa \cite{liu-etal-2019-roberta}, XLNet \cite{yang-etal-2019-xlnet} and GPT-Neo \cite{black-etal-2021-gpt,gao-etal-2020-pile}. However, no matter the chosen approach to build these large corpora, there are in every case concerns that have been expressed, specially for the datasets used in very large generative language models \cite{bender-etal-2021-on}, even when using manually edited resources like Wikipedia \cite{barera-2020-mind}.
+
+In this paper, that is part of the OSCAR project\footnote{\url{https://oscar-corpus.com}} or \emph{\textbf{O}pen \textbf{S}uper-large \textbf{C}rawled \textbf{A}ggregated co\textbf{R}pus} \cite{ortiz-suarez-etal-2019-asynchronous,ortiz-suarez-etal-2020-monolingual,abadji-etal-2021-ungoliant} we would like to tackle some of the existing problems with OSCAR and its pipeline \emph{Ungoliant}\footnote{\url{https://github.com/oscar-corpus/ungoliant}} pointed out by \newcite{caswell-etal-2020-language,caswell-etal-2021-quality}, by completely shifting our language classification pipeline Ungoliant from line level classification, to document level language classification. Moreover we propose a new set of automatic annotations that we add to the document metadata after language classification and that we hope will help OSCAR users more easily determine which documents they would like to use.
+
+The contributions of the paper are as follows:
+
+\begin{itemize}
+    \item A new, document oriented corpus that is comparable in total size and language size distribution with OSCAR 21.09,
+    \item A line filtering that intends to limit the integrity destruction of the documents, keeping contiguous lines and making documents human readable and exploitable as documents,
+    \item Annotations that enable quality related filtering, enabling the query of documents meeting certain length criteria, potentially increasing the quality of data for less data hungry applications,
+    \item A 12GB multilingual corpus,
+    \item A deduplicated English corpus, as well as a line deduplication tool
+\end{itemize}
+
+While we are aware that this set of improvements still does not address all the concerns expressed by \newcite{caswell-etal-2021-quality} or \newcite{bender-etal-2021-on}. We still believe the new proposed features as well as the release of the OSCAR 22.01 will hopefully be of use to the users of the OSCAR projects, specially considering that maintaining an up-to date, manually curated, large multilingual corpus still remains a very expensive, time-consuming task.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Changing things}
+\section{CaBeRnet}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Since this class heavily relies on the \verb|scrbook| class, you can use
-\emph{their} styling commands in order to change the look of things. For
-example, if you want to change the text in sections to \textbf{bold} you
-can just use
+The question of quality versus size of training corpora is increasingly gaining attention and interest in the context of the latest developments in neural language models' performance.
+The longstanding issue of corpora "representativeness" is here addressed, in order to grasp to what extent a linguistically balanced cross-genre language sample is sufficient for a language model to gain in accuracy for contextualized word-embeddings on different NLP tasks.
+
+Several increasingly larger corpora are nowadays compiled from the web, i.e. frWAC \citep{baroni-etal-2009-the}, CCNet \citep{wenzek-etal-2020-ccnet} and OSCAR-fr \citep{ortiz-suarez-etal-2019-asynchronous}. However, does large size necessarily go along with better performance for language model training? Their alleged lack of representativeness has called for inventive ways of building a French balanced corpus offering new insights into language variation and NLP.
+
+Following Biber's definition, “representativeness refers to the extent to which a sample includes the full range of variability in a population” \citep{biber-1993-representativeness}. We adopt a balanced approach by sampling a wide spectrum of language use and its cross-genre variability, be it situational (e.g.\ format, author, addressee, purposes, settings or topics) or linguistic, e.g.\ linked to distributional parameters like frequencies of word classes and genres.
+In this way, we developed two newly built corpora. The French Balanced Reference Corpus - \textit{CaBeRnet} - includes a wide-ranging and balanced coverage of cross-genre language use to be maximally representative of French language and therefore yield good generalizations from. The second corpus, the \textit{French Children Book Test} (CBT-fr), includes both narrative material and oral language use as present in youth literature, and will be used for domain-specific language model training. Both are inspired by existing American and English corpora, respectively  COCA, the balanced Corpus of Contemporary American English \citep{davies-2009-the, davies-2010-the}, and the Children Book Test \citep[CBT]{hill-etal-2016-the}.
+
+%better performing word-embeddings
+%evaluate the quality of word embedding generated by pre-training 
+The second main contribution of this paper lies in the evaluation of the quality of the word-embeddings obtained by pre-training and fine-tuning on different corpora, that are made here publicly available.
+Based on the underlying assumption that a linguistically representative corpus would possibly generate better word-embeddings. %being more representative of real language use, would tentatively preform better in downstream tasks. 
+We provide an evaluation-based investigation of how a balanced cross-genre corpus can yield improvements in the performance of neural language models like ELMo \citep{peters-etal-2018-deep} on various downstream tasks.
+The two corpora, \Cabernet and CBT-fr, and the ELMos will be distributed freely under Creative Commons License.
+
+Specifically, we want to investigate the contribution of oral language use as present in different corpora. Through a series of comparisons, we contrast a more domain-specific and written corpus like Wikipedia-fr with the newly built domain-specific CBT-fr corpus which additionally features oral style dialogues, like the ones one can find in youth literature. To test for the effect of corpus size, we further compare a wide ranging corpora characterized by a variety of linguistic phenomena crawled from internet, like OSCAR \citep{ortiz-suarez-etal-2019-asynchronous}, with our newly built French Balanced Reference Corpus \Cabernet.
+Our aim is assess the benefits that can be gained from a balanced, multi-domain corpus such as \Cabernet, despite its being 34 times smaller than the web-based OSCAR.
+
+%Methodologically, our approach constitutes an original proof-of-concept that fine-tuning with resources that are up to 35 times smaller than pre-training corpora has a observable impact on classical NLP tasks scores. Secondly, we show that pre-training a language model on a very small sample like the French Children Book Test corpus yields unexpected positive results.
+%\iffalse
+%Resources associated to this paper encompass\footnote{The link to the corpus and FrElMos will be available upon acceptance of the paper. Following the link the reader will have access to a dedicated website \textit{cabernet-corpus.fr} where raw text version and metadata for each sub-part of the corpus are also be available.} five version of FrELMo trained on the four corpora presented in this paper and two newly brewed corpora - The French Balanced Reference Corpus CaBeRnet and the French Children Book Test.
+%\fi
+
+%In sum, this paper offers three main contributions: (1) two newly built corpora one French Balanced Reference Corpus and a second domain-specific corpus having both oral and written style, (2) five versions of FrELMo, and (3) a whole array of computational results that deepen our understanding on the effects of balance and register in NLP evaluation. 
+
+
+%The data for corpus creation has been extracted from selected sections of open data including dumped data from the web and section of already published corpora that specialize on a given register of source.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\subsection{The present Paper}\label{ssect:Paper_struct}
+
+%The paper presents two substantially different training corpora, proposing a set of evaluations to enquire on the accuracy of Language Models
+
+%We report a few experiments designed to better understand the computational impact of the quality and size of training corpora with the method and tasks described so far. All the experiments are performed on xxx.
+
+%Crucially, manipulating the presence of oral transcriptions and oral based text will be interesting to understand the impact on accuracy of our language model and their impact on several language tasks after fine-tuning. 
+
+%\paragraph{Structure of the paper}
+The paper is organized as follows. Sections \ref{sec:DescribeCorpora} and \ref{sec:CompareCorpora} are dedicated to a descriptive overlook of the building of our two newly brewed corpora \Cabernet and CBT-fr, including quantitative measures like type-token ratio and morphological richness. %corpora building and data collection. The construction process of  is here presented.% through
+%in this section that summarizes information details that can be found in corpora metadata. The achievement of linguistic balance in \Cabernet is detailed in section \ref{subsec:DescribeCaBeRnet}. 
+%statistics on the distribution of lexical, syntactic and morphological features of the different sub-parts of the corpus are also presented. 
+%Section \ref{sec:CompareCorpora} focuses on several quantitative measures characterizing the corpora under comparison : number of sentences, type-token ratio and morphological richness. %The characteristics of CBT-fr and \Cabernet are compared to the other corpora under analysis (OSCAR-fr, Wiki-fr). 
+Section \ref{sect:EvalMethod} presents the evaluation methods for POS-tagging, NER and dependency Parsing tasks, while results are introduced in §\ref{sect:ResultsCorpora}
+Finally, we conclude in §\ref{sec:Concl} on the computational relevance of word-embeddings obtained through a balanced and representative corpus, and broaden the discussion on the benefits of smaller and noiseless corpora in neural NLP.% and some future developments of \Cabernet.
+
+%\notemumu{@ALL should we say here why each corpus ? and summarize the table here under \ref{Table_copus_feature} commented here under}
+
+%\begin{table}[htbp]
+%\centering
+%\begin{tabular}{lccccc}\\\toprule
+%Corpora     & noise     & Range     & O/W    & Ling. \\\midrule
+%OSCAR-fr    &  -        &   +      &  -      &   -    \\%\midrule 
+%\Cabernet   &  +        &   +      &  both   &   +     \\%\midrule 
+%Wiki-fr     &  +        &   -      &  -      &   -    \\%\midrule 
+%CBT-fr      &  +        &   -      &  both   &   -     \\\bottomrule  
+%\end{tabular}
+%\caption{\label{Table_copus_feature} Comparison of corpora. Full-fledged linguistic representativity.}
+%\end{table}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{CamemBERT}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Pretrained word representations have a long history in Natural Language Processing (NLP), from non-contextual \citep{brown-etal-1992-class,ando-zhang-2005-framework,mikolov-etal-2013-distributed,pennington-etal-2014-glove} to contextual word embeddings \citep{peters-etal-2018-deep,akbik-etal-2018-contextual}. Word representations are usually obtained by training language model architectures on large amounts of textual data and then fed as an input to more complex task-specific architectures. More recently, these specialized architectures have been replaced altogether by large-scale pretrained language models which are \emph{fine-tuned} for each application considered. This shift has resulted in large improvements in performance over a wide range of tasks \cite{devlin-etal-2019-bert,radford-etal-2019-language,liu-etal-2019-roberta,raffel-etal-2020-exploring}.
+
+These transfer learning methods exhibit clear advantages over more traditional task-specific approaches. In particular, they can be trained in an \emph{unsupervized} manner, thereby taking advantage of the information contained in large amounts of raw text.
+Yet they come with implementation challenges, namely the amount of data and computational resources needed for pretraining, which can reach hundreds of gigabytes of text and require hundreds of GPUs \citep{yang-etal-2019-xlnet,liu-etal-2019-roberta}. This has limited the availability of these state-of-the-art models to the English language, at least in the monolingual setting. This is particularly inconvenient as it hinders their practical use in NLP systems. It also prevents us from investigating their language modelling capacity, for instance in the case of morphologically rich languages.
+
+Although multilingual models give remarkable results, they are often larger, and their results, as we will observe for French, can lag behind their monolingual counterparts for high-resource languages. %\cite{conneau-lample-2019-cross,conneau-etal-2020-unsupervised}.
+
+In order to reproduce and validate results that have so far only been obtained for English, we take advantage of the newly available multilingual corpora OSCAR \cite{ortiz-suarez-etal-2019-asynchronous} to train a monolingual language model for French, dubbed \camembert. We also train alternative versions of \camembert on different smaller corpora with different levels of homogeneity in genre and style in order to assess the impact of these parameters on downstream task performance.
+\camembert uses the \roberta architecture \cite{liu-etal-2019-roberta}, an improved variant of the high-performing and widely used \bert architecture \cite{devlin-etal-2019-bert}.
+
+We evaluate our model on four different downstream tasks for French: part-of-speech (POS) tagging, dependency parsing, named entity recognition (NER) and natural language inference (NLI).
+\camembert improves on the state of the art in all four tasks compared to previous monolingual and multilingual approaches including \mbert, XLM and XLM-R, which confirms the effectiveness of large pretrained language models for French.
+
+%Our contributions can be summarized as follows:
+We make the following contributions:
+\begin{itemize}
+    \item First release of a monolingual \roberta model for the French language using recently introduced large-scale open source corpora from the Oscar collection and first outside the original \bert authors to release such a large model for an other language than English.\footnote{Released at:
+              \mbox{\url{https://camembert-model.fr}} under the MIT open-source license.}
+
+          %c'est déjà en conclusion
+          %\newline
+          %\mbox{\url{https://github.com/pytorch/fairseq}}\newline
+          %\mbox{\url{https://github.com/huggingface/transformers}}
+    \item We achieve state-of-the-art results on four downstream tasks: POS tagging, dependency parsing, NER and NLI, confirming the effectiveness of \bert-based language models for French.
+    \item We demonstrate that small and diverse training sets can achieve similar performance to large-scale corpora, by analysing the importance of the pretraining corpus in terms of size and domain.%show that for the evaluated tasks, the pretraining domain is more important than the size %more than the dataset size, t%run detailed ablation studies highlighting the importance of the pretraining corpora, the model size, the masking setting, and the number of pretraining steps. 
+          %\item We release several of our best-performing models\footnote{under MIT open-source license} %We make CamemBERT easy to use in a few line of codes and make it available in popular open-source libraries. 
+          %as well as fine-tuned versions for each downstream task so that they can serve as strong baselines for future research and be useful for French NLP applications.
+\end{itemize}
+
+%\lm{Clementine's version of the contributions:}
+
+%Our contribution can be summarised in the three following points. 
+%Having trained several monolingual \roberta models for the French language using recent large-scale corpora, we evaluated them on four downstream tasks (POS tagging, dependency parsing, NER and NLI) and achieved state-of-the-art results in all tasks, therefore confirming the effectiveness of \bert-based language models for French. 
+%Said models (the original CamemBert and its fine tuned counterparts) were then released with an MIT open-source license. With the same goal of reproducibility, we made CamemBERT easy to use in a few line of codes by releasing it in popular open-source libraries, so that they can serve as strong baselines for future research and be useful for French NLP applications.
+%    \footnote{Models released at:
+%    \mbox{\url{https://camembert-model.fr}}\newline
+%    \mbox{\url{https://github.com/pytorch/fairseq}}\newline
+%    \mbox{\url{https://github.com/huggingface/transformers}}}
+%Finally, we also studied in detail the impact of several training parameters, such as the pretraining corpora, the model size, the masking setting, and the number of pretraining steps, and provided a detailed discussion of said points. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{FrELMo}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+Named entity recognition (NER) is the widely studied task consisting in identifying text spans that denote \emph{named entities} such as person, location and organization names, to name the most important types. Such text spans are called named entity \emph{mentions}. In NER, mentions are generally not only identified, but also classified according to a more or less fine-grained ontology, thereby allowing for instance to distinguish between the telecommunication company \emph{Orange} and the town \emph{Orange} in southern France (amongst others). Importantly, it has long been recognised that the type of named entities can be defined in two ways, which underlies the notion of metonymy: the intrinsic type (\emph{France} is always a location) and the contextual type (in \emph{la France a signé un traité} `France signed a treaty', \emph{France} denotes an organization).
+
+
+NER has been an important task in natural language processing for quite some time. It was already the focus of the MUC conferences and associated shared tasks
+\cite{marsh-perzanowski-1998-muc}, and later that of the CoNLL~2003 and ACE shared tasks \cite{tjong-kim-sang-de-meulder-2003-introduction,doddington-etal-2004-automatic}. Traditionally, as for instance was the case for the MUC shared tasks, only person names, location names, organization names, and sometimes ``other proper names'' are considered. However, the notion of named entity mention is sometimes extended to cover any text span that does not follow the general grammar of the language at hand, but a type- and often culture-specific grammar, thereby including entities ranging from product and brand names to dates and from URLs to monetary amounts and other types of numbers.
+
+As for many other tasks, NER was first addressed using rule-based approaches, followed by statistical and now neural machine learning techniques (see Section~\ref{subsec:sota} for a brief discussion on NER approaches). Of course, evaluating NER systems as well as training machine-learning-based NER systems, statistical or neural, require named-entity-annotated corpora.
+Unfortunately, most named entity annotated French corpora are oral transcripts, and they are not always freely available. The ESTER and ESTER2 corpora (60 plus 150 hours of NER-annotated broadcast transcripts)
+\cite{galliano-etal-2005-the,galliano-etal-2009-the}, as well as the Quaero
+\cite{grouin-etal-2011-proposal} corpus are based on oral transcripts (radio broadcasts). Interestingly, the Quaero corpus relies on an original, very rich and structured  definition of the notion of named entity \cite{rosset-etal-2011-entites}. It contains both the intrinsic and the contextual types of each mention, whereas the ESTER and ESTER2 corpora only provide the contextual type.
+
+\newcite{sagot-etal-2012-annotation} describe the addition to the French Treebank (FTB) \citep{abeille-etal-2003-building} in its FTB-UC version \citep{candito-etal-2010-statistical} of a new, freely available annotation layer providing named entity information in terms of span and type (NER) as well as reference (NE linking), using the Wikipedia-based \aleda \cite{sagot-stern-2012-aleda} as a reference entity database. This was the first freely available French corpus annotated with referential named entity information and the first freely available such corpus for the written journalistic genre. However, this annotation is provided in the form of an XML-annotated text with sentence boundaries but no tokenization. This corpus will be referred to as FTB-NE in the rest of the article.
+
+Since the publication of that named entity FTB annotation layer, the field has evolved in many ways. Firstly, most treebanks are now available as part of the \emph{Universal Dependencies} (UD)\footnote{\url{https://universaldependencies.org}} treebank collection. Secondly, neural approaches have considerably improved the state of the art in natural language processing in general and in NER in particular. In this regard, the emergence of contextual language models has played a major role. However, surprisingly few neural French NER systems have been published.\footnote{We are only aware of the \emph{entity-fishing} NER (and NE linking) system developed by Patrice Lopez, a \href{https://github.com/kermitt2/entity-fishing}{freely available} yet unpublished system.} This might be because large contextual language models for French have only been made available very recently \cite{martin-etal-2020-camembert}. But it is also the result of the fact that getting access to the FTB with its named entity layer as well as using this corpus were not straightforward tasks.
+
+For a number of technical reasons, re-aligning the XML-format named entity FTB annotation layer created by \newcite{sagot-etal-2012-annotation} with the ``official'' version of the FTB or, later, with the version of the FTB provided in the Universal Dependency (UD) framework was not a straightforward task.\footnote{Note that the UD version of the FTB is freely downloadable, but does not include the original tokens or lemmas. Only people with access to the original FTB can restore this information, as required by the  intellectual property status of the source text.} Moreover, due to the intellectual property status of the source text in the FTB, the named entity annotations could only be provided to people having signed the FTB license, which prevented them from being made freely downloadable online.
+
+The goal of this paper is to establish a new state of the art for French NER by (i)~providing a new, easy-to-use UD-aligned version of the named entity annotation layer in the FTB and (ii)~using this corpus as a training and evaluation dataset for carrying out NER experiments using state-of-the-art architectures, thereby improving over the previous state of the art in French NER. In particular, by using both FastText embeddings \cite{bojanowski-etal-2017-enriching} and one of the versions of the CamemBERT French neural contextual language model \cite{martin-etal-2020-camembert} within an LSTM-CRF architecture, we can reach an F1-score of 90.25, a 6.5-point improvement over the previously state-of-the-art system SEM \cite{dupont-2017-exploration}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{SinNER}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Among the aspects for which Natural Language Processing (NLP) can be useful for Digital Humanities (DH) figures prominently Named Entity Recognition. This task interests researchers for numerous reasons since the application can be pretty wide.
+We can cite genealogy or history for which finding mentions of persons and places in texts is very useful. Researchers in digital literature have shown a great interest in NER since it can help for instance to highlight the path of different characters in a book or in a book series. There can be cross-fertilization between NER and DH since some researchers showed that some particular properties of literature can help to build better NER systems \cite{brooke-etal-2016-bootstrapped}.
+Apart from literature, NER can also be used more generally to help refine queries to assist browsing in newspaper collections \cite{neudecker-etal-2014-large}.
+Like other NLP tasks, NER quality will suffer from different problems related to variations in the input data: variation in languages (multilinguality), variation in the quality of the data (OCR errors mainly) and specificity of the application domain (literature vs. epidemic surveillance for instance). These difficulties can be connected with the challenges for low-level NLP tasks highlighted by Dale \textit{et al.} \cite{dale-etal-2000-handbook}. In CLEF-HIPE shared task \cite{ehrmann-etal-2020-extended}, the variation in language and in text quality will be the main problems even if the specificity of the application can be of great interest.
+
+NER in old documents represent an interesting challenge for NLP since it is usually necessary to process documents that show different kind of variations as compared to the particular laboratory conditions on which NER systems are trained.
+Most NER systems are usually designed to process clean data.
+Additionally, there is the multilingual issue since NER systems have been designed primarily for English, with assumptions on the availability of data on the one hand and on the universal nature of some linguistic properties on the other hand.
+
+The fact that the texts processed in Digital Humanities are usually not born-digital is very important since, even after OCR post-correction, it is very likely that some noise would be found in the text.
+Other difficulties will arise as well in those type of documents. The variation in language is one of them since contemporary English will clearly not be the most frequent language.  It is interesting for researchers to check how much diachronic variation has an influence on NER systems \cite{ehrmann-etal-2016-diachronic}.
+It makes it even more important to work on multilingual NER and to build architectures that need less training data \cite{rahimi-etal-2019-massively}.
+More generally, NER in ancient texts represents a great opportunity for NLP to compare to main approaches to handle variation in texts: adapting the texts to an existing architecture via modernization or normalization \cite{leaman-etal-2016-taggerone} or adapting the pipeline to non standard data (OCR noise, language variants\dots) via domain adaptation or data augmentation techniques \cite{ghannay-etal-2018-end}.
+
+In Section \ref{sec:sota} we present a brief state-of-the-art for Named Entity Recognition with a focus on digitized documents. Section \ref{sec:dataset} and \ref{sec:method} are respectively devoted to the description of the dataset of CLEF-HIPE 2020 shared task and the methods we developed to extract NE for French and German.
+The results of our systems are described in Section \ref{sec:results} and in Section \ref{sec:concl} we give some conclusions and perspectives for this work.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{BERTrade}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Context
+There is a growing interest in digital humanities for automatic processing and annotation of historical texts. In this work, we study how to take advantage of current NLP models of the BERT family to advance the state of the art in processing historical languages, taking Old French (9th-13th century French) as a use case.
+
+Old French is one of the historical languages for which we have the largest amount of syntactically annotated data, and we expect that our results on these language states may be generalised and used as a source of inspiration for researchers currently developing annotated resources for other historical languages.
+
+Using contextual word embeddings as input representations has brought clear gains in performances for most of the NLP tasks for which they have been used.
+However, this has mostly been attested in languages where sufficient (raw) linguistic data is available.
+For less-resourced languages, the most common approach has been to leverage multilingual models such as mBERT \citep{devlin-etal-2019-bert}
+%\footnote{The multilingual model is only documented in the supplemental materials at e.g.\ \url{https://github.com/google-research/bert/blob/eedf5716ce/multilingual.md}}
+
+% Motivation
+Historical languages are typical cases where available linguistic data is limited, with no chance of acquiring new texts. They are also not normalized by spelling and institutional conventions and tend to be more heterogeneous than contemporary lesser-resourced languages.
+
+Old French is a particularly interesting language for this kind of study, since relatively to its limited amount of available raw text, its volume of \emph{annotated} linguistic data is quite high, due to the existence of the SRCMF dependency treebank \citep{prevost-stein-2013-syntactic} and its latest incarnation in the Universal Dependency project \citep{nivre-etal-2020-universal}, which boasts around \SI{17.7}{K\quantity} sentences\footnote{Putting it in the second place of all French language treebanks in number of sentences.}
+for around \SI{171}{K\quantity} words.
+% The existence of such data is crucial for the evaluation of contextual embeddings, which are essentially tools providing representations for downstream NLP tasks.
+
+Another interesting property of Old French is its proximity to a well-resourced language, namely contemporary French, for which monolingual contextual embeddings models exist and have been shown to be relevant for dependency parsing  \citep{le-etal-2020-flaubert,martin-etal-2020-camembert}.
+Last, but certainly not least, the design of an accurate syntactic parser for Old French would be a very valuable tool for computer-assisted linguistic studies.
+% Q: Mentionner Profiterole ? Pour justifier la période de nos textes.
+% A (LG): Je ne pense pas. Ici on justifie la période par l'utilisation de SRCMF comme probe : on utilise SRCMF donc on reprend la même période.
+Indeed, studying the historical variation of syntax in a language that lacks both native speakers and centralized standard variants can be very challenging, due to the prohibitive cost of manual annotation. Automatic syntactic annotations, either as a \enquote{silver-standard} truth or as a bootstrapping step towards manual annotation, can drastically reduce that cost.
+
+In this work, exploiting this currently unique situation of Old French among lesser-resourced and historical languages, we use dependency parsing and POS-tagging of Old French as probes of the relevance of contextual embeddings in a context of high heterogeneity and relative scarcity of data.
+More precisely, we consider several neural language models, some of which trained or fine-tuned on a new corpus of raw Old and Middle French texts, and use their internal representations of words as inputs to train taggers and parsers on the SRCMF treebank. The resulting tagging and parsing scores then serve as an evaluation of the quality and usefulness of these representations.
+We claim the following contributions:
 %
-\begin{verbatim}
-  \setkomafont{sectioning}{\normalfont\bfseries}
-\end{verbatim}
-%
-at the end of the document preamble---you don't have to modify the class
-file for this. Please consult the source code for more information.
+\begin{itemize}
+    \item We provide empirical evidence that contextual embeddings are relevant for historical language processing, even when no data is available beyond the treebank used to train a parser.
+    \item We provide a comparative study of several strategies for obtaining such contextual embeddings. Specifically, we compare cases where raw data is available in the target language and cases where existing contextual embeddings are available for the contemporary counterpart of a historical language.
+    \item We release two publicly\footnote{\url{https://url.retained/for/anonymous/review}} available resources for Old French: BERTrade,\footnote{\emph{Bertrade de Laon}, also known as \emph{Berthe au Grand Pied} was the mother of Charlemagne.} a set of contextual word embedding models and a state-of-the-art POS-tagging and dependency parsing model.
+\end{itemize}
+
+The paper is organized as follows. Section~\ref{sec-related} provides an overview of related work that aims at taking advantage of the BERT family of language models in scenarios where the amount of data is limited. In Section~\ref{sec-data} we provide a description of the dataset we gathered to conduct our experiments, and finally we report experiments in Section~\ref{sec-experiments} involving reusing BERT from other languages and training BERT models on Old French.
+
