@@ -1,13 +1,5 @@
 \chapter{Towards a Cleaner Document-Oriented Multilingual Crawled Corpus}
 
-\section{Related Work}
-
-Crawled data and more specifically Common Crawl\footnote{\url{https://commoncrawl.org}} has been extensively used for pre-training language representations and large generative language models in recent years. One of the first proposed pipelines to automatically classify Common Crawl by language was that of \newcite{grave-etal-2018-learning}, it classified Common Crawl entries at line level using the FastText linear classifier \cite{joulin-etal-2016-fasttext,joulin-etal-2017-bag}. However, even though FastText word embeddings were released for 157 different languages \cite{grave-etal-2018-learning}, the data itself was never released.
-
-Later \newcite{ortiz-suarez-etal-2019-asynchronous} reproduced and optimized \newcite{grave-etal-2018-learning} pipeline and actually released the data which came to be the first version of the OSCAR corpus (now referred to as OSCAR 2019). This pipeline was then rewritten and optimized by \newcite{abadji-etal-2021-ungoliant} which in turn released a second version of OSCAR (referred to as OSCAR 21.09) but, other than adding the metadata and using a more recent dump of Common Crawl, it remained virtually the same as the original one proposed by \newcite{ortiz-suarez-etal-2019-asynchronous}. All these three mentioned pipelines \cite{grave-etal-2018-learning,ortiz-suarez-etal-2019-asynchronous,abadji-etal-2021-ungoliant} classified Common Crawl's text at the line level, meaning that the apparent \emph{``documents''} of OSCAR were actually just contiguous lines of text that were classified as being the same language. This approach preserved somehow the document integrity of monolingual entries in Common Crawl, but it completely destroyed the document integrity of multilingual entries.
-
-Parallel to the development of OSCAR, there is also Multilingual C4 (mC4) \cite{xue-etal-2021-mt5} and CCNet \cite{wenzek-etal-2020-ccnet} both of which are also derived from Common Crawl but propose pipelines that propose a document level language classification as opposed to OSCAR's line level classification. Both CCNet and mC4 pipelines proposed methods for filtering \emph{``undesired''} data: CCNet used small language models trained on Wikipedia and based on the KenLM library \cite{heafield-2011-kenlm} while mC4 used a simple badword filter\footnote{\url{https://github.com/LDNOOBW/}}.
-
 \section{Filtering}
 
 Previous OSCAR pipelines were line-oriented (where a line is defined as a string separated by \texttt{\textbackslash n}), which meant that the highest filtering granularity were lines.

@@ -1,0 +1,156 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{SinNER Related Work}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Related Work on Named Entity Recognition}
+\label{sec:sota}
+
+Named Entity Recognition came into light as a prerequisite for designing robust Information Extraction (IE) systems in the MUC conferences \cite{grishman-sundheim-1995-design}. This task soon began to be treated independently from IE since it can serve multiple purposes, like Information retrieval or Media Monitoring for instance \cite{yangarber-etal-2002-unsupervised}. As such, shared task specifically dedicated to NER started to rise like the CoNLL 2003 shared task \cite{tjong-kim-sang-de-meulder-2003-introduction}. Two main paths were followed by the community: (i) since NER was at first used for general purposes, domain extension start to gain interest \cite{evans-2003-a}; (ii) since the majority of NER systems were designed for English, the extension to novel languages (including low resource languages) became of importance \cite{rossler-2004-adapting}.
+
+One can say that NER followed the different trends in NLP. The first approaches were based on gazeeters and handcrafted rules. Initially NER was considered to be solved by a patient process involving careful syntactic analysis \cite{hobbs-1993-generic}. Supervised learning approaches came to fashion with the increase of available data and the rise of shared tasks on NER. Decision trees and Markov models were soon outperformed by Condition Random Fields (CRF).
+%By taking advantage of the sequentiality of textual data, CRF helped to set new state-of-the-art results in the domain \cite{finkel-etal-2005-incorporating}.
+Thanks to its ability to model dependencies and to take advantage of the sequentiality of textual data, CRF helped to set new state-of-the-art results in the domain \cite{finkel-etal-2005-incorporating}.
+Since supervised learning results were bound by the size of training data, lighter approaches were tested in the beginning of the 2000's, among them we can cite weakly supervision \cite{yangarber-2003-counter} and active learning \cite{shen-etal-2004-multi}.
+
+During a time, most of promising approaches involved an addition to improve CRFs : word embeddings \cite{passos-etal-2014-lexicon}, (bi-)LSTMs \cite{lample-etal-2016-neural} % \cite{Ma-2016}
+or contextual embeddings \cite{peters-etal-2018-deep}.
+More recently, the improvements in contextual word embeddings made the CRFs disappear as standalone models for systems reaching state-of-the-art results, see \cite{stanislawek-etal-2019-named} for a review on the subject and a very interesting discussion on the limits attained by state-of-the-art systems, the \textit{Glass Ceiling}.
+
+\section{Dataset for the CLEF-HIPE shared task}
+\label{sec:dataset}
+
+The dataset of the CLEF-HIPE shared task contains newspaper articles of 17th-20th century. The text is an output of an OCR software, then tokenised and annotated with labels corresponding to each sub-task. This pecularity of historical documents will be detailed later in this section.
+The corpus provided for French and German both contained training data (train) and development data (dev) whereas, for English only development data was provided for the shared task. For this reason, we chose to work on French and German only.
+%In the development stage, we tried to train our model with the training data and then to evaluate our model with labeled dev data. The submitted results are based on models only trained with the training data.
+Table \ref{stats} shows some statistics of this dataset. The size of the train dataset was twice higher for French than for German whereas the development sets have roughly the same size. As usual in NER, persons (Pers) and locations (Loc) are the most frequent entity types.
+
+\begin{table}[!h]
+    \centering
+    \begin{tabular}{ @{\hspace{0.15cm}} l @{\hspace{0.15cm}}  @{\hspace{0.15cm}}  r @{\hspace{0.15cm}}  @{\hspace{0.15cm}} r @{\hspace{0.15cm}}  @{\hspace{0.15cm}} r  @{\hspace{0.2cm}}  @{\hspace{0.2cm}}  r @{\hspace{0.15cm}}  @{\hspace{0.15cm}} r @{\hspace{0.15cm}}  @{\hspace{0.15cm}} r @{\hspace{0.15cm}}  @{\hspace{0.15cm}} r @{\hspace{0.15cm}}  @{\hspace{0.15cm}} r @{\hspace{0.15cm}} }
+        \toprule
+                 & \multirow{2}{*}{Tokens} & \multirow{2}{*}{Documents} & \multirow{2}{*}{Segments} & \multicolumn{5}{c}{Labeled named entities}                            \\
+        \cmidrule{5-9}
+                 &                         &                            &                           & Pers                                       & Loc  & Org & Time & Prod \\
+        \midrule
+        Train Fr & 166217                  & 158                        & 19183                     & 3067                                       & 2513 & 833 & 273  & 198  \\
+        Dev Fr   & 37592                   & 43                         & 4423                      & 771                                        & 677  & 158 & 69   & 48   \\
+        Train De & 86960                   & 104                        & 10353                     & 1747                                       & 1170 & 358 & 118  & 112  \\
+        Dev De   & 36175                   & 40                         & 4186                      & 664                                        & 428  & 172 & 73   & 53   \\
+        \bottomrule
+    \end{tabular}
+    \caption{Statistics on the training and development data in French and German}
+    \label{stats}
+\end{table}
+
+Table \ref{extraitCorpus} shows an excerpt of the train dataset (CoNLL format).
+For each document, general information were provided. Among them, newspaper and date may have been features useful for recognising entities but we did not take advantage of it.
+Each document was composed of segments, starting with "\# segment \dots" corresponding to lines in the original documents. Each segment is tokenized in order to correspond to the CoNLL format with one token per line.
+These two notions, segments and tokens, are very important since they do not always match the type of unit usually processed in NLP pipelines.
+Segments seldom correspond to sentences so that there is a need to concatenate the segments to get the raw text and then segment it into sentences. This is very interesting since it gets us close to real-world conditions rather than laboratory conditions, and we show in Section \ref{sec:sequence_seg} that this segment vs. sentence question has an important influence on the results.
+Regarding tokens, the tokenization is obviously not perfect.
+We can see that there are non-standard words and bad tokenization due to the OCR output (in red in Table \ref{extraitCorpus}).
+If we concatenate the tokens we get the sequence "Su. \_sss allemands" instead of "Suisse allemande". These non-standard words make the Named Entity Recognition task more complicated and, again, more realistic.
+
+% \begin{figure}[h!]
+% \centering
+%\includegraphics[width=0.5\textwidth]{./ExtraitFrPartiel.png}
+% \caption{Example extracted from French training dataset}
+%\label{extraitCorpus}
+% \end{figure}
+\begin{table}%[!htbp]
+    \centering
+    \scriptsize
+    \scalebox{0.91}{
+        \begin{tabular}{l|ll|lll|l|ll|l}
+            TOKEN                               & \multicolumn{2}{c|}{NE-COARSE} & \multicolumn{3}{c|}{NE-FINE} & NE-NESTED     & \multicolumn{2}{c|}{NEL} & MISC                                                 \\
+                                                & LIT                            & METO                         & LIT           & METO                     & COMP &               & LIT     & METO &              \\
+
+            \multicolumn{10}{l}{\textcolor{blue}{\# language = fr}}                                                                                                                                               \\
+            \multicolumn{10}{l}{\textcolor{blue}{\# newspaper = EXP}}                                                                                                                                             \\
+            \multicolumn{10}{l}{\textcolor{blue}{\# date = 1918-04-22}}                                                                                                                                           \\
+            \multicolumn{10}{l}{\textcolor{blue}{\# document\_id = EXP-1918-04-22-a-i0077}}                                                                                                                       \\
+            \multicolumn{10}{l}{\textcolor{blue}{\# segment\_iiif\_link = \url{https://iiif.dhlab.epfl.ch/iiif_impresso}}\dots}                                                                                   \\%.../default.jpg}}} \\
+            Lettre                              & O                              & O                            & O             & O                        & O    & O             & \_      & \_   & \_           \\
+            de                                  & O                              & O                            & O             & O                        & O    & O             & \_      & \_   & \_           \\
+            la                                  & O                              & O                            & O             & O                        & O    & O             & \_      & \_   & \_           \\
+            \textbf{\textcolor{red}{Su}}        & B-loc                          & O                            & B-loc.adm.reg & O                        & O    & B-loc.adm.nat & Q689055 & \_   & NoSpaceAfter \\
+            \textbf{\textcolor{red}{.}}         & I-loc                          & O                            & I-loc.adm.reg & O                        & O    & I-loc.adm.nat & Q689055 & \_   & \_           \\
+            \textbf{\textcolor{red}{\_}}        & I-loc                          & O                            & I-loc.adm.reg & O                        & O    & I-loc.adm.nat & Q689055 & \_   & NoSpaceAfter \\
+            \textbf{\textcolor{red}{sss}}       & I-loc                          & O                            & I-loc.adm.reg & O                        & O    & I-loc.adm.nat & Q689055 & \_   & \_           \\
+            \textbf{\textcolor{red}{allemands}} & I-loc                          & O                            & I-loc.adm.reg & O                        & O    & O             & Q689055 & \_   & EndOfLine    \\
+
+            \multicolumn{10}{l}{\textcolor{blue}{\# segment\_iiif\_link = \url{https://iiif.dhlab.epfl.ch/iiif_impresso}}\dots}                                                                                   \\% .../default.jpg}}} \\
+
+            (                                   & O                              & O                            & O             & O                        & O    & O             & \_      & \_   & NoSpaceAfter \\
+            Nous                                & O                              & O                            & O             & O                        & O    & O             & \_      & \_   & \_           \\
+            serons                              & O                              & O                            & O             & O                        & O    & O             & \_      & \_   & \_           \\
+            heureux                             & O                              & O                            & O             & O                        & O    & O             & \_      & \_   & \_           \\
+            de                                  & O                              & O                            & O             & O                        & O    & O             & \_      & \_   & \_           \\
+            publier                             & O                              & O                            & O             & O                        & O    & O             & \_      & \_   & \_           \\
+            \dots                                                                                                                                                                                                 \\
+            %%%de &	O &	O &	O &	O &	O &	O &	\_ &	\_ &	\_ \\
+            %%%temps &	O &	O &	O &	O &	O &	O &	\_ &	\_ &	\_ \\
+            %%%à &	O &	O &	O &	O &	O &	O &	\_ &	\_ &	EndOfLine \\
+            %%%
+            %%%\multicolumn{10}{l}{\textcolor{blue}{\# segment\_iiif\_link = \url{https://iiif.dhlab.epfl.ch/iiif\_impresso/\dots}}}\\%_impresso/.../default.jpg}}} \\
+            %%%
+            %%%autre &	O &	O &	O &	O &	O &	O & 	\_ &	\_ &	NoSpaceAfter \\ 
+            %%%, &	O &	O &	O &	O &	O &	O &	\_ & 	\_ &	\_ \\
+            %%%sous &	O &	O &	O &	O &	O &	O &	\_ &	\_ &	\_ \\
+            %%%cette &	O &	O &	O &	O &	O &	O &	\_ &	\_ &	\_ \\ 
+            %%%rubrique &	O &	O &	O &	O &	O & 	O &	\_ & 	\_ &	NoSpaceAfter \\
+            %%%, &	O &	O &	O &	O &	O &	O & 	\_ &	\_ &	\_ \\
+        \end{tabular}
+    }
+    \caption{Example extracted from the French training dataset}
+    \label{extraitCorpus}
+\end{table}
+\vspace{-1cm}
+%\input{./parts/table2.tex}
+
+% \begin{figure}[h!]
+% \centering
+%\includegraphics[width=0.5\textwidth]{./exempleSuisseDetail.png}
+% \caption{Extracted from French training dataset}
+%\label{egNorm}
+% \end{figure}
+
+\subsection{Contextualized word embeddings}
+
+\emph{Embeddings from Language Models} (ELMo) \cite{peters-etal-2018-deep} is a Language Model, i.e, a model that given a sequence of $N$ tokens, $(t_1, t_2, ..., t_N)$, computes the probability of the sequence
+by modeling the probability of token $t_k$ given the history $(t_1, ..., t_{k-1})$:
+\[
+    p(t_1, t_2, \ldots, t_N) = \prod_{k=1}^N p({t_k} \mid t_1, t_2, \ldots, t_{k-1}).
+\]
+However, ELMo in particular uses a bidirectional language model (biLM) consisting of $L$ LSTM layers, that is, it combines both a forward and a backward language model jointly maximizing the log likelihood of the forward and backward directions:
+\begin{align*}
+     & \sum_{k=1}^N \left( \right. \log p({t_k} \mid t_1, \ldots, t_{k-1}; \Theta_x, \overrightarrow{\Theta}_{LSTM}, \Theta_s) \\
+     & + \log p({t_k} \mid t_{k+1}, \ldots, t_{N}; \Theta_x, \overleftarrow{\Theta}_{LSTM}, \Theta_s)
+    \left. \right).
+\end{align*}
+where at each position $k$, each LSTM layer $l$ outputs a context-dependent representation $\overrightarrow{\mathbf{h}}^{LM}_{k,l}$ with $l=1, \ldots, L$ for a forward LSTM, and $\overleftarrow{\mathbf{h}}^{LM}_{k,l}$ of $t_k$ given $(t_{k+1}, \ldots, t_N)$ for a backward LSTM.
+
+ELMo also computes a context-independent token representation $\mathbf{x}^{LM}_{k}$ via token embeddings or via a CNN over characters. ELMo then ties the parameters for the token representation ($\Theta_x$) and Softmax layer ($\Theta_s$) in the forward and backward direction while maintaining separate parameters for the LSTMs in each direction.
+
+ELMo is a task specific combination of the intermediate layer representations in the biLM, that is,
+for each token $t_k$, a $L$-layer biLM computes a set of $2L + 1$ representations
+\begin{align*}
+    R_k & =  \{\mathbf{x}^{LM}_{k}, \overrightarrow{\mathbf{h}}^{LM}_{k,l}, \overleftarrow{\mathbf{h}}^{LM}_{k,l} \ |\  l =1, \ldots, L \} \\
+        & =  \{\mathbf{h}^{LM}_{k,l}\ | \ l=0, \ldots, L\},
+\end{align*}
+where $\mathbf{h}^{LM}_{k,0}$ is the token layer and
+\[
+    \mathbf{h}^{LM}_{k,l} = [\overrightarrow{\mathbf{h}}^{LM}_{k,l}; \overleftarrow{\mathbf{h}}^{LM}_{k,l}],
+\]
+for each biLSTM layer.
+
+
+When included in a downstream model, as it is the case in this paper, ELMo collapses all $L$ layers in $R$ into a single vector $\mathbf{ELMo}_k = E(R_k; \mathbf{\Theta}_e)$, generally computing a task specific weighting of all biLM layers:
+\begin{align*}
+    \mathbf{ELMo}^{task}_k & = E(R_k; \Theta^{task})                                       \\
+                           & =\gamma^{task} \sum_{l=0}^L s^{task}_l \mathbf{h}^{LM}_{k,l}.
+\end{align*}
+applying layer normalization to each biLM layer before weighting.
+
+Following \cite{peters-etal-2018-deep}, we use in this paper ELMo models where $L=2$, i.e., the ELMo architecture involves a character-level CNN layer followed by a 2-layer biLSTM.
+
