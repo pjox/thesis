@@ -140,7 +140,6 @@ To train the selected parser and tagger (cf.~Section \ref{udpipe-future}) and ev
 
 \begin{table}[ht!]
     \centering\small
-    \scalebox{0.95}{
         \begin{tabular}{@{}llccc@{}}\toprule
             Treebank       & Model       & UPOS              & UAS               & LAS               \\
             \midrule
@@ -181,14 +180,13 @@ To train the selected parser and tagger (cf.~Section \ref{udpipe-future}) and ev
                            & +\elmooscar & \textbf{94.12}    & \textbf{86.49}    & \textbf{80.59}    \\
             \bottomrule
         \end{tabular}
-    }
     \caption{Scores from \mbox{UDPipe~2.0} \protect\citep[from][]{kondratyuk-straka-2019-75}, the previous state-of-the-art models UDPipe 2.0+mBERT \protect\citep{straka-strakova-2019-evaluating} and UDify \protect\citep{kondratyuk-straka-2019-75}, and our ELMo-enhanced UDPipe 2.0 models. Test scores are given for UPOS, UAS and LAS in all five languages. Best scores are shown in bold, second best scores are underlined.}
     \label{tab:parse}
 \end{table}
 
-\begin{table*}[htbp]
+\begin{table*}[ht!]
     \centering\small
-    \scalebox{0.91}{
+    \resizebox{0.45\linewidth}{!}{
         \begin{tabular}{@{}llccc@{}}\toprule
             Treebank       & Model            & UPOS              & UAS               & LAS               \\ \midrule
                            & UDPipe 2.0       & 98.98             & 93.38             & 90.35             \\
@@ -225,7 +223,7 @@ To train the selected parser and tagger (cf.~Section \ref{udpipe-future}) and ev
         \end{tabular}
     }
     ~
-    \scalebox{0.91}{
+    \resizebox{0.45\linewidth}{!}{
         \begin{tabular}{@{}llccc@{}}\toprule
             Treebank       & Model            & UPOS              & UAS               & LAS               \\
             %\fi{}
