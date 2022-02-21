@@ -1,27 +1,10 @@
 \chapter{D'AlemBERT}
 
 
-
-
 % \abstract{
 %     Language models for historical states of language are becoming increasingly important to allow the optimal digitisation and analysis of old textual sources. Because these historical states are at the same time more complex to process and more scarce in the corpora available, specific efforts are necessary to train natural language processing (NLP) tools adapted to the data. In this paper, we present our efforts to develop NLP tools for Early Modern French (historical French from the 16\textsuperscript{th} to the 18\textsuperscript{th} centuries). We present the \freemmax corpus of Early Modern French and D'AlemBERT, a RoBERTa-based language model trained on \freemmax. We evaluate the usefulness of D'AlemBERT by fine-tuning it on a part-of-speech tagging task, outperforming previous work on the test set. Importantly, we find evidence for the transfer learning capacity of the language model, since its performance on lesser-resourced time periods appears to have been boosted by the more resourced ones. We release D'AlemBERT and the open-sourced subpart of the \freemmax corpus.
 %     \\ \newline \Keywords{Digital humanities, Early Modern French, Language modelling, Neural language representation models, Less-resourced languages, Corpus creation, POS tagging} }
 
-\section{Introduction}
-
-With the rise of digital humanities, it is becoming increasingly important to develop high quality tools to automatically process old states of languages. Libraries, archives and museums, among others, are digitising large numbers of historical sources, from which high quality data must be extracted for further study by specialists of human sciences following new approaches such as ``distant reading'' \cite{moretti_distant_2013}. Many (sub)tasks such as automatic OCR post-correction \cite{rijhwani_lexically_2021} and linguistic annotation \cite{camps_corpus_2020} benefit from pretrained language models to improve their accuracy, and this is what motivated us to develop a BERT-like \cite{devlin-etal-2019-bert} contextualised language model for Early Modern French.
-
-Languages evolve over time on many different levels: from one century to another, we see variations in spelling, syntax, the lexicon etc. However this variation is not uniform: it tends, at least for ``literate scriptors'' (literature, journalism, law, etc.), to converge towards a single norm over time, and this has especially been the case for French because of the prominent role of the \textit{Académie française} and the \emph{remarqueurs} \cite{ayres-bennett_remarques_2011}. The result of this convergence is, for instance, that spelling and word order within sentences have become more strict, where they were less so in the past. From a computational perspective, historical states of language are therefore not only different from the contemporary state, but, from a computational perspective, are also more complex because they do not follow a strict and explicit norm. In French, this explicit norm  appeared in the 17\textsuperscript{th}~c. and was slowly integrated throughout the 18\textsuperscript{th}~c.
-
-On top of this first linguistic problem, a second issue appears: because the production of textual sources has continued to grow exponentially, it is easier to collect a corpus for contemporary French  than for the 19\textsuperscript{th}\,c. French, which is itself easier than for the 18\textsuperscript{th}\,c. French, etc. The further we go back in time, the more scarce resources are, which creates the following paradox: we have more data when the language is homogeneous and simple for the computer to process, and less when it is heterogeneous and harder to process.
-
-The following paper will address the development of \dalembert a neural language model in a complex setting, defined here as the state of language with scarce heterogeneous resources. We will also present \freemmax the data used to train the model, discuss its conception, and evaluate its efficiency with a classical natural language processing (NLP) task, part-of-speech (POS) tagging, crucial for corpus linguistics and the digital humanities. We release both the \dalembert model and a subset of the \freemmax dataset that we were allowed to open source by the original authors.
-
-\section{Related Work}
-
-Large datasets for historical states of languages or  extinct languages do exist. The \emph{Corpus Middelnederlands} for Medieval Dutch \citep{Reenen_corpus_1998} and the \emph{Base Geste} for Medieval French \citep{camps_geste_2016} are freely available online, encoded in TEI. It is also the case for other corpora for later states of language, such as the \textit{Reference corpus of historical Slovene}, covering approximately three centuries of Slovene (1584--1899)  \citep{erjavec_reference_2015}, and the ``corpus noyau'' of \emph{Presto} \citep{presto_corpus_2018}. This last corpus, in its extended version, uses other French corpora such as \textit{Espistemon} for Renaissance French \citep{demonet_epistemon_1998} and the University of Chicago's \emph{American and French Research on the Treasury of the French Language} (ARTFL) \citep{morrissey_artfl_1981}; or like \textsc{Frantext} \citep{atilf_frantext_1998}, which is a generalist French corpus, covering the different states of the French language between the 11\textsuperscript{th} and the 21\textsuperscript{st} century. Although most of these text collections are free, the two biggest ones, \textsc{Frantext} and ARTFL, are not freely available or open-sourced.
-
-Concerning language modelling in French, two main models are available for contemporary French, \camembert \cite{martin-etal-2020-camembert} and FlauBERT \cite{le-etal-2020-flaubert}. \camembert was trained on a freely available, automatically web-crawled corpus called OSCAR \cite{ortiz-suarez-etal-2019-asynchronous,ortiz-suarez-etal-2020-monolingual} while FlauBERT was trained on a mix of web-crawled data and manually curated (partly non freely available) contemporary French corpora. Neither of these models was explicitly pre-trained for historical French.\footnote{Note however that texts in Old, Middle and Modern French do exist in the internet, and might have found their way to the training corpus of these two models. This is especially the case for Modern French texts, which automatic language classification tools can easily classify as Contemporary French.} However efficient language models have been trained for less-resourced or extinct Languages such as Latin \cite{Bamman_latinBErt_2020}, following the approach of \newcite{martin-etal-2020-camembert} for training language models with less data than was previously thought. There have also been some recent projects that specifically target Early Modern French such as that of \pieextended \cite{clerice-2020-pie} that uses the hierarchical encoding architecture originally proposed by \newcite{manjavacas-etal-2019-improving} which itself is constructed by stacking multiple Bi-LSTM-CRFs. \newcite{clerice-2020-pie} distributes pre-trained models for POS tagging and lemmatisation.
 
 \section{Corpora}
 
@@ -31,61 +14,61 @@ Concerning language modelling in French, two main models are available for conte
         \toprule
         Source                                                                                                                                                                                                                                                                                                                                                                      & Normalised & Translation \\
         \midrule
-        Surquoy, SIRE, s’il plai\longs{}t à vo\longs{}tre Maie\longs{}té de \longs{}e \longs{}ouuenir des mi\longs{}eres de \longs{}on E\longs{}tat, dõt au moins ell’a tiré cét aduantage, qu’en vne grande ieune\longs{}se ell’a acquis vne grande experi\~ece, elle verra que tous les mal-heurs de sõ bas âge ont pris leur commencement en \longs{}emblables occa\longs{}ions; &
-        \textit{Sur quoi, SIRE, s’il plaît à votre Majesté de se souvenir des misères de son état dont au moins elle a tiré cet avantage, qu’en une grande jeunesse elle a acquis une grande expérience, elle verra que tous les malheurs de son bas âge ont pris leur commencement en semblables occasions~;}                                                                      &
+        Surquoy, SIRE, s’il plaiſt à voſtre Maieſté de ſe ſouuenir des miſeres de ſon Eſtat, dõt au moins ell’a tiré cét aduantage, qu’en vne grande ieuneſse ell’a acquis vne grande experi\~ece, elle verra que tous les mal-heurs de sõ bas âge ont pris leur commencement en ſemblables occaſions; &
+        \emph{Sur quoi, SIRE, s’il plaît à votre Majesté de se souvenir des misères de son état dont au moins elle a tiré cet avantage, qu’en une grande jeunesse elle a acquis une grande expérience, elle verra que tous les malheurs de son bas âge ont pris leur commencement en semblables occasions~;}                                                                      &
         \textcolor{gray}{``Whereupon, SIR, if it pleases your Majesty to remember the miseries of her state, from which at least she has derived this advantage, that in great youth she has acquired great experience, she will see that all the misfortunes of her early life took their beginning on similar occasions;''}                                                                                  \\
         \bottomrule
     \end{tabular}
-    \caption{\label{tab:norm_examples}Example of normalisation taken from the \textit{Lettres} of \protect\newcite{guez_de_balzac_lettres_1624}.}
+    \caption{\label{tab:norm_examples}Example of normalisation taken from the \emph{Lettres} of \protect\newcite{balzac-1624-lettres}.}
 \end{table*}
 
-For the past few years, we have been involved in the development of linguistic resources for Early Modern French. The initiative, called \textsc{FreEM} (which stands for \textit{FREnch Early Modern}), aims to collect the corpora required for various NLP tasks such as lemmatisation, POS tagging, linguistic normalisation and named entity recognition. Two of these corpora are introduced here: \freemmax (see Section~\ref{freem_max}) and \freemlpm (see Section~\ref{freem_lpm}).
+For the past few years, we have been involved in the development of linguistic resources for Early Modern French. The initiative, called \textsc{FreEM} (which stands for \emph{FREnch Early Modern}), aims to collect the corpora required for various NLP tasks such as lemmatisation, POS tagging, linguistic normalisation and named entity recognition. Two of these corpora are introduced here: \freemmax (see Section~\ref{freem_max}) and \freemlpm (see Section~\ref{freem_lpm}).
 
 \subsection{Early Modern French}\label{def:early}
 
-Experiments are based on data of which the core comprises Early Modern French literary texts. We loosely define Early Modern French as a state of language following Middle French in 1500---following here the \textit{terminus ad quem} used by the \textit{Dictionnaire de Moyen Français} \cite{martin_dictionnaire_2020}---and ending with the French Revolution in 1789. It therefore encompasses three centuries (16\textsuperscript{th}, 17\textsuperscript{th} and 18\textsuperscript{th}\,c.), or two linguistic periods: the \textit{français préclassique} or ``preclassical French'', 1500--1630 and the \textit{français classique} or ``classical French'', 1630--1689; both periodisations are currently used in French linguistics (\textit{e.g.}~by \newcite{vachon_changement_2010} and \newcite{amatuzzi_ameliorer_2019}).
+Experiments are based on data of which the core comprises Early Modern French literary texts. We loosely define Early Modern French as a state of language following Middle French in 1500---following here the \emph{terminus ad quem} used by the \emph{Dictionnaire de Moyen Français} \cite{martin-2020-dictionnaire}---and ending with the French Revolution in 1789. It therefore encompasses three centuries (16\textsuperscript{th}, 17\textsuperscript{th} and 18\textsuperscript{th}\,c.), or two linguistic periods: the \emph{français préclassique} or ``preclassical French'', 1500--1630 and the \emph{français classique} or ``classical French'', 1630--1689; both periodisations are currently used in French linguistics (\emph{e.g.}~by \newcite{vachon-2010-changement} and \newcite{amatuzzi-etal-2019-ameliorer}).
 
-A typical example of Early Modern French, taken from ~\newcite{guez_de_balzac_lettres_1624}, is given in Table~\ref{tab:norm_examples}. We note here the presence of several phenomena that have now disappeared in contemporary French, such as the presence of abbreviations (\textit{dõt}$\to$\textit{dont}), the long \textit{s} (\textit{\longs{}}, see\,\textit{mi\longs{}eres}), the use of \textit{v} instead of \textit{u} (\textit{vne} for \textit{une}), the conservation of etymological letters (\textit{vo\longs{}tre}$<$Latin~\textit{vŏster} rather than \textit{votre}) and calligraphic letters (\textit{-y} in \textit{Surquoy}), the absence of welding  (\textit{\mbox{mal-heurs}} and not \textit{malheurs}) and the opposite (\textit{Surquoy} and not \textit{Sur quoi}).
+A typical example of Early Modern French, taken from ~\newcite{balzac-1624-lettres}, is given in Table~\ref{tab:norm_examples}. We note here the presence of several phenomena that have now disappeared in contemporary French, such as the presence of abbreviations (\emph{dõt}$\to$\emph{dont}), the long \emph{s} (\emph{ſ}, see\,\emph{miſeres}), the use of \emph{v} instead of \emph{u} (\emph{vne} for \emph{une}), the conservation of etymological letters (\emph{voſtre}$<$Latin~\emph{vŏster} rather than \emph{votre}) and calligraphic letters (\emph{-y} in \emph{Surquoy}), the absence of welding  (\emph{\mbox{mal-heurs}} and not \emph{malheurs}) and the opposite (\emph{Surquoy} and not \emph{Sur quoi}).
 
 For NLP tasks, which process raw sequences, such differences with respect to contemporary French are not trivial, and they prevent the processing of historical texts with tools trained on recent sources.
 
 \subsection{\texorpdfstring{\freemmax}{FREEM max}}\label{freem_max}
 
-Usable historical documents are difficult to find because, as previously mentioned, they are more rare than contemporary ones; editors tend to normalise the language (\textit{i.e.}~use the spelling conventions of contemporary French, see~\cite{gabay_pourquoi_2014}), transcriptions are not (always) distributed in a digital format. \freemmax \citep{FREEMmax} is an attempt to solve this problem, and the aim of this dataset is to group together the largest number or texts possible written in Early Modern French.
+Usable historical documents are difficult to find because, as previously mentioned, they are more rare than contemporary ones; editors tend to normalise the language (\emph{i.e.}~use the spelling conventions of contemporary French, see~\cite{gabay-2014-pourquoi}), transcriptions are not (always) distributed in a digital format. \freemmax \citep{gabay-etal-2022-FreEM} is an attempt to solve this problem, and the aim of this dataset is to group together the largest number or texts possible written in Early Modern French.
 %
 The texts have a variety of sources, which can be grouped into three main types:
 \begin{itemize}
     \item Two institutional datasets have been used and are non open-sourced:
           \begin{itemize}
-              \item \textsc{Frantext} \textit{intégral} \citep{atilf_frantext_1998}, the biggest database of French texts (only the texts between 1500 and 1800), a very small portion of which is open access: \textsc{Frantext} \textit{Démonstration} \citep{atilf_frantext_1998-1};
-              \item \textit{Electronic Enlightenment} \citep{bodleian_libraries_electronic_2008}, an online collection of edited correspondences of the Early Modern period;
+              \item \textsc{Frantext} \emph{intégral} \citep{atilf-1998-frantext}, the biggest database of French texts (only the texts between 1500 and 1800), a very small portion of which is open access: \textsc{Frantext} \emph{Démonstration} \citep{atilf-1998-frantext-d};
+              \item \emph{Electronic Enlightenment} \citep{bodleian-2008-electronic}, an online collection of edited correspondences of the Early Modern period;
           \end{itemize}
     \item Several come from research projects distributing transcriptions online:
           \begin{itemize}
-              \item The \textit{Antonomaz project},  French \textit{mazarinades} (\url{https://cahier.hypotheses.org/antonomaz});
-              \item The II.B section (in French) of the \textit{Actis Pacis Westphalicae}, diplomatic letters for the Peace of Westphalia (\url{http://kaskade.dwds.de/dstar/apwcf/});
+              \item The \emph{Antonomaz project},  French \emph{mazarinades} (\url{https://cahier.hypotheses.org/antonomaz});
+              \item The II.B section (in French) of the \emph{Actis Pacis Westphalicae}, diplomatic letters for the Peace of Westphalia (\url{http://kaskade.dwds.de/dstar/apwcf/});
               \item The Bibliothèques virtuelles humanistes, 16\textsuperscript{th}\,c.~French literature (\url{http://www.bvh.univ-tours.fr});
-              \item The \textit{Corpus électronique de la première modernité}, 17\textsuperscript{th}\,c.~French literature (\url{http://www.cepm.paris-sorbonne.fr})
-              \item The \textit{Condé} project, \textit{coutumiers normands} (\url{https://conde.hypotheses.org})
+              \item The \emph{Corpus électronique de la première modernité}, 17\textsuperscript{th}\,c.~French literature (\url{http://www.cepm.paris-sorbonne.fr})
+              \item The \emph{Condé} project, \emph{coutumiers normands} (\url{https://conde.hypotheses.org})
               \item The Corpus Descartes, works of René Descartes (\url{https://www.unicaen.fr/puc/sources/prodescartes/});
-              \item The \textit{Bibliothèque dramatique} of the CELLF, 17\textsuperscript{th}\,c.~French plays (\url{http://bibdramatique.huma-num.fr});
-              \item The \textit{Fabula numerica} project, French fables (\url{https://obvil.sorbonne-universite.fr/projets/fabula-numerica});
-              \item The \textit{ Fonds Boissy}, plays of Louis de Boissy (\url{https://www.licorn-research.fr/Boissy.html});
-              \item The \textit{Mercure Galant} project, the famous French \textit{gazette} and literary magazine between 1672 and 1710 (\url{https://obvil.sorbonne-universite.fr/corpus/mercure-galant});
-              \item The \textit{Rousseau online} project, works of Jean-Jacques Rousseau (\url{https://www.rousseauonline.ch});
-              \item The \textit{Sermo} project, sermons of the 16\textsuperscript{th} and 17\textsuperscript{th}\,c. (\url{http://sermo.unine.ch});
-              \item The \textit{Théâtre classique} project, 17\textsuperscript{th} and 18\textsuperscript{th}\,c.~French plays (\url{http://www.theatre-classique.fr});
+              \item The \emph{Bibliothèque dramatique} of the CELLF, 17\textsuperscript{th}\,c.~French plays (\url{http://bibdramatique.huma-num.fr});
+              \item The \emph{Fabula numerica} project, French fables (\url{https://obvil.sorbonne-universite.fr/projets/fabula-numerica});
+              \item The \emph{ Fonds Boissy}, plays of Louis de Boissy (\url{https://www.licorn-research.fr/Boissy.html});
+              \item The \emph{Mercure Galant} project, the famous French \emph{gazette} and literary magazine between 1672 and 1710 (\url{https://obvil.sorbonne-universite.fr/corpus/mercure-galant});
+              \item The \emph{Rousseau online} project, works of Jean-Jacques Rousseau (\url{https://www.rousseauonline.ch});
+              \item The \emph{Sermo} project, sermons of the 16\textsuperscript{th} and 17\textsuperscript{th}\,c. (\url{http://sermo.unine.ch});
+              \item The \emph{Théâtre classique} project, 17\textsuperscript{th} and 18\textsuperscript{th}\,c.~French plays (\url{http://www.theatre-classique.fr});
           \end{itemize}
     \item Additional sources come from researchers who kindly accepted to offer their personal transcriptions or data scrapped by our team:
           \begin{itemize}
               \item Transcriptions of Anne-Élisabeth Spica (17\textsuperscript{th}\,c. French novels);
-              \item Transcriptions found on \textit{Wikisource} (\url{https://fr.wikisource.org});
-              \item Transcriptions (ePub files) found on \textit{Gallica} (\url{https://gallica.bnf.fr});
+              \item Transcriptions found on \emph{Wikisource} (\url{https://fr.wikisource.org});
+              \item Transcriptions (ePub files) found on \emph{Gallica} (\url{https://gallica.bnf.fr});
               \item Transcriptions found on various websites online.
           \end{itemize}
 \end{itemize}
 
-Additional data for later states of the language, up to the 1920's (mainly from FRANTEXT \textit{intégral}), are also provided for two main reasons: on the one hand, it is common to normalise Early Modern French into Contemporary French \cite{gabay_pourquoi_2014} because of the linguistic proximity between these the two states of the language, and on the other hand, it helps to collect (precious) additional data to avoid ending up with with too small of a corpus for our needs.
+Additional data for later states of the language, up to the 1920's (mainly from FRANTEXT \emph{intégral}), are also provided for two main reasons: on the one hand, it is common to normalise Early Modern French into Contemporary French \cite{gabay-2014-pourquoi} because of the linguistic proximity between these the two states of the language, and on the other hand, it helps to collect (precious) additional data to avoid ending up with with too small of a corpus for our needs.
 
 \begin{table}[htp]
     \centering
@@ -104,9 +87,9 @@ Additional data for later states of the language, up to the 1920's (mainly from 
         CELLF                                                  & 1,873,772   \\
         Electronic enlightenment                               & 6,568,047   \\
         Fabula project                                         & 145,978     \\
-        \textsc{Frantext} \textit{intégral} ($>$1500, $<$1800) & 60,018,390  \\
-        \textsc{Frantext} \textit{intégral} ($>$1800)          & 71,504,440  \\
-        \textsc{Frantext} \textit{Démonstration}               & 1,255,454   \\
+        \textsc{Frantext} \emph{intégral} ($>$1500, $<$1800) & 60,018,390  \\
+        \textsc{Frantext} \emph{intégral} ($>$1800)          & 71,504,440  \\
+        \textsc{Frantext} \emph{Démonstration}               & 1,255,454   \\
         Gallica                                                & 5,212,333   \\
         Boissy project                                         & 438,215     \\
         Mercure galant                                         & 5,427,469   \\
@@ -145,7 +128,7 @@ Metadata is prepared manually in order to have the same categories for each docu
 
 \subsection{\texorpdfstring{\freemlpm}{FREEM LPM}}\label{freem_lpm}
 
-The \freemlpm (``Lemma, POS tags, Morphology'') has already been presented \cite{gabay_standardizing_2020}. The POS-annotated data, is a mixture of two different sources. On the one hand, there is the \textit{CornMol} corpus \cite{camps_corpus_2020}, made up of normalised 17\textsuperscript{th}\,c.~French comedies. On the other hand, there is a gold subset of the \textit{Presto} corpus \cite{blumenthal_presto_2017}, made up of texts of different genres written during the 16\textsuperscript{th}, 17\textsuperscript{th} and 18\textsuperscript{th}\,c., which have previously used to train annotation tools \cite{diwersy_ressources_2017}, and was heavily corrected by us to match our annotation principles \cite{gabay_manuel_2020}.
+The \freemlpm (``Lemma, POS tags, Morphology'') has already been presented \cite{gabay-etal-2020-standardizing}. The POS-annotated data, is a mixture of two different sources. On the one hand, there is the \emph{CornMol} corpus \cite{camps-etal-2021-corpus}, made up of normalised 17\textsuperscript{th}\,c.~French comedies. On the other hand, there is a gold subset of the \emph{Presto} corpus \cite{blumenthal-etal-2017-presto}, made up of texts of different genres written during the 16\textsuperscript{th}, 17\textsuperscript{th} and 18\textsuperscript{th}\,c., which have previously used to train annotation tools \cite{diwersy-etal-2017-ressources}, and was heavily corrected by us to match our annotation principles \cite{gabay-etal-2020-manuel}.
 
 On top of traditional in-domain tests, an out-of-domain testing dataset was prepared to control the capacity of the model to generalise to other genres and periods. Centuries covered are the 16\textsuperscript{th}, 17\textsuperscript{th}, 18\textsuperscript{th}, 19\textsuperscript{th} and 20\textsuperscript{th}. There are two test sets for each century: one made up only of theatre, the other of everything but theatre. Each test set comprises 10 short samples (c.\,100 tokens), as representative as possible of the linguistic production of the century (female and male authors, decade of publication, genre, etc.).
 
