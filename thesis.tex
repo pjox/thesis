@@ -132,6 +132,8 @@
   \textcolor{white}{\sffamily\bfseries\small ?}}{%
   \rotatebox{45}{$\blacksquare$}}}}
 
+\usepackage{wasysym} % long s
+
 \let\tablefontsize\normalsize
 
 \newcommand{\camembert}{CamemBERT\xspace}
@@ -200,6 +202,11 @@
 
 \def\aleda{\textsf{Aleda}\xspace}
 
+\newcommand{\dalembert}{D'AlemBERT\xspace}
+\newcommand{\freemmax}{\textsc{FreEM}\textsubscript{\emph{max}}\xspace}
+\newcommand{\freemlpm}{\textsc{FreEM}\textsubscript{\emph{LPM}}\xspace}
+\newcommand{\pieextended}{Pie Extended\xspace}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Incipit
@@ -248,8 +255,8 @@
 \include{sources/mod_eval/camembert}
 \include{sources/mod_eval/frelmo}
 \include{sources/mod_eval/sinner}
-\chapter{D'Alembert}
 \include{sources/mod_eval/bertrade}
+\include{sources/mod_eval/dalembert}
 
 \part{Real World Application}
 \chapter{BASNUMS}
