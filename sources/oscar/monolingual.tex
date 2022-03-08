@@ -1,5 +1,6 @@
 \chapter{A Monolingual Approach to Contextualized Word Embeddings}
 
+Having released OSCAR 2019, the first thing that we wanted to do with it was to evaluate how good it actually was for what it was mainly intended, that is, the pre-training of contextualized word embeddings tha had just become available such as ULMFiT \citep{howard-ruder-2018-universal}, ELMo \citep{peters-etal-2018-deep} or BERT \citep{devlin-etal-2019-bert}
 
 \section{Corpora}
 We train ELMo contextualized word embeddings for 5 languages: Bulgarian, Catalan, Danish, Finnish and Indonesian. We train one set of embeddings using only Wikipedia data, and another set using only  Common-Crawl-based OSCAR data. We chose these languages primarily because they are morphologically and typologically different from one another, but also because all of the OSCAR datasets for these languages were of a sufficiently manageable size such that the ELMo pre-training was doable in less than one month. Contrary to \emph{HIT-SCIR} team \citep{che-etal-2018-towards}, we do not impose any cap on the amount of data, and instead use the entirety of Wikipedia or OSCAR for each of our 5 chosen languages.
