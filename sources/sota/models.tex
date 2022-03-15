@@ -1,10 +1,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{CamemBERT Related Work}
+\chapter{Language Model Related Work}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Previous work}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{CamemBERT Related Work}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Previous work}
 \label{relatedwork}
-\subsection{Contextual Language Models}
+\subsubsection{Contextual Language Models}
 \paragraph{From non-contextual to contextual word embeddings}
 The first neural word vector representations were non-contextualized word embeddings, most notably
 word2vec \citep{mikolov-etal-2013-distributed}, GloVe \cite{pennington-etal-2014-glove} and fastText \cite{mikolov-etal-2018-advances}, which were designed to be used as input to task-specific neural architectures.
@@ -29,7 +34,7 @@ It comes in two sizes: the \bertbase architecture and the \bertlarge architectur
 \roberta improves the original implementation of \bert by identifying key design choices for better performance, using dynamic masking, removing the next sentence prediction task, training with larger batches, on more data, and for longer.
 
 
-\section{Downstream evaluation tasks}
+\subsection{Downstream evaluation tasks}
 
 In this section, we present the four downstream tasks that we use to evaluate \camembert, namely: Part-Of-Speech (POS) tagging, dependency parsing, Named Entity Recognition (NER) and Natural Language Inference (NLI). We also present the baselines that we will use for comparison.
 
@@ -133,3 +138,35 @@ We also report the results of \mbox{XLM-R} \cite{conneau-etal-2020-unsupervised}
 %As it is the case with contextualized word embeddings like ELMo \cite{peters-etal-2018-deep} and Flair \cite{akbik-etal-2018-contextual}, one can use a frozen version of transformer models like BERT or RoBERTa as if they were feature based embeddings, notable examples of this type of utilization are the original BERT paper, in which the authors use BERT in this way to do NER \cite{devlin-etal-2019-bert}; the work of \newcite{straka-strakova-2019-evaluating} in which the English BERT and \mbert are plugged as feature-based embeddings to the UDPipe Future architecture obtaining state-of-the-art for part-of-speech tagging and dependency parsing across a wide range of languages; and the work of \newcite{strakova-etal-2019-neural} which again uses both the English BERT and \mbert as feature based embeddings coupled with \newcite{lample-etal-2016-neural} architecture. \bm{I remove the SOTA mention here as it's not the right place} % obtaining state-of-the-art results for both flat and nested NER in 5 different languages. 
 %In order to obtain a representation for a given token, all these implementations first compute the representations of the subwords of a token by taking the mean of the representations given by the four last layers, and then generate the representation for the token by taking the mean of the representations of the subwords of a given token.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{D'AlemBERT Related Work}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+Large datasets for historical states of languages or  extinct languages do exist. The \emph{Corpus Middelnederlands} for Medieval Dutch \citep{reenen-etal-1998-corpus} and the \emph{Base Geste} for Medieval French \citep{camps-etal-2019-geste} are freely available online, encoded in TEI. It is also the case for other corpora for later states of language, such as the \emph{Reference corpus of historical Slovene}, covering approximately three centuries of Slovene (1584--1899)  \citep{erjavec-2015-reference}, and the ``corpus noyau'' of \emph{Presto} \citep{blumenthal-2018-presto}. This last corpus, in its extended version, uses other French corpora such as \emph{Espistemon} for Renaissance French \citep{demonet-1998-epistemon} and the University of Chicago's \emph{American and French Research on the Treasury of the French Language} (ARTFL) \citep{morrissey-olsen-1991-american}; or like \textsc{Frantext} \citep{atilf-1998-frantext}, which is a generalist French corpus, covering the different states of the French language between the 11\textsuperscript{th} and the 21\textsuperscript{st} century. Although most of these text collections are free, the two biggest ones, \textsc{Frantext} and ARTFL, are not freely available or open-sourced.
+
+Concerning language modelling in French, two main models are available for contemporary French, \camembert \cite{martin-etal-2020-camembert} and FlauBERT \cite{le-etal-2020-flaubert}. \camembert was trained on a freely available, automatically web-crawled corpus called OSCAR \cite{ortiz-suarez-etal-2019-asynchronous,ortiz-suarez-etal-2020-monolingual} while FlauBERT was trained on a mix of web-crawled data and manually curated (partly non freely available) contemporary French corpora. Neither of these models was explicitly pre-trained for historical French.\footnote{Note however that texts in Old, Middle and Modern French do exist in the internet, and might have found their way to the training corpus of these two models. This is especially the case for Modern French texts, which automatic language classification tools can easily classify as Contemporary French.} However efficient language models have been trained for less-resourced or extinct Languages such as Latin \cite{bamman-burns-2020-latin}, following the approach of \newcite{martin-etal-2020-camembert} for training language models with less data than was previously thought. There have also been some recent projects that specifically target Early Modern French such as that of \pieextended \cite{clerice-2020-pie} that uses the hierarchical encoding architecture originally proposed by \newcite{manjavacas-etal-2019-improving} which itself is constructed by stacking multiple Bi-LSTM-CRFs. \newcite{clerice-2020-pie} distributes pre-trained models for POS tagging and lemmatisation.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{BERTrade Related Work}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\label{sec-related}
+Since the introduction of contextualized word representations \citep{peters-etal-2018-deep,akbik-etal-2018-contextual,devlin-etal-2019-bert} and the many improvements proposed for them in the consumption of computational resources \citep{clark-etal-2020-electra}, in the amount of data required to fine-tune them \citep{raffel-etal-2020-exploring}, and more recently in the length of the contextual window \citep{xiong-etal-2021-nystromformer}; there have also been important advancements from a digital humanities point of view on \emph{unsupervised domain adaptation} \citep{ramponi-plank-2020-neural}. In this case, one specializes a language model to a particular domain with unlabeled data in order to improve performance in downstream tasks. This can be achieved by  pre-training the models from scratch with specialized data \citep{beltagy-etal-2019-scibert} or by continuing the training of a general model with a new corpus \citep{lee-etal-2019-BioBERT, peng-etal-2019-transfer}. This last method has already been successfully implemented in the context of historical languages, in particular \citet{han-eisenstein-2019-unsupervised} showed that one can successfully adapt the original BERT \citep{devlin-etal-2019-bert} to Early Modern English by continuing the pre-training on historical raw texts.
+
+In a multilingual context, transformer-based models such as mBERT have been adapted to low-resource languages and evaluated in dependency parsing and POS-tagging showing promising results \citep{chau-etal-2020-parsing, muller-etal-2021-unseen, gururangan-etal-2020-dont, wang-etal-2020-extending}. However, this multilingual approach has also been criticized for favoring monolingual pre-training even when data is scarce \citep{virtanen-etal-2019-multilingual, ortiz-suarez-etal-2020-monolingual}. Indeed, even when only small pre-training corpora are available, BERT-like models have also been successfully pre-trained, resulting in well-performing models \citep{micheli-etal-2020-importance}. Furthermore, compact BERT-like models have also been studied \citep{turc-etal-2019-well} and might prove useful in data constrained conditions, such as monolingual pre-training of contextualized word representation for low-resource languages.
+
+%BERT for parsing low-resource languages: \citet{chau-etal-2020-parsing} (post-training mBERT with vocabulary augmentations, contemporary languages), \citet{muller-etal-2021-unseen} (post-training mBERT and from scratch, translitteration/normalization, contemporary languages), \citet{gururangan-etal-2020-dont} ("domain adaptative" pre-training).
+
+% Bougé de la section expérience:
+% > Many aspects of training contextual word embedding models on very limited amounts of data are still unclear. \citet{micheli-etal-2020-importance} shows that training a small BERT model (by limiting its depth) can yield a valuable model even with as little as \SI{100}{\mebi\byte} of data.
+% > However, their objective was more to train a \emph{small} model than an \emph{optimal} one.
+% > It is also the approach used by \citet{muller-etal-2021-unseen} for training BERT models on lesser-resourced languages.
+
+Regarding corpora for historical languages, very few of them have manually annotated syntactical resources for their medieval states. English has three such treebanks \citep{oxford-2001-the,kroch-etal-2000-the,traugott-pintzuk-2008-coding} for Old and Middle English. The TOROT treebank for Old Church Slavonic, Old East Slavonic and Middle Russian is another large resource \citep{berdicevskis-eckhoff-2020-diachronic}. There is a treebank for Medieval Latin as well, the \emph{Index Thomisticus Treebank} \citep{passarotti-2019-project}. To our knowledge, the last large treebank containing medieval texts is IcePaHC for Icelandic \citep{rognvaldsson-etal-2012-icelandic}. Some other corpora were annotated automatically in order to reduce the cost of annotation. For example, \citet{rocio-etal-2003-automated} adapted a parsing pipeline for contemporary Portuguese and \citet{lee-kong-2014-a} used a previously annotated treebank \citep{lee-kong-2012-dependency} to parse a larger medieval Chinese corpus. Concerning contemporary regional Romance languages, \citet{miletic-etal-2020-building} also used a smaller treebank to generate new annotations, and concluded that using similar languages to train a model does not improve parsing. Although there are many resources for Latin, and some for Ancient Greek, we do not include them here, because they do not face the same challenges as medieval states of language, in particular the high level of spelling variability.
+
+Lastly, concerning dependency parsing and POS-tagging of Old French in particular, the works of \citet{guibon-etal-2014-parsing} and \citet{stein-2014-parsing, stein-2016-old} are noteworthy. However, they use very different approaches to the one used in this paper and evaluate on previous versions of SRCMF, with incompatible annotation choices and slightly different texts. For the UD version of SRCMF, the most notable work is that of the winner of the \emph{CoNLL 2018 Shared Task} \citep{zeman-etal-2018-conll}, UDPipe 2.0 \citep{straka-2018-udpipe}, which was later enhanced by including contextualized word embeddings \citep{straka-strakova-2019-evaluating}.
+
+% Q: Ajouter POS-tagging and lemmatization using joint learning \citep{pie2019ImprovingLemmatizationNonStandard}.
+% A (LG): Pas les mêmes techniques que nous, pas tout à fait le même dataset et les résultats sont pas très simples à extraire du papier, je propose qu'on s'en passe.
+% (MR) A : d'accord !
