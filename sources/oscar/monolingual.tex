@@ -1,6 +1,15 @@
 \chapter{A Monolingual Approach to Contextualized Word Embeddings}
 
-Having released OSCAR 2019, the first thing that we wanted to do with it was to evaluate how good it actually was for what it was mainly intended, that is, the pre-training of contextualized word embeddings tha had just become available such as ULMFiT \citep{howard-ruder-2018-universal}, ELMo \citep{peters-etal-2018-deep} or BERT \citep{devlin-etal-2019-bert}
+\begin{center}
+    \begin{minipage}{0.66\textwidth}
+        \begin{small}
+            In which we present the work of \citet{ortiz-suarez-etal-2020-monolingual}, who propose the first evaluation of OSCAR 2019 as a pretraining corpus for language modeling. This evaluation was done by selecting OSCAR subcorpora for 5 morphologically and tipologically different mid-ressource languages and pre-training monolingual ELMo models \citep{peters-etal-2018-deep} for each of them. These ELMo models are then attached to the UDPipe 2.0 architecture \citep{straka-2018-udpipe,straka-strakova-2019-evaluating} and evaluated in dependency parsing and POS tagging.
+        \end{small}
+    \end{minipage}
+    \vspace{0.5cm}
+\end{center}
+
+Having released OSCAR 2019, the first thing that we wanted to do with it was to evaluate how good it actually was for what it was mainly intended, that is, the pre-training of contextualized word embeddings that had just become available at the time we started working on OSCAR 2019. Such models included ULMFiT \citep{howard-ruder-2018-universal}, ELMo \citep{peters-etal-2018-deep} and BERT \citep{devlin-etal-2019-bert} at that time. For this first evaluation we decided to
 
 \section{Corpora}
 We train ELMo contextualized word embeddings for 5 languages: Bulgarian, Catalan, Danish, Finnish and Indonesian. We train one set of embeddings using only Wikipedia data, and another set using only  Common-Crawl-based OSCAR data. We chose these languages primarily because they are morphologically and typologically different from one another, but also because all of the OSCAR datasets for these languages were of a sufficiently manageable size such that the ELMo pre-training was doable in less than one month. Contrary to \emph{HIT-SCIR} team \citep{che-etal-2018-towards}, we do not impose any cap on the amount of data, and instead use the entirety of Wikipedia or OSCAR for each of our 5 chosen languages.
@@ -141,6 +150,7 @@ To train the selected parser and tagger (cf.~Section \ref{udpipe-future}) and ev
 
 \begin{table}[ht!]
     \centering\small
+    \resizebox{0.45\linewidth}{!}{
         \begin{tabular}{@{}llccc@{}}\toprule
             Treebank       & Model       & UPOS              & UAS               & LAS               \\
             \midrule
@@ -161,6 +171,13 @@ To train the selected parser and tagger (cf.~Section \ref{udpipe-future}) and ev
             Danish-DDT     & +mBERT      & 98.21             & \underline{89.32} & \underline{87.24} \\
                            & +\elmowiki  & \underline{98.45} & 89.05             & 86.92             \\
                            & +\elmooscar & \textbf{98.62}    & \textbf{89.84}    & \textbf{87.95}    \\
+            \bottomrule
+        \end{tabular}
+    }
+    ~
+    \resizebox{0.45\linewidth}{!}{
+        \begin{tabular}{@{}llccc@{}}\toprule
+            Treebank       & Model       & UPOS              & UAS               & LAS               \\
             \midrule
                            & UDify       & 93.80             & 86.37             & 81.40             \\
                            & UDPipe 2.0  & 96.65             & 90.68             & 87.89             \\
@@ -181,11 +198,25 @@ To train the selected parser and tagger (cf.~Section \ref{udpipe-future}) and ev
                            & +\elmooscar & \textbf{94.12}    & \textbf{86.49}    & \textbf{80.59}    \\
             \bottomrule
         \end{tabular}
+    }
     \caption{Scores from \mbox{UDPipe~2.0} \protect\citep[from][]{kondratyuk-straka-2019-75}, the previous state-of-the-art models UDPipe 2.0+mBERT \protect\citep{straka-strakova-2019-evaluating} and UDify \protect\citep{kondratyuk-straka-2019-75}, and our ELMo-enhanced UDPipe 2.0 models. Test scores are given for UPOS, UAS and LAS in all five languages. Best scores are shown in bold, second best scores are underlined.}
     \label{tab:parse}
 \end{table}
 
-\begin{table*}[ht!]
+\subsection{Parsing and POS tagging results}
+We use UDPipe 2.0 without contextualized embeddings as our baseline for POS tagging and dependency parsing. However, we did not train the model without contextualized word embedding ourselves. We instead take the scores as they are reported in \citep{kondratyuk-straka-2019-75}. We also compare our UDPipe 2.0 + ELMo models against the state-of-the-art results (assuming gold tokenization) for these languages, which are either UDify \citep{kondratyuk-straka-2019-75} or UDPipe 2.0 + mBERT \citep{straka-strakova-2019-evaluating}.
+
+Results for UPOS, UAS and LAS are shown in Table \ref{tab:parse}. We obtain the state of the art for the three metrics in each of the languages with the UDPipe 2.0 + \elmooscar models. We also see that in every single case the UDPipe 2.0 + \elmooscar result surpasses the UDPipe 2.0 + \elmowiki one, suggesting that the size of the pre-training data plays an important role in downstream task results. This is also supports our hypothesis that the OSCAR corpora, being multi-domain, exhibits a better coverage of the different styles, genres and uses present at least in these 5 languages.
+
+Taking a closer look at the results for Danish, we see that \elmowiki, which was trained with a mere 300MB corpus, does not show any sign of overfitting, as the UDPipe 2.0 + \elmowiki results considerably improve the UDPipe 2.0 baseline. This is the case for all of our \elmowiki models as we never see any evidence of a negative impact when we add them to the baseline model. In fact, the results of UDPipe 2.0 + \elmowiki give better than previous state-of-the-art results in all metrics for the Finnish-FTB and in UPOS for the Finnish-TDT. The results for Finnish are actually quite interesting, as mBERT was pre-trained on Wikipedia and here we see that the multilingual setting in which UDify was fine-tuned exhibits sub-baseline results for all metrics, and that the UDPipe + mBERT scores are often lower than those of our UDPipe 2.0 + \elmowiki. This actually suggests that even though the multilingual approach of mBERT (in pre-training) or UDify (in pre-training and fine-tuning) leads to better performance for  high-resource languages or languages that are closely related to high-resource languages, it might also significantly degrade the representations for more isolated or even simply more morphologically rich languages like Finnish. In contrast, our monolingual approach with UDPipe 2.0 + \elmooscar improves the previous SOTA considerably, by more than 2 points for some metrics. Note however that Indonesian, which might also be seen as a relatively isolated language, does not behave in the same way as Finnish.
+
+\subsection{Impact of the number of training epochs}
+
+An important topic we wanted to address with our experiments was that of \emph{overfitting} and the number of epochs one should train the contextualized embeddings for. The ELMo authors have expressed that increasing the number of training epochs is generally better, as they argue that training the ELMo model for longer reduces held-out perplexity and further improves downstream task performance.\footnote{Their comments on the matter can be found \href{https://github.com/allenai/bilm-tf/issues/135}{here}.} This is why we intentionally fully pre-trained the \elmowiki to the 10 epochs of the original ELMo paper, as its authors also expressed concern over the possibility of overfitting for smaller corpora. We thus save checkpoints for each of our ELMo model at the 1, 3, 5 and 10 epoch marks so that we can properly probe for overfitting. The scores of all checkpoints are reported in Table \ref{tab:ablation-monolingual}. Here again we do not train the UDPipe 2.0 baselines without embedding, we just report the scores published in \citet{kondratyuk-straka-2019-75}.
+
+The first striking finding is that even though all our Wikipedia data sets are smaller than 1GB in size (except for Catalan), none of the \elmowiki models show any sign of overfitting, as the results continue to improve for all metrics the more we train the ELMo models, with the best results consistently being those of the fully trained 10 epoch ELMos. For all of our Wikipedia models, but those of Catalan and Indonesian, we see sub-baseline results at 1 epoch; training the model for longer is better, even if the corpora are small in size.
+
+\begin{table}[ht!]
     \centering\small
     \resizebox{0.45\linewidth}{!}{
         \begin{tabular}{@{}llccc@{}}\toprule
@@ -263,21 +294,7 @@ To train the selected parser and tagger (cf.~Section \ref{udpipe-future}) and ev
     }
     \caption{UPOS, UAS and LAS scores for the UDPipe 2.0 baseline reported by \protect\citep{kondratyuk-straka-2019-75}, plus the scores for checkpoints at 1, 3, 5 and 10 epochs for all the \elmooscar and \elmowiki. All scores are test scores. Best \elmooscar scores are shown in bold while best \elmowiki scores are underlined.}
     \label{tab:ablation-monolingual}
-\end{table*}
-
-
-\subsection{Parsing and POS tagging results}
-We use UDPipe 2.0 without contextualized embeddings as our baseline for POS tagging and dependency parsing. However, we did not train the model without contextualized word embedding ourselves. We instead take the scores as they are reported in \citep{kondratyuk-straka-2019-75}. We also compare our UDPipe 2.0 + ELMo models against the state-of-the-art results (assuming gold tokenization) for these languages, which are either UDify \citep{kondratyuk-straka-2019-75} or UDPipe 2.0 + mBERT \citep{straka-strakova-2019-evaluating}.
-
-Results for UPOS, UAS and LAS are shown in Table \ref{tab:parse}. We obtain the state of the art for the three metrics in each of the languages with the UDPipe 2.0 + \elmooscar models. We also see that in every single case the UDPipe 2.0 + \elmooscar result surpasses the UDPipe 2.0 + \elmowiki one, suggesting that the size of the pre-training data plays an important role in downstream task results. This is also supports our hypothesis that the OSCAR corpora, being multi-domain, exhibits a better coverage of the different styles, genres and uses present at least in these 5 languages.
-
-Taking a closer look at the results for Danish, we see that \elmowiki, which was trained with a mere 300MB corpus, does not show any sign of overfitting, as the UDPipe 2.0 + \elmowiki results considerably improve the UDPipe 2.0 baseline. This is the case for all of our \elmowiki models as we never see any evidence of a negative impact when we add them to the baseline model. In fact, the results of UDPipe 2.0 + \elmowiki give better than previous state-of-the-art results in all metrics for the Finnish-FTB and in UPOS for the Finnish-TDT. The results for Finnish are actually quite interesting, as mBERT was pre-trained on Wikipedia and here we see that the multilingual setting in which UDify was fine-tuned exhibits sub-baseline results for all metrics, and that the UDPipe + mBERT scores are often lower than those of our UDPipe 2.0 + \elmowiki. This actually suggests that even though the multilingual approach of mBERT (in pre-training) or UDify (in pre-training and fine-tuning) leads to better performance for  high-resource languages or languages that are closely related to high-resource languages, it might also significantly degrade the representations for more isolated or even simply more morphologically rich languages like Finnish. In contrast, our monolingual approach with UDPipe 2.0 + \elmooscar improves the previous SOTA considerably, by more than 2 points for some metrics. Note however that Indonesian, which might also be seen as a relatively isolated language, does not behave in the same way as Finnish.
-
-\subsection{Impact of the number of training epochs}
-
-An important topic we wanted to address with our experiments was that of \emph{overfitting} and the number of epochs one should train the contextualized embeddings for. The ELMo authors have expressed that increasing the number of training epochs is generally better, as they argue that training the ELMo model for longer reduces held-out perplexity and further improves downstream task performance.\footnote{Their comments on the matter can be found \href{https://github.com/allenai/bilm-tf/issues/135}{here}.} This is why we intentionally fully pre-trained the \elmowiki to the 10 epochs of the original ELMo paper, as its authors also expressed concern over the possibility of overfitting for smaller corpora. We thus save checkpoints for each of our ELMo model at the 1, 3, 5 and 10 epoch marks so that we can properly probe for overfitting. The scores of all checkpoints are reported in Table \ref{tab:ablation-monolingual}. Here again we do not train the UDPipe 2.0 baselines without embedding, we just report the scores published in \citet{kondratyuk-straka-2019-75}.
-
-The first striking finding is that even though all our Wikipedia data sets are smaller than 1GB in size (except for Catalan), none of the \elmowiki models show any sign of overfitting, as the results continue to improve for all metrics the more we train the ELMo models, with the best results consistently being those of the fully trained 10 epoch ELMos. For all of our Wikipedia models, but those of Catalan and Indonesian, we see sub-baseline results at 1 epoch; training the model for longer is better, even if the corpora are small in size.
+\end{table}
 
 \elmooscar models exhibit exactly the same behavior as \elmowiki models where the scores continue to improve the longer they are pre-trained, except for the case of Finnish. Here we actually see an unexpected behavior where the model performance caps around the 3\textsuperscript{rd} to 5\textsuperscript{th} epoch. This is surprising because the Finnish OSCAR corpus is more than 20 times bigger than our smallest Wikipedia corpus, the Danish Wikipedia, that did not exhibit this behavior. As previously mentioned Finnish is morphologically richer than the other languages in which we trained ELMo, we hypothesize that the representation space given by the ELMo embeddings might not be sufficiently big to extract more features from the Finnish OSCAR corpus beyond the 5\textsuperscript{th} epoch mark, however in order to test this we would need to train a larger language model like BERT which is sadly beyond our computing infrastructure limits (cf. Subsection \ref{cost}). However we do note that pre-training our current language model architectures in a morphologically rich language like Finnish might actually better expose the limits of our existing approaches to language modeling.
 
