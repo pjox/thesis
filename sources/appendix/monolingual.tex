@@ -1,0 +1,78 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{A First Evaluation of the OSCAR Corpus}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\label{sec:appendix}
+
+\section{Computational cost and carbon footprint}\label{cost}
+
+Considering the discussion above, we believe an interesting follow-up to our experiments would be training the ELMo models for more of the languages included in the OSCAR corpus. However training ELMo is computationally costly, and one way to estimate this cost, as pointed out by \citet{strubell-etal-2019-energy}, is by using the training times of each model to compute both power consumption and CO\textsubscript{2} emissions.
+
+\begin{table}[t]
+    \centering\small
+    \scalebox{0.93}{
+        \begin{tabular}{@{}lrrrrr@{}}\toprule
+            Language                                        & Power & Hours  & Days  & KWh$\cdotp$PUE & CO\textsubscript{2}e \\
+            \midrule
+            \multicolumn{6}{l}{\hspace*{6mm}\em OSCAR-Based ELMos}                                                           \\[0.5mm]
+            Bulgarian                                       & 1183  & 515.00 & 21.45 & 962.61         & 49.09                \\
+            Catalan                                         & 1118  & 199.98 & 8.33  & 353.25         & 18.02                \\
+            Danish                                          & 1183  & 200.89 & 8.58  & 375.49         & 19.15                \\
+            Finnish                                         & 1118  & 591.25 & 24.63 & 1044.40        & 53.26                \\
+            Indonesian                                      & 1183  & 694.26 & 28.93 & 1297.67        & 66.18                \\
+            \midrule\multicolumn{6}{l}{\hspace*{6mm}\em Wikipedia-Based ELMos}                                               \\[0.5mm]
+            Bulgarian                                       & 1118  & 15.45  & 0.64  & 27.29          & 1.39                 \\
+            Catalan                                         & 1118  & 51.08  & 2.13  & 90.22          & 4.60                 \\
+            Danish                                          & 1118  & 14.56  & 0.61  & 25,72          & 1.31                 \\
+            Finnish                                         & 1118  & 21.79  & 0.91  & 38.49          & 1.96                 \\
+            Indonesian                                      & 1118  & 20.28  & 0.84  & 35.82          & 1.82                 \\
+            \midrule
+            \multicolumn{2}{@{}l}{\textsc{Total emissions}} &       &        &       & 216.78                                \\
+            \bottomrule
+        \end{tabular}
+    }
+    \caption{Average power draw (Watts), training times (in both hours and days), mean power consumption (KWh) and CO\textsubscript{2} emissions (kg) for each ELMo model trained.}
+    \label{tab:carbon}
+\end{table}
+
+In our set-up we used two different machines, each one having 4 NVIDIA GeForce GTX 1080 Ti graphic cards and 128GB of RAM, the difference between the machines being that one uses a single Intel Xeon Gold 5118 processor, while the other uses two Intel Xeon E5-2630 v4 processors. One GeForce GTX 1080 Ti card is rated at around 250 W,\footnote{\url{https://www.geforce.com/hardware/desktop-gpus/geforce-gtx-1080-ti/specifications}} the Xeon Gold 5118 processor is rated at 105 W,\footnote{\url{https://ark.intel.com/content/www/us/en/ark/products/120473/intel-xeon-gold-5118-processor-16-5m-cache-2-30-ghz.html}} while one Xeon E5-2630 v4 is rated at 85 W.\footnote{\url{https://ark.intel.com/content/www/us/en/ark/products/92981/intel-xeon-processor-e5-2630-v4-25m-cache-2-20-ghz.html}} For the DRAM we can use the work of \citet{desrochers-etal-2016-a} to estimate the total power draw of 128GB of RAM at around 13W. Having this information, we can now use the formula proposed by \citet{strubell-etal-2019-energy} in order to compute the total power required to train one ELMo model:
+\[
+    p_t = \frac{1.58t(cp_{c} + p_r + gp_g)}{1000}
+\]
+Where $c$ and $g$ are the number of CPUs and GPUs respectively, $p_c$ is the average power draw (in Watts) from all CPU sockets, $p_r$ the average power draw from all DRAM sockets, and $p_g$ the average power draw of a single GPU. We estimate the total power consumption by adding GPU, CPU and DRAM consumptions, and then multiplying by the \emph{Power Usage Effectiveness} (PUE), which accounts for the additional energy required to support the compute infrastructure. We use a PUE coefficient of 1.58, the 2018 global average for data centers \citep{strubell-etal-2019-energy}. In table \ref{tab:carbon} we report the training times in both hours and days, as well as the total power draw (in Watts) of the system used to train each individual ELMo model. We use this information to compute the total power consumption of each ELMo, also reported in table \ref{tab:carbon}.
+
+We can further estimate the CO\textsubscript{2} emissions in kilograms of each single model by multiplying the total power consumption by the average CO\textsubscript{2} emissions per kWh in France (where the models were trained). According to the RTE (Réseau de transport d'électricité / Electricity Transmission Network) the average emission per kWh were around 51g/kWh in November 2019,\footnote{\url{https://www.rte-france.com/fr/eco2mix/eco2mix-co2}} when the models were trained. Thus the total CO\textsubscript{2} emissions in kg for one single model can be computed as:
+\[
+    \text{CO}_{2}\text{e} = 0.051 p_t
+\]
+All emissions for the ELMo models are also reported in table \ref{tab:carbon}.
+
+We do not report the power consumption or the carbon footprint of training the UDPipe 2.0 architecture, as each model took less than 4 hours to train on a machine using a single NVIDIA Tesla V100 card. Also, this machine was shared during training time, so it would be extremely difficult to accurately estimate the power consumption of these models.
+
+Even though it would have been interesting to replicate all our experiments and computational cost estimations with state-of-the-art fine-tuning models such as BERT, XLNet, RoBERTa or ALBERT, we recall that these transformer-based architectures are extremely costly to train, as noted by the BERT authors on the official BERT GitHub repository,\footnote{\url{https://github.com/google-research/bert}} and are currently beyond the scope of our computational infrastructure. However we believe that ELMo contextualized word embeddings remain a useful model that still provide an extremely good trade-off between performance to training cost, even setting new state-of-the-art scores in parsing and POS tagging for our five chosen languages, performing even better than the multilingual mBERT model.
+
+\section{Number of training steps for each checkpoint and each corpus}
+
+\begin{table}[ht!]
+    \centering\small
+    \scalebox{0.96}{
+        \begin{tabular}{@{}lrrrr@{}}\toprule
+            Language   & 1 Epoch & 3 Epochs & 5 Epochs  & 10 Epochs        \\
+            \midrule
+            \multicolumn{5}{l}{\hspace*{6mm}\em Wikipedia-Based ELMos}     \\[0.5mm]
+            Bulgarian  & 6,268   & 18,804   & 31,340    & 62,680           \\
+            Catalan    & 20,666  & 61,998   & 103,330   & 206,660          \\
+            Danish     & 5,922   & 17,766   & 29,610    & 59,220           \\
+            Finnish    & 8,763   & 26,289   & 43,815    & 87,630           \\
+            Indonesian & 7,891   & 23,673   & 39,455    & 78,910           \\
+            \midrule\multicolumn{5}{l}{\hspace*{6mm}\em OSCAR-Based ELMos} \\[0.5mm]
+            Bulgarian  & 143,169 & 429,507  & 715,845   & 1,431,690        \\
+            Catalan    & 81,156  & 243,468  & 405,780   & 811,560          \\
+            Danish     & 81,156  & 243,468  & 405,780   & 811,560          \\
+            Finnish    & 181,230 & 543,690  & 906,150   & 1,812,300        \\
+            Indonesian & 263,830 & 791,490  & 1,319,150 & 2,638,300        \\
+            \bottomrule
+        \end{tabular}
+    }
+    \caption{Number of training steps for each checkpoint, for the \elmowiki and \elmooscar of each language.}
+    \label{tab:steps}
+\end{table}

@@ -1,4 +1,4 @@
-\chapter{A Monolingual Approach to Contextualized Word Embeddings}
+\chapter{A First Evaluation of the OSCAR Corpus}
 
 \begin{center}
     \begin{minipage}{0.66\textwidth}
@@ -9,13 +9,9 @@
     \vspace{0.5cm}
 \end{center}
 
-Having released OSCAR 2019, the first thing that we wanted to do with it was to evaluate how good it actually was for what it was mainly intended, that is, the pre-training of contextualized word embeddings that had just become available at the time we started working on OSCAR 2019. Such models included ULMFiT \citep{howard-ruder-2018-universal}, ELMo \citep{peters-etal-2018-deep} and BERT \citep{devlin-etal-2019-bert} at that time. For this first evaluation we decided to train monolingual ELMo 
-
-
-We train ELMo contextualized word embeddings for 5 languages: Bulgarian, Catalan, Danish, Finnish and Indonesian. We train one set of embeddings using only Wikipedia data, and another set using only  Common-Crawl-based OSCAR data. We chose these languages primarily because they are morphologically and typologically different from one another, but also because all of the OSCAR datasets for these languages were of a sufficiently manageable size such that the ELMo pre-training was doable in less than one month. Contrary to \emph{HIT-SCIR} team \citep{che-etal-2018-towards}, we do not impose any cap on the amount of data, and instead use the entirety of Wikipedia or OSCAR for each of our 5 chosen languages.
+Having released OSCAR 2019, the first thing that we wanted to do with it was to evaluate how good it actually was for what it was mainly intended, that is, the pre-training of contextualized word embeddings that had just become available at the time we started working on OSCAR 2019. Such models included ULMFiT \citep{howard-ruder-2018-universal}, ELMo \citep{peters-etal-2018-deep} and BERT \citep{devlin-etal-2019-bert} among others at that time. For this first evaluation we decided to train ELMo contextualized word embeddings for 5 languages: Bulgarian, Catalan, Danish, Finnish and Indonesian. We train one set of embeddings using only Wikipedia data, and another set using only OSCAR 2019 data. We chose these languages primarily because they are morphologically and typologically different from one another, but also because all of the OSCAR 2019 subcorpora for these languages were of a sufficiently manageable size such that the ELMo pre-training was doable in less than one month. Contrary to \emph{HIT-SCIR} team \citep{che-etal-2018-towards}, we do not impose any cap on the amount of data, and instead use the entirety of Wikipedia or OSCAR 2019 for each of our 5 chosen languages.
 
 \section{Corpora}
-\subsection{Wikipedia}
 
 \begin{table}[t!]
     \centering\small
@@ -36,15 +32,7 @@ We train ELMo contextualized word embeddings for 5 languages: Bulgarian, Catalan
 
 Wikipedia is the biggest online multilingual open encyclopedia, comprising more than 40 million articles in 301 different languages. Because articles are curated by language and written in an open collaboration model, its text tends to be of very high-quality in comparison to other free online resources. This is why Wikipedia has been extensively used in various NLP applications \citep{wu-weld-2010-open,mihalcea-2007-using,al-rfou-etal-2013-polyglot,bojanowski-etal-2017-enriching}. We downloaded the XML Wikipedia dumps\footnote{XML dumps from April 4, 2019.} and extracted the plain-text from them using the \texttt{wikiextractor.py} script\footnote{Available \href{https://github.com/attardi/wikiextractor}{here}.} from Giuseppe Attardi. We present the number of words and tokens available for each of our 5 languages in Table \ref{tab:Wikipedia}. We decided against deduplicating the Wikipedia data as the corpora are already quite small. We tokenize the 5 corpora using \emph{UDPipe} \citep{straka-strakova-2017-tokenizing}.
 
-\subsection{OSCAR}
-
-Common Crawl is a non-profit organization that produces and maintains an open, freely available repository of crawled data from the web. Common Crawl's complete archive consists of petabytes of monthly snapshots collected since 2011. \iffalse The snapshots are distributed as raw HTML documents, or as \emph{WET} files which contain the extracted plain text converted to UTF-8, as well as a header containing the metadata of each extracted document.\fi{} Common Crawl snapshots are not classified by language, and contain a certain level of noise (e.g.~one-word ``sentences'' such as ``OK'' and ``Cancel'' are unsurprisingly very frequent).
-
-This is what motivated the creation of the freely available multilingual OSCAR corpus \citep{ortiz-suarez-etal-2019-asynchronous}, extracted from the November 2018 snapshot, which amounts to more than 20 terabytes of plain-text. In order to create OSCAR from this Common Crawl snapshot, \citet{ortiz-suarez-etal-2019-asynchronous}  reproduced the pipeline proposed by \citep{grave-etal-2018-learning} to process, filter and classify Common Crawl. More precisely,  language classification was performed using the \emph{fastText} linear classifier \citep{joulin-etal-2016-fasttext,joulin-etal-2017-bag}, which was trained by \citet{grave-etal-2018-learning} to recognize 176 languages and was shown to have an extremely good accuracy to processing time trade-off. The filtering step as performed by \citet{grave-etal-2018-learning} consisted in only keeping the lines exceeding 100 bytes in length.\footnote{Script available \href{https://github.com/facebookresearch/fastText/blob/master/crawl/process_wet_file.sh}{here}.} However, considering that Common Crawl is a mutilingual UTF-8 encoded corpus, this 100-byte threshold creates a huge disparity between ASCII and non-ASCII encoded languages. The filtering step used to create OSCAR therefore consisted in only keeping the lines containing at least 100 UTF-8-encoded characters. Finally, as in  \citep{grave-etal-2018-learning}, the OSCAR corpus is deduplicated, i.e.~for each language, only one occurrence of a given line is included.
-
-As we did for Wikipedia, we tokenize OSCAR corpora for the 5 languages we chose for our study using UDPipe. Table \ref{tab:CC} provides quantitative information about the 5 resulting tokenized corpora.
-
-We note that the original Common-Crawl-based corpus created by \citet{grave-etal-2018-learning} to train fastText is not freely available. Since running the experiments described in this paper, a new architecture for creating a Common-Crawl-based corpus named CCNet \citep{wenzek-etal-2020-ccnet} has been published, although it includes specialized filtering which might result in a cleaner corpus compared to OSCAR, the resulting CCNet corpus itself was not published. Thus we chose to keep OSCAR as it remains the only very large scale, Common-Crawl-based corpus currently available and easily downloadable.
+As we did for Wikipedia, we tokenize OSCAR 2019 subcorpora for the 5 languages we chose for our study using UDPipe. Table \ref{tab:CC} provides quantitative information about the 5 resulting tokenized corpora.
 
 \begin{table}[t]
     \centering\small
@@ -59,20 +47,20 @@ We note that the original Common-Crawl-based corpus created by \citet{grave-etal
             \bottomrule
         \end{tabular}
     }
-    \caption{Size of OSCAR subcorpora, measured in bytes, thousands of tokens, words and sentences.}
+    \caption{Size of OSCAR 2019 subcorpora, measured in bytes, thousands of tokens, words and sentences.}
     \label{tab:CC}
 \end{table}
 
 \subsection{Noisiness}
 
-We wanted to address \citep{trinh-le-2018-a} and \citep{radford-etal-2019-language}'s criticisms of Common Crawl, so we devised a simple method to measure how noisy the OSCAR corpora were for our 5 languages. We randomly extract a number of lines from each corpus, such that the resulting random sample contains one million words.\footnote{We remove tokens that are capitalized or contain less than 4 UTF-8 encoded characters, allowing us to remove bias against Wikipedia, which traditionally contains a large quantity of proper nouns and acronyms.} We test if the words are in the corresponding \emph{GNU Aspell}\footnote{\url{http://aspell.net/}} dictionary. We repeat this task for each of the 5 languages, for both the OSCAR and the Wikipedia corpora. We compile in Table \ref{tab:OOV} the number of out-of-vocabulary tokens for each corpora.
+We wanted to address \citep{trinh-le-2018-a} and \citep{radford-etal-2019-language}'s criticisms of Common Crawl, so we devised a simple method to measure how noisy the OSCAR 2019 subcorpora were for our 5 languages. We randomly extract a number of lines from each corpus, such that the resulting random sample contains one million words.\footnote{We remove tokens that are capitalized or contain less than 4 UTF-8 encoded characters, allowing us to remove bias against Wikipedia, which traditionally contains a large quantity of proper nouns and acronyms.} We test if the words are in the corresponding \emph{GNU Aspell}\footnote{\url{http://aspell.net/}} dictionary. We repeat this task for each of the 5 languages, for both the OSCAR and the Wikipedia corpora. We compile in Table \ref{tab:OOV} the number of out-of-vocabulary tokens for each corpora.
 
-As expected, this simple metric shows that in general the OSCAR samples contain more out-of-vocabulary words than the Wikipedia ones. However the difference in magnitude between the two is strikingly lower that one would have expected in view of the criticisms by \citet{trinh-le-2018-a} and \citet{radford-etal-2019-language}, thereby validating the usability of Common Crawl data when it is properly filtered, as was achieved by the OSCAR creators. We even observe that, for Danish, the number of out-of-vocabulary words in OSCAR is lower than that in Wikipedia.
+As expected, this simple metric shows that in general the OSCAR samples contain more out-of-vocabulary words than the Wikipedia ones. However the difference in magnitude between the two is strikingly lower that one would have expected in view of the criticisms by \citet{trinh-le-2018-a} and \citet{radford-etal-2019-language}, thereby validating the usability of Common Crawl data when it is properly filtered, as was achieved by in the OSCAR 2019 corpus. We even observe that, for Danish, the number of out-of-vocabulary words in OSCAR is lower than that in Wikipedia.
 
 \begin{table}[t]
     \centering\small
     \begin{tabular}{lrr}\toprule
-        Language   & \multicolumn{1}{l}{OOV Wikipedia} & \multicolumn{1}{l}{OOV OSCAR} \\ \midrule
+        Language   & \multicolumn{1}{l}{OOV Wikipedia} & \multicolumn{1}{l}{OOV OSCAR 2019} \\ \midrule
         Bulgarian  & 60,879                            & 66,558                        \\
         Catalan    & 34,919                            & 79,678                        \\
         Danish     & 134,677                           & 123,299                       \\
@@ -80,13 +68,13 @@ As expected, this simple metric shows that in general the OSCAR samples contain 
         Indonesian & 116,714                           & 124,607                       \\
         \bottomrule
     \end{tabular}
-    \caption{Number of out-of-vocabulary words in random samples of 1M words for OSCAR and Wikipedia.}
+    \caption{Number of out-of-vocabulary words in random samples of 1M words for OSCAR 2019 and Wikipedia.}
     \label{tab:OOV}
 \end{table}
 
 \section{Experimental Setting}
 
-The main goal of this paper is to show the impact of training data on contextualized word representations when applied in particular downstream tasks. To this end, we train different versions of the \emph{Embeddings from Language Models} (ELMo) \citep{peters-etal-2018-deep} for both the Wikipedia and OSCAR corpora, for each of our selected 5 languages. We save the models' weights at different number of epochs for each language, in order to test how corpus size affect the embeddings and to see whether and when overfitting happens when training elmo on smaller corpora.
+The main goal of this paper is to show the impact of training data on contextualized word representations when applied in particular downstream tasks. To this end, we train different versions of the \emph{Embeddings from Language Models} (ELMo) \citep{peters-etal-2018-deep} for both the Wikipedia and OSCAR 2019 corpora, for each of our selected 5 languages. We save the models' weights at different number of epochs for each language, in order to test how corpus size affect the embeddings and to see whether and when overfitting happens when training elmo on smaller corpora.
 
 We take each of the trained ELMo models and use them in conjunction with the UDPipe 2.0 \citep{straka-2018-udpipe,straka-strakova-2019-evaluating} architecture for dependency parsing and POS-tagging to test our models. We train UDPipe 2.0 using gold tokenization and segmentation for each of our ELMo models, the only thing that changes from training to training is the ELMo model as hyperparameters always remain at the default values (except for number of training tokens) \citep{peters-etal-2018-deep}.
 
@@ -94,7 +82,7 @@ We take each of the trained ELMo models and use them in conjunction with the UDP
 
 \emph{Embeddings from Language Models} (ELMo) \citep{peters-etal-2018-deep} is an LSTM-based language model. More precisely, it uses a bidirectional language model, which combines a forward and a backward LSTM-based language model. ELMo also computes a context-independent token representation via a CNN over characters.
 
-We train ELMo models for Bulgarian, Catalan, Danish, Finnish and Indonesian using the OSCAR corpora on the one hand and the Wikipedia corpora on the other. We train each model for 10 epochs, as was done for the original English ELMo \citep{peters-etal-2018-deep}. We save checkpoints at 1\textsuperscript{st}, 3\textsuperscript{rd} and 5\textsuperscript{th} epoch in order to investigate some concerns about possible overfitting for smaller corpora (Wikipedia in this case) raised by the original ELMo authors.\footnote{\url{https://github.com/allenai/bilm-tf/issues/135}}
+We train ELMo models for Bulgarian, Catalan, Danish, Finnish and Indonesian using the OSCAR 2019 subcorpora on the one hand and the Wikipedia corpora on the other. We train each model for 10 epochs, as was done for the original English ELMo \citep{peters-etal-2018-deep}. We save checkpoints at 1\textsuperscript{st}, 3\textsuperscript{rd} and 5\textsuperscript{th} epoch in order to investigate some concerns about possible overfitting for smaller corpora (Wikipedia in this case) raised by the original ELMo authors.\footnote{\url{https://github.com/allenai/bilm-tf/issues/135}}
 
 \subsection{UDPipe 2.0} \label{udpipe-future}
 
@@ -207,7 +195,7 @@ To train the selected parser and tagger (cf.~Section \ref{udpipe-future}) and ev
 \subsection{Parsing and POS tagging results}
 We use UDPipe 2.0 without contextualized embeddings as our baseline for POS tagging and dependency parsing. However, we did not train the model without contextualized word embedding ourselves. We instead take the scores as they are reported in \citep{kondratyuk-straka-2019-75}. We also compare our UDPipe 2.0 + ELMo models against the state-of-the-art results (assuming gold tokenization) for these languages, which are either UDify \citep{kondratyuk-straka-2019-75} or UDPipe 2.0 + mBERT \citep{straka-strakova-2019-evaluating}.
 
-Results for UPOS, UAS and LAS are shown in Table \ref{tab:parse}. We obtain the state of the art for the three metrics in each of the languages with the UDPipe 2.0 + \elmooscar models. We also see that in every single case the UDPipe 2.0 + \elmooscar result surpasses the UDPipe 2.0 + \elmowiki one, suggesting that the size of the pre-training data plays an important role in downstream task results. This is also supports our hypothesis that the OSCAR corpora, being multi-domain, exhibits a better coverage of the different styles, genres and uses present at least in these 5 languages.
+Results for UPOS, UAS and LAS are shown in Table \ref{tab:parse}. We obtain the state of the art for the three metrics in each of the languages with the UDPipe 2.0 + \elmooscar models. We also see that in every single case the UDPipe 2.0 + \elmooscar result surpasses the UDPipe 2.0 + \elmowiki one, suggesting that the size of the pre-training data plays an important role in downstream task results. This is also supports our hypothesis that the OSCAR corpus, being multi-domain, exhibits a better coverage of the different styles, genres and uses present at least in these 5 languages.
 
 Taking a closer look at the results for Danish, we see that \elmowiki, which was trained with a mere 300MB corpus, does not show any sign of overfitting, as the UDPipe 2.0 + \elmowiki results considerably improve the UDPipe 2.0 baseline. This is the case for all of our \elmowiki models as we never see any evidence of a negative impact when we add them to the baseline model. In fact, the results of UDPipe 2.0 + \elmowiki give better than previous state-of-the-art results in all metrics for the Finnish-FTB and in UPOS for the Finnish-TDT. The results for Finnish are actually quite interesting, as mBERT was pre-trained on Wikipedia and here we see that the multilingual setting in which UDify was fine-tuned exhibits sub-baseline results for all metrics, and that the UDPipe + mBERT scores are often lower than those of our UDPipe 2.0 + \elmowiki. This actually suggests that even though the multilingual approach of mBERT (in pre-training) or UDify (in pre-training and fine-tuning) leads to better performance for  high-resource languages or languages that are closely related to high-resource languages, it might also significantly degrade the representations for more isolated or even simply more morphologically rich languages like Finnish. In contrast, our monolingual approach with UDPipe 2.0 + \elmooscar improves the previous SOTA considerably, by more than 2 points for some metrics. Note however that Indonesian, which might also be seen as a relatively isolated language, does not behave in the same way as Finnish.
 
@@ -297,94 +285,13 @@ The first striking finding is that even though all our Wikipedia data sets are s
     \label{tab:ablation-monolingual}
 \end{table}
 
-\elmooscar models exhibit exactly the same behavior as \elmowiki models where the scores continue to improve the longer they are pre-trained, except for the case of Finnish. Here we actually see an unexpected behavior where the model performance caps around the 3\textsuperscript{rd} to 5\textsuperscript{th} epoch. This is surprising because the Finnish OSCAR corpus is more than 20 times bigger than our smallest Wikipedia corpus, the Danish Wikipedia, that did not exhibit this behavior. As previously mentioned Finnish is morphologically richer than the other languages in which we trained ELMo, we hypothesize that the representation space given by the ELMo embeddings might not be sufficiently big to extract more features from the Finnish OSCAR corpus beyond the 5\textsuperscript{th} epoch mark, however in order to test this we would need to train a larger language model like BERT which is sadly beyond our computing infrastructure limits (cf. Subsection \ref{cost}). However we do note that pre-training our current language model architectures in a morphologically rich language like Finnish might actually better expose the limits of our existing approaches to language modeling.
+\elmooscar models exhibit exactly the same behavior as \elmowiki models where the scores continue to improve the longer they are pre-trained, except for the case of Finnish. Here we actually see an unexpected behavior where the model performance caps around the 3\textsuperscript{rd} to 5\textsuperscript{th} epoch. This is surprising because the Finnish OSCAR 2019 subcorpus is more than 20 times bigger than our smallest Wikipedia corpus, the Danish Wikipedia, that did not exhibit this behavior. As previously mentioned Finnish is morphologically richer than the other languages in which we trained ELMo, we hypothesize that the representation space given by the ELMo embeddings might not be sufficiently big to extract more features from the Finnish OSCAR subcorpus beyond the 5\textsuperscript{th} epoch mark, however in order to test this we would need to train a larger language model like BERT which is sadly beyond our computing infrastructure limits (cf. Subsection \ref{cost}). However we do note that pre-training our current language model architectures in a morphologically rich language like Finnish might actually better expose the limits of our existing approaches to language modeling.
 
 One last thing that it is important to note with respect to the number of training epochs is that even though we fully pre-trained our \elmowikis and \elmooscars to the recommended 10 epoch mark, and then compared them against one another, the number of training steps between both pre-trained models differs drastically due to the big difference in corpus size (for Indonesian, for instance, 10 epochs correspond to 78K steps for \elmowiki and to 2.6M steps for OSCAR; the complete picture is provided in the Appendix, in Table~\ref{tab:steps}). In fact, we can see in Table \ref{tab:ablation-monolingual} that all the UDPipe 2.0 + \elmooscarone perform better than the UDPipe 2.0 + \elmowikione models across all metrics. Thus we believe that talking in terms of training steps as opposed to training epochs might be a more transparent way of comparing two pre-trained models.
 
-\subsection{Computational cost and carbon footprint}\label{cost}
-
-Considering the discussion above, we believe an interesting follow-up to our experiments would be training the ELMo models for more of the languages included in the OSCAR corpus. However training ELMo is computationally costly, and one way to estimate this cost, as pointed out by \citet{strubell-etal-2019-energy}, is by using the training times of each model to compute both power consumption and CO\textsubscript{2} emissions.
-
-\begin{table}[t]
-    \centering\small
-    \scalebox{0.93}{
-        \begin{tabular}{@{}lrrrrr@{}}\toprule
-            Language                                        & Power & Hours  & Days  & KWh$\cdotp$PUE & CO\textsubscript{2}e \\
-            \midrule
-            \multicolumn{6}{l}{\hspace*{6mm}\em OSCAR-Based ELMos}                                                           \\[0.5mm]
-            Bulgarian                                       & 1183  & 515.00 & 21.45 & 962.61         & 49.09                \\
-            Catalan                                         & 1118  & 199.98 & 8.33  & 353.25         & 18.02                \\
-            Danish                                          & 1183  & 200.89 & 8.58  & 375.49         & 19.15                \\
-            Finnish                                         & 1118  & 591.25 & 24.63 & 1044.40        & 53.26                \\
-            Indonesian                                      & 1183  & 694.26 & 28.93 & 1297.67        & 66.18                \\
-            \midrule\multicolumn{6}{l}{\hspace*{6mm}\em Wikipedia-Based ELMos}                                               \\[0.5mm]
-            Bulgarian                                       & 1118  & 15.45  & 0.64  & 27.29          & 1.39                 \\
-            Catalan                                         & 1118  & 51.08  & 2.13  & 90.22          & 4.60                 \\
-            Danish                                          & 1118  & 14.56  & 0.61  & 25,72          & 1.31                 \\
-            Finnish                                         & 1118  & 21.79  & 0.91  & 38.49          & 1.96                 \\
-            Indonesian                                      & 1118  & 20.28  & 0.84  & 35.82          & 1.82                 \\
-            \midrule
-            \multicolumn{2}{@{}l}{\textsc{Total emissions}} &       &        &       & 216.78                                \\
-            \bottomrule
-        \end{tabular}
-    }
-    \caption{Average power draw (Watts), training times (in both hours and days), mean power consumption (KWh) and CO\textsubscript{2} emissions (kg) for each ELMo model trained.}
-    \label{tab:carbon}
-\end{table}
-
-In our set-up we used two different machines, each one having 4 NVIDIA GeForce GTX 1080 Ti graphic cards and 128GB of RAM, the difference between the machines being that one uses a single Intel Xeon Gold 5118 processor, while the other uses two Intel Xeon E5-2630 v4 processors. One GeForce GTX 1080 Ti card is rated at around 250 W,\footnote{\url{https://www.geforce.com/hardware/desktop-gpus/geforce-gtx-1080-ti/specifications}} the Xeon Gold 5118 processor is rated at 105 W,\footnote{\url{https://ark.intel.com/content/www/us/en/ark/products/120473/intel-xeon-gold-5118-processor-16-5m-cache-2-30-ghz.html}} while one Xeon E5-2630 v4 is rated at 85 W.\footnote{\url{https://ark.intel.com/content/www/us/en/ark/products/92981/intel-xeon-processor-e5-2630-v4-25m-cache-2-20-ghz.html}} For the DRAM we can use the work of \citet{desrochers-etal-2016-a} to estimate the total power draw of 128GB of RAM at around 13W. Having this information, we can now use the formula proposed by \citet{strubell-etal-2019-energy} in order to compute the total power required to train one ELMo model:
-\[
-    p_t = \frac{1.58t(cp_{c} + p_r + gp_g)}{1000}
-\]
-Where $c$ and $g$ are the number of CPUs and GPUs respectively, $p_c$ is the average power draw (in Watts) from all CPU sockets, $p_r$ the average power draw from all DRAM sockets, and $p_g$ the average power draw of a single GPU. We estimate the total power consumption by adding GPU, CPU and DRAM consumptions, and then multiplying by the \emph{Power Usage Effectiveness} (PUE), which accounts for the additional energy required to support the compute infrastructure. We use a PUE coefficient of 1.58, the 2018 global average for data centers \citep{strubell-etal-2019-energy}. In table \ref{tab:carbon} we report the training times in both hours and days, as well as the total power draw (in Watts) of the system used to train each individual ELMo model. We use this information to compute the total power consumption of each ELMo, also reported in table \ref{tab:carbon}.
-
-We can further estimate the CO\textsubscript{2} emissions in kilograms of each single model by multiplying the total power consumption by the average CO\textsubscript{2} emissions per kWh in France (where the models were trained). According to the RTE (Réseau de transport d'électricité / Electricity Transmission Network) the average emission per kWh were around 51g/kWh in November 2019,\footnote{\url{https://www.rte-france.com/fr/eco2mix/eco2mix-co2}} when the models were trained. Thus the total CO\textsubscript{2} emissions in kg for one single model can be computed as:
-\[
-    \text{CO}_{2}\text{e} = 0.051 p_t
-\]
-All emissions for the ELMo models are also reported in table \ref{tab:carbon}.
-
-We do not report the power consumption or the carbon footprint of training the UDPipe 2.0 architecture, as each model took less than 4 hours to train on a machine using a single NVIDIA Tesla V100 card. Also, this machine was shared during training time, so it would be extremely difficult to accurately estimate the power consumption of these models.
-
-Even though it would have been interesting to replicate all our experiments and computational cost estimations with state-of-the-art fine-tuning models such as BERT, XLNet, RoBERTa or ALBERT, we recall that these transformer-based architectures are extremely costly to train, as noted by the BERT authors on the official BERT GitHub repository,\footnote{\url{https://github.com/google-research/bert}} and are currently beyond the scope of our computational infrastructure. However we believe that ELMo contextualized word embeddings remain a useful model that still provide an extremely good trade-off between performance to training cost, even setting new state-of-the-art scores in parsing and POS tagging for our five chosen languages, performing even better than the multilingual mBERT model.
-
-
 \section{Conclusions}
 
-In this paper, we have explored the use of the Common-Crawl-based OSCAR corpora to train ELMo contextualized embeddings for five typologically diverse mid-resource languages. We have compared them with Wikipedia-based ELMo embeddings on two classical NLP tasks, POS tagging and parsing, using state-of-the-art neural architectures. Our goal was to explore whether the noisiness level of Common Crawl data, often invoked to criticize the use of such data, could be compensated by its larger size; for some languages, the OSCAR corpus is several orders of magnitude larger than the corresponding Wikipedia. Firstly, we found that when properly filtered, Common Crawl data is not massively noisier than Wikipedia. Secondly, we show that embeddings trained using OSCAR data consistently outperform Wikipedia-based embeddings, to the extent that they allow us to improve the state of the art in POS tagging and dependency parsing for all the 6 chosen treebanks. Thirdly, we observe that more training epochs generally results in better embeddings even when the training data is relatively small, as is the case for Wikipedia.
+In this paper, we have explored the use of the Common-Crawl-based OSCAR 2019 corpora to train ELMo contextualized embeddings for five typologically diverse mid-resource languages. We have compared them with Wikipedia-based ELMo embeddings on two classical NLP tasks, POS tagging and parsing, using state-of-the-art neural architectures. Our goal was to explore whether the noisiness level of Common Crawl data, often invoked to criticize the use of such data, could be compensated by its larger size; for some languages, the OSCAR 2019 corpus is several orders of magnitude larger than the corresponding Wikipedia. Firstly, we found that when properly filtered, Common Crawl data is not massively noisier than Wikipedia. Secondly, we show that embeddings trained using OSCAR 2019 data consistently outperform Wikipedia-based embeddings, to the extent that they allow us to improve the state of the art in POS tagging and dependency parsing for all the 6 chosen treebanks. Thirdly, we observe that more training epochs generally results in better embeddings even when the training data is relatively small, as is the case for Wikipedia.
 
 Our experiments show that Common-Crawl-based data such as the OSCAR corpus can be used to train high-quality contextualized embeddings, even for languages for which more standard textual resources lack volume or genre variety. This could result in better performances in a number of NLP tasks for many non highly resourced languages.
-
-\subsection*{Acknowledgments}
-
-We want to thank Ganesh Jawahar for his insightful comments and suggestions during the early stages of this project. This work was partly funded by the French national ANR grant BASNUM (\mbox{ANR-18-CE38-0003}), as well as by the last author's chair in the PRAIRIE institute,\footnote{\url{http://prairie-institute.fr/}} funded by the French national ANR as part of the ``Investissements d’avenir'' programme under the reference \mbox{ANR-19-P3IA-0001}. The authors are grateful to Inria Sophia Antipolis - Méditerranée ``Nef''\footnote{\url{https://wiki.inria.fr/wikis/ClustersSophia}} computation cluster for providing resources and support.
-
-\section{Appendix}
-\label{sec:appendix}
-\subsection{Number of training steps for each checkpoint and each corpus}
-
-\begin{table}[ht!]
-    \centering\small
-    \scalebox{0.96}{
-        \begin{tabular}{@{}lrrrr@{}}\toprule
-            Language   & 1 Epoch & 3 Epochs & 5 Epochs  & 10 Epochs        \\
-            \midrule
-            \multicolumn{5}{l}{\hspace*{6mm}\em Wikipedia-Based ELMos}     \\[0.5mm]
-            Bulgarian  & 6,268   & 18,804   & 31,340    & 62,680           \\
-            Catalan    & 20,666  & 61,998   & 103,330   & 206,660          \\
-            Danish     & 5,922   & 17,766   & 29,610    & 59,220           \\
-            Finnish    & 8,763   & 26,289   & 43,815    & 87,630           \\
-            Indonesian & 7,891   & 23,673   & 39,455    & 78,910           \\
-            \midrule\multicolumn{5}{l}{\hspace*{6mm}\em OSCAR-Based ELMos} \\[0.5mm]
-            Bulgarian  & 143,169 & 429,507  & 715,845   & 1,431,690        \\
-            Catalan    & 81,156  & 243,468  & 405,780   & 811,560          \\
-            Danish     & 81,156  & 243,468  & 405,780   & 811,560          \\
-            Finnish    & 181,230 & 543,690  & 906,150   & 1,812,300        \\
-            Indonesian & 263,830 & 791,490  & 1,319,150 & 2,638,300        \\
-            \bottomrule
-        \end{tabular}
-    }
-    \caption{Number of training steps for each checkpoint, for the \elmowiki and \elmooscar of each language.}
-    \label{tab:steps}
-\end{table}
 
