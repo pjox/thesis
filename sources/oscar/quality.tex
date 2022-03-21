@@ -11,63 +11,16 @@
     \vspace{0.5cm}
 \end{center}
 
+Having done a first automatic evaluation of a small portion of the OSCAR 2019 corpus for a selection fo 5 mid-resource languages, we wanted to better assess the global quality of the corpus specially for low-resource languages. To accomplished this, we participated in a collaborative effort to manually audit OSCAR 2019 and other 4 crawled corpora that have been extensively used in NLP research in the last few years.
+
+Thus, to shed light on the quality of data crawls, specially for the lowest resource languages, we perform a manual data audit for 230 per-language subsets of five major crawled multilingual datasets:\footnote{Annotations are available for \href{https://storage.googleapis.com/huggingface-nlp/datasets/masakhane_audit_annotations/masakhane_language_audit.zip}{download} (last accessed: 12 Oct 2021).}
+CCAligned~\citep{el-kishky-etal-2020-ccaligned}, ParaCrawl~\citep{espla-etal-2019-paracrawl,banon-etal-2020-paracrawl}, WikiMatrix~\citep{schwenk-etal-2021-wikimatrix}, OSCAR 2019 \citep{ortiz-suarez-etal-2019-asynchronous, ortiz-suarez-etal-2020-monolingual} and mC4~\citep{xue-etal-2021-mt5}. We propose solutions for effective, low-effort data auditing (Section~\ref{sec:audit}), including an error taxonomy. Our quantitative analysis reveals surprisingly low amounts of valid in-language data, and identifies systematic issues across datasets and languages. In addition, we find that a large number of datasets is labeled with nontransparent or incorrect language codes (Section~\ref{sec:codes}). This leads us to reflect on the potential harm of low-quality data releases for low-resource languages (Section~\ref{sec:risk}), and provide a set of recommendations for future multilingual data releases (Section~\ref{sec:recommendation}).
+
+
 \section{Auditing Data Quality}\label{sec:audit}
-None of the above datasets has been evaluated for quality on the sentence level (exception: several languages in ParaCrawl v3), and downstream evaluations are centered around a small fraction of higher-resource languages. This is insufficient for drawing conclusions about the quality of individual or aligned sentences, and about the entirety of languages. In addition, there might be a publication bias preventing negative results with any of the above corpora with lower quality being published.
+None of the five selected datasets has been evaluated for quality on the sentence level (exception: several languages in ParaCrawl v3), and downstream evaluations are centered around a small fraction of higher-resource languages. This is insufficient for drawing conclusions about the quality of individual or aligned sentences (in parallel datasets), and about the entirety of languages. In addition, there might be a publication bias preventing negative results with any of the above corpora with lower quality being published.
 
 To close this gap, we conduct a human data quality audit focused on the lowest-resource and most under-evaluated languages, but also covering mid- and high-resource languages for comparison.
-
-
-\begin{table*}[th]
-    \small
-    \centering
-    \resizebox{\textwidth}{!}{
-    \begin{tabular}{ll}
-        \toprule
-        \multicolumn{2}{c}{\textbf{Correct Codes}}                                                                                  \\
-        \midrule
-        \textbf{\texttt{C}}:  \textit{Correct translation, any} & Combined label for \texttt{CC}, \texttt{CB}, \texttt{CS}          \\
-        \midrule
-        \multicolumn{2}{l}{\textbf{\texttt{CC}:} \textit{Correct translation, natural sentence}}                                    \\
-        %	\midrule
-        \texttt{en} The Constitution of South Africa            & \texttt{nso} Molaotheo wa Rephabliki ya Afrika Borwa              \\
-        \texttt{en} Transforming your swimming pool into a pond & \texttt{de} Umbau Ihres Swimmingpools zum Teich                   \\
-        \midrule
-        \multicolumn{2}{l}{\textbf{\texttt{CB}:} \textit{Correct translation, Boilerplate or low quality}}                          \\
-        %	\midrule
-        \texttt{en} Reference number: 13634                     & \texttt{ln} Motango ya référence: 13634                           \\
-        \texttt{en} Latest Smell Stop Articles                  & \texttt{fil} Pinakabagong mga Artikulo Smell Stop                 \\
-        %  \texttt{en} Weight (Male): 8,6 - 13,5 kg & \texttt{ts} Ntiko (Xinuna): 8, 6 - 13, 5 kg \\
-        \midrule
-        \multicolumn{2}{l}{\textbf{\texttt{CS}:} \textit{Correct translation, Short}}                                               \\
-        % 	\midrule
-        \texttt{en} movies, dad                                 & \texttt{it} cinema, pap\`{a}                                      \\
-        \texttt{en} Halloween - without me                      & \texttt{ay} Hallowen – janiw nayampejj                            \\
-        \midrule
-        \midrule
-        \multicolumn{2}{c}{\textbf{Error Codes}}                                                                                    \\
-        \midrule
-        \multicolumn{2}{l}{\textbf{X:} \textit{Incorrect translation, but both correct languages}}                                  \\
-        %	\midrule
-        \texttt{en} A map of the arrondissements of Paris       & \texttt{kg} Paris kele mbanza ya kimfumu ya Fwalansa.             \\
-        \texttt{en} Ask a question                              & \texttt{tr} Soru sor Kullanıma g{\"o}re se\c{c}im                 \\
-        \midrule
-        \multicolumn{2}{l}{\textbf{\texttt{WL}:} \textit{Source OR target wrong language, but both still linguistic content}}       \\
-        % 	\midrule
-        \texttt{en} The ISO3 language code is zho               & \texttt{zza} T{\' a}im eadra bracach mar bhionns na frogannaidhe. \\
-        %  \texttt{en} sicilianu: Johannesburg & \texttt{ve} Tshivenda: Johannesburg \\
-        \texttt{en} Der Werwolf — sprach der gute Mann,         &
-        \texttt{de} des Weswolfs, Genitiv sodann,                                                                                   \\
-        \midrule
-        \multicolumn{2}{l}{\textbf{NL:} \textit{Not a language: at least one of source and target are not linguistic content}}      \\
-        %	\midrule
-        \texttt{en} EntryScan 4 \_                              & \texttt{tn} TSA PM704 \_                                          \\
-        \texttt{en} organic peanut butter                       & \texttt{ckb} \ucr \ucr \ucr \ucr \ucr \ucr \ucr                   \\
-        \bottomrule
-    \end{tabular}
-    }
-    \caption{Annotation codes for parallel data with sentence pair examples. The language code before each sentence indicates the language it is supposed to be in.}
-    \label{tab:examples}
-\end{table*}
 
 \subsection{Auditing Process}
 
@@ -85,56 +38,105 @@ In general, we aim to find an upper bound on quality, so we encouraged annotator
 
 \paragraph{Effort} The individual effort was dependent on the quality and complexity of the data, and on the annotator's knowledge of the language(s), e.g., it took from less than two minutes for an English native speaker to pass through 100 well-formed English sentences (or similarly to annotate languages with 0\% in-language sentences), to two hours of ``detective work'' for well-formed content in languages for an annotator without familiarity.
 
+\begin{table}[th]
+    \small
+    \centering
+    \resizebox{\textwidth}{!}{
+        \begin{tabular}{ll}
+            \toprule
+            \multicolumn{2}{c}{\textbf{Correct Codes}}                                                                                  \\
+            \midrule
+            \textbf{\texttt{C}}:  \textit{Correct translation, any} & Combined label for \texttt{CC}, \texttt{CB}, \texttt{CS}          \\
+            \midrule
+            \multicolumn{2}{l}{\textbf{\texttt{CC}:} \textit{Correct translation, natural sentence}}                                    \\
+            %	\midrule
+            \texttt{en} The Constitution of South Africa            & \texttt{nso} Molaotheo wa Rephabliki ya Afrika Borwa              \\
+            \texttt{en} Transforming your swimming pool into a pond & \texttt{de} Umbau Ihres Swimmingpools zum Teich                   \\
+            \midrule
+            \multicolumn{2}{l}{\textbf{\texttt{CB}:} \textit{Correct translation, Boilerplate or low quality}}                          \\
+            %	\midrule
+            \texttt{en} Reference number: 13634                     & \texttt{ln} Motango ya référence: 13634                           \\
+            \texttt{en} Latest Smell Stop Articles                  & \texttt{fil} Pinakabagong mga Artikulo Smell Stop                 \\
+            %  \texttt{en} Weight (Male): 8,6 - 13,5 kg & \texttt{ts} Ntiko (Xinuna): 8, 6 - 13, 5 kg \\
+            \midrule
+            \multicolumn{2}{l}{\textbf{\texttt{CS}:} \textit{Correct translation, Short}}                                               \\
+            % 	\midrule
+            \texttt{en} movies, dad                                 & \texttt{it} cinema, pap\`{a}                                      \\
+            \texttt{en} Halloween - without me                      & \texttt{ay} Hallowen – janiw nayampejj                            \\
+            \midrule
+            \midrule
+            \multicolumn{2}{c}{\textbf{Error Codes}}                                                                                    \\
+            \midrule
+            \multicolumn{2}{l}{\textbf{X:} \textit{Incorrect translation, but both correct languages}}                                  \\
+            %	\midrule
+            \texttt{en} A map of the arrondissements of Paris       & \texttt{kg} Paris kele mbanza ya kimfumu ya Fwalansa.             \\
+            \texttt{en} Ask a question                              & \texttt{tr} Soru sor Kullanıma g{\"o}re se\c{c}im                 \\
+            \midrule
+            \multicolumn{2}{l}{\textbf{\texttt{WL}:} \textit{Source OR target wrong language, but both still linguistic content}}       \\
+            % 	\midrule
+            \texttt{en} The ISO3 language code is zho               & \texttt{zza} T{\' a}im eadra bracach mar bhionns na frogannaidhe. \\
+            %  \texttt{en} sicilianu: Johannesburg & \texttt{ve} Tshivenda: Johannesburg \\
+            \texttt{en} Der Werwolf — sprach der gute Mann,         &
+            \texttt{de} des Weswolfs, Genitiv sodann,                                                                                   \\
+            \midrule
+            \multicolumn{2}{l}{\textbf{NL:} \textit{Not a language: at least one of source and target are not linguistic content}}      \\
+            %	\midrule
+            \texttt{en} EntryScan 4 \_                              & \texttt{tn} TSA PM704 \_                                          \\
+            \texttt{en} organic peanut butter                       & \texttt{ckb} \ucr \ucr \ucr \ucr \ucr \ucr \ucr                   \\
+            \bottomrule
+        \end{tabular}
+    }
+    \caption{Annotation codes for parallel data with sentence pair examples. The language code before each sentence indicates the language it is supposed to be in.}
+    \label{tab:examples}
+\end{table}
+
 \paragraph{Taxonomy}
 In order to quantify errors, we developed a simple error taxonomy. Sentences and sentence pairs were annotated according to a simple rubric with error classes of Incorrect Translation (\texttt{X}, excluded for monolingual data), Wrong Language (\texttt{WL}), and Non-Linguistic Content (\texttt{NL}). Of correct sentences (\texttt{C}), we further mark single words or phrases (\texttt{CS}) and boilerplate contents (\texttt{CB}).
 In addition, we asked annotators to flag offensive or pornographic content.
 Table \ref{tab:examples} provides examples for parallel data, and Appendix~\ref{app:taxonomy} contains detailed annotation instructions.
 
-\begin{table*}[th]
+\begin{table}[th]
     \centering \small
     \resizebox{\textwidth}{!}{%
-    \begin{tabular}{llccccc}
-        \toprule
-                                                                  &                             & \multicolumn{3}{c}{\textbf{Parallel}} & \multicolumn{2}{c}{\textbf{Monolingual}}                                                       \\
-        \cmidrule(lr){3-5} \cmidrule(lr){6-7}
-                                                                  &                             & \textbf{CCAligned}                    & \textbf{ParaCrawl v7.1}                  & \textbf{WikiMatrix} & \textbf{OSCAR} & \textbf{mC4} \\
-        \midrule
-        \multicolumn{2}{l}{\#langs audited / total}               & 65 / 119                    & 21 / 38                               & 20 / 78                                  & 51 / 166            & 48 / 108                      \\
-        \multicolumn{2}{l}{\%langs audited}                       & 54.62\%                     & 55.26\%                               & 25.64\%                                  & 30.72\%             & 44.44\%                       \\
-        \multicolumn{2}{l}{\#sents audited / total}               & 8037 / 907M                 & 2214 / 521M                           & 1997 / 95M                               & 3517 / 8.4B         & 5314 / 8.5B                   \\
-        \multicolumn{2}{l}{\%sents audited}                       & 0.00089\%                   & 0.00043\%                             & 0.00211\%                                & 0.00004\%           & 0.00006\%                     \\
-        \midrule
-        \multirow{6}{*}{\rotatebox[origin=c]{90}{\textbf{macro}}} &
-        \texttt{C}                                                & 29.25\%                     & 76.14\%                               & 23.74\%                                  & 87.21\%             & 72.40\%                       \\
-                                                                  & \texttt{X}                  & 29.46\%                               & 19.17\%                                  & 68.18\%             & -              & -            \\
-                                                                  & \texttt{WL}                 & 9.44\%                                & 3.43\%                                   & 6.08\%              & 6.26\%         & 15.98\%      \\
-                                                                  & \texttt{NL}                 & 31.42\%                               & 1.13\%                                   & 1.60\%              & 6.54\%         & 11.40\%      \\
-                                                                  & offensive                   & 0.01\%                                & 0.00\%                                   & 0.00\%              & 0.14\%         & 0.06\%       \\
-                                                                  & porn                        & 5.30\%                                & 0.63\%                                   & 0.00\%              & 0.48\%         & 0.36\%       \\
-        \midrule
-        \multirow{6}{*}{\rotatebox[origin=c]{90}{\textbf{micro}}} &
-        \texttt{C}                                                & 53.52\%                     & 83.00\%                               & 50.58\%                                  & 98.72\%             & 92.66\%                       \\
-                                                                  & \texttt{X}                  & 32.25\%                               & 15.27\%                                  & 47.10\%             & -              & -            \\
-                                                                  & \texttt{WL}                 & 3.60\%                                & 1.04\%                                   & 1.35\%              & 0.52\%         & 2.33\%       \\
-                                                                  & \texttt{NL}                 & 10.53\%                               & 0.69\%                                   & 0.94\%              & 0.75\%         & 5.01\%       \\
-                                                                  & offensive                   & 0.00\%                                & 0.00\%                                   & 0.00\%              & 0.18\%         & 0.03\%       \\
-                                                                  & porn                        & 2.86\%                                & 0.33\%                                   & 0.00\%              & 1.63\%         & 0.08\%       \\
-        \midrule
-                                                                  & \#langs =0\% \texttt{C}     & 7                                     & 0                                        & 1                   & 7              & 0            \\
-        %& \#langs $<$5\% \texttt{C} & 14 & 0 & 2 & 7  & 0 \\
-        %& \#langs $<$20\% \texttt{C} & 27 & 0 & 10 & 7 & 4 \\
-                                                                  & \#langs $<$50\% \texttt{C}  & 44                                    & 4                                        & 19                  & 11             & 9            \\
-                                                                  & \#langs $>$50\% \texttt{NL} & 13                                    & 0                                        & 0                   & 7              & 1            \\
-                                                                  & \#langs $>$50\% \texttt{WL} & 1                                     & 0                                        & 0                   & 3              & 4            \\
-        \bottomrule
-    \end{tabular}%
+        \begin{tabular}{llccccc}
+            \toprule
+                                                                      &                             & \multicolumn{3}{c}{\textbf{Parallel}} & \multicolumn{2}{c}{\textbf{Monolingual}}                                                       \\
+            \cmidrule(lr){3-5} \cmidrule(lr){6-7}
+                                                                      &                             & \textbf{CCAligned}                    & \textbf{ParaCrawl v7.1}                  & \textbf{WikiMatrix} & \textbf{OSCAR} & \textbf{mC4} \\
+            \midrule
+            \multicolumn{2}{l}{\#langs audited / total}               & 65 / 119                    & 21 / 38                               & 20 / 78                                  & 51 / 166            & 48 / 108                      \\
+            \multicolumn{2}{l}{\%langs audited}                       & 54.62\%                     & 55.26\%                               & 25.64\%                                  & 30.72\%             & 44.44\%                       \\
+            \multicolumn{2}{l}{\#sents audited / total}               & 8037 / 907M                 & 2214 / 521M                           & 1997 / 95M                               & 3517 / 8.4B         & 5314 / 8.5B                   \\
+            \multicolumn{2}{l}{\%sents audited}                       & 0.00089\%                   & 0.00043\%                             & 0.00211\%                                & 0.00004\%           & 0.00006\%                     \\
+            \midrule
+            \multirow{6}{*}{\rotatebox[origin=c]{90}{\textbf{macro}}} &
+            \texttt{C}                                                & 29.25\%                     & 76.14\%                               & 23.74\%                                  & 87.21\%             & 72.40\%                       \\
+                                                                      & \texttt{X}                  & 29.46\%                               & 19.17\%                                  & 68.18\%             & -              & -            \\
+                                                                      & \texttt{WL}                 & 9.44\%                                & 3.43\%                                   & 6.08\%              & 6.26\%         & 15.98\%      \\
+                                                                      & \texttt{NL}                 & 31.42\%                               & 1.13\%                                   & 1.60\%              & 6.54\%         & 11.40\%      \\
+                                                                      & offensive                   & 0.01\%                                & 0.00\%                                   & 0.00\%              & 0.14\%         & 0.06\%       \\
+                                                                      & porn                        & 5.30\%                                & 0.63\%                                   & 0.00\%              & 0.48\%         & 0.36\%       \\
+            \midrule
+            \multirow{6}{*}{\rotatebox[origin=c]{90}{\textbf{micro}}} &
+            \texttt{C}                                                & 53.52\%                     & 83.00\%                               & 50.58\%                                  & 98.72\%             & 92.66\%                       \\
+                                                                      & \texttt{X}                  & 32.25\%                               & 15.27\%                                  & 47.10\%             & -              & -            \\
+                                                                      & \texttt{WL}                 & 3.60\%                                & 1.04\%                                   & 1.35\%              & 0.52\%         & 2.33\%       \\
+                                                                      & \texttt{NL}                 & 10.53\%                               & 0.69\%                                   & 0.94\%              & 0.75\%         & 5.01\%       \\
+                                                                      & offensive                   & 0.00\%                                & 0.00\%                                   & 0.00\%              & 0.18\%         & 0.03\%       \\
+                                                                      & porn                        & 2.86\%                                & 0.33\%                                   & 0.00\%              & 1.63\%         & 0.08\%       \\
+            \midrule
+                                                                      & \#langs =0\% \texttt{C}     & 7                                     & 0                                        & 1                   & 7              & 0            \\
+            %& \#langs $<$5\% \texttt{C} & 14 & 0 & 2 & 7  & 0 \\
+            %& \#langs $<$20\% \texttt{C} & 27 & 0 & 10 & 7 & 4 \\
+                                                                      & \#langs $<$50\% \texttt{C}  & 44                                    & 4                                        & 19                  & 11             & 9            \\
+                                                                      & \#langs $>$50\% \texttt{NL} & 13                                    & 0                                        & 0                   & 7              & 1            \\
+                                                                      & \#langs $>$50\% \texttt{WL} & 1                                     & 0                                        & 0                   & 3              & 4            \\
+            \bottomrule
+        \end{tabular}%
     }
     \caption{Averages of sentence-level annotations across datasets and selected languages. Macro-avg: Each language is weighted equally in the aggregation, regardless of its size. Micro-avg: Each label is weighted by the fraction of sentences for that language in the overall annotated corpus, i.e., the annotations for higher-represented languages are upweighted, and annotations for lower-represented languages are downweighted. The bottom rows contain the number of languages that have 0\% labeled \texttt{C} etc. Note that these are not true expectations since the languages audited were not randomly sampled. }
     \label{tab:results}
-\end{table*}
-
-
-
+\end{table}
 
 
 \subsection{Human Audit Results}\label{sec:audit-res}
@@ -166,7 +168,18 @@ Figure~\ref{fig:ratio_c} illustrates per-corpus correctness more completely, sho
     \label{fig:ratio_c}
 \end{figure}
 
-\begin{figure*}[th]
+\paragraph{Why haven't these problems been reported before?}
+The findings above are averaged on a per-language basis (i.e. macro-average), and therefore give low and high-resource languages equal weight. If we instead estimate the quality on a per-sentence basis, i.e. down-weight lower-resource languages in the computation of the average, the numbers paint a more optimistic picture (``micro'' block in Table~\ref{tab:results}). This is especially relevant for the monolingual datasets because they contain audits for English, which makes up for 43\% of all sentences in OSCAR 2019 and 36\% in mC4. To illustrate the effect of this imbalance: A random sample from the entire mC4 dataset with over 63\% chance will be from one of the 8 largest languages (\texttt{en}, \texttt{ru}, \texttt{es}, \texttt{de}, \texttt{fr}, \texttt{it}, \texttt{pt}, \texttt{pl}, $>$100M sentences each), %\footnote{mC4 contains 22\% \texttt{und} sentences, i.e. sentences with undefined language.} 
+of which all have near perfect quality. Analogously, evaluation and tuning of web mining pipelines and resulting corpora in downstream applications focused largely on higher-resource languages (Section~\ref{sec:crawls}), so the low quality of underrepresented languages might go unnoticed if there is no dedicated evaluation, or no proficient speakers are involved in the curation~\citep{nekoto-etal-2020-participatory}.
+
+
+\paragraph{How much content is nonlinguistic or in the wrong language?}
+Nonlinguistic content is a more common problem than wrong-language content. Among the parallel datasets, CCAligned contains the highest percentage of nonlinguistic content, at 31.42\% on average across all rated corpora, and also the highest percent of wrong-language content, at 9.44\%. Among the monolingual datasets, mC4 contains the highest ratio both of sentences in incorrect languages (15.98\% average) and nonlinguistic content (11.40\% average), with 4 of the 48 audited languages having more than 50\% contents in other languages. The low amount of wrong language in ParaCrawl shows the benefits of selecting domains by the amount in-language text, but the dataset also covers the smallest amount of languages. The low ratio of wrong language samples in OSCAR may reflect the success of line-level LangID filtering.
+These numbers provide evidence that more research in LangID could improve the overall quality, especially with respect to nonlinguistic content.
+
+\paragraph{Which languages got confused?} The languages that were confused were frequently related higher-resource languages. However, there were also a significant number of ``out-of-model cousin" cases, where languages not supported by the LangID model ended up in a similar-seeming language. For instance in mC4, much of the Shona (\texttt{sn}, Bantu language spoken in Zimbabwe and Mozambique) corpus is actually Kinyarwanda (\texttt{rw}, Bantu language spoken in mostly in Rwanda and Uganda)---and, peculiarly, much of the Hawaiian (\texttt{haw}, Polynesian language spoken in Hawaii) is actually Twi (\texttt{tw}/\texttt{ak}, Central Tano language spoken mostly in Ghana).
+
+\begin{figure}[th]
     \centering
     \begin{subfigure}{.5\textwidth}
         \centering
@@ -182,21 +195,7 @@ Figure~\ref{fig:ratio_c} illustrates per-corpus correctness more completely, sho
     \end{subfigure}
     \caption{Percentage of sentences labeled as correct vs. log N sentences for all audited languages.}
     \label{fig:C}
-\end{figure*}
-
-\paragraph{Why haven't these problems been reported before?}
-The findings above are averaged on a per-language basis (i.e. macro-average), and therefore give low and high-resource languages equal weight. If we instead estimate the quality on a per-sentence basis, i.e. down-weight lower-resource languages in the computation of the average, the numbers paint a more optimistic picture (``micro'' block in Table~\ref{tab:results}). This is especially relevant for the monolingual datasets because they contain audits for English, which makes up for 43\% of all sentences in OSCAR and 36\% in mC4. To illustrate the effect of this imbalance: A random sample from the entire mC4 dataset with over 63\% chance will be from one of the 8 largest languages (\texttt{en}, \texttt{ru}, \texttt{es}, \texttt{de}, \texttt{fr}, \texttt{it}, \texttt{pt}, \texttt{pl}, $>$100M sentences each), %\footnote{mC4 contains 22\% \texttt{und} sentences, i.e. sentences with undefined language.} 
-of which all have near perfect quality. Analogously, evaluation and tuning of web mining pipelines and resulting corpora in downstream applications focused largely on higher-resource languages (Section~\ref{sec:crawls}), so the low quality of underrepresented languages might go unnoticed if there is no dedicated evaluation, or no proficient speakers are involved in the curation~\citep{nekoto-etal-2020-participatory}.
-
-
-\paragraph{How much content is nonlinguistic or in the wrong language?}
-Nonlinguistic content is a more common problem than wrong-language content. Among the parallel datasets, CCAligned contains the highest percentage of nonlinguistic content, at 31.42\% on average across all rated corpora, and also the highest percent of wrong-language content, at 9.44\%. Among the monolingual datasets, mC4 contains the highest ratio both of sentences in incorrect languages (15.98\% average) and nonlinguistic content (11.40\% average), with 4 of the 48 audited languages having more than 50\% contents in other languages. The low amount of wrong language in ParaCrawl shows the benefits of selecting domains by the amount in-language text, but the dataset also covers the smallest amount of languages. The low ratio of wrong language samples in OSCAR may reflect the success of line-level LangID filtering.
-These numbers provide evidence that more research in LangID could improve the overall quality, especially with respect to nonlinguistic content.
-
-\paragraph{Which languages got confused?} The languages that were confused were frequently related higher-resource languages. However, there were also a significant number of ``out-of-model cousin" cases, where languages not supported by the LangID model ended up in a similar-seeming language. For instance in mC4, much of the Shona (\texttt{sn}, Bantu language spoken in Zimbabwe and Mozambique) corpus is actually Kinyarwanda (\texttt{rw}, Bantu language spoken in mostly in Rwanda and Uganda)---and, peculiarly, much of the Hawaiian (\texttt{haw}, Polynesian language spoken in Hawaii) is actually Twi (\texttt{tw}/\texttt{ak}, Central Tano language spoken mostly in Ghana).
-
-
-
+\end{figure}
 
 \paragraph{Do low-resource languages have lower quality?}
 Low-resource datasets tend to have lower human-judged quality.
@@ -212,7 +211,17 @@ Not all higher-resource languages ($>10^6$ sentences) have high quality, in part
 %\footnote{\texttt{\_rom} corpora have been removed in the latest CCAligned release.}
 For individual error codes trends are less clear (not depicted).
 
-\begin{table*}[!htbp]
+\paragraph{Which languages have the lowest quality?} Across datasets we observe that the quality is particularly poor for languages that are included in romanized script (\texttt{\_rom}/\texttt{\_latn}), but are more commonly written in other scripts, e.g., Urdu (\texttt{ur}), Japanese (\texttt{ja}), Arabic (\texttt{ar}).
+%\footnote{These romanized versions have been removed from CCAligned in a later release.} 
+These are not transliterations of other scripts, but mostly contain non-linguistic material or wrong languages (e.g. the romanized Japanese corpus in mC4 (\texttt{ja\_latn}) contains Spanish, French, English, Portuguese, amongst others). %, Chinese (\texttt{zh}), Telugu (\texttt{te}) and Bulgarian (\texttt{bg}).  
+In terms of geography, the poorest quality is found for African languages (Bambara (\texttt{bm}), Fula (\texttt{ff}), Kikongo (\texttt{kg}), Luganda (\texttt{lg}), Lingala (\texttt{ln}), Norther Sotho (\texttt{nso}), Oromo (\texttt{om}), Shona (\texttt{sn}), Somali (\texttt{so}), Tswana (\texttt{tn}), Wolof (\texttt{wo})), minority languages in Europe and the Middle East that are closely related to higher-resource languages (Azerbaijani (\texttt{az-IR}), North Frisian (\texttt{frr}), Neapolitan (\texttt{nap}), Silesian (\texttt{szl}), Zaza (\texttt{zza})), lesser spoken Chinese languages sharing a script with Mandarin (Yue (\texttt{yue}), Wu (\texttt{wuu})), four major Austronesian (Central Bikol (\texttt{bcl}), Chavacano (\texttt{cbk}), Javanese (\texttt{jv}), Sundanese (\texttt{su})), and some South-Asian languages, in particular Sinhala (\texttt{si}).
+Appendix~\ref{app:stats} contains the detailed per-language statistics for all corpora.
+% Omitted from above: mt
+
+\paragraph{What is the incidence of offensive and pornographic content?}
+Overall, the sampled sentences did not contain a large amount of offensive contents. However, there were notable amounts of pornographic content ($>10\%$) found in CCAligned for 11 languages. % not fully annotated: tl_XX, lt_LV ?
+
+\begin{table}[!htbp]
     \centering
     \resizebox{\textwidth}{!}{%
 
@@ -230,37 +239,26 @@ For individual error codes trends are less clear (not depicted).
         %$n$ indicates the granularity of the classes.  For $n=6$ all classes of the taxonomy were distinguished, for $n=4$ the \texttt{C} subclasses were combined, and for $n=2$ it is binary decision between \texttt{C} and the rest of the error classes.
     }
     \label{tab:agreement_ccaligned}
-\end{table*}
+\end{table}
 
 \begin{table}[!htbp]
     \centering\small
 
-        \begin{tabular}{lccccccccc}
-            \toprule
-                           & \texttt{tyv} & \texttt{rm} & \texttt{bar} & \texttt{eml} & \texttt{zh} & \texttt{la} & \textbf{mean} \\
-            \midrule
-            \textbf{Acc-6} & 1.0          & 0.98        & 1.0          & 1.0          & 0.86        & 1.0         & 0.98          \\
-            \textbf{Acc-4} & 1.0          & 1.0         & 1.0          & 1.0          & 0.87        & 1.0         & 0.98          \\
-            \textbf{Acc-2} & 1.0          & 1.0         & 1.0          & 1.0          & 0.87        & 1.0         & 0.98          \\
-            \bottomrule
-        \end{tabular}%
-    \caption{Rater evaluation for a subset of audits from \textbf{OSCAR} measured by the accuracy (Acc-$n$) of annotations by non-proficient speaker against annotations by proficient speakers.}
+    \begin{tabular}{lccccccccc}
+        \toprule
+                       & \texttt{tyv} & \texttt{rm} & \texttt{bar} & \texttt{eml} & \texttt{zh} & \texttt{la} & \textbf{mean} \\
+        \midrule
+        \textbf{Acc-6} & 1.0          & 0.98        & 1.0          & 1.0          & 0.86        & 1.0         & 0.98          \\
+        \textbf{Acc-4} & 1.0          & 1.0         & 1.0          & 1.0          & 0.87        & 1.0         & 0.98          \\
+        \textbf{Acc-2} & 1.0          & 1.0         & 1.0          & 1.0          & 0.87        & 1.0         & 0.98          \\
+        \bottomrule
+    \end{tabular}%
+    \caption{Rater evaluation for a subset of audits from \textbf{OSCAR 2019} measured by the accuracy (Acc-$n$) of annotations by non-proficient speaker against annotations by proficient speakers.}
     \label{tab:agreement_oscar}
 \end{table}
 
-\paragraph{Which languages have the lowest quality?} Across datasets we observe that the quality is particularly poor for languages that are included in romanized script (\texttt{\_rom}/\texttt{\_latn}), but are more commonly written in other scripts, e.g., Urdu (\texttt{ur}), Japanese (\texttt{ja}), Arabic (\texttt{ar}).
-%\footnote{These romanized versions have been removed from CCAligned in a later release.} 
-These are not transliterations of other scripts, but mostly contain non-linguistic material or wrong languages (e.g. the romanized Japanese corpus in mC4 (\texttt{ja\_latn}) contains Spanish, French, English, Portuguese, amongst others). %, Chinese (\texttt{zh}), Telugu (\texttt{te}) and Bulgarian (\texttt{bg}).  
-In terms of geography, the poorest quality is found for African languages (Bambara (\texttt{bm}), Fula (\texttt{ff}), Kikongo (\texttt{kg}), Luganda (\texttt{lg}), Lingala (\texttt{ln}), Norther Sotho (\texttt{nso}), Oromo (\texttt{om}), Shona (\texttt{sn}), Somali (\texttt{so}), Tswana (\texttt{tn}), Wolof (\texttt{wo})), minority languages in Europe and the Middle East that are closely related to higher-resource languages (Azerbaijani (\texttt{az-IR}), North Frisian (\texttt{frr}), Neapolitan (\texttt{nap}), Silesian (\texttt{szl}), Zaza (\texttt{zza})), lesser spoken Chinese languages sharing a script with Mandarin (Yue (\texttt{yue}), Wu (\texttt{wuu})), four major Austronesian (Central Bikol (\texttt{bcl}), Chavacano (\texttt{cbk}), Javanese (\texttt{jv}), Sundanese (\texttt{su})), and some South-Asian languages, in particular Sinhala (\texttt{si}).
-Appendix~\ref{app:stats} contains the detailed per-language statistics for all corpora.
-% Omitted from above: mt
-
-\paragraph{What is the incidence of offensive and pornographic content?}
-Overall, the sampled sentences did not contain a large amount of offensive contents. However, there were notable amounts of pornographic content ($>10\%$) found in CCAligned for 11 languages. % not fully annotated: tl_XX, lt_LV ?
-
-
 \paragraph{Annotation quality}
-For a subset of audited languages from CCAligned and OSCAR we measure the accuracy (Acc) of the labels assigned by non-proficient speakers against the labels assigned by proficient speakers for all audited sentences. This can be understood as a directed measure of annotator agreement for the special case where one rater is an expert and the other is not. Results for varying label granularity are reported in Tables~\ref{tab:agreement_ccaligned} and \ref{tab:agreement_oscar}. For $n=6$ all classes of the taxonomy were distinguished, for $n=4$ the \texttt{C} subclasses were combined, and for $n=2$ it is binary decision between \texttt{C} and the rest of the error classes. With the full 6-class taxonomy (Acc-6) we find a mean accuracy of 0.66
+For a subset of audited languages from CCAligned and OSCAR 2019 we measure the accuracy (Acc) of the labels assigned by non-proficient speakers against the labels assigned by proficient speakers for all audited sentences. This can be understood as a directed measure of annotator agreement for the special case where one rater is an expert and the other is not. Results for varying label granularity are reported in Tables~\ref{tab:agreement_ccaligned} and \ref{tab:agreement_oscar}. For $n=6$ all classes of the taxonomy were distinguished, for $n=4$ the \texttt{C} subclasses were combined, and for $n=2$ it is binary decision between \texttt{C} and the rest of the error classes. With the full 6-class taxonomy (Acc-6) we find a mean accuracy of 0.66
 %($\sigma^2 =0.02$) 
 for CCAligned audits, and 0.98
 %($\sigma^2 =0.002$) 
@@ -293,7 +291,7 @@ Standardized and unambiguous representations of language codes are important for
 %, which builds off the two-letter ISO639-2 codes and three-letter ISO639\nobreakdash-3 codes. Codes may additionally specify ISO15924 script subtags to indicate that a nonstandard script is used (e.g. \texttt{hi-Latn} for Hindi written in Latin script), ISO3166-1 country codes to indicate regional varieties (e.g. \texttt{fr-CA} for Canadian French), or extensions for private use (e.g. \texttt{ca-x-val} for Valencian Catalan). Some BCP-47 codes represent groups of languages---for instance, \texttt{kg} represents the Kongo language, and \texttt{kng}, \texttt{ldi}, \texttt{kwy}, and \texttt{yom} represent particular varieties of Kongo.
 
 We find a variety of errors and inconsistencies in language code usage, ranging from serious mislabelings to small transgressions against standard conventions. For this analysis, we also include the JW300~\citep{agic-vulic-2019-jw300} dataset, a multilingual dataset crawled from \url{jw.org}. %, which was otherwise not audited in this paper. 
-In summary, we find 8 nonstandard codes in CCAligned, 3 in OSCAR, 1 in mC4, 1 in WikiMatrix, and 70 in JW300, for 83 in total. This does not include the 59 codes affected by superset issues. %0 in ParaCrawl, 
+In summary, we find 8 nonstandard codes in CCAligned, 3 in OSCAR 2019, 1 in mC4, 1 in WikiMatrix, and 70 in JW300, for 83 in total. This does not include the 59 codes affected by superset issues. %0 in ParaCrawl, 
 Full details are given in Appendix~\ref{app:jw300}.
 
 \paragraph{Inconsistent Language Codes} One common issue is simply using nonstandard or invented codes. For example, CCAligned uses only two-letter codes, so when the BCP-47 code for a language is three letters it is either shortened (e.g. \texttt{zza} $\rightarrow$ \texttt{zz})
@@ -301,7 +299,7 @@ Full details are given in Appendix~\ref{app:jw300}.
 or invented (\texttt{shn}  $\rightarrow$ \texttt{qa}).
 %, \texttt{kac}  $\rightarrow$ \texttt{qd}, \texttt{ceb}  $\rightarrow$ \texttt{cx}), which can lead to 
 %this can lead to confusion and limits the compatibility with other tools and resources.
-Similarly, OSCAR contains data labeled as \texttt{als} (BCP-47 for Tosk Albanian) that is actually in \texttt{gsw} (Allemannic).\footnote{This is a result of the language code used by the \href{https://en.wikipedia.org/wiki/Alemannic\_Wikipedia}{Alemannic Wikipedia} and affects any corpus or tool that uses Wikipedia data without correcting for this, like FastText.}
+Similarly, OSCAR 2019 contains data labeled as \texttt{als} (BCP-47 for Tosk Albanian) that is actually in \texttt{gsw} (Allemannic).\footnote{This is a result of the language code used by the \href{https://en.wikipedia.org/wiki/Alemannic\_Wikipedia}{Alemannic Wikipedia} and affects any corpus or tool that uses Wikipedia data without correcting for this, like FastText.}
 % \citep{joulin-etal-2017-bag, joulin-etal-2016-fasttext}.
 %\footnote{\url{https://en.wikipedia.org/wiki/Alemannic_Wikipedia}
 % And in JW300~\citep{agic-vulic-2019-jw300}, a multilingual dataset otherwise not audited in this paper, there are five codes ({\tt cat}, {\tt daf}, {\tt que}, {\tt nya}, {\tt run}) which use ISO693-3 instead of BCP-47 codes. Puzzlingly, in most of these cases there exist separate datasets for the equivalent ISO693-2 and 3 codes (e.g. both {\tt ny} and {\tt nya}).
@@ -327,7 +325,7 @@ In many cases, the nature of the data in the superset code remains a mystery.
 % requiring detective work.
 
 
-\paragraph{Deprecated codes} Finally, there are several deprecated codes that are used: \texttt{sh} in Wikimatrix, \texttt{iw} in mC4, \texttt{sh} and \texttt{eml} in Oscar, and \texttt{daf} in JW300.
+\paragraph{Deprecated codes} Finally, there are several deprecated codes that are used: \texttt{sh} in Wikimatrix, \texttt{iw} in mC4, \texttt{sh} and \texttt{eml} in OSCAR 2019, and \texttt{daf} in JW300.
 
 \section{Risks of Low-Quality Data}\label{sec:risk}
 
@@ -349,38 +347,38 @@ Similarly, if low-quality datasets are used as benchmarks they may exaggerate mo
 
 \begin{table}[t!]
 
-        \centering\small
-        \begin{tabular}{ll}
-            \toprule
+    \centering\small
+    \begin{tabular}{ll}
+        \toprule
 
-            \texttt{en}  & The prime minister of the \textbf{UK} is \textbf{Boris Johnson}.          \\
-            \texttt{nl}  & De minister-president van \textbf{Nederland} is \textbf{Mark Rutte}.      \\
-                         & \small{\texttt{en}: The prime minister of the Netherlands is Mark Rutte.} \\
-            \midrule
-            %\midrule
-            % \texttt{en} &Sunglasses \\
-            % \texttt{ig}	&ah\d{i}a Nyocha \\
-            % \midrule
-            \texttt{en}  & \textbf{24 March} 2018                                                    \\
-            \texttt{pt}  & \textbf{14 Novembro} 2018                                                 \\
-                         & \small{\texttt{en}: 14 November 2018 }                                    \\
-            %\midrule
-            \midrule
-            % \texttt{en} &The current local time in \textbf{Sarasota} is \textbf{89} minutes ahead of apparent solar time. \\
-            % \texttt{nn}	&Den lokale tiden i \textbf{Miami} er \textbf{86} minutt f\o{o}re sann soltid. \\
-            \texttt{en}  & The current local time in \textbf{Sarasota} is \textbf{89} minutes.       \\
-            \texttt{nn}  & Den lokale tiden i \textbf{Miami} er \textbf{86} minutt.                  \\
-                         & \small{\texttt{en}: The local time in Miami is 86 minutes.}               \\
-            %\midrule
-            \midrule
-            \texttt{en}  & In \textbf{1932} the highway was extended \textbf{north to LA}.           \\
-            \texttt{bar} & \textbf{1938} is de Autobahn bei \textbf{Inglstod} fertig gstellt.        \\
-                         & \small{\texttt{en}: The highway near Inglstod was completed in 1938.}     \\
-            % \midrule
-            % \textit{en:} He was engaged to the lawyer and actor João Lima Junior, with whom he dated from 2004 to 2006. \\
-            % \textit{nds:} Ze woont in de tussentied samen met zanger en liedtiesschriever Johannes Oerding met wie ze sinds 2009 ook samen op de bühne stiet.\\
-            \bottomrule
-        \end{tabular}%
+        \texttt{en}  & The prime minister of the \textbf{UK} is \textbf{Boris Johnson}.          \\
+        \texttt{nl}  & De minister-president van \textbf{Nederland} is \textbf{Mark Rutte}.      \\
+                     & \small{\texttt{en}: The prime minister of the Netherlands is Mark Rutte.} \\
+        \midrule
+        %\midrule
+        % \texttt{en} &Sunglasses \\
+        % \texttt{ig}	&ah\d{i}a Nyocha \\
+        % \midrule
+        \texttt{en}  & \textbf{24 March} 2018                                                    \\
+        \texttt{pt}  & \textbf{14 Novembro} 2018                                                 \\
+                     & \small{\texttt{en}: 14 November 2018 }                                    \\
+        %\midrule
+        \midrule
+        % \texttt{en} &The current local time in \textbf{Sarasota} is \textbf{89} minutes ahead of apparent solar time. \\
+        % \texttt{nn}	&Den lokale tiden i \textbf{Miami} er \textbf{86} minutt f\o{o}re sann soltid. \\
+        \texttt{en}  & The current local time in \textbf{Sarasota} is \textbf{89} minutes.       \\
+        \texttt{nn}  & Den lokale tiden i \textbf{Miami} er \textbf{86} minutt.                  \\
+                     & \small{\texttt{en}: The local time in Miami is 86 minutes.}               \\
+        %\midrule
+        \midrule
+        \texttt{en}  & In \textbf{1932} the highway was extended \textbf{north to LA}.           \\
+        \texttt{bar} & \textbf{1938} is de Autobahn bei \textbf{Inglstod} fertig gstellt.        \\
+                     & \small{\texttt{en}: The highway near Inglstod was completed in 1938.}     \\
+        % \midrule
+        % \textit{en:} He was engaged to the lawyer and actor João Lima Junior, with whom he dated from 2004 to 2006. \\
+        % \textit{nds:} Ze woont in de tussentied samen met zanger en liedtiesschriever Johannes Oerding met wie ze sinds 2009 ook samen op de bühne stiet.\\
+        \bottomrule
+    \end{tabular}%
     \caption{Examples of ``parallel" data where the translation has a different meaning than the source, but the form looks the same. (We added translations of the non-English side.) Such data may encourage hallucinations of fake ``facts".}
     \label{tab:not_actually_parallel}
 \end{table}
