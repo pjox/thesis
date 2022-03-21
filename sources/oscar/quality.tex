@@ -1,5 +1,14 @@
 \chapter{Quality at Glance}
 
+\begin{center}
+    \begin{minipage}{0.66\textwidth}
+        \begin{small}
+            In which we present the work of \citet{kreutzer-etal-2021-quality}, who propose the first evaluation of OSCAR 2019 as a pretraining corpus for language modeling. This evaluation was done by selecting OSCAR subcorpora for 5 morphologically and tipologically different mid-ressource languages and pre-training monolingual ELMo models \citep{peters-etal-2018-deep} for each of them. These ELMo models are then attached to the UDPipe 2.0 architecture \citep{straka-2018-udpipe,straka-strakova-2019-evaluating} and evaluated in dependency parsing and POS tagging.
+        \end{small}
+    \end{minipage}
+    \vspace{0.5cm}
+\end{center}
+
 \section{Auditing Data Quality}\label{sec:audit}
 None of the above datasets has been evaluated for quality on the sentence level (exception: several languages in ParaCrawl v3), and downstream evaluations are centered around a small fraction of higher-resource languages. This is insufficient for drawing conclusions about the quality of individual or aligned sentences, and about the entirety of languages. In addition, there might be a publication bias preventing negative results with any of the above corpora with lower quality being published.
 
