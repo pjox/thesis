@@ -1,11 +1,20 @@
 \chapter{Ungoliant}
 
+\begin{center}
+    \begin{minipage}{0.66\textwidth}
+        \begin{small}
+            In which we present the work of \citet{abadji-etal-2021-ungoliant}, who after the evaluations discussed in the previous two chapters, completely rewrite the original OSCAR's \goclassy pipeline, add features to the corpus such as metadata extraction and publish the second version of the OSCAR corpus now known as OSCAR 21.09.
+        \end{small}
+    \end{minipage}
+    \vspace{0.5cm}
+\end{center}
 
-\section{Limitations of the OSCAR Corpus and its Generation Pipeline}
 
-\subsection{OSCAR}
+\section{Limitations of the OSCAR 2019 Corpus and its Generation Pipeline}
 
-OSCAR is a multilingual corpus derived from CommonCrawl\footnote{\url{https://commoncrawl.org}}, a project that provides web crawl data for everyone on a periodic manner, usually each month. CommonCrawl provides data in several formats, from raw HTML source code to pure text. OSCAR was generated from the pure text data version (WET files) of the November 2018 crawl, distributed in the form of 56,000 \emph{shards}, that were then filtered and classified by language \citep{ortiz-suarez-etal-2019-asynchronous,ortiz-suarez-etal-2020-monolingual}. OSCAR is available through several means, and has been used in numerous projects \citep{ortiz-suarez-etal-2019-asynchronous}. OSCAR's generation pipeline also suffers from numerous issues, which we plan to address simultaneously with the release of a new, more powerful, stable, and higher quality pipeline
+\subsection{OSCAR 2019}
+
+OSCAR 2019 was generated from the pure text data version (WET files) of the November 2018 crawl, which was distributed in the form of 56,000 \emph{shards}, that were then filtered and classified by language \citep{ortiz-suarez-etal-2019-asynchronous,ortiz-suarez-etal-2020-monolingual}. OSCAR 2019 is available through several means, and has been used in numerous projects as previously discussed. OSCAR's generation pipeline also suffers from numerous issues, which we plan to address simultaneously with the release of a new, more powerful, stable, and higher quality pipeline.
 
 Simply put, OSCAR is composed of single language files that contain textual data (\texttt{ta.txt} for the Tamil language, for example). However, due to the often huge sizes of these files, and subsequently the impracticality of storage and distribution, OSCAR files are split and compressed in equally sized parts.
 
