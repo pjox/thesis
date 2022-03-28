@@ -1,0 +1,41 @@
+\chapter{D'AlemBERT}
+
+\section{Carbon Footprint}\label{carbon-footprint-dalembert}
+
+\begin{table}[th]
+    \centering\small
+        \begin{tabular}{lrrrr}
+            \toprule
+            \textbf{Model}               & {\textbf{Power (W)}} & {\textbf{Time (h)}} & {\textbf{(PUE$\cdotp$kWh)}} & {\textbf{CO\textsuperscript{2}e (kg)}} \\
+            \midrule
+            Pre-train                    & 48640                & 20                  & 1537.02                     & 46.11                                  \\
+            Evaluation                   & 589                  & 1                   & 0.93                        & 0.03                                   \\
+            \midrule
+            Total CO\textsuperscript{2}e &                      &                     &                             & 46.14                                  \\
+            \bottomrule
+        \end{tabular}
+    \caption{Average power draw, number of models trained, training times in hours, mean power consumption including power usage effectiveness (PUE), and CO\textsuperscript{2} emissions; for each setting.}
+    \label{tab:carbon-dalembert}
+\end{table}
+
+In light of recent interest concerning the energy consumption and carbon emission of machine learning models and specifically of those of language models \cite{schwartz-etal-2020-green,bender-etal-2021-on}, we have decided to report the power consumption and carbon footprint of all our experiments following the approach of \newcite{strubell-etal-2019-energy}. We report the energy consumption and carbon emissions of both the pre-training of D'AlemBERT and its evaluation.
+
+\paragraph{Pre-training:} We use a cluster of 32 machines, each one having 4 GPU Nvidia Tesla V100 SXM2 32GiB, 192GiB of RAM, and two Intel Xeon Gold 6248 processors. One Nvidia Tesla V100 card is rated at around 300W,\footnote{\href{https://www.nvidia.com/en-us/data-center/v100/}{ Nvidia Tesla V100 specification}} while the Xeon Gold 6248 processor is rated at 150W.\footnote{\href{https://ark.intel.com/content/www/us/en/ark/products/192446/intel-xeon-gold-6248-processor-27-5m-cache-2-50-ghz.html}{Intel Xeon Gold 6248 specification}} For the DRAM we can use the work of \newcite{desrochers-etal-2016-a} to estimate the total power draw of 192GiB of RAM at around 20W. Thus, the total power draw of the pre-training adds up to around 48640W.
+
+\paragraph{Evaluation:} We use a single machine with a single GPU Nvidia Tesla V100 SXM2 32GiB, 384GiB of RAM and two Intel Xeon Gold 6226 processors. The Xeon Gold 6226 processor is rated at 125 W,\footnote{\href{https://ark.intel.com/content/www/us/en/ark/products/193957/intel-xeon-gold-6226-processor-19-25m-cache-2-70-ghz.html}{Intel Xeon Gold 6226 specification}} and the DRAM total power draw can be estimated at around 39W. Therefore, the total power draw of the evaluation adds up to around 589W.
+
+With this information, we use the formula proposed by \newcite{strubell-etal-2019-energy} to compute the total power required for each setting:
+
+\begin{equation*}
+    p_t = \frac{1.58t(cp_{c} + p_r + gp_g)}{1000}
+\end{equation*}
+
+Where $c$ and $g$ are the number of CPUs and GPUs respectively, $p_c$ is the average power draw (in W) from all CPU sockets, $p_r$ the average power draw from all DRAM sockets and $p_g$ the average power draw of a single GPU. We estimate the total power consumption by adding GPU, CPU and DRAM consumption, and then multiplying by the \emph{Power Usage Effectiveness} (PUE), which accounts for the additional energy required to support the compute infrastructure. We use a PUE coefficient of 1.58, the 2018 global average for data centres \cite{strubell-etal-2019-energy}. In Table~\ref{tab:carbon-dalembert} we report the training times in hours, as well as the total power draw (in Watts) of the system used to train the models. We use this information to compute the total power consumption of each setting, also reported in Table~\ref{tab:carbon-dalembert}.
+
+We can further estimate the CO\textsuperscript{2} emissions in kilograms of each single model by multiplying the total power consumption by the average CO\textsuperscript{2} emissions per kWh in our region, which were around 30g/kWh between the 30\textsuperscript{th} and the 31\textsuperscript{st} of December,\footnote{\href{https://www.rte-france.com/eco2mix/les-emissions-de-co2-par-kwh-produit-en-france}{Rte - éCO\textsuperscript{2}mix}.} when the models were trained. Thus the total CO\textsuperscript{2} emissions in kg for one single model can be computed as:
+
+\begin{equation*}
+    \text{CO}_{2}\text{e} = 0.030 p_t
+\end{equation*}
+
+All emissions are also reported in Table~\ref{tab:carbon-dalembert}.

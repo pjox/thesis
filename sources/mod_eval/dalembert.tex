@@ -12,11 +12,11 @@
     \centering\small
     \begin{tabular}{@{}p{0.3\linewidth}p{0.3\linewidth}p{0.3\linewidth}@{}}
         \toprule
-        Source                                                                                                                                                                                                                                                                                                                                                                      & Normalised & Translation \\
+        Source                                                                                                                                                                                                                                                                                               & Normalised & Translation \\
         \midrule
-        Surquoy, SIRE, s’il plaiſt à voſtre Maieſté de ſe ſouuenir des miſeres de ſon Eſtat, dõt au moins ell’a tiré cét aduantage, qu’en vne grande ieuneſse ell’a acquis vne grande experi\~ece, elle verra que tous les mal-heurs de sõ bas âge ont pris leur commencement en ſemblables occaſions; &
-        \emph{Sur quoi, SIRE, s’il plaît à votre Majesté de se souvenir des misères de son état dont au moins elle a tiré cet avantage, qu’en une grande jeunesse elle a acquis une grande expérience, elle verra que tous les malheurs de son bas âge ont pris leur commencement en semblables occasions~;}                                                                      &
-        \textcolor{gray}{``Whereupon, SIR, if it pleases your Majesty to remember the miseries of her state, from which at least she has derived this advantage, that in great youth she has acquired great experience, she will see that all the misfortunes of her early life took their beginning on similar occasions;''}                                                                                  \\
+        Surquoy, SIRE, s’il plaiſt à voſtre Maieſté de ſe ſouuenir des miſeres de ſon Eſtat, dõt au moins ell’a tiré cét aduantage, qu’en vne grande ieuneſse ell’a acquis vne grande experi\~ece, elle verra que tous les mal-heurs de sõ bas âge ont pris leur commencement en ſemblables occaſions;       &
+        \emph{Sur quoi, SIRE, s’il plaît à votre Majesté de se souvenir des misères de son état dont au moins elle a tiré cet avantage, qu’en une grande jeunesse elle a acquis une grande expérience, elle verra que tous les malheurs de son bas âge ont pris leur commencement en semblables occasions~;} &
+        \textcolor{gray}{``Whereupon, SIR, if it pleases your Majesty to remember the miseries of her state, from which at least she has derived this advantage, that in great youth she has acquired great experience, she will see that all the misfortunes of her early life took their beginning on similar occasions;''}           \\
         \bottomrule
     \end{tabular}
     \caption{\label{tab:norm_examples}Example of normalisation taken from the \emph{Lettres} of \protect\newcite{balzac-1624-lettres}.}
@@ -70,45 +70,36 @@ The texts have a variety of sources, which can be grouped into three main types:
 
 Additional data for later states of the language, up to the 1920's (mainly from FRANTEXT \emph{intégral}), are also provided for two main reasons: on the one hand, it is common to normalise Early Modern French into Contemporary French \cite{gabay-2014-pourquoi} because of the linguistic proximity between these the two states of the language, and on the other hand, it helps to collect (precious) additional data to avoid ending up with with too small of a corpus for our needs.
 
-\begin{table}[htp]
-    \centering
-    \begin{tabular}{lr}
-        \toprule
-        Origin                                                 & \#Tokens    \\
-        \midrule
-        Spica corpus                                           & 691,467     \\
-        Antonomaz project                                      & 119,194     \\
-        Acta Pacis Westphlicae II B                            & 2,463,047   \\
-        Bibliothèque Bleue                                     & 776,838     \\
-        BVH                                                    & 2,434,657   \\
-        CEPM                                                   & 2,707,432   \\
-        Condé project                                          & 3,173,845   \\
-        Descartes                                              & 1,025,337   \\
-        CELLF                                                  & 1,873,772   \\
-        Electronic enlightenment                               & 6,568,047   \\
-        Fabula project                                         & 145,978     \\
-        \textsc{Frantext} \emph{intégral} ($>$1500, $<$1800) & 60,018,390  \\
-        \textsc{Frantext} \emph{intégral} ($>$1800)          & 71,504,440  \\
-        \textsc{Frantext} \emph{Démonstration}               & 1,255,454   \\
-        Gallica                                                & 5,212,333   \\
-        Boissy project                                         & 438,215     \\
-        Mercure galant                                         & 5,427,469   \\
-        Rousseau Online project                                & 2,428,587   \\
-        Scrapping                                              & 1,936,835   \\
-        Sermo project                                          & 529,647     \\
-        Théâtre classique project                              & 13,916,169  \\
-        Wikisource                                             & 996,329     \\
-        \midrule
-        \textbf{TOTAL}                                         & 185,643,482 \\
-        \bottomrule
-    \end{tabular}
+\begin{table}[ht]
+    \centering\small
+    \resizebox{\linewidth}{!}{
+        \begin{tabular}{lrrlr}
+            \toprule
+            Origin                      & \#Tokens  &  & Origin                                               & \#Tokens    \\
+            \midrule
+            Spica corpus                & 691,467   &  & \textsc{Frantext} \emph{intégral} ($>$1500, $<$1800) & 60,018,390  \\
+            Antonomaz project           & 119,194   &  & \textsc{Frantext} \emph{intégral} ($>$1800)          & 71,504,440  \\
+            Acta Pacis Westphlicae II B & 2,463,047 &  & \textsc{Frantext} \emph{Démonstration}               & 1,255,454   \\
+            Bibliothèque Bleue          & 776,838   &  & Gallica                                              & 5,212,333   \\
+            BVH                         & 2,434,657 &  & Boissy project                                       & 438,215     \\
+            CEPM                        & 2,707,432 &  & Mercure galant                                       & 5,427,469   \\
+            Condé project               & 3,173,845 &  & Rousseau Online project                              & 2,428,587   \\
+            Descartes                   & 1,025,337 &  & Scrapping                                            & 1,936,835   \\
+            CELLF                       & 1,873,772 &  & Sermo project                                        & 529,647     \\
+            Electronic enlightenment    & 6,568,047 &  & Théâtre classique project                            & 13,916,169  \\
+            Fabula project              & 145,978   &  & Wikisource                                           & 996,329     \\
+            \midrule
+            \textbf{TOTAL}              &           &  &                                                      & 185,643,482 \\
+            \bottomrule
+        \end{tabular}
+    }
     \caption{Breakdown of the \freemmax corpus by text origin.}
     \label{tab:my_label}
 \end{table}
 
 The final result is far from being balanced or representative (see Figure~\ref{fig:FreEMmax_desc}). 16\textsuperscript{th}\,c. French documents are under-represented, as well as 18\textsuperscript{th}\,c.~literature. The 17\textsuperscript{th}\,c. is clearly over-represented, especially its second half---probably one of the most important of French literature, which could explain this situation (on top of our personal interest for this specific period).
 
-\begin{figure}[htp]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=1\linewidth]{static/media/mod_eval/dalembert/desc_DalemBERT.png}
     \caption{Distribution of the documents in the \freemmax corpus per year}
@@ -119,7 +110,7 @@ As some texts are still (partially) protected by restrictive licences, the \free
 
 Metadata is prepared manually in order to have the same categories for each document, whatever its origin. As well as the author, the title and the date (where relevant), we also provide the genre (``theatre''), sometimes a subgenre (``tragedy''), the linguistic status (normalised or not) and the licence attached to the transcription.
 
-\begin{figure}[htp]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=1\linewidth]{static/media/mod_eval/dalembert/corpus_trans.png}
     \caption{\freemmax compilation pipeline. All files are kept in their original format. Metadata is manually prepared in separate files in order to automatically transform and clean (in blue) all the available documents into XML TEI files following the same encoding. It allows us to distribute open data (in green) but also data distributed with restrictions regarding the modification of the original format (in orange). Non-open texts (in red) are not distributed.}
@@ -144,7 +135,24 @@ Similar to \roberta \cite{liu-etal-2019-roberta} we segment the input text data 
 
 \subsection{Language Modelling}
 
-\begin{table*}[ht]
+\paragraph{Transformer}
+\dalembert uses the exact same architecture as \roberta, which is a multi-layer bidirectional Transformer \cite{vaswani-etal-2017-attention}.
+\dalembert uses the original \emph{base} architecture of \roberta (12 layers, 768 hidden dimensions, 12 attention heads, 110M parameters).
+
+\paragraph{Pretraining Objective}
+We train our model on the Masked Language Modelling (MLM) task as proposed by RoBERTa's authors \cite{liu-etal-2019-roberta}: given an input text sequence composed of $N$ tokens $x_1, ..., x_N$, we select 15\% of tokens for possible replacement. Among those selected tokens, 80\% are replaced with the special \texttt{<MASK>} token, 10\% are left unchanged and 10\% are replaced by a random token. The model is then trained to predict the masked tokens using cross-entropy loss.
+
+Again, following the \roberta approach, we dynamically mask tokens instead of fixing them statically for the whole dataset during preprocessing. We also choose not to use the next sentence prediction (NSP) task originally used in \bert \cite{devlin-etal-2019-bert}, as it has been shown that it does not improve downstream task performance \cite{conneau-lample-2019-cross,liu-etal-2019-roberta}.
+
+\paragraph{Optimisation}
+We optimise our model in the exact same way as \cite{liu-etal-2019-roberta} using Adam \cite{kingma-ba-2015-adam} ($\beta_1 = 0.9$, $\beta_2 = 0.98$) for 100k steps with large batch sizes of 8,192 sequences, each sequence containing at most 512 tokens.
+
+\paragraph{Pre-training}
+We use the \roberta implementation in the Zelda Rose library,\footnote{\url{https://github.com/LoicGrobol/zeldarose}} and again, in the same way as \newcite{liu-etal-2019-roberta} our learning rate is warmed up for 10k steps up to a peak value of $0.0003$ instead of the original $0.0001$ used by the original implementation of \roberta \cite{liu-etal-2019-roberta}, as our model diverged with the $0.0001$ value. We hypothesise that this is either due to the smaller size of \freemmax (compared to the corpora used for \roberta or \camembert) or to our large batch size. We train our model for 31k steps, which amounts to 41 epochs. The total pre-training times, the details of the infrastructure we used and even the carbon emissions of our model are reported in Appendix~\ref{carbon-footprint-dalembert}.
+
+\section{Evaluation and Discussion}
+
+\begin{table}[ht]
     \centering\small
     \resizebox{\linewidth}{!}{
         \begin{tabular}{lrrrrrr}
@@ -190,28 +198,26 @@ Similar to \roberta \cite{liu-etal-2019-roberta} we segment the input text data 
     }
     \caption{Comparison between \dalembert, \camembert and \pieextended performance on \freemlpm.}
     \label{tab:POS}
-\end{table*}
-
-\paragraph{Transformer}
-\dalembert uses the exact same architecture as \roberta, which is a multi-layer bidirectional Transformer \cite{vaswani-etal-2017-attention}.
-\dalembert uses the original \emph{base} architecture of \roberta (12 layers, 768 hidden dimensions, 12 attention heads, 110M parameters).
-
-\paragraph{Pretraining Objective}
-We train our model on the Masked Language Modelling (MLM) task as proposed by RoBERTa's authors \cite{liu-etal-2019-roberta}: given an input text sequence composed of $N$ tokens $x_1, ..., x_N$, we select 15\% of tokens for possible replacement. Among those selected tokens, 80\% are replaced with the special \texttt{<MASK>} token, 10\% are left unchanged and 10\% are replaced by a random token. The model is then trained to predict the masked tokens using cross-entropy loss.
-
-Again, following the \roberta approach, we dynamically mask tokens instead of fixing them statically for the whole dataset during preprocessing. We also choose not to use the next sentence prediction (NSP) task originally used in \bert \cite{devlin-etal-2019-bert}, as it has been shown that it does not improve downstream task performance \cite{conneau-lample-2019-cross,liu-etal-2019-roberta}.
-
-\paragraph{Optimisation}
-We optimise our model in the exact same way as \cite{liu-etal-2019-roberta} using Adam \cite{kingma-ba-2015-adam} ($\beta_1 = 0.9$, $\beta_2 = 0.98$) for 100k steps with large batch sizes of 8,192 sequences, each sequence containing at most 512 tokens.
-
-\paragraph{Pre-training}
-We use the \roberta implementation in the Zelda Rose library,\footnote{\url{https://github.com/LoicGrobol/zeldarose}} and again, in the same way as \newcite{liu-etal-2019-roberta} our learning rate is warmed up for 10k steps up to a peak value of $0.0003$ instead of the original $0.0001$ used by the original implementation of \roberta \cite{liu-etal-2019-roberta}, as our model diverged with the $0.0001$ value. We hypothesise that this is either due to the smaller size of \freemmax (compared to the corpora used for \roberta or \camembert) or to our large batch size. We train our model for 31k steps, which amounts to 41 epochs. The total pre-training times, the details of the infrastructure we used and even the carbon emissions of our model are reported in Appendix~\ref{carbon-footprint-dalembert}.
-
-\section{Evaluation and Discussion}
+\end{table}
 
 In order to evaluate our \dalembert model, we fine-tune it for POS tagging on the \freemlpm corpus. We use the \texttt{flair} framework\footnote{\url{https://github.com/flairNLP/flair}} for sequence tagging \cite{akbik-etal-2019-flair}. To fine-tune \dalembert for POS we follow the same approach as \newcite{schweter-akbik-2020-flert} with some modifications: we append a linear layer of size 256 that takes as input the last hidden representation of the \texttt{<s>} special token and the mean of the last hidden representation of the subword units of each token (token as defined for \freemlpm), that is, we use a \emph{``mean''} subword pooling strategy. We fine-tune \dalembert with a learning rate of 0.000005 for a total of 10 epochs. We also fine-tune \camembert using the exact same hyperparameters as that we use for \dalembert.
 
 \freemlpm provides a standard split (train, dev, test), however it also proposes an evaluation on a \emph{out-of-domain} subcorpus that is not contained in the standard split and that is separated by century (from the 16\textsuperscript{th} to the 20\textsuperscript{th} century) and that also contains both the \emph{Normalised} and \emph{Original} versions of the texts for the 16\textsuperscript{th}, 17\textsuperscript{th} and 18\textsuperscript{th} centuries. The idea of this out-of-domain evaluation corpus is to have a fine-grained evaluation of the models to better assess their performance in all the different types of text that one might encounter when working with Early Modern French data.
+
+\begin{table}[ht]
+    \centering\small
+    \begin{tabular}{lrrr}
+        \toprule
+        Model & Precision & Recall & F1-Score \\
+        \midrule
+        LSTM-CRF  &   0.8640  &  0.8533  &  0.8586\\
+        \camembert & \emph{0.9303}  &  \emph{0.9309}  &  \emph{0.9306} \\
+        \dalembert & \textbf{0.9329}  &  \textbf{0.9323}  &  \textbf{0.9326}\\
+        \bottomrule
+    \end{tabular}
+    \caption{Comparison between \dalembert, \camembert and \pieextended performance on \freemlpm.}
+    \label{tab:dalembert-ner}
+\end{table}
 
 Following the approach of \newcite{clerice-2020-pie}, we report the scores obtained on the out-of-domain testing dataset of \freemlpm in Table~\ref{tab:POS}. We use the scores previously reported by \newcite{clerice-2020-pie} using \emph{Pie Extended} as our baseline as well as the fine-tuned \camembert that serves as a second baseline as well as a rough estimation of how much knowledge can \dalembert transfer from the \freemmax into this task.
 
@@ -222,45 +228,3 @@ As for \camembert, we can see that it consistently scores lower than both \dalem
 \section{Conclusion}
 
 In this paper we presented the manually curated \freemmax corpus of Early Modern French as well as \dalembert, a RoBERTa-based language model trained on \freemmax. With \dalembert, we showed that it is possible to successfully train a transformer-based language model for historical French with even less data than originally shown in previous works \cite{martin-etal-2020-camembert}. Moreover with our POS tagging evaluation we were able to observe some form of transfer learning and generalisation across multiple states of the language corresponding to different periods of time. Both our corpus and our model will be of use to digital humanists and linguists interested in Early Modern French. For our future work, we hope that will be able to study the application of our \dalembert model to other NLP tasks such as text normalisation, named entity recognition and even document structuring, where we hope to more extensively study the transfer learning capabilities of our approach.
-
-\section{Carbon Footprint}\label{carbon-footprint-dalembert}
-
-\begin{table}[th]
-    \centering\small
-    \resizebox{\linewidth}{!}{
-        \begin{tabular}{@{}lrrrr@{}}
-            \toprule
-            \textbf{Model}               & {\textbf{Power (W)}} & {\textbf{Time (h)}} & {\textbf{(PUE$\cdotp$kWh)}} & {\textbf{CO\textsuperscript{2}e (kg)}} \\
-            \midrule
-            Pre-train                    & 48640                & 20                  & 1537.02                     & 46.11                                  \\
-            Evaluation                   & 589                  & 1                   & 0.93                        & 0.03                                   \\
-            \midrule
-            Total CO\textsuperscript{2}e &                      &                     &                             & 46.14                                  \\
-            \bottomrule
-        \end{tabular}
-    }
-    \caption{Average power draw, number of models trained, training times in hours, mean power consumption including power usage effectiveness (PUE), and CO\textsuperscript{2} emissions; for each setting.}
-    \label{tab:carbon-dalembert}
-\end{table}
-
-In light of recent interest concerning the energy consumption and carbon emission of machine learning models and specifically of those of language models \cite{schwartz-etal-2020-green,bender-etal-2021-on}, we have decided to report the power consumption and carbon footprint of all our experiments following the approach of \newcite{strubell-etal-2019-energy}. We report the energy consumption and carbon emissions of both the pre-training of D'AlemBERT and its evaluation.
-
-\paragraph{Pre-training:} We use a cluster of 32 machines, each one having 4 GPU Nvidia Tesla V100 SXM2 32GiB, 192GiB of RAM, and two Intel Xeon Gold 6248 processors. One Nvidia Tesla V100 card is rated at around 300W,\footnote{\href{https://www.nvidia.com/en-us/data-center/v100/}{ Nvidia Tesla V100 specification}} while the Xeon Gold 6248 processor is rated at 150W.\footnote{\href{https://ark.intel.com/content/www/us/en/ark/products/192446/intel-xeon-gold-6248-processor-27-5m-cache-2-50-ghz.html}{Intel Xeon Gold 6248 specification}} For the DRAM we can use the work of \newcite{desrochers-etal-2016-a} to estimate the total power draw of 192GiB of RAM at around 20W. Thus, the total power draw of the pre-training adds up to around 48640W.
-
-\paragraph{Evaluation:} We use a single machine with a single GPU Nvidia Tesla V100 SXM2 32GiB, 384GiB of RAM and two Intel Xeon Gold 6226 processors. The Xeon Gold 6226 processor is rated at 125 W,\footnote{\href{https://ark.intel.com/content/www/us/en/ark/products/193957/intel-xeon-gold-6226-processor-19-25m-cache-2-70-ghz.html}{Intel Xeon Gold 6226 specification}} and the DRAM total power draw can be estimated at around 39W. Therefore, the total power draw of the evaluation adds up to around 589W.
-
-With this information, we use the formula proposed by \newcite{strubell-etal-2019-energy} to compute the total power required for each setting:
-
-\begin{equation*}
-    p_t = \frac{1.58t(cp_{c} + p_r + gp_g)}{1000}
-\end{equation*}
-
-Where $c$ and $g$ are the number of CPUs and GPUs respectively, $p_c$ is the average power draw (in W) from all CPU sockets, $p_r$ the average power draw from all DRAM sockets and $p_g$ the average power draw of a single GPU. We estimate the total power consumption by adding GPU, CPU and DRAM consumption, and then multiplying by the \emph{Power Usage Effectiveness} (PUE), which accounts for the additional energy required to support the compute infrastructure. We use a PUE coefficient of 1.58, the 2018 global average for data centres \cite{strubell-etal-2019-energy}. In Table~\ref{tab:carbon-dalembert} we report the training times in hours, as well as the total power draw (in Watts) of the system used to train the models. We use this information to compute the total power consumption of each setting, also reported in Table~\ref{tab:carbon-dalembert}.
-
-We can further estimate the CO\textsuperscript{2} emissions in kilograms of each single model by multiplying the total power consumption by the average CO\textsuperscript{2} emissions per kWh in our region, which were around 30g/kWh between the 30\textsuperscript{th} and the 31\textsuperscript{st} of December,\footnote{\href{https://www.rte-france.com/eco2mix/les-emissions-de-co2-par-kwh-produit-en-france}{Rte - éCO\textsuperscript{2}mix}.} when the models were trained. Thus the total CO\textsuperscript{2} emissions in kg for one single model can be computed as:
-
-\begin{equation*}
-    \text{CO}_{2}\text{e} = 0.030 p_t
-\end{equation*}
-
-All emissions are also reported in Table~\ref{tab:carbon-dalembert}.

@@ -376,6 +376,7 @@ Finally, it is also relevant to compare our results with \camembert on the selec
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{table*}
     \small\centering
+    \resizebox{\linewidth}{!}{
         \begin{tabular}{ l  c  c  c @{\hspace{0.35cm}}  @{\hspace{0.35cm}} c  c  c @{\hspace{0.35cm}}  @{\hspace{0.35cm}} c  c  c  @{\hspace{0.35cm}}  @{\hspace{0.35cm}} c  c  c }
             \toprule
                                                         & \multicolumn{3}{c @{\hspace{0.5cm}}}{\textsc{GSD}} & \multicolumn{3}{c @{\hspace{0.7cm}}}{\textsc{Sequoia}} & \multicolumn{3}{c @{\hspace{0.7cm}}}{\textsc{Spoken}} & \multicolumn{3}{c @{\hspace{0.35cm}}}{\textsc{ParTUT}}                                                                                                                                                                                                                                                                                                                        \\
@@ -422,6 +423,7 @@ Finally, it is also relevant to compare our results with \camembert on the selec
 
             \bottomrule
         \end{tabular}
+    }
     \caption{Final POS and dependency parsing scores on 4 French treebanks (French GSD, Spoken, Sequoia and ParTUT), reported on test sets (4 averaged runs) assuming gold tokenisation. Best scores in bold, second to best underlined, state-of-the-art results in italics.}
     %gray : 
     %light gray :
@@ -461,7 +463,7 @@ And additional term of comparison was identified in a recently released state-of
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{table}
-    \centering
+    \centering\small
         \begin{tabular}{lccc}
             \toprule
             %\multicolumn{4}{c}{\textsc{NER - Results}}  \\\midrule
