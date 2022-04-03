@@ -43,7 +43,7 @@ The pipeline was not functional out-of-the-box, as the user had to provide the c
 
 \goclassy also made heavy use of I/O, as data was saved and loaded repeatedly between steps; as an example, the identification step stored language identification data and individual sentences in two files, before generating the final files (one per language). Despite these limitations, \goclassy's performance remained acceptable mainly due to Go's emphasis on easy and efficient parallelization and inherent speed. The pipeline for instance used clever handling of file descriptors and employed extensive buffering, which limited I/O calls cost in some parts.
 
-\section{Building a new version of the OSCAR corpus}
+\section{Building a New Version of the OSCAR Corpus}
 
 Having identified some shortcomings of both OSCAR 2019 and its pipeline, \goclassy, we decided to restart the OSCAR project by completely rewriting our pipeline. To that end, we introduce \emph{Ungoliant}, a new corpus generation pipeline that, like \goclassy, creates a large-scale multilingual text corpus from a Common Crawl dump. However, contrarily to \goclassy, Ungoliant is fully modular, better structured, and highly parametrizable; thereby allowing comparisons between several parallelization strategies. A specific effort was put in testing and documentation. Parts of Ungoliant are heavily inspired by \goclassy, although for its implementation we decided to use Rust rather than Go, which is often considered to be a faster more low level programming language.\footnote{\url{https://benchmarksgame-team.pages.debian.net/benchmarksgame/fastest/rust-go.html}}
 
@@ -52,17 +52,17 @@ We also use Ungoliant to generate a new version of the OSCAR corpus from a more 
 
 \subsection{Ungoliant}
 
-\subsubsection{Rationale and scope}
+\subsubsection{Rationale and Scope}
 \label{subsubsec:rationale}
-While Ungoliant is heavily inspired by goclassy, it provides a better set of tools to download, process, filter and aggregate textual and contextual data from CommonCrawl. These operations can be sequential, parallel or both, depending on contexts and performance requirements.
+While Ungoliant is heavily inspired by \goclassy, it provides a better set of tools to download, process, filter and aggregate textual and contextual data from Common Crawl. These operations can be sequential, parallel or both, depending on contexts and performance requirements.
 
-We provide both batch and streaming processing, so that the whole pipeline could be run either online, with every step running on streams of data, or offline, with every step running on tangible files, or a mix of both, using already downloaded CommonCrawl dumps but streaming the rest of the process. Moreover, we embed numerous filtering and deduplication utilities directly inside Ungoliant, making these features available for pipeline composition and post-processing.
+We provide both batch and streaming processing, so that the whole pipeline could be run either online, with every step running on streams of data, or offline, with every step running on tangible files, or a mix of both, using already downloaded Common Crawl dumps but streaming the rest of the process. Moreover, we embed numerous filtering and deduplication utilities directly inside Ungoliant, making these features available for pipeline composition and post-processing.
 
-Ungoliant features a loosely defined pipeline interface, on which we re-implement goclassy's one, while improving performance by threading more aggressively and avoiding I/O where it is not necessary: While goclassy uses intermediate files for tags and sentences, we try to keep everything in memory in order to avoid losing time loading or writing files. The Rust language provides constructs that helps us build complex abstractions and pipelines while limiting proactive file I/O or computing, since nearly all the reimplemented pipeline is built around lazy evaluation. File I/O is only used when loading shards, and when writing sentences in language files.
+Ungoliant features a loosely defined pipeline interface, on which we re-implement \goclassy's one, while improving performance by threading more aggressively and avoiding I/O where it is not necessary: While \goclassy uses intermediate files for tags and sentences, we try to keep everything in memory in order to avoid losing time loading or writing files. The Rust language provides constructs that helps us build complex abstractions and pipelines while limiting proactive file I/O or computing, since nearly all the reimplemented pipeline is built around lazy evaluation. File I/O is only used when loading shards, and when writing sentences in language files.
 
 Through benchmarking we found that the best parallelization strategy is to use rayon\footnote{\url{https://github.com/rayon-rs/rayon}}, a work-stealing \cite{blumofe-etal-1999-scheduling} parallel and concurrent library enabling massive parallelization. We parallelize on \mbox{shard-,} record- and sentence-level processing.
 
-To evaluate Ungoliant performance, we run both goclassy and Ungoliant's implementation on 1, 10, 25 and 100 Common Crawl shards both on a middle-range laptop computer (i5-7200u, 8GB RAM, NVMe SSD) and a HPC node (Xeon 5218 (64 Threads), 180GB RAM). Results are shown in Table~\ref{tab:goclassy-bench}.
+To evaluate Ungoliant performance, we run both \goclassy and Ungoliant's implementation on 1, 10, 25 and 100 Common Crawl shards both on a middle-range laptop computer (i5-7200u, 8GB RAM, NVMe SSD) and a HPC node (Xeon 5218 (64 Threads), 180GB RAM). Results are shown in Table~\ref{tab:goclassy-bench}.
 
 \begin{table}[t]
     \centering\small
@@ -85,22 +85,21 @@ To evaluate Ungoliant performance, we run both goclassy and Ungoliant's implemen
     \label{tab:goclassy-bench}
 \end{table}
 
-Ungoliant performs better than goclassy on all tasks, independently of the platform or number of shards processed. However, we can note that Ungoliant's speedup is higher on short tasks, which is explained by its aggressive multithreading strategy, while goclassy uses a record-scope multithreading at its finest granularity.
+Ungoliant performs better than \goclassy on all tasks, independently of the platform or number of shards processed. However, we can note that Ungoliant's speedup is higher on short tasks, which is explained by its aggressive multithreading strategy, while \goclassy uses a record-scope multithreading at its finest granularity.
 
 
-\subsection{Iterating on the goclassy pipeline}
+\subsection{Iterating on the goclassy Pipeline}
 
 
-CommonCrawl dumps contain metadata that hold useful information such as related records, recognized language(s), or origin URLs. Since OSCAR pipeline discards metadata and sentences can be shuffled, we lose the ability to investigate those metadata themselves, as well as working on potentially multilingual documents, since we separate text from metadata.
+Common Crawl dumps contain metadata that hold useful information such as related records, recognized language(s), or origin URLs. Since OSCAR's 2019 pipeline discarded metadata and sentences could be shuffled, we lost the ability to investigate the metadata itself, as well as working on potentially multilingual documents, since we separated text from metadata.
 
-The new pipeline (and the resulting new corpus schema) aims to establish a first link between textual data and metadata from CommonCrawl, while staying backward compatible with the existing OSCAR schema.
+The new pipeline (and the resulting new corpus schema) aims to establish a first link between textual data and metadata from Common Crawl, while staying backward compatible with the existing OSCAR 2019 schema.
 
-In other words, switching from the original OSCAR corpus and the newly generated one should be a drop-in operation.
+In other words, switching from the original OSCAR 2019 corpus and the newly generated one should be a drop-in operation.
 
 % début ajout explication extraction metadata
-\subsubsection{Metadata extraction and linking}
-Our choice of keeping the corpus backward compatible with the original OSCAR introduces changes in the way the corpus is generated, namely regarding metadata: a record's body is composed of sentences that aren't guaranteed to be of the same language.
-Since OSCAR merges sentences from multiple records into a single file, special attention has to be paid to the metadata dispatch too.
+\subsubsection{Metadata Extraction and Linking}
+Our choice of keeping the corpus backward compatible with the original OSCAR 2019 introduces changes in the way the corpus is generated, namely regarding metadata: a record's body is composed of sentences that \textbf{aren't guaranteed to be of the same language}. Since OSCAR merges sentences from multiple records into a single file, special attention has to be paid to the metadata dispatch too.
 
 Approaches to tackle this problem range from (1) storing all metadata in a single location to (2) having language-specific metadata files that contain the metadata for each line in the language file.
 
@@ -110,13 +109,13 @@ Both (1) and (2) have their strengths and weaknesses, namely:
     \item Getting the metadata for a given line is fast since line numbers are synchronized, but there is repeated information and a potentially important increase in size.
 \end{enumerate}
 
-We choose a hybrid approach which keeps metadata local to each language, while trying to limit the information repetition by keeping an entry by group of chunks rather than by line, where a chunk is a series of contiguous sentences that share the same language from the same document.
+We thus choose a hybrid approach which keeps metadata local to each language, while trying to limit the information repetition by keeping an entry by group of \emph{chunks} rather than by line, where a \emph{chunk} is a series of contiguous sentences that share the same language from the same document.
 
-An overview of the pipeline can be seen in Figure~\ref{fig:zoomed}, with a more precise view on record processing and metadata extraction in Figure~\ref{fig:zoomed}.
+An overview of the pipeline can be seen in Figure~\ref{fig:zoomed}, where we depict Ungoliant at a macro level in the first part of the figure, and where we also give a more precise view on record processing and metadata extraction in the second half of the figure.
 
-Metadata are distributed via JSON-encoded files holding an ordered list of metadata entries, along with offsets ($o$) and paragraph lengths ($l$), enabling any user to get the content of a said metadata by querying for lines $(o, o+l]$ in the content file.
+Metadata is distributed via JSON-encoded files holding an ordered list of metadata entries, along with offsets ($o$) and paragraph lengths ($l$), enabling any user to get the content of a said metadata by querying for lines $(o, o+l]$ in the content file.
 
-This approach still has drawbacks, in particular when looking for the corresponding metadata of a given sentence/paragraph, where one has to perform a search on the metadata file, or when working with multilingual documents. Another drawback is the resulting cost of potentially merging back numerous language parts: Since metadata query is offset-based, merging back metadata files implies updating those offsets.
+This approach still has drawbacks, in particular when looking for the corresponding metadata of a given sentence/paragraph, where one has to perform a search on the metadata file, or when working with multilingual documents. Another important drawback is the resulting cost of potentially merging back numerous language parts: Since metadata query is offset-based, merging back metadata files implies updating those offsets.
 
 \begin{figure*}
     \centering
@@ -473,23 +472,22 @@ This approach still has drawbacks, in particular when looking for the correspond
     \label{fig:zoomed}
 \end{figure*}
 
-Having paragraphs and metadata linked by offsets in a highly parallelized pipeline implies to take special care at the offset level.
-The solution is to use shard-scoped offsets (starting from $0$ for each language), and to keep global offsets protected by a mutex guard. This way, when a given shard is done processing and is ready to be written on disk, we convert shard-scoped offsets to global-scoped ones, update the global-scoped ones and then write text and metadata on disk.
+Having paragraphs and metadata linked by offsets in a highly parallelized pipeline implies to take special care at the offset level. The solution is to use shard-scoped offsets (starting from $0$ for each language), and to keep global offsets protected by a mutex guard. This way, when a given shard is done processing and is ready to be written on disk, we convert shard-scoped offsets to global-scoped ones, update the global-scoped ones and then write text and metadata on disk.
 
 \begin{table}[t]
     \centering\small
     \scalebox{0.85}{
         \begin{tabular}{lrrrr}
             \toprule
-            Platform                 & \#shards & OSCAR & With Metadata & Speedup     \\
+            Platform                 & \#shards & Without Metadata & With Metadata & Speedup     \\
             \midrule
-            \multirow{3}{*}{Desktop} & 1        & 13s   & 12s           & $\times$1.1 \\
-                                     & 10       & 2m12s & 1m55s         & $\times$1.1 \\
-                                     & 25       & 5m47s & 4m50s         & $\times$1.2 \\
+            \multirow{3}{*}{Desktop} & 1        & 13s              & 12s           & $\times$1.1 \\
+                                     & 10       & 2m12s            & 1m55s         & $\times$1.1 \\
+                                     & 25       & 5m47s            & 4m50s         & $\times$1.2 \\
             \midrule
-            \multirow{3}{*}{HPC}     & 1        & 6s    & 7s            & $\times$0.9 \\
-                                     & 25       & 1m6s  & 1m12s         & $\times$0.9 \\
-                                     & 100      & 4m14s & 4m36s         & $\times$0.9 \\
+            \multirow{3}{*}{HPC}     & 1        & 6s               & 7s            & $\times$0.9 \\
+                                     & 25       & 1m6s             & 1m12s         & $\times$0.9 \\
+                                     & 100      & 4m14s            & 4m36s         & $\times$0.9 \\
             \bottomrule
         \end{tabular}
     }
@@ -497,37 +495,37 @@ The solution is to use shard-scoped offsets (starting from $0$ for each language
     \label{tab:pipelines-bench}
 \end{table}
 
-We compare running times for the reimplementation of the goclassy pipeline, and our new pipeline adding metadata extraction, using both desktop and HPC contexts. The results are reported in Table ~\ref{tab:pipelines-bench}.
+We compare running times for the reimplementation of the \goclassy pipeline, and our new pipeline adding metadata extraction, using both desktop and HPC contexts. The results are reported in Table ~\ref{tab:pipelines-bench}.
 
 Metadata generation does not seem to influence generation time dramatically. However, we can notice a slight performance difference between HPC and Desktop contexts. These differences may lie in the storage medium differences, I/O layout, or algorithmic peculiarities benefiting desktop contexts because of other bottlenecks.
 
 
-\subsection{Characteristics of our new backward compatible OSCAR-like corpus}
+\subsection{Characteristics of the OSCAR 21.09 Corpus}
 
-We evaluate the newly generated corpus, assessing its ability to reflect events that occurred after the publication of OSCAR 2018 and detail the metadata format and potential use.
+We evaluate the newly generated OSCAR 21.09 corpus (published on September 2021\footnote{\url{https://oscar-corpus.com/post/oscar-v21-09/}}), assessing its ability to reflect events that occurred after the publication of OSCAR 2019, that is, events that occurred after November 2018, and we detail the metadata format and potential use.
 
-\subsubsection{Comparison with OSCAR}
+\subsubsection{Comparison with OSCAR 2019}
 
-While it is expected that our new corpus has a larger file size than OSCAR since CommonCrawl itself grew from 7.42TB to 8.06TB, metadata quickly adds up and take for nearly 15\% of the whole uncompressed data.
+While it is expected that our new corpus has a larger file size than OSCAR 2019 since Common Crawl itself grew from 7.42TB to 8.06TB, metadata quickly adds up and accounts for nearly 15\% of the total uncompressed data in OSCAR 21.09.
 
 \begin{table}[t]
     \centering\small
     \scalebox{0.82}{
         \begin{tabular}{lrrrr}
             \toprule
-            Version & Source & Textual (dedup) & Metadata & Total (increase) \\
+            OSCAR Version & Common Crawl & OSCAR (dedup) & Metadata & Total (increase) \\
             \midrule
-            2018    & 7.42TB & 6.3TB (3.2TB)   & N/A      & 6.3TB            \\
+            2019          & 7.42TB       & 6.3TB (3.2TB) & N/A      & 6.3TB            \\
             \midrule
-            2021    & 8.06TB & 7.2TB (3.3TB)   & 1.2TB    & 8.4TB ($+33\%$)  \\
+            21.09         & 8.06TB       & 7.2TB (3.3TB) & 1.2TB    & 8.4TB ($+33\%$)  \\
             \bottomrule
         \end{tabular}
     }
-    \caption{Comparison of CommonCrawl and OSCAR sizes between 2018 and 2021 versions. Compressed (CommonCrawl) sources are from November 2018 and February 2021. Total is Textual + Metadata without deduplication.}
+    \caption{Comparison of the size of the Common Crawl dumps and their corresponding OSCAR sizes between the 2019 and the 21.09 versions. Compressed (Common Crawl) sources are from November 2018 and February 2021 dumps. Total is Textual + Metadata without deduplication.}
     \label{tab:oscar-size}
 \end{table}
 
-The size augmentation is not the same for each language, and while the whole corpus is bigger now, some languages are smaller than they were before.
+The size difference is not the same for each language, and while the corpus as a whole is bigger now, some languages are smaller than they were before.
 
 \begin{figure}[ht]
     \centering
@@ -536,17 +534,17 @@ The size augmentation is not the same for each language, and while the whole cor
     \label{fig:lang-size}
 \end{figure}
 
-Results show that already largely represented languages gain more and more data (like the English language, which constitutes more than a third of the original OSCAR), except for the Russian language which loses approximately 100Gb of textual content. These results are summarized in Figure~\ref{fig:lang-size}.
+Results show that already largely represented languages gain more and more data (like the English language, which constituted more than a third of the original OSCAR 2019), except for the Russian language which loses approximately 100Gb of textual content. These results are summarized in Figure~\ref{fig:lang-size}.
 
-However, in a context where the number of languages is very high (higher than 150) and of varying sizes, evolution can't be analyzed via a mere size evaluation. By computing, for each language, the relative size difference between the 2018 and 2021 releases of OSCAR, less resourced languages do appear, hinting at a better representation of some of them. These results can be found in Figure~\ref{fig:lang-size-pctg}.
+However, in a context where the number of languages is very high (higher than 150) and of varying sizes, evolution can't be analyzed via a mere size evaluation. By computing, for each language, the relative size difference between the 2019 and 21.09 releases of OSCAR, less resourced languages do appear, hinting at a better representation of some of them. These results can be found in Figure~\ref{fig:lang-size-pctg}.
 
-Numerous languages have been omitted from Figure~\ref{fig:lang-size-pctg}, either:
+Note nonetheless that numerous languages have been omitted from Figure~\ref{fig:lang-size-pctg}, either:
 \begin{itemize}
-    \item because they were present in the original OSCAR and are now absent (\textit{Central Bikol} and \textit{Cantonese})
-    \item because they were absent in the original OSCAR and are now present (\textit{Manx}, \textit{Rusyn}, \textit{Scots} and \textit{West Flemish})
+    \item because they were present in the original OSCAR 2019 and are now absent (\textit{Central Bikol} and \textit{Cantonese})
+    \item or because they were absent in the original OSCAR 2019 and are now present (\textit{Manx}, \textit{Rusyn}, \textit{Scots} and \textit{West Flemish})
 \end{itemize}
 
-Precautions have to be taken when using these corpora and further work has to be done to correctly assess the quality of low-to-mid resource languages in order to better reflect the quality of each corpus to the OSCAR users. Some languages exhibited either a particularly low number of sentences or a very low quality, and as such couldn't be usable, while still accounting for a language in the total language count of the original OSCAR.
+Precautions have to be taken when using these corpora and further work has to be done to correctly assess the quality of low-to-mid resource languages in order to better reflect the quality of each corpus to the OSCAR users. Some sub-corpora exhibited either a particularly low number of sentences or just very low quality data, and as such they are not really usable in practice. However, they still account for a language in the total language count of both the original OSCAR 2019 and the new OSCAR 21.09.
 
 \begin{figure}[ht]
     \centering
@@ -559,23 +557,19 @@ Precautions have to be taken when using these corpora and further work has to be
 
 Metadata provides new contextual data that is useful to evaluate the corpus and draw metrics.
 
-The total size of metadata is 1.2TB, ranging from 4Kb to 500Gb, depending on the number of lines.
-Relative size varies from 100\% to 20\%, diminishing with the textual data size, which is expected.
-
-Metadata are provided in single files for now, but split versions of both textual and contextual data will be released soon after the release of the corpus, enabling easy access.
+The total size of metadata is 1.2TB, ranging from 4Kb to 500Gb, depending on the number of lines. Relative size varies from 100\% to 20\%, diminishing with the textual data size, which is expected.
 
 Our choice of keeping metadata aside from the main content adds some complexity when working with both textual and contextual data:
 
 \begin{itemize}
     \item When trying to get the metadata of given sentence, one has to get the line number $k$, then sequentially (or use a search algorithm since offsets are sorted) look for the record (with offset $o$ and length $l$), where $k \in [o, o+l]$.
     \item Looking for lines corresponding to a particular metadata entry is easier: one has to read the textual file, skipping until the $o$-th line, then read $l$ lines.
-
 \end{itemize}
 
 
 \subsubsection{Presence of events}
 
-Using a sample of an English part of our corpus, we perform a simple search of terms in order to assess and compare the presence of pre- and post- 2018 events and persons in both corpora. Terms and frequency are grouped in Table \ref{tab:word-frequency}.
+Using a sample of five sub-corpora, we perform a simple search of terms in order to assess and compare the presence of pre- and post- 2018 events and persons in both corpora. Terms and frequency are grouped in Table \ref{tab:word-frequency}.
 
 \begin{table}[t]
     \centering\small
@@ -590,7 +584,7 @@ Using a sample of an English part of our corpus, we perform a simple search of t
         \multirow{1}{*}{French}   & Yellow Vests          & 2     & 96    \\
         \bottomrule
     \end{tabular}
-    \caption{Comparison of occurrences of news-related terms between OSCAR and our corpus in a sample of 100 CommonCrawl shards. For the Burmese language, we use the whole 2018 and 2021 corpus since it is a low resource language. Terms are translated in the corpus language.}
+    \caption{Comparison of occurrences of news-related terms between OSCAR and our corpus in a sample of 100 Common Crawl shards. For the Burmese language, we use the whole 2018 and 2021 corpus since it is a low resource language. Terms are translated to the target language.}
     \label{tab:word-frequency}
 \end{table}
 
@@ -600,9 +594,9 @@ We include search terms linked to post-2018 events in French and Arabic which ar
 
 \subsection{License}
 
-This new corpus will be released under a research-only license that is compliant with the EU's exceptions for research in text and data mining. Contrarily to the original OSCAR, no shuffled version of the corpus will be distributed, instead we will put in place an authentication system that will allow us to verify that requests for the corpus come from research institutions. A contact form will be also provided for independent researchers so that we can study their particular cases and determine if the utilization of the corpus corresponds to a legitimate research use.
+This new OSCAR 21.09 corpus is released under a research-only license that is compliant with the EU's exceptions for research in text and data mining. Contrarily to the original OSCAR 2019, no shuffled version of the corpus is distributed, instead we put in place an authentication system that allows us to verify that requests for the corpus come from research institutions. A contact form is also provided for independent researchers so that we can study their particular cases and determine if the utilization of the corpus corresponds to a legitimate research use.
 
-Moreover, the introduction of metadata makes our corpus far more queryable, thus simplifying and speeding up the handling of take-down GDPR requests. For this reason, we will be releasing the complete set of metadata under a CC0 public domain license, so that any individual can check if their personal or even copyrighted data is in our new corpus and make a request accordingly.
+Moreover, the introduction of metadata makes our corpus far more queryable, thus simplifying and speeding up the handling of take-down GDPR requests. For this reason, we release the complete set of metadata under a CC0 public domain license, so that any individual can check if their personal or even copyrighted data is in our new OSCAR 21.09 corpus and make a request accordingly.
 
 \section{Conclusion}
 
