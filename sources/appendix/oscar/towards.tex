@@ -1,9 +1,8 @@
-\chapter{Towards a Cleaner Document-Oriented Multilingual Crawled Corpus}
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Towards a Cleaner Document-Oriented Annotated OSCAR Corpus}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Carbon Footprint}\label{carbon_footprint_towards}
-
-Taking into consideration recent concerns regarding the power consumption and carbon footprint of machine learning experiments \cite{schwartz-etal-2020-green,bender-etal-2021-on} we report the power consumption and carbon footprint of the OSCAR generation, assuming the whole dump of Common Crawl has already been downloaded. We follow the approach of \newcite{strubell-etal-2019-energy}.
 
 We use a single machine having 192 GB of RAM and two Intel Xeon Gold 5218 processors, which is rated at 125 W,\footnote{\href{https://ark.intel.com/content/www/us/en/ark/products/192444/intel-xeon-gold-5218-processor-22m-cache-2-30-ghz.html}{Intel Xeon Gold 5218 specification}}. For the DRAM we can use the work of \newcite{desrochers-etal-2016-a} to estimate the total power draw of 192GB of RAM at around 20W. The total power draw of this setting adds up to around 270 W.
 
@@ -107,6 +106,6 @@ Thus total CO\textsubscript{2} emissions amount to 0.01648\unit{\kilo\gram} or 1
             \bottomrule
         \end{tabular}
     }
-    \caption{Size of the OSCAR corpus by language measured in bytes and number of words. Standard UNIX human-readable notation is used for the size in byte. We define ``words'' as spaced separated tokens, which gives a good estimate of the size of each corpus for languages using Latin or Cyrillic alphabets, but might give a misleading size for other languages such as Chinese or Japanese.}
+    \caption{Size of the OSCAR 22.01 corpus by language measured in bytes and number of words. Standard UNIX human-readable notation is used for the size in byte. We define ``words'' as spaced separated tokens, which gives a good estimate of the size of each corpus for languages using Latin or Cyrillic alphabets, but might give a misleading size for other languages such as Chinese or Japanese.}
     \label{tab:langs_towards}
 \end{table}

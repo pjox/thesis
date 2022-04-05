@@ -1,4 +1,23 @@
-\chapter{Towards a Cleaner Document-Oriented Multilingual Crawled Corpus}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Towards a Cleaner Document-Oriented Annotated OSCAR Corpus}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{center}
+    \begin{minipage}{0.66\textwidth}
+        \begin{small}
+            In which we present the work of \citet{abadji-etal-2022-towards}, who continued improving over the second OSCAR pipeline \emph{Ungoliant} by adding mechanisms to ensure document integrity, specially for multilingual records of Common Crawl, and also by adding the first methods for simple annotations of the OSCAR corpus that would allow users to more easily filter the data and obtain a cleaner dataset specially for language modeling applications.
+        \end{small}
+    \end{minipage}
+    \vspace{0.5cm}
+\end{center}
+
+In this final chapter about the OSCAR project we present the first methods for adding simple annotators to the Ungoliant pipeline that build upon the improvements presented in the previous chapter and that actually allow us to finally start adressing some of the problems exposed in chpater \ref{chap:quality} and in far more detail in \citep{caswell-etal-2020-language,kreutzer-etal-2021-quality}. Moreover, we also introduce a new method for document level language classification that:
+
+\begin{enumerate}
+    \item Is based on line-level language classification allowing us to hopefully preserve the classification quality that we saw in chapter \ref{chap:quality}.
+    \item Allos us to respect document integrity such that we can stablish a one to one correspondance between OSCAR documents and Common Crawl records.
+    \item Allows us to get multilingual documents that might one day serve as a the basis of a parallel OSCAR corpus.
+\end{enumerate}
 
 \section{Filtering}
 
@@ -43,7 +62,7 @@ This filter may limit the impact of documents containing low-quality long lines 
 The backbone of the language identification process is similar to the one used in goclassy \cite{ortiz-suarez-etal-2019-asynchronous} for the generation of OSCAR 2019 and Ungoliant \cite{abadji-etal-2021-ungoliant} for the generation of OSCAR 21.09. However, shifting to a document oriented corpus (with a single top-level identification per document) requires to infer the document identification, based on line identifications.
 
 
-We define a document $\mathcal{D}$ as a pair $\mathcal{D}=(\mathcal{L}, \mathscr{L})$ where $\mathcal{L}=\{l_1,\ldots,l_n\}$ is the set of lines (strings separated by \texttt{\textbackslash n}) that constitute the document and $\mathscr{L} = \{g_1, \ldots, g_m\}$\footnote{Note that since FastText identifies one language by line, we have always have $m\le n$ for every document $\mathcal{D}$.} is the set of languages identified by FastText for the document $\mathcal{D}$. When FastText is no able to identify a language for an specific line, for instance because the confidence isn't higher than $0.8$, we tag said line with the \emph{No Identification Language} that we simply note by $g_0$. Furthermore, we define each line $l_i$ in a document $\mathcal{D}$ as a triplet $l_k=(g_i, p_i, s_i)$ where $g_i$ is the language identified by FastText with the highest confidence for the line $l_i$, $p_i$ is said confidence and $s_i$ is the size in bytes of the line $l_i$. We also note $|l_i|=s_i$ and we thus define the size $|\mathcal{D}|$ of a document $\mathcal{D}$ as
+We define a document $\mathcal{D}$ as a pair $\mathcal{D}=(\mathcal{L}, \mathscr{L})$ where $\mathcal{L}=\{l_1,\ldots,l_n\}$ is the set of lines (strings separated by \texttt{\textbackslash n}) that constitute the document and $\mathscr{L} = \{g_1, \ldots, g_m\}$\footnote{Note that since FastText identifies one language by line, we have always have $m\le n$ for every document $\mathcal{D}$.} is the set of languages identified by FastText for the document $\mathcal{D}$. When FastText is not able to identify a language for a specific line, for instance because the confidence isn't higher than $0.8$, we tag said line with the \emph{No Identification Language} that we simply note by $g_0$. Furthermore, we define each line $l_i$ in a document $\mathcal{D}$ as a triplet $l_k=(g_i, p_i, s_i)$ where $g_i$ is the language identified by FastText with the highest confidence for the line $l_i$, $p_i$ is said confidence and $s_i$ is the size in bytes of the line $l_i$. We also note $|l_i|=s_i$ and we thus define the size $|\mathcal{D}|$ of a document $\mathcal{D}$ as
 \[
     |\mathcal{D}| = \sum_{i=0}^{n} |l_i| = \sum_{i=0}^{n} s_i.
 \]
@@ -53,7 +72,7 @@ Moreover, for each identified language $g_j \in \mathscr{L}$ in a document conta
 \]
 Finally for each language $g_j \in \mathscr{L}$ we can also compute its \emph{overall weighted confidence} $P_j$ throughout the document $\mathcal{D}$ as the following weighted mean:
 \[
-    |P_j| = |D|^{-1}\sum_{\mathclap{\{s_i|g_i=g_j\}}} s_jp_j.
+    P_j = |D|^{-1}\sum_{\mathclap{\{s_i|g_i=g_j\}}} s_jp_j.
 \]
 
 \subsection{Multilingual document identification}
@@ -165,7 +184,7 @@ The adult blocklist is comprised of roughly 3.7M records.
 
 \section{Corpus}
 
-We apply the aforementioned pipeline to the November/December 2021 crawl dump of CommonCrawl. The result is a new corpus, OSCAR 22.01. While its structure is different from the previous OSCAR corpora (due to the choice of generating a document oriented corpus), we attempt to compare the two corpora, especially in terms of size and news-related topic presence and recall. We also evaluate the occurrence and pertinence of the annotations.
+We apply the aforementioned pipeline to the November/December 2021 crawl dump of Common Crawl. The result is a new corpus, OSCAR 22.01. While its structure is different from the previous OSCAR corpora (due to the choice of generating a document oriented corpus), we have attempted to compare the two corpora, especially in terms of size and news-related topic presence and recall. We also evaluate the occurrence and pertinence of the annotations.
 
 \subsection{Comparison with OSCAR 21.09}
 \subsubsection{Size distribution}
@@ -174,7 +193,7 @@ The data layout of OSCAR 22.01 may limit the relevance of raw size comparisons, 
 
 However, comparing the distribution of corpus sizes may help us ensure that the new corpus has a size distribution similar to the older one.
 
-We compare the distribution of the corpus sizes between OSCAR 21.09 and OSCAR 22.01 in figure \ref{fig.1}. We see that while the overall distribution is similar, the lower end of the distribution has more variance: The $[0\text{B}, 100\text{KB})$ range shows more corpora at its bounds than at its center. We also plot the empirical cumulative density function, that helps to assert the distribution similarity between OSCAR 21.09 and OSCAR 22.01.
+We compare the distribution of the sub-corpora sizes between OSCAR 21.09 and OSCAR 22.01 in figure \ref{fig.1}. We see that while the overall distribution is similar, the lower end of the distribution has more variance: The $[0\text{B}, 100\text{KB})$ range shows more corpora at its bounds than at its center. We also plot the empirical cumulative density function, that helps to assert the distribution similarity between OSCAR 21.09 and OSCAR 22.01.
 
 \begin{figure*}[!ht]
     \begin{center}
@@ -238,8 +257,8 @@ As OSCAR 22.01 is based on a November/December 2021 dump (compared to OSCAR 21.0
     \label{tab:word_frequency_towards}
 \end{table}
 
-We see that the events and terms related to events predating February 2021 are still occurrent in the corpus, but have a diminished count that is in the same order of magnitude.
-We also count the occurrences of the term Omicron, related to the Omicron variant, and observe that the term has a higher count on the 21.09 sample.
+We see that the events and terms related to events predating February 2021 are still present in the corpus, but have a lower count that nevertheless remains in the same order of magnitude.
+We also count the occurrences of the term Omicron, related to the Omicron variant, and observe that the term has a higher count on the 21.01 sample.
 
 \subsubsection{Absence of deduplication}
 
@@ -400,3 +419,13 @@ Another solution would be to base the whole OSCAR generation pipeline on raw HTM
 The \textit{adult} annotation, based from an adult URL blocklist, is present on a very limited set of documents. However, studies have shown that adult content has been present in a previous version of OSCAR in a larger proportion than the one measured here \cite{kreutzer-etal-2021-quality}, hinting at a bad performance of the blocklist based adult content filtering approach. Moreover, we noticed that the blocklist contained websites representing LGBTQI+ related topics, which damages the representation of the LGBTQI+ (association with adult content, filtering out LGBTQI+ documents, which in turn could limit the representation in downstream tasks..).
 Model-based approaches may help in improving the \textit{adult} annotation, and should be the next step towards a better annotation of adult content \cite{luccioni-viviano-2021-whats}.
 
+
+\section{Conclusion}
+
+With the improvements to the Ungoliant pipeline described in this chapter and the release of OSCAR 22.01, we belive we are moving the OSCAR project in a direction were we are capable of distributing high quality up to date textual data for a wide range of NLP and Digital Humanities applications.
+
+While we're aware that not all of the problems and concerns around the OSCAR corpus have been addresed, we hope we can continue working on this project as it has already had a significant impact on the NLP community, specially for studies in previously underrepresented languages.
+
+We beleive however that the next steps in improving our corpus will require a more close involvement and participation of the OSCAR users. We thus hope that in the coming months and years we will be able to build an active open source community around the OSCAR project where people will be able to collaborate and contribute directly to the development of future versions of OSCAR and its pipeline Ungoliant.
+
+While this chapter marks the end of the multilingual discussion of this thesis, the French sub-corpus of OSCAR will be consequential to the development of our models and resources for both contemporary and historical French, as we will see in the coming chapters.
