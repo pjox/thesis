@@ -1,4 +1,19 @@
-\chapter{CaBeRnet: A Contemporary French Balanced Corpus}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Contemporary French Corpora}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{center}
+    \begin{minipage}{0.66\textwidth}
+        \begin{small}
+            In which we present a part of the work of \citet{popa-fabre-etal-2020-french} who construct a balanced corpus for contemporary French that could be used for language modeling; and of \citet{ortiz-suarez-etal-2020-establishing} who aligned both the Universal Dependencies and the TEI-annotated NER version of the French Treebank, and who then convert the NER annotations to a more user-friendly CoNLL format.
+        \end{small}
+    \end{minipage}
+    \vspace{0.5cm}
+\end{center}
+
+
+\section{CaBeRnet: A Contemporary French Balanced Corpus}
+\label{sec:DescribeCorpora}
 
 The question of quality versus size of training corpora is increasingly gaining attention and interest in the context of the latest developments in neural language models' performance.
 The longstanding issue of corpora "representativeness" is here addressed, in order to grasp to what extent a linguistically balanced cross-genre language sample is sufficient for a language model to gain in accuracy for contextualized word-embeddings on different NLP tasks.
@@ -60,9 +75,8 @@ Finally, we conclude in §\ref{sec:Concl} on the computational relevance of word
 %\caption{\label{Table_copus_feature} Comparison of corpora. Full-fledged linguistic representativity.}
 %\end{table}
 
-\section{Corpora Building}%- Quantitative Description
-\label{sec:DescribeCorpora}
-%Two main criteria guided corpus building, the first was balance and representativeness, and the second was maximizing the usage of open resources to build our corpora.
+
+
 
 \subsection{\Cabernet} \label{subsec:DescribeCaBeRnet}
 
@@ -154,7 +168,7 @@ Chapter heads, titles, notes and all types of editorial information were removed
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%      Section 3    %%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Corpora Descriptive Comparison} \label{sec:CompareCorpora}
+\subsection{Corpora Descriptive Comparison} \label{sec:CompareCorpora}
 
 We used two different tokenizers: SEM, Segmenteur-Étiqueteur Markovien standalone \citet{dupont-2017-exploration} and TreeTagger. Both are based on cascades of regular expressions, and both perform tokenization and sentence splitting.
 The first was used for descriptive purposes because it technically allowed to segment and tokenize all corpora including OSCAR (23 billion words). Hence, all corpora were entirely segmented into sentences and tokenized using SEM.
@@ -162,7 +176,7 @@ The first was used for descriptive purposes because it technically allowed to se
 The second tokenization method was run only on 3 million words samples to automatically tag them with TreeTagger into part-of-speech and lemmatize them.\footnote{Based on the tag-set available at \url{https://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/data/french-tagset.html}.} All corpora were randomly shuffled by sentence to then select samples of 3 million words, to be able to compare them in terms of lexical composition (Type-Token Ratio, see Table \ref{Table_MorphoRich}).
 %All corpora were POS-Tagged for descriptive reasons using MElt POS-tagging (\citep{denis2012coupling} and \citep{sagot2016external}). Vocabulary size was evaluated after Lemmatization of each Corpus with MElt tool.
 
-\subsection{Corpora Size and Composition}
+\subsubsection{Corpora Size and Composition}
 %\notemumu{@Eric est-ce que je raporte la moyenne ou la mediane ou les deux ? je me rappelle que dans tes scripts tu as les deux.}
 
 Length of sentences is a simple measure to quantify both sentence syntactic complexity and genre. Hence, the number of sentences reported in Table \ref{Table_nb_Words} shows interesting patterns of distributions across genres, consider the comparison between \Cabernet an Wiki-fr.
@@ -171,18 +185,16 @@ In our effort to evaluate the impact of corpora pre-training on ELMo-based conte
 %xxx for OSCAR-fr, xxx for frWac, xxx for Wiki-fr, xxx for \Cabernet and xx for CBT-fr.
 %TODO
 
-\subsubsection{OSCAR fr}
+\paragraph{OSCAR fr}
 As it has been shown that pre-trained language models can be significantly improved by using more data \citep{liu-etal-2019-roberta,raffel-etal-2020-exploring}, we decided to include in our comparison a corpus of French text extracted from Common Crawl\footnote{More information available  at \url{https://commoncrawl.org/about/}.}. We leverage on a recently published corpus, OSCAR \citep{ortiz-suarez-etal-2019-asynchronous}, which offers a pre-classified and pre-filtered version of the November 2018 Common Craw snapshot.
 
 OSCAR gathers a set of monolingual text extracted from Common Crawl - in plain text \emph{WET} format - where all HTML tags are removed and all text encodings are converted to UTF-8. It follows a similar approach to \citep{grave-etal-2018-learning} by using a language classification model based on the fastText linear classifier \citep{joulin-etal-2016-fasttext,joulin-etal-2017-bag} pre-trained on Wikipedia, Tatoeba and SETimes, supporting 176 different languages.
 
 After language classification, a deduplication step is performed without introducing a specialized filtering scheme: paragraphs containing 100 or more UTF-8 encoded characters are kept. This makes OSCAR an example of unfiltered data that is nearly as noisy as to the original Crawled data.%\footnote{We did not use CCNet because of its difficult availability and download.}
 
-%\subsubsection{frWac} %on l'enlève !
-%The frWaC corpus is a French text corpus collected from the .fr domain with using medium-frequency words from the Le Monde Diplomatique corpus and basic French vocabulary lists as seeds. The corpus consists of French websites with total size 1.3 billion words (xxx).%add to biblio
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsubsection{FrWIKI}
+\paragraph{FrWIKI}
 This corpus collects a selection of pages from Wikipedia-fr from a dump executed in April 2019, where HTML tags and tables were removed, together with template expansion using Attardi's tool (WikiExtractor, §\ref{subsec:DescribeCaBeRnetFic}). As reported on Table \ref{Table_nb_Words}, in this data-set (660 million words) sentences are relatively longer compared to other corpora. It has the advantage of having a comparable size to \Cabernet, but its homogeneity in terms of written genre is set to Wikipedia entries descriptive style.
 
 \begin{table}[ht]
@@ -199,22 +211,15 @@ This corpus collects a selection of pages from Wikipedia-fr from a dump executed
 \end{table}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Corpora Lexical Variety}
+\subsubsection{Corpora Lexical Variety}
 
-Focusing on a useful measure of complexity that documents lexical richness or variety in vocabulary, we present the type-token ration (TTR) of the corpora under analysis. Generally used to asses language use aspects like the variety of different words used to communicate by learners or children, it represents the total number of unique words (types/forms) divided by the total number of tokens in a given sample of language production. Hence, the closer the TTR ratio is to 1, the greater the lexical richness of the corpus. Table \ref{Table_Morpho_CabernetSub} summarizes the lexical variety of the five sub-portions of \Cabernet, respectively taken as representative of Oral, Popular, Fiction, News, and Academic genres. Domain diversity of texts can be observed in the lexical statistics showing a gradual increase in the number of distinct lexical forms (cf. TTR). This pattern  reflects a generally acknowledged distributional pattern of vocabulary-size across genres. Oral style shows a poorer lexical variety compared to newspapers/magazines’ textual typology. The lexically rich fictional/classic literature is outreached by academic writing-style with its wide-ranging specialized vocabulary. All in all, Table \ref{Table_Morpho_CabernetSub} quantitatively demonstrates that the selected textual and oral materials are indeed representative of the five types of genres of CaBeRnet.
-
-
-%\textbf{DEFINITION :} The Type Token Ratio (TTR). The TTR is the number of Types divided by the number of Tokens. The closer the TTR is to 1 the more lexical variety there is. Enter Henry's TTR for his written sample in Table 1 below.
-
+Focusing on a useful measure of complexity that documents lexical richness or variety in vocabulary, we present the type-token ration (TTR) of the corpora under analysis. Generally used to assess language use aspects like the variety of different words used to communicate by learners or children, it represents the total number of unique words (types/forms) divided by the total number of tokens in a given sample of language production. Hence, the closer the TTR ratio is to 1, the greater the lexical richness of the corpus. Table \ref{Table_Morpho_CabernetSub} summarizes the lexical variety of the five sub-portions of \Cabernet, respectively taken as representative of Oral, Popular, Fiction, News, and Academic genres. Domain diversity of texts can be observed in the lexical statistics showing a gradual increase in the number of distinct lexical forms (cf. TTR). This pattern  reflects a generally acknowledged distributional pattern of vocabulary-size across genres. Oral style shows a poorer lexical variety compared to newspapers/magazines’ textual typology. The lexically rich fictional/classic literature is outreached by academic writing-style with its wide-ranging specialized vocabulary. All in all, Table \ref{Table_Morpho_CabernetSub} quantitatively demonstrates that the selected textual and oral materials are indeed representative of the five types of genres of CaBeRnet.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Corpora Morphological richness}
+\subsubsection{Corpora Morphological richness}
 
 To select a measure that would help quantifying the different corpora morphological richness, we follow \citep{bonami-etal-2015-implicative}. Hence, the proportion of lemmas with multiple forms in a given vocabulary size was evaluated on randomly selected samples of 3-million-words from each corpus under analysis (see Table \ref{Table_MorphoRich}).
-%Distribution of the lemmas in function of the percentage of their full flexion . 
-
-%\notemumu{@Benoit : je suis pas sûre de bien ex-primer ici le contenu de nos discussions sur le sujet}
 
 \begin{table}[ht]
     \centering
@@ -235,75 +240,4 @@ To select a measure that would help quantifying the different corpora morphologi
 
 Table 4 reports some more in-depth lexical and morphological statistics across corpora. Although OSCAR is 34 times bigger than CaBeRnet, their total number of forms and the proportion of lemmas having more than one form in a 3-million-word sample are comparable. FrWiki shows a radically different lexical distribution with numerous hapaxes but a lower morphological richness. Although its total number of forms is more than one third higher than in OSCAR and CaBeRnet samples, the proportion of lemmas having more than one distinct form is around four points below CaBeRnet and OSCAR. Comparatively, youth literature in CBT-fr shows the greatest morphological richness, around 56\% of lemmas have more than one form.
 
-%\begin{table}[ht]
-%\centering\small
-%\scalebox{0.95}{
-%\begin{tabular}{lr}\\\toprule
-
-%{\sc CBT-fr 3 m sample}   &   \\\midrule
-
-%%%number of different lemmas    & 25.139   \\ 
-%%total number of forms       &  95.058  \\  
-%%mean number of forms per lemma     &  3,78   \\ 
-%%Number of lemmas having more than one form :   &  14.128  \\
-%%Percentage of lemmas with multiple forms  &  56,20 %\\\midrule
-
-% CBT-fr
-%number of forms: 70230
-%number of lemmas: 22123
-%mean number of forms per lemma: 74819 3.381955430999412
-%proportion of lemmas with multiple forms: 11808 0.5337431632237942
-
-%%{\sc CaBeRnetFRanc 3 m sample}   &   \\\midrule
-%%number of different lemmas          & 30 488   \\ 
-%%total number of forms               &  180.089  \\  
-%%mean number of forms per lemma      &  6,19   \\ %188.675
-%%Number of lemmas having more than one form :   &  15.927  \\
-%%Percentage of lemmas with multiple forms  & 52,24 %\\\midrule
-
-%CaBeRnetFRanc.txt
-%number of forms: 
-%number of lemmas: 30488
-%mean number of forms per lemma: 188675 6.188500393597481
-%proportion of lemmas with multiple forms: 15927 0.5224 022566255576
-
-%{\sc frWAC 3 m sample}   &   \\\midrule
-%number of different lemmas    & 30.892   \\ 
-%total number of forms       &  194.562  \\  
-%mean number of forms per lemma     &  6,62 \\ 
-%Number of lemmas having more than one form :   &  16.197  \\
-%Proportion of lemmas with multiple forms  &  52,43 \\\midrule
-% frwac
-%number of forms: 194562
-%number of lemmas: 30892
-%mean number of forms per lemma: 204400 6.61659976692995
-%proportion of lemmas with multiple forms: 16197 0.5243 105011006086
-
-%%{\sc frwiki 3 m sample}   &   \\\midrule
-%%number of different lemmas    & 31.385   \\ 
-%%total number of forms       &  238.121  \\  
-%%mean number of forms per lemma     &  7,85   \\ 
-%Number of lemmas having more than one form :   &  15.182  \\
-%%Percentage of lemmas with multiple forms  &  48,37 %\\\midrule
-% frwiki
-%number of forms: 238121
-%number of lemmas: 31385
-%mean number of forms per lemma: 246418 7.851457702724232
-%proportion of lemmas with multiple forms: 15182 0.4837 3426796240243
-
-%{\sc OSCAR 3 m sample}   &   \\\midrule
-%number of different lemmas    & 31.204   \\ 
-%%total number of forms       &  190.078  \\  
-%%mean number of forms per lemma     &  6,40   \\ 
-%Number of lemmas having more than one form :   &  16.480  \\
-%%Percentage of lemmas with multiple forms  &  52,81 %\\
-% OSCAR
-%number of forms: 190078
-%number of lemmas: 31204
-%mean number of forms per lemma: 199589 6.396263299576978
-%proportion of lemmas with multiple forms: 16480 0.5281 374182797077
-%\bottomrule  
-%\end{tabular}}
-%\caption{\label{Table_MorphoRich} Lexical Statistics comparing morphological richness of the corpora under study.}
-%\end{table}
 
