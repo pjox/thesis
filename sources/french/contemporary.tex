@@ -18,123 +18,92 @@ In this chapter we will present \emph{CaBeRnet} \citep{popa-fabre-etal-2020-fren
 \section{CaBeRnet: A Contemporary French Balanced Corpus}
 \label{sec:DescribeCorpora}
 
-While working on OSCAR 2019,\footnote{All the work on \Cabernet was conducted prior to the existence of OSCAR 21.09 and OSCAR 22.01. As such, all the mentions of OSCAR in this chapter refer to OSCAR 2019.} the question of quality versus size of corpus caught our attention. We wanted to study in particular the issue of corpus ``representativeness'' in order to grasp to what extent a linguistically balanced cross-genre language sample would be sufficient to pre-train a language model. Following Biber's definition, “representativeness refers to the extent to which a sample includes the full range of variability in a population” \citep{biber-1993-representativeness}. 
+While working on OSCAR 2019,\footnote{All the work on \Cabernet was conducted prior to the existence of OSCAR 21.09 and OSCAR 22.01. As such, all the mentions of OSCAR in this chapter refer to OSCAR 2019.} the question of quality versus size of corpus caught our attention. We wanted to study in particular the issue of corpus ``representativeness'' in order to grasp to what extent a linguistically balanced cross-genre language sample would be sufficient to pre-train a language model. Here for ``representativeness'' we follow Biber's definition: \emph{“representativeness refers to the extent to which a sample includes the full range of variability in a population”} \citep{biber-1993-representativeness}.
 
-Several increasingly larger corpora are nowadays compiled from the web, i.e. frWAC \citep{baroni-etal-2009-the}, CCNet \citep{wenzek-etal-2020-ccnet} and OSCAR-fr \citep{ortiz-suarez-etal-2019-asynchronous}. However, does large size necessarily go along with better performance for language model training? Their alleged lack of representativeness has called for inventive ways of building a French balanced corpus offering new insights into language variation and NLP.
+To construct our corpora we adopt a balanced approach by sampling a wide spectrum of language use and its cross-genre variability, be it situational (e.g. format, author, addressee, purposes, settings or topics) or linguistic, e.g. linked to distributional parameters like frequencies of word classes and genres. In this fashion, we developed two corpora:
+\begin{enumerate}
+    \item The French Balanced Reference Corpus (\emph{CaBeRnet}), which includes a wide-ranging and balanced coverage of cross-genre language use to be maximally representative of the French language and therefore yield good generalizations from.
+    \item The \emph{French Children Book Test} (CBT-fr), which includes both narrative material and oral language use as present in youth literature, and which could be used for domain-specific language model training.
+\end{enumerate}
 
-We adopt a balanced approach by sampling a wide spectrum of language use and its cross-genre variability, be it situational (e.g. format, author, addressee, purposes, settings or topics) or linguistic, e.g.\ linked to distributional parameters like frequencies of word classes and genres. In this way, we developed two newly built corpora. The French Balanced Reference Corpus - \textit{CaBeRnet} - includes a wide-ranging and balanced coverage of cross-genre language use to be maximally representative of French language and therefore yield good generalizations from. The second corpus, the \textit{French Children Book Test} (CBT-fr), includes both narrative material and oral language use as present in youth literature, and will be used for domain-specific language model training. Both are inspired by existing American and English corpora, respectively  COCA, the balanced Corpus of Contemporary American English \citep{davies-2009-the, davies-2010-the}, and the Children Book Test \citep[CBT]{hill-etal-2016-the}.
+Both corpora are inspired by existing American and English corpora, respectively  COCA, the balanced Corpus of Contemporary American English \citep{davies-2009-the, davies-2010-the}, and the Children Book Test \citep[CBT]{hill-etal-2016-the}.
 
 \subsection{\Cabernet} \label{subsec:DescribeCaBeRnet}
 
-\Cabernet corpus was inspired by the genre partition of the American balanced corpus COCA, \footnote{\url{https://www.english-corpora.org/coca/}} which currently contains over 618 million words of text (20 million words each year 1990-2019) and is equally divided among spoken, fiction, popular magazines, newspapers, and academic texts \citep{davies-2009-the, davies-2010-the}. A second reference, guiding our approach and sampling method, is one of the earliest precursors of balanced reference corpora: the BNC \citep{bnc-2007-the}, first covered a wide variety of genres, with the intention to be a representative sample of spoken and written language.
+The \Cabernet corpus was inspired by the genre partition of the American balanced corpus COCA, \footnote{\url{https://www.english-corpora.org/coca/}} which at the end of 2019, when this study was conducted, contained over 618 million words of text (20 million words each year 1990-2019) and was equally divided among spoken, fiction, popular magazines, newspapers, and academic texts \citep{davies-2009-the, davies-2010-the}. A second reference, guiding our approach and sampling method, was one of the earliest precursors of balanced reference corpora: the BNC \citep{bnc-2007-the}, which covered a wide variety of genres, with the intention to be a representative sample of spoken and written language.
 
-\Cabernet was obtained by compiling existing data-sets and web-text extracted from different sources as detailed in this section. As shown in Table \ref{Table_Morpho_CabernetSub}, genres sources are evenly divided ($\sim$120 million words each) into spoken, fiction, magazine, newspaper, academic to achieve genre-balanced between oral and written modality in newspapers or popular written style, technical reports and Wikipedia entries, fiction, literature or academic production.
+\begin{table}[ht]
+    \centering\small
+    \begin{tabular}{lrrr}                                                                                      \\\toprule
+        {\textsc{\Cabernet Sub-set}} & {\textsc{Tokens}} & {\textsc{Unique Forms}} & {\textsc{TTR}} \\\midrule
+        Oral                         & 122 864 888       & 291 744                 & 0.0024         \\
+        Popular                      & 131 444 017       & 458 521                 & 0.0035         \\
+        News                         & 132 708 943       & 462 971                 & 0.0035         \\
+        Fiction                      & 198 343 802       & 983 195                 & 0.0050         \\
+        Academic                     & 126 431 211       & 1 433 663               & 0.0113         \\
+        \textit{Total}               & 711 792 861       & 2 558 513               & 0.0036         \\ \bottomrule
+    \end{tabular}
+    \caption{\label{Table_Morpho_CabernetSub} Comparison of number of unique forms in the different genres represented by \Cabernet partition. TTR: Type-Token Ration. Lemmatization and tokenization was performed as described in §\ref{sec:CompareCorpora}.}
+\end{table}
+
+\Cabernet was obtained by compiling existing data-sets and web-text extracted from different sources as detailed in this subsection. As shown in Table \ref{Table_Morpho_CabernetSub}, genres sources are evenly divided ($\sim$120 million words each) into spoken, fiction, magazine, newspaper, academic to achieve genre-balanced between oral and written modality in newspapers and popular written style, technical reports and Wikipedia entries, fiction, literature and academic production.
 
 \paragraph{\Cabernet Oral} \label{subsec:DescribeCaBeRnetOral}
-The oral sub-portion gathers both oral transcriptions (\textsc{ORFEO} and Rhapsodie\footnote{\textsc{ORFEO} corpus available at \url{www.cocoon.huma-num.fr/exist/crdo/} ; Rhapsodie corpus at \url{www.projet-rhapsodie.fr}.}) and Films subtitles (Open Subtitles.org), pruned from diacritics, interlocutors tagging and time stamps. To these transcriptions, the French European Parliament Proceedings (1996-2011), as presented in \citet{koehn-2005-europarl}, contributed a sample of more complex oral style with longer sentences and richer vocabulary.%\url{www.opensubtitles.org/fr}
+The oral sub-portion gathers both oral transcriptions (\textsc{ORFEO} and Rhapsodie\footnote{\textsc{ORFEO} corpus available at \url{www.cocoon.huma-num.fr/exist/crdo/} ; Rhapsodie corpus at \url{www.projet-rhapsodie.fr}.}) and Films subtitles (Open Subtitles.org), pruned from diacritics, interlocutors tagging and time stamps. To these transcriptions, we add the French European Parliament Proceedings (1996-2011), as presented in \citet{koehn-2005-europarl}, which contribute a sample of more complex oral style with longer sentences and richer vocabulary.
 
 \paragraph{\Cabernet Popular Press} \label{subsec:DescribeCaBeRnetPop}
-The whole sub-portion of Popular Press is gathered from an open data-set from the \textit{Est  Républicain} (1999, 2002 and 2003), a regional press format\footnote{Corpus available at \url{www.cnrtl.fr/corpus/estrepublicain/}.}. %Ce corpus est constitué des données textuelles correspondant à deux années de toutes les éditions intégrales du quotidien régional.
-It was selected to match popular style as it is characterized by easy-to-read press style and a wide range of every-day topics characterizing local regional press.
+The whole sub-portion of Popular Press is gathered from an open data-set from the \textit{Est Républicain} (1999, 2002 and 2003), a regional press format\footnote{Corpus available at \url{www.cnrtl.fr/corpus/estrepublicain/}.}. It was selected to match popular style as it is characterized by easy-to-read press style and a wide range of every-day topics characterizing local regional french press.
 
 \paragraph{\Cabernet Fiction \& Literature} \label{subsec:DescribeCaBeRnetFic}
 The Fiction \& Literature sub-portion was compiled from March 2019's Wiki Source and WikiBooks dump and extracted using WikiExtractor.py, a script that extracts and cleans text from a WikiMedia database dumps, by performing template expansion and preprocessing of template definitions.\footnote{Script available at \url{https://github.com/attardi/wikiextractor}.}
 
 \paragraph{\Cabernet News} \label{subsec:DescribeCaBeRnetNews}
-The News sub-portion builds upon web crawled elements, including Wikimedia's NewsComments and WikiNews reports from May 2019 WikiMedia dump, collected with a custom version of WikiExtractor.py.
-Newspaper's content gathered by the Chambers-Rostand Corpus (i.e. Le Monde 2002-2003, La Dépèche 2002-2003, L'Humanité 2002-2003) and \textit{Le Monde diplomatique} open-source corpus were assembled to represent a higher register of written news style from different political and thematic horizons.
-Several months of French Press Agency reports (AFP, 2007-2011-2012) competed with more simple and telegraphic style the newspaper written sample of the corpus.\footnote{At the time being, this part of \Cabernet corpus is still subject to Licence restrictions. This restricted amount of AFP news reports can reasonably fall in the public domain.}
+The News sub-portion builds upon web crawled elements, including Wikimedia's NewsComments and WikiNews reports from the May 2019 WikiMedia dump, collected with a custom version of WikiExtractor.py. We also add newspaper's content gathered by the Chambers-Rostand Corpus (i.e. Le Monde 2002-2003, La Dépèche 2002-2003, L'Humanité 2002-2003) and \emph{Le Monde diplomatique}. This open-source corpora were assembled to represent a higher register of written news style from different political and thematic horizons. Several months of French Press Agency reports are also added (AFP, 2007-2011-2012), which contribute with a more simple and telegraphic style than the others newspaper written samples of the corpus.\footnote{This part of \Cabernet corpus is still subject to Licence restrictions. However, this restricted amount of AFP news reports can reasonably fall in the public domain.}
 
 \paragraph{\Cabernet Academic} \label{subsec:DescribeCaBeRnetAcad}
-The academic genre was also built from different sources including technical and educational texts from WikiBooks and Wikipedia dump (prior to 2016) for their thematic variety of highly specialized written production. \textsc{ORFEO} Corpus offered a small sample of academic writings like PHD dissertations and scientific articles encompassing a wide choice of disciplinary topics, and TALN Corpus\footnote{TALN proceedings corpus (about 2 million) builds on a subset of 586 scientific articles (from 2007 to 2013), namely TALN and RECITAL. Available at \url{redac.univ-tlse2.fr/corpus/taln_en.html}.} was included to represent more concise written style characterizing scientific abstracts and proceedings.
+The academic genre was also built from different sources including technical and educational texts from WikiBooks and Wikipedia dump (prior to 2016) for their thematic variety of highly specialized written production. The \textsc{ORFEO} Corpus offered a small sample of academic writings like PHD dissertations and scientific articles encompassing a wide choice of disciplinary topics, and the TALN Corpus\footnote{TALN proceedings corpus (about 2 million) builds on a subset of 586 scientific articles (from 2007 to 2013), namely TALN and RECITAL. Available at \url{redac.univ-tlse2.fr/corpus/taln_en.html}.} was included to represent more concise written style characterizing scientific abstracts and proceedings.
 
-\begin{table}[ht]
-    \centering\small
-        \begin{tabular}{lrrr}                                                                                      \\\toprule
-            {\textsc{\Cabernet Sub-set}} & {\textsc{Tokens}} & {\textsc{Unique Forms}} & {\textsc{TTR}} \\\midrule
-            Oral                         & 122 864 888       & 291 744                 & 0.0024         \\
-            Popular                      & 131 444 017       & 458 521                 & 0.0035         \\
-            News                         & 132 708 943       & 462 971                 & 0.0035         \\
-            Fiction                      & 198 343 802       & 983 195                 & 0.0050         \\
-            Academic                     & 126 431 211       & 1 433 663               & 0.0113         \\
-            \textit{Total}               & 711 792 861       & 2 558 513               & 0.0036         \\ \bottomrule
-        \end{tabular}
-    \caption{\label{Table_Morpho_CabernetSub} Comparison of number of unique forms in the different genres represented by \Cabernet partition. TTR: Type-Token Ration. Lemmatization and tokenization was performed as described in §\ref{sec:CompareCorpora}.}
-\end{table}
-%%%check !! 
-%\begin{table}[htbp]
-%\centering
-%\scalebox{0.83}{
-%\begin{tabular}{lrrr}\\
-%\toprule
-%\multicolumn{2}{}{French Balanced Reference Corpus - \textbf{\Cabernet}}\\\midrule
-%{\sc \textbf{\Cabernet}}   & nb{\sc Tokens}    & nb {\sc Unique Forms}  & Mo \\\midrule
-%Oral        &  122,864,888      & 291,744  & 735,4 Mo   \\ 
-%Popular     &  131,444,017      & 458,521  & 758,5 Mo   \\  
-%News        &  132,708,943      & 462,971  & 797,2 Mo   \\ 
-%Fiction     &  198,343,802      & 983,195  & 1 080 Mo    \\
-%Academic    &  126,431,211      & 1433663  & 810,8 Mo   \\
-%Tot.        &  711,792,861     & 2,558,513 & 4 190 Mo   \\ \bottomrule  
-%\end{tabular}}
-%\caption{\label{Table_TTR_CabernetSub} Comparison of number of unique forms in the different genres represent by \Cabernet partition into Oral, Popular, News, Fiction and Academic. Mo: Mega Octet. lemmatisation and tokenisation was achieved as described in section \ref{sec:CompareCorpora}}
-%\end{table}
-%voir si remplaçabl
-
-For all sub-portions of \Cabernet, visual inspection was performed to remove section titles, redundant meta-information linked to publishing schemes of each of the six news editor includes. This was manually achieved by compiling a rich set of regular expressions specific of each textual source to obtain clean plain text as an outcome.
-
+For all sub-portions of \Cabernet, visual inspection was performed to remove section titles, redundant meta-information linked to publishing schemes of each of the six news editor included. This was manually achieved by compiling a rich set of regular expressions specific of each textual source to obtain clean plain text as an output.
 
 \subsection{French Children Book Test (CBT-fr)}
 \label{subsec:DescribeCBT}
 
-The French Children Book Test (CBT-fr) was built upon its original English version, the Children Book Test (CBT) \citet{hill-etal-2016-the}\footnote{This data-set can be found at \url{www.fb.ai/babi/}.}, which consists of books freely available on \url{www.gutenberg.org}{Project Gutenberg}.
+The French Children Book Test (CBT-fr) was built upon its original English version, the Children Book Test (CBT) \citep{hill-etal-2016-the}\footnote{This data-set can be found at \url{www.fb.ai/babi/}.}, which consists of books freely available from Project Gutenberg. \footnote{\url{{www.gutenberg.org}.}}
 
-Using youth literature and children books guarantees a clear narrative structure, and a large amount of dialogues, which enrich with oral register the literary style of this corpus.
-The English version of this corpus was originally built as benchmark data-set to test how well language models capture meaning in context. It contains 108 books, and a vocabulary size of 53,628.
+Using youth literature and children books guarantees a clear narrative structure, and a large amount of dialogues, which enriches with oral register the literary style of this corpus. The English version of this corpus was originally built as a benchmark data-set to test how well language models capture meaning in context. It contains 108 books, and a vocabulary size of 53,628 tokens.
 
-French version of CBT, named CBT-fr, was constructed to guarantee enough linguistic similarities between the collected books in the two languages. 104 freely available books were included. One third of the books were purposely chosen because they were classical translations of English literary classics. % (see Metadata). %www.cabernet-corpus.fr 
-Chapter heads, titles, notes and all types of editorial information were removed to obtain a plain narrative text. The effort of keeping proportion, genre, domain, and time as equal as possible yields a multilingual set of comparable corpora with a similar balance and representativeness.
+The French version of CBT, named CBT-fr, was constructed to guarantee enough linguistic similarities between the collected books in the two languages. 104 freely available books were included. One third of the books were purposely chosen because they were classical translations of English literary classics. Chapter heads, titles, notes and all types of editorial information were removed to obtain a plain narrative text. The effort of keeping proportion, genre, domain, and time as equal as possible yields a multilingual set of comparable corpora with a similar balance and representativeness.
 
 \begin{table}[ht]
     \centering\small
-        \begin{tabular}{lr}                                                             \\\toprule
-            {\textsc{Children Book Test - fr}}           & { \textsc{words}} \\\midrule
-            number of different lemmas                   & 25 139            \\
-            total number of forms                        & 95 058            \\
-            mean number of forms per lemma               & 3.78              \\
-            Number of lemmas having more than one form : & 14 128            \\
-            Percentage of lemmas with multiple forms     & 56.20             \\
-            \bottomrule
-        \end{tabular}
+    \begin{tabular}{lr}                                                             \\\toprule
+        {\textsc{Children Book Test - fr}}           & { \textsc{Words}} \\\midrule
+        Number of different lemmas                   & 25 139            \\
+        Total number of forms                        & 95 058            \\
+        Mean number of forms per lemma               & 3.78              \\
+        Number of lemmas having more than one form : & 14 128            \\
+        Percentage of lemmas with multiple forms     & 56.20             \\
+        \bottomrule
+    \end{tabular}
     \caption{\label{Table_DescribeCBTfr} Lexical statistics of French CBT, performed as described in §\ref{sec:CompareCorpora}}
 \end{table}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%      Section 3    %%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Corpora Descriptive Comparison} \label{sec:CompareCorpora}
 
-We used two different tokenizers: SEM, Segmenteur-Étiqueteur Markovien standalone \citet{dupont-2017-exploration} and TreeTagger. Both are based on cascades of regular expressions, and both perform tokenization and sentence splitting.
-The first was used for descriptive purposes because it technically allowed to segment and tokenize all corpora including OSCAR (23 billion words). Hence, all corpora were entirely segmented into sentences and tokenized using SEM.
+Having put together these two different balanced corpora, we wanted to perform a descriptive comparison between them, the French subcorpus of OSCAR 2019 and Wikipedia. In order to perform this comparison we start by tokenizing all corpora. For this we used two different tokenizers: A standalone version of SEM, (Segmenteur-Étiqueteur Markovien) \citep{dupont-2017-exploration} and TreeTagger \citep{schmid-1999-improvements}. Both are based on cascades of regular expressions, and both perform tokenization and sentence splitting. The first was used for descriptive purposes because it technically allowed to segment and tokenize all corpora including OSCAR (23 billion words). Hence, all corpora were entirely segmented into sentences and tokenized using SEM.
 
-The second tokenization method was run only on 3 million words samples to automatically tag them with TreeTagger into part-of-speech and lemmatize them.\footnote{Based on the tag-set available at \url{https://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/data/french-tagset.html}.} All corpora were randomly shuffled by sentence to then select samples of 3 million words, to be able to compare them in terms of lexical composition (Type-Token Ratio, see Table \ref{Table_MorphoRich}).
-%All corpora were POS-Tagged for descriptive reasons using MElt POS-tagging (\citep{denis2012coupling} and \citep{sagot2016external}). Vocabulary size was evaluated after Lemmatization of each Corpus with MElt tool.
+While the second tokenization method was only run on 3 million words samples to automatically tag them with TreeTagger into part-of-speech and lemmatize them.\footnote{Based on the tag-set available at \url{https://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/data/french-tagset.html}.} All corpora were randomly shuffled by sentence to then select samples of 3 million words, to be able to compare them in terms of lexical composition (Type-Token Ratio, see Table \ref{Table_MorphoRich}).
 
 \subsubsection{Corpora Size and Composition}
-%\notemumu{@Eric est-ce que je raporte la moyenne ou la mediane ou les deux ? je me rappelle que dans tes scripts tu as les deux.}
 
-Length of sentences is a simple measure to quantify both sentence syntactic complexity and genre. Hence, the number of sentences reported in Table \ref{Table_nb_Words} shows interesting patterns of distributions across genres, consider the comparison between \Cabernet an Wiki-fr.
-In our effort to evaluate the impact of corpora pre-training on ELMo-based contextualized word-embedding, we introduce here our two terms of comparison, namely the crawled corpus OSCAR-fr and the Wikipedia-fr one.
-%an average length per sentence of 
-%xxx for OSCAR-fr, xxx for frWac, xxx for Wiki-fr, xxx for \Cabernet and xx for CBT-fr.
-%TODO
+Length of sentences is a simple measure to quantify both sentence syntactic complexity and genre. Hence, the number of sentences reported in Table \ref{Table_nb_Words} shows interesting patterns of distributions across genres, consider the comparison between \Cabernet an Wiki-fr. In our effort to evaluate the impact of corpora pre-training on ELMo-based contextualized word-embedding, we introduce here our two terms of comparison, namely the crawled corpus OSCAR-fr and the Wikipedia-fr one.
 
 \paragraph{OSCAR fr}
 As it has been shown that pre-trained language models can be significantly improved by using more data \citep{liu-etal-2019-roberta,raffel-etal-2020-exploring}, we decided to include in our comparison a corpus of French text extracted from Common Crawl\footnote{More information available  at \url{https://commoncrawl.org/about/}.}. We leverage on a recently published corpus, OSCAR \citep{ortiz-suarez-etal-2019-asynchronous}, which offers a pre-classified and pre-filtered version of the November 2018 Common Craw snapshot.
 
 OSCAR gathers a set of monolingual text extracted from Common Crawl - in plain text \emph{WET} format - where all HTML tags are removed and all text encodings are converted to UTF-8. It follows a similar approach to \citep{grave-etal-2018-learning} by using a language classification model based on the fastText linear classifier \citep{joulin-etal-2016-fasttext,joulin-etal-2017-bag} pre-trained on Wikipedia, Tatoeba and SETimes, supporting 176 different languages.
 
-After language classification, a deduplication step is performed without introducing a specialized filtering scheme: paragraphs containing 100 or more UTF-8 encoded characters are kept. This makes OSCAR an example of unfiltered data that is nearly as noisy as to the original Crawled data.%\footnote{We did not use CCNet because of its difficult availability and download.}
-
+After language classification, a deduplication step is performed without introducing a specialized filtering scheme: paragraphs containing 100 or more UTF-8 encoded characters are kept. This makes OSCAR an example of unfiltered data that is nearly as noisy as to the original Crawled data.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{FrWIKI}
@@ -142,14 +111,14 @@ This corpus collects a selection of pages from Wikipedia-fr from a dump executed
 
 \begin{table}[ht]
     \centering
-        \begin{tabular}{lrrr}                                                                                 \\\toprule
-            {\textsc{corpus}} & { \textsc{wordforms}} & { \textsc{tokens}} & { \textsc{sentences}} \\\midrule
-            OSCAR-fr          & 23 212 459 287        & 27 439 082 933     & 1 003 261 066         \\
-            Wiki-fr           & 665 599 545           & 802 283 130        & 21 775 351            \\
-            \Cabernet         & 697 119 013           & 830 894 133        & 54 216 010            \\
-            CBT-fr            & 5 697 584             & 6 910 201          & 317 239               \\\bottomrule
-            %frWac       &  1,357,598,417  & 1,622,619,337  &  57,236,199  \\  
-        \end{tabular}
+    \begin{tabular}{lrrr}                                                                                 \\\toprule
+        {\textsc{corpus}} & { \textsc{wordforms}} & { \textsc{tokens}} & { \textsc{sentences}} \\\midrule
+        OSCAR-fr          & 23 212 459 287        & 27 439 082 933     & 1 003 261 066         \\
+        Wiki-fr           & 665 599 545           & 802 283 130        & 21 775 351            \\
+        \Cabernet         & 697 119 013           & 830 894 133        & 54 216 010            \\
+        CBT-fr            & 5 697 584             & 6 910 201          & 317 239               \\\bottomrule
+        %frWac       &  1,357,598,417  & 1,622,619,337  &  57,236,199  \\  
+    \end{tabular}
     \caption{\label{Table_nb_Words} Comparing the corpora under study.}
 \end{table}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -166,17 +135,17 @@ To select a measure that would help quantifying the different corpora morphologi
 
 \begin{table}[ht]
     \centering
-        \begin{tabular}{lrrrr}
-            \toprule
-            \textsc{3 M samples}  & \textsc{CBT-fr} & \textsc{\Cabernet} & \textsc{Fr-Wiki} & \textsc{OSCAR} \\
-            \midrule
-            nb of diff. lemmas    & 25 139          & 30 488             & 31 385           & 31 204         \\
-            tot. nb forms         & 95 058          & 180 089            & 238 121          & 190 078        \\
-            mean nb forms/lemma   & 3.78            & 6.19               & 7.85             & 6.40           \\
-            nb lemmas $>$ 1 form  & 14 128          & 15 927             & 15 182           & 16 480         \\
-            \% lemmas  $>$ 1 form & 56.20           & 52.24              & 48.37            & 52.81          \\
-            \bottomrule
-        \end{tabular}
+    \begin{tabular}{lrrrr}
+        \toprule
+        \textsc{3 M samples}  & \textsc{CBT-fr} & \textsc{\Cabernet} & \textsc{Fr-Wiki} & \textsc{OSCAR} \\
+        \midrule
+        nb of diff. lemmas    & 25 139          & 30 488             & 31 385           & 31 204         \\
+        tot. nb forms         & 95 058          & 180 089            & 238 121          & 190 078        \\
+        mean nb forms/lemma   & 3.78            & 6.19               & 7.85             & 6.40           \\
+        nb lemmas $>$ 1 form  & 14 128          & 15 927             & 15 182           & 16 480         \\
+        \% lemmas  $>$ 1 form & 56.20           & 52.24              & 48.37            & 52.81          \\
+        \bottomrule
+    \end{tabular}
     \caption{Lexical statistics on morphological richness over randomly selected samples of 3 million words from each corpus. nb : number}
     \label{Table_MorphoRich}
 \end{table}
