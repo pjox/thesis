@@ -64,7 +64,7 @@ Ungoliant features a loosely defined pipeline interface, on which we re-implemen
 
 Through benchmarking we found that the best parallelization strategy is to use rayon\footnote{\url{https://github.com/rayon-rs/rayon}}, a work-stealing \cite{blumofe-etal-1999-scheduling} parallel and concurrent library enabling massive parallelization. We parallelize on \mbox{shard-,} record- and sentence-level processing.
 
-To evaluate Ungoliant performance, we run both \goclassy and Ungoliant's implementation on 1, 10, 25 and 100 Common Crawl shards both on a middle-range laptop computer (i5-7200u, 8GB RAM, NVMe SSD) and a HPC node (Xeon 5218 (64 Threads), 180GB RAM). Results are shown in Table~\ref{tab:goclassy-bench}.
+To evaluate Ungoliant performance, we run both \goclassy and Ungoliant's implementation on 1, 10, 25 and 100 Common Crawl shards both on a middle-range laptop computer (i5-7200u, 8 GB RAM, NVMe SSD) and a HPC node (Xeon 5218 (64 Threads), 180 GB RAM). Results are shown in Table~\ref{tab:goclassy-bench}.
 
 \begin{table}[t]
     \centering\small
@@ -121,7 +121,7 @@ This approach still has drawbacks, in particular when looking for the correspond
 
 \begin{figure*}
     \centering
-    \begin{tikzpicture}[auto,scale=0.85, every node/.style={transform shape},font=\sffamily]
+    \begin{tikzpicture}[auto,scale=0.75, every node/.style={transform shape},font=\sffamily]
         \tikzstyle{nod}=[minimum width=1.65cm,minimum height=6cm,rectangle,rounded corners=10pt,
         fill=red!20, align=center, text width=1.65cm,text centered]
         \tikzstyle{ft} = [minimum width=1.5cm,minimum height=1cm,rectangle,rounded corners=10pt,
@@ -220,25 +220,11 @@ This approach still has drawbacks, in particular when looking for the correspond
         \draw[arr] (TA3.0)--(FF);
         \draw[arr] (TA4.0)--(FF);
     \end{tikzpicture}
-    %\caption{A scheme of the \emph{goclassy} pipeline. The red square represents the Compressed WET files stored on Amazon Web Services. The {\faFileArchive} icons represent the gzip files stored locally, the {\faFile} represent one of the 64K WET files. The {\faFile} represents the filtered file and the {\faTags} represents a file of language tags, one tag per line in \faFileTextO. The {\faLanguage} represents one of the 166 classified files. Each arrow represents an asynchronous non blocking worker and dotted arrows represent a line filtering process.}
-    % \captionsetup{singlelinecheck=off}
-    % \caption{
-    % Scheme of the Ungoliant pipeline. The red square represents CommonCrawl content hosting, where the compressed shards are fetched. The \textit{Process Shard} steps hold shard processing, paragraph creation and merging (see Figure~\ref{fig:zoomed}), and are internally parallelized.
-    % \label{fig:overview}
-    % \begin{itemize}
-    %     \item \faFileArchive : CommonCrawl compressed shard.
-    %     \item \faFile : Uncompressed shard, containing records.
-    %     \item \faCode : Record Metadata 
-    %     \item \faTag : Language identification 
-    %     \item \faParagraph : Paragraph, composed of sentences identified as \faTag
-    % \end{itemize}
-    % }
-
 
 
     \tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
 
-    \begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-0.91,xscale=0.91, every node/.style={scale=0.91}, font=\sffamily]
+    \begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-0.85,xscale=0.85, every node/.style={scale=0.85}, font=\sffamily]
         %uncomment if require: \path (0,489); %set diagram left start at 0, and has height of 489
 
         %Flowchart: Stored Data [id:dp4699321019986179] 
@@ -508,7 +494,7 @@ We evaluate the newly generated OSCAR 21.09 corpus (published on September 2021\
 
 \subsubsection{Comparison with OSCAR 2019}
 
-While it is expected that our new corpus has a larger file size than OSCAR 2019 since Common Crawl itself grew from 7.42TB to 8.06TB, metadata quickly adds up and accounts for nearly 15\% of the total uncompressed data in OSCAR 21.09.
+While it is expected that our new corpus has a larger file size than OSCAR 2019 since Common Crawl itself grew from 7.42 TB to 8.06 TB, metadata quickly adds up and accounts for nearly 15\% of the total uncompressed data in OSCAR 21.09.
 
 \begin{table}[t]
     \centering\small
@@ -559,7 +545,7 @@ Precautions have to be taken when using these corpora and further work has to be
 
 Metadata provides new contextual data that is useful to evaluate the corpus and draw metrics.
 
-The total size of metadata is 1.2TB, ranging from 4Kb to 500Gb, depending on the number of lines. Relative size varies from 100\% to 20\%, diminishing with the textual data size, which is expected.
+The total size of metadata is 1.2 TB, ranging from 4Kb to 500Gb, depending on the number of lines. Relative size varies from 100\% to 20\%, diminishing with the textual data size, which is expected.
 
 Our choice of keeping metadata aside from the main content adds some complexity when working with both textual and contextual data:
 
@@ -592,7 +578,7 @@ Using a sample of five sub-corpora, we perform a simple search of terms in order
 
 Our corpus keeps around the same number of occurrences for pre-2018 events or public figures such as Barack Obama, while increasing the occurrence of people linked to more recent events (Joe Biden).
 
-We include search terms linked to post-2018 events in French and Arabic which are smaller corpora (resp. 200 and 80 GB), and in Burmese, a mid-resource language (approximately 2GB). We observe a term occurrences evolution that reflects the linked events' timing and importance.
+We include search terms linked to post-2018 events in French and Arabic which are smaller corpora (resp. 200 and 80 GB), and in Burmese, a mid-resource language (approximately 2 GB). We observe a term occurrences evolution that reflects the linked events' timing and importance.
 
 \subsection{License}
 
