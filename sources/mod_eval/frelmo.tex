@@ -1,30 +1,6 @@
 \chapter{FrELMo}
 
 
-\section{A named entity annotation layer for the UD version of the French TreeBank}
-
-In this section, we describe the process whereby we re-aligned the named entity FTB annotations by \newcite{sagot-etal-2012-annotation} with the UD version of the FTB. This makes it possible to share these annotations in the form of a set of additional columns that can easily be pasted to the UD FTB file. This new version of the named entity FTB layer is much more readily usable than the original XML version, and will serve as a basis for our experiments in the next sections.
-Yet information about the named entity annotation guidelines, process and results can only be found in \newcite{sagot-etal-2012-annotation}, which is written in French. We therefore begin with a brief summary of this publication before describing the alignment process.
-
-
-\subsection{Alignment to the UD version of the FTB}
-\label{subsec:alignment}
-% Alingment
-%For creating an NER model, we first had to align the provided annotated XML with the already tokenised version of FTB.
-%TODO: add this somewhere? This allows to use ML tools while minimizing variation due to automatically segmenting / annotating the data.
-%Both resources were created semi-automatically and we found some mismatches when trying to align the two.
-%Used a script that performed basic alignment of textual data (lowercase, no space), and manually corrected in case of mismatch.
-%Found X errors in XML corpus, and Y in the already tokenised version.
-
-The named entity (NE) annotation layer for the FTB was developed using an XML editor on the raw text of the FTB. Annotations are provided as inline XML elements within the sentence-segmented but non tokenized text. For creating our NER models, we first had to align these XML annotations with the already tokenized UD version of FTB.
-
-Sentences were provided in the same order for both corpora, so we did not have to align them.
-For each sentence, we created a mapping $M$ between the raw text of the NE-annotated FTB (i.e.~after having removed all XML annotations) and tokens in the UD version of the FTB corpus. More precisely, character offsets in the FTB-NE raw text were mapped to token offsets in the tokenized FTB-UD.
-This alignment was done using case insensitive character-based comparison and were a mapping of a span in the raw text to a span in the tokenized corpus.
-We used the inlined XML annotations to create offline, character-level NE annotations for each sentence, and reported the NE annotations at the token level in the FTB-UD using the mapping $M$ obtained.
-
-We logged each error (i.e.~an unaligned NE or token) and then manually corrected the corpora, as those cases were always errors in either corpora and not alignment errors. We found 70 errors in FTB-NE and 3 errors in FTB-UD. Errors in FTB-NE were mainly XML entity problems (unhandled "\&", for instance) or slightly altered text (for example, a missing comma). Errors in FTB-UD were probably some XML artifacts.
-
 %===============================================================================
 
 % Corpus segmentation
@@ -216,9 +192,3 @@ Integration of the NER annotations in the UD version of FTB would allow to train
 % perspective 2: investigate annotations?
 One interesting point to investigate is that using Large embeddings overall has a negative impact on the models performances. It could be because larger models store information relevant to NER more sparingly, making it harder for trained models to capitalize them. We would like to investigate this hypothesis in future research.
 
-
-%===============================================================================
-
-\subsection*{Acknowledgments}
-
-This work was partly funded by the French national ANR grant BASNUM (\mbox{ANR-18-CE38-0003}), as well as by the last author's chair in the PRAIRIE institute,\footnote{\url{http://prairie-institute.fr/}} funded by the French national ANR as part of the ``Investissements d’avenir'' programme under the reference \mbox{ANR-19-P3IA-0001}. The authors are grateful to Inria Sophia Antipolis - Méditerranée ``Nef'' \footnote{\url{https://wiki.inria.fr/wikis/ClustersSophia}} computation cluster for providing resources and support.

@@ -90,24 +90,15 @@ The French version of CBT, named CBT-fr, was constructed to guarantee enough lin
 
 \subsection{Corpora Descriptive Comparison} \label{sec:CompareCorpora}
 
-Having put together these two different balanced corpora, we wanted to perform a descriptive comparison between them, the French subcorpus of OSCAR 2019 and Wikipedia. In order to perform this comparison we start by tokenizing all corpora. For this we used two different tokenizers: A standalone version of SEM, (Segmenteur-Étiqueteur Markovien) \citep{dupont-2017-exploration} and TreeTagger \citep{schmid-1999-improvements}. Both are based on cascades of regular expressions, and both perform tokenization and sentence splitting. The first was used for descriptive purposes because it technically allowed to segment and tokenize all corpora including OSCAR (23 billion words). Hence, all corpora were entirely segmented into sentences and tokenized using SEM.
+Having put together these two different balanced corpora, we wanted to perform a descriptive comparison between them, the French subcorpus of OSCAR 2019 (that we call OSCAR-fr for short) and Wikipedia (Wikipedia-fr). In order to perform this comparison we start by tokenizing all corpora. For this we used two different tokenizers: A standalone version of SEM, (Segmenteur-Étiqueteur Markovien) \citep{dupont-2017-exploration} and TreeTagger \citep{schmid-1999-improvements}. Both are based on cascades of regular expressions, and both perform tokenization and sentence splitting. The first was used for descriptive purposes because it technically allowed to segment and tokenize all corpora including OSCAR (23 billion words). Hence, all corpora were entirely segmented into sentences and tokenized using SEM.
 
 While the second tokenization method was only run on 3 million words samples to automatically tag them with TreeTagger into part-of-speech and lemmatize them.\footnote{Based on the tag-set available at \url{https://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/data/french-tagset.html}.} All corpora were randomly shuffled by sentence to then select samples of 3 million words, to be able to compare them in terms of lexical composition (Type-Token Ratio, see Table \ref{Table_MorphoRich}).
 
+For Wikipedia-fr in particular we use a dump executed from April 2019, where HTML tags and tables were removed, together with template expansion using Attardi's tool WikiExtractor.
+
 \subsubsection{Corpora Size and Composition}
 
-Length of sentences is a simple measure to quantify both sentence syntactic complexity and genre. Hence, the number of sentences reported in Table \ref{Table_nb_Words} shows interesting patterns of distributions across genres, consider the comparison between \Cabernet an Wiki-fr. In our effort to evaluate the impact of corpora pre-training on ELMo-based contextualized word-embedding, we introduce here our two terms of comparison, namely the crawled corpus OSCAR-fr and the Wikipedia-fr one.
-
-\paragraph{OSCAR fr}
-As it has been shown that pre-trained language models can be significantly improved by using more data \citep{liu-etal-2019-roberta,raffel-etal-2020-exploring}, we decided to include in our comparison a corpus of French text extracted from Common Crawl\footnote{More information available  at \url{https://commoncrawl.org/about/}.}. We leverage on a recently published corpus, OSCAR \citep{ortiz-suarez-etal-2019-asynchronous}, which offers a pre-classified and pre-filtered version of the November 2018 Common Craw snapshot.
-
-OSCAR gathers a set of monolingual text extracted from Common Crawl - in plain text \emph{WET} format - where all HTML tags are removed and all text encodings are converted to UTF-8. It follows a similar approach to \citep{grave-etal-2018-learning} by using a language classification model based on the fastText linear classifier \citep{joulin-etal-2016-fasttext,joulin-etal-2017-bag} pre-trained on Wikipedia, Tatoeba and SETimes, supporting 176 different languages.
-
-After language classification, a deduplication step is performed without introducing a specialized filtering scheme: paragraphs containing 100 or more UTF-8 encoded characters are kept. This makes OSCAR an example of unfiltered data that is nearly as noisy as to the original Crawled data.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{FrWIKI}
-This corpus collects a selection of pages from Wikipedia-fr from a dump executed in April 2019, where HTML tags and tables were removed, together with template expansion using Attardi's tool (WikiExtractor, §\ref{subsec:DescribeCaBeRnetFic}). As reported on Table \ref{Table_nb_Words}, in this data-set (660 million words) sentences are relatively longer compared to other corpora. It has the advantage of having a comparable size to \Cabernet, but its homogeneity in terms of written genre is set to Wikipedia entries descriptive style.
+Length of sentences is a simple measure to quantify both sentence syntactic complexity and genre. Hence, the number of sentences reported in Table \ref{Table_nb_Words} shows interesting patterns of distributions across genres.
 
 \begin{table}[ht]
     \centering
@@ -121,23 +112,27 @@ This corpus collects a selection of pages from Wikipedia-fr from a dump executed
     \end{tabular}
     \caption{\label{Table_nb_Words} Comparing the corpora under study.}
 \end{table}
+
+As reported on Table \ref{Table_nb_Words}, in the Wikipedia-fr dataset (660 million words) sentences are relatively longer compared to other corpora. It has the advantage of having a comparable size to \Cabernet, but its homogeneity in terms of written genre is limited to Wikipedia's entries descriptive style.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Corpora Lexical Variety}
 
-Focusing on a useful measure of complexity that documents lexical richness or variety in vocabulary, we present the type-token ration (TTR) of the corpora under analysis. Generally used to assess language use aspects like the variety of different words used to communicate by learners or children, it represents the total number of unique words (types/forms) divided by the total number of tokens in a given sample of language production. Hence, the closer the TTR ratio is to 1, the greater the lexical richness of the corpus. Table \ref{Table_Morpho_CabernetSub} summarizes the lexical variety of the five sub-portions of \Cabernet, respectively taken as representative of Oral, Popular, Fiction, News, and Academic genres. Domain diversity of texts can be observed in the lexical statistics showing a gradual increase in the number of distinct lexical forms (cf. TTR). This pattern  reflects a generally acknowledged distributional pattern of vocabulary-size across genres. Oral style shows a poorer lexical variety compared to newspapers/magazines’ textual typology. The lexically rich fictional/classic literature is outreached by academic writing-style with its wide-ranging specialized vocabulary. All in all, Table \ref{Table_Morpho_CabernetSub} quantitatively demonstrates that the selected textual and oral materials are indeed representative of the five types of genres of CaBeRnet.
+We also try to find a useful measure of complexity that measures lexical richness or variety in vocabulary. For this, we present the type-token ration (TTR) of the corpora we analyze. This measure, is generally used to assess language use aspects, like the amount of words used to communicate by language learners or children, it represents the total number of unique words (types/forms) divided by the total number of tokens in a given sample of text. Thus, the closer the TTR ratio is to 1, the greater the lexical richness of the corpus. Table \ref{Table_Morpho_CabernetSub} summarizes the lexical variety of the five sub-portions of \Cabernet, respectively taken as representative of Oral, Popular, Fiction, News, and Academic genres. 
+
+Domain diversity of texts can be observed in the lexical statistics showing a gradual increase in the number of distinct lexical forms (cf. TTR). This pattern  reflects a generally acknowledged distributional pattern of vocabulary-size across genres. Oral style shows a poorer lexical variety compared to newspapers/magazines’ textual typology. The lexically rich fictional/classic literature is outreached by academic writing-style with its wide-ranging specialized vocabulary. All in all, Table \ref{Table_Morpho_CabernetSub} quantitatively suggests that the selected textual and oral materials are indeed representative of the five types of genres of CaBeRnet.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Corpora Morphological richness}
 
-To select a measure that would help quantifying the different corpora morphological richness, we follow \citep{bonami-etal-2015-implicative}. Hence, the proportion of lemmas with multiple forms in a given vocabulary size was evaluated on randomly selected samples of 3-million-words from each corpus under analysis (see Table \ref{Table_MorphoRich}).
+To select a measure that would help quantifying the different corpora morphological richness, we follow \citep{bonami-etal-2015-implicative}. Hence, the proportion of lemmas with multiple forms in a given vocabulary size was evaluated on randomly selected samples of 3-million-words from each of the analyzed corpora (see Table \ref{Table_MorphoRich}).
 
 \begin{table}[ht]
     \centering
     \begin{tabular}{lrrrr}
         \toprule
-        \textsc{3 M samples}  & \textsc{CBT-fr} & \textsc{\Cabernet} & \textsc{Fr-Wiki} & \textsc{OSCAR} \\
+        \textsc{3 M samples}  & \textsc{CBT-fr} & \textsc{\Cabernet} & \textsc{Wiki-fr} & \textsc{OSCAR-fr} \\
         \midrule
         nb of diff. lemmas    & 25 139          & 30 488             & 31 385           & 31 204         \\
         tot. nb forms         & 95 058          & 180 089            & 238 121          & 190 078        \\
@@ -150,6 +145,30 @@ To select a measure that would help quantifying the different corpora morphologi
     \label{Table_MorphoRich}
 \end{table}
 
-Table 4 reports some more in-depth lexical and morphological statistics across corpora. Although OSCAR is 34 times bigger than CaBeRnet, their total number of forms and the proportion of lemmas having more than one form in a 3-million-word sample are comparable. FrWiki shows a radically different lexical distribution with numerous hapaxes but a lower morphological richness. Although its total number of forms is more than one third higher than in OSCAR and CaBeRnet samples, the proportion of lemmas having more than one distinct form is around four points below CaBeRnet and OSCAR. Comparatively, youth literature in CBT-fr shows the greatest morphological richness, around 56\% of lemmas have more than one form.
+Table \ref{Table_MorphoRich} reports some more in-depth lexical and morphological statistics across corpora. Here we see that, although OSCAR is 34 times bigger than CaBeRnet, their total number of forms and the proportion of lemmas having more than one form in a 3-million-word sample are quite similar. FrWiki shows a radically different lexical distribution with numerous hapaxes but a lower morphological richness. Although its total number of forms is more than one third higher than in OSCAR and CaBeRnet samples, the proportion of lemmas having more than one distinct form is around four points below CaBeRnet and OSCAR. Comparatively, youth literature in CBT-fr shows the greatest morphological richness, with around 56\% of lemmas having more than one form.
+
+Having performed this descriptive evaluation, we will evaluate how these corpora perform as pre-training datasets for language models in the following part of the thesis. For now, we will present a small improvement that we contributed to an existing Named Entity Recognition corpus in French.
+
+\section{A named entity annotation layer for the UD version of the French TreeBank}
+
+In this section, we describe the process whereby we re-aligned the named entity FTB annotations by \newcite{sagot-etal-2012-annotation} with the UD version of the FTB. This makes it possible to share these annotations in the form of a set of additional columns that can easily be pasted to the UD FTB file. This new version of the named entity FTB layer is much more readily usable than the original XML version, and will serve as a basis for our experiments in the next sections.
+Yet information about the named entity annotation guidelines, process and results can only be found in \newcite{sagot-etal-2012-annotation}, which is written in French. We therefore begin with a brief summary of this publication before describing the alignment process.
 
 
+\subsection{Alignment to the UD version of the FTB}
+\label{subsec:alignment}
+% Alingment
+%For creating an NER model, we first had to align the provided annotated XML with the already tokenised version of FTB.
+%TODO: add this somewhere? This allows to use ML tools while minimizing variation due to automatically segmenting / annotating the data.
+%Both resources were created semi-automatically and we found some mismatches when trying to align the two.
+%Used a script that performed basic alignment of textual data (lowercase, no space), and manually corrected in case of mismatch.
+%Found X errors in XML corpus, and Y in the already tokenised version.
+
+The named entity (NE) annotation layer for the FTB was developed using an XML editor on the raw text of the FTB. Annotations are provided as inline XML elements within the sentence-segmented but non tokenized text. For creating our NER models, we first had to align these XML annotations with the already tokenized UD version of FTB.
+
+Sentences were provided in the same order for both corpora, so we did not have to align them.
+For each sentence, we created a mapping $M$ between the raw text of the NE-annotated FTB (i.e.~after having removed all XML annotations) and tokens in the UD version of the FTB corpus. More precisely, character offsets in the FTB-NE raw text were mapped to token offsets in the tokenized FTB-UD.
+This alignment was done using case insensitive character-based comparison and were a mapping of a span in the raw text to a span in the tokenized corpus.
+We used the inlined XML annotations to create offline, character-level NE annotations for each sentence, and reported the NE annotations at the token level in the FTB-UD using the mapping $M$ obtained.
+
+We logged each error (i.e.~an unaligned NE or token) and then manually corrected the corpora, as those cases were always errors in either corpora and not alignment errors. We found 70 errors in FTB-NE and 3 errors in FTB-UD. Errors in FTB-NE were mainly XML entity problems (unhandled "\&", for instance) or slightly altered text (for example, a missing comma). Errors in FTB-UD were probably some XML artifacts.
