@@ -15,11 +15,9 @@
 \section{Medieval French Corpus}
 \label{sec-data}
 
-This section describes the raw corpus of Medieval French we gathered in order to train unsupervised language models for Old French.
-To our knowledge, it is one of the largest such dataset gathered for Medieval French, although it remains quite small (\SI{55}{\mebi\byte} in total) relatively to the corpora usually used for pre-training contextual embeddings models.
+This section describes the raw corpus of Medieval French we gathered in order to train unsupervised language models for Old French. To our knowledge, it is one of the largest such dataset gathered for Medieval French, although it remains quite small (\SI{55}{\mebi\byte} in total) relatively to the corpora usually used for pre-training contextual embeddings models.
 
-We chose to include a few texts from the early Middle French period (14th-15th c.) in this raw corpus, which brings a valuable complement of the prose documents that are lacking for Old French, while staying close enough to late Old French, the boundary between the two epochs being somewhat fuzzy.
-These texts precede the adoption of norms established by editors after the invention of Gutenberg's printing press. Middle French is more regular than Old French in some respects such as word order \citep{marchello-Nizia-etal-2020-grande} and less in others such as NP structure and pronouns system \citep{marchello-nizia-etal-1979-histoire}, but they share most of their lexicon and for these relatively early texts, the syntax is not too different from that of late Old French texts.
+We chose to include a few texts from the early Middle French period (14th-15th c.) in this raw corpus, which brings a valuable complement of the prose documents that are lacking for Old French, while staying close enough to late Old French, the boundary between the two epochs being somewhat fuzzy. These texts precede the adoption of norms established by editors after the invention of Gutenberg's printing press. Middle French is more regular than Old French in some respects such as word order \citep{marchello-Nizia-etal-2020-grande} and less in others such as NP structure and pronouns system \citep{marchello-nizia-etal-1979-histoire}, but they share most of their lexicon and for these relatively early texts, the syntax is not too different from that of late Old French texts.
 
 %Corpora
 \begin{table}[thb]
@@ -92,18 +90,17 @@ These texts precede the adoption of norms established by editors after the inven
 Medieval French has many factors of variation: language evolution, dialects, domains, forms of text (verse or prose) and lack of standard. Our dataset gives us a representation of Medieval French that is as accurate and diversified as possible, given the limited amount of material that survived to these days.
 The detailed instructions to replicate this dataset are described in the Appendix. No particular processing is done on the original documents.
 
-In order to get a sound evaluation of the contextual embeddings trained with this dataset, we filter out the documents that are also present in the SRCMF treebank used for evaluation purposes in section \ref{sec-experiments}\footnote{As noted by \citet{gururangan-etal-2020-dont}, pre-training on task specific data provides an additional boost, that would muddle our results, since our objective here is not so much task optimization as embeddings benchmarking.}.
-The resulting corpus is quite heterogeneous: legal texts and verse literature are in the majority, whereas other domains, such as historical and didactic texts, are under-represented, as can be seen in \cref{fig:metadata}.
+In order to get a sound evaluation of the contextual embeddings trained with this dataset, we filter out the documents that are also present in the SRCMF treebank used for evaluation purposes in section \ref{sec-experiments}\footnote{As noted by \citet{gururangan-etal-2020-dont}, pre-training on task specific data provides an additional boost, that would muddle our results, since our objective here is not so much task optimization as embeddings benchmarking.}. The resulting corpus is quite heterogeneous: legal texts and verse literature are in the majority, whereas other domains, such as historical and didactic texts, are under-represented, as can be seen in \cref{fig:metadata}.
 
 
 \section{Early Modern French Corpora}
 
-For the past few years, we have been involved in the development of linguistic resources for Early Modern French. The initiative, called \textsc{FreEM} (which stands for \emph{FREnch Early Modern}), aims to collect the corpora required for various NLP tasks such as lemmatisation, POS tagging, linguistic normalisation and named entity recognition. Two of these corpora are introduced here: \freemmax (see Section~\ref{freem_max}) and \freemlpm (see Section~\ref{freem_lpm}).
+For the past few years, we have been involved in the development of linguistic resources for Early Modern French. The initiative, called \textsc{FreEM} (which stands for \emph{FREnch Early Modern}), aims to collect the corpora required for various NLP tasks such as lemmatization, POS tagging, linguistic normalization and named entity recognition. Two of these corpora are introduced here: \freemmax (see Section~\ref{freem_max}) and \freemlpm (see Section~\ref{freem_lpm}).
 
 \subsection{\texorpdfstring{\freemmax}{FREEM max}}\label{freem_max}
 
-Usable historical documents are difficult to find because, as previously mentioned, they are more rare than contemporary ones; editors tend to normalise the language (\emph{i.e.}~use the spelling conventions of contemporary French, see~\cite{gabay-2014-pourquoi}), transcriptions are not (always) distributed in a digital format. \freemmax \citep{gabay-etal-2022-FreEM} is an attempt to solve this problem, and the aim of this dataset is to group together the largest number or texts possible written in Early Modern French.
-%
+Usable historical documents are difficult to find because, as previously mentioned, they are more rare than contemporary ones; editors tend to normalize the language (\emph{i.e.}~use the spelling conventions of contemporary French, see~\cite{gabay-2014-pourquoi}), transcriptions are not (always) distributed in a digital format. \freemmax \citep{gabay-etal-2022-FreEM} is an attempt to solve this problem, and the aim of this dataset is to group together the largest number of texts possible written in Early Modern French.
+
 The texts have a variety of sources, which can be grouped into three main types:
 \begin{itemize}
     \item Two institutional datasets have been used and are non open-sourced:
@@ -136,7 +133,7 @@ The texts have a variety of sources, which can be grouped into three main types:
           \end{itemize}
 \end{itemize}
 
-Additional data for later states of the language, up to the 1920's (mainly from FRANTEXT \emph{intégral}), are also provided for two main reasons: on the one hand, it is common to normalise Early Modern French into Contemporary French \cite{gabay-2014-pourquoi} because of the linguistic proximity between these the two states of the language, and on the other hand, it helps to collect (precious) additional data to avoid ending up with with too small of a corpus for our needs.
+Additional data for later states of the language, up to the 1920's (mainly from FRANTEXT \emph{intégral}), are also provided for two main reasons: on the one hand, it is common to normalize Early Modern French into Contemporary French \cite{gabay-2014-pourquoi} because of the linguistic proximity between these the two states of the language, and on the other hand, it helps to collect (precious) additional data to avoid ending up with too small of a corpus for our needs.
 
 \begin{table}[ht]
     \centering\small
@@ -174,9 +171,9 @@ The final result is far from being balanced or representative (see Figure~\ref{f
     \label{fig:FreEMmax_desc}
 \end{figure}
 
-As some texts are still (partially) protected by restrictive licences, the \freemmax corpus exists in both open and non-open versions, only the open one being distributed. In order to limit the impact of licences forbidding the modification of files, we have designed a pipeline to distribute the data as it was found and recreate it (see Figure~\ref{fig:pipeline}).
+As some texts are still (partially) protected by restrictive licenses, the \freemmax corpus exists in both open and non-open versions, only the open one being distributed. In order to limit the impact of licenses forbidding the modification of files, we have designed a pipeline to distribute the data as it was found and recreate it (see Figure~\ref{fig:pipeline}).
 
-Metadata is prepared manually in order to have the same categories for each document, whatever its origin. As well as the author, the title and the date (where relevant), we also provide the genre (``theatre''), sometimes a subgenre (``tragedy''), the linguistic status (normalised or not) and the licence attached to the transcription.
+Metadata is prepared manually in order to have the same categories for each document, whatever its origin. As well as the author, the title and the date (where relevant), we also provide the genre (``theater''), sometimes a subgenre (``tragedy''), the linguistic status (normalized or not) and the license attached to the transcription.
 
 \begin{figure}[ht]
     \centering
@@ -187,9 +184,9 @@ Metadata is prepared manually in order to have the same categories for each docu
 
 \subsection{\texorpdfstring{\freemlpm}{FREEM LPM}}\label{freem_lpm}
 
-The \freemlpm (``Lemma, POS tags, Morphology'') has already been presented \cite{gabay-etal-2020-standardizing}. The POS-annotated data, is a mixture of two different sources. On the one hand, there is the \emph{CornMol} corpus \cite{camps-etal-2021-corpus}, made up of normalised 17\textsuperscript{th}\,c.~French comedies. On the other hand, there is a gold subset of the \emph{Presto} corpus \cite{blumenthal-etal-2017-presto}, made up of texts of different genres written during the 16\textsuperscript{th}, 17\textsuperscript{th} and 18\textsuperscript{th}\,c., which have previously used to train annotation tools \cite{diwersy-etal-2017-ressources}, and was heavily corrected by us to match our annotation principles \cite{gabay-etal-2020-manuel}.
+The \freemlpm (``Lemma, POS tags, Morphology'') has already been presented \cite{gabay-etal-2020-standardizing}. The POS-annotated data, is a mixture of two different sources. On the one hand, there is the \emph{CornMol} corpus \cite{camps-etal-2021-corpus}, made up of normalized 17\textsuperscript{th}\,c.~French comedies. On the other hand, there is a gold subset of the \emph{Presto} corpus \cite{blumenthal-etal-2017-presto}, made up of texts of different genres written during the 16\textsuperscript{th}, 17\textsuperscript{th} and 18\textsuperscript{th}\,c., which have previously used to train annotation tools \cite{diwersy-etal-2017-ressources}, and was heavily corrected by us to match our annotation principles \cite{gabay-etal-2020-manuel}.
 
-On top of traditional in-domain tests, an out-of-domain testing dataset was prepared to control the capacity of the model to generalise to other genres and periods. Centuries covered are the 16\textsuperscript{th}, 17\textsuperscript{th}, 18\textsuperscript{th}, 19\textsuperscript{th} and 20\textsuperscript{th}. There are two test sets for each century: one made up only of theatre, the other of everything but theatre. Each test set comprises 10 short samples (c.\,100 tokens), as representative as possible of the linguistic production of the century (female and male authors, decade of publication, genre, etc.).
+On top of traditional in-domain tests, an out-of-domain testing dataset was prepared to control the capacity of the model to generalize to other genres and periods. Centuries covered are the 16\textsuperscript{th}, 17\textsuperscript{th}, 18\textsuperscript{th}, 19\textsuperscript{th} and 20\textsuperscript{th}. There are two test sets for each century: one made up only of theater, the other of everything but theater. Each test set comprises 10 short samples (c.\,100 tokens), as representative as possible of the linguistic production of the century (female and male authors, decade of publication, genre, etc.).
 
 All the data from \freemlpm (but almost none of the out-of-domain) can be found in \freemmax.
 
@@ -200,11 +197,11 @@ All the data from \freemlpm (but almost none of the out-of-domain) can be found 
     \begin{tabular}{@{}p{0.15\linewidth}p{0.15\linewidth}p{0.15\linewidth}p{0.15\linewidth}p{0.15\linewidth}p{0.15\linewidth}@{}}
         \toprule
                 \rowcolor{lightgray}
-                \multicolumn{3}{c}{Personne} & \multicolumn{3}{c}{Fonction} \\
+                \multicolumn{3}{c}{Person} & \multicolumn{3}{c}{Function} \\
                 \multicolumn{3}{c}{\begin{tabular}{cc} \texttt{pers.ind} & \texttt{pers.coll} \end{tabular}} &
                 \multicolumn{3}{c}{\begin{tabular}{cc} \texttt{func.ind} & \texttt{func.coll} \end{tabular}} \\
                 \rowcolor{lightgray}
-                \multicolumn{3}{c}{Localisation} & \multicolumn{3}{c}{Production} \\
+                \multicolumn{3}{c}{Location} & \multicolumn{3}{c}{Production} \\
                 \texttt{loc.adm.town} & \texttt{loc.phys.geo} & \texttt{loc.fac} &
                 \texttt{prod.art} & \texttt{prod.rule} & \texttt{prod.object} \\
                 \texttt{loc.adm.reg} & \texttt{loc.phys.hydro} & \texttt{loc.oro} &
@@ -214,16 +211,16 @@ All the data from \freemlpm (but almost none of the out-of-domain) can be found 
                 \texttt{loc.adm.sup} &  &  &
                 \multicolumn{3}{c}{\begin{tabular}{cc}  &  \end{tabular}} \\
                 \rowcolor{lightgray}
-                \multicolumn{2}{c}{Organisation} & \multicolumn{2}{c}{Temps} &
-                \multicolumn{1}{c}{Evénement} &
-                \multicolumn{1}{c}{Montant} \\
+                \multicolumn{2}{c}{Organization} & \multicolumn{2}{c}{Temps} &
+                \multicolumn{1}{c}{Event} &
+                \multicolumn{1}{c}{Quantity} \\
                 \texttt{org.adm} & \texttt{org.ent} & \multicolumn{2}{c}{\texttt{time.date.abs}} &
                 \multicolumn{1}{c}{\texttt{event}} &
                 \multicolumn{1}{c}{\texttt{amount}} \\
                 \multicolumn{2}{c}{} & \multicolumn{2}{c}{\texttt{time.date.rel}} &
                 \multicolumn{2}{c}{} \\
             \end{tabular}
-            \caption{Types (en gris) et sous-types retenus de la typologie \textit{Quaero}.}
+            \caption{Types (in gray) and subtypes taken from the \emph{Quaero} typology.}
             \label{tab:types}
         \end{table}
    
@@ -261,13 +258,6 @@ Suabe & Souabe & Np & I-pers & I-pers.ind & I-comp.title & B-loc.adm.reg & Q4384
     \label{tab:data}
     \end{table}
 
-\begin{figure}[!htp]
-    \centering
-    \includegraphics[width=0.75\linewidth]{static/media/mod_eval/dalembert/corpus_desc_1.png}
-    \caption{Number of entities (\textit{$\log_{10}$} scale) per category.}
-    \label{fig:repartition}
-\end{figure}
-
 Because two important historical corpora presented \textit{supra} (\textit{Quaero} and \textit{Impresso}) have chosen to follow the \textit{Quaero} annotation guide~\cite{rosset-etal-2011-entites}, it seemed logical to use this same typology. Because our texts and interests diverge from those of the aforementioned corpora, only some types and subtypes have been kept (cf.\,tab.~\ref{tab:types}) from the \textit{Quaero} annotation scheme. The details of our annotation choices can be found in a dedicated annotation manual~\cite{gabay-etal-2020-manuel}. 
 
 The annotated texts are available in multi-columns \texttt{tsv} files (cf.\,tab.~\ref{tab:types}). Each token has a lemma (manually corrected) and a POS (produced by the \textit{Presto} project, non-systematically corrected but fairly reliable) using the MULTEXT tag set. We propose a coarse-grained annotation for high-level entity types and fine-grained annotation using subtypes using the following syntax:
@@ -287,8 +277,15 @@ The annotated texts are available in multi-columns \texttt{tsv} files (cf.\,tab.
     \item \texttt{val} to annotate tokens that are values (a number) that is linked to a unit to annotate an \texttt{amount}.
 \end{itemize}
 
+\begin{figure}[!htp]
+    \centering
+    \includegraphics[width=0.75\linewidth]{static/media/mod_eval/dalembert/corpus_desc_1.png}
+    \caption{Number of entities (\textit{$\log_{10}$} scale) per category.}
+    \label{fig:repartition}
+\end{figure}
+
 We have decided not to annotate metaphorical uses differently or in a separate column: everything is annotated in a literal sense. Thus, in \textit{\textbf{France} goes to war}, \textit{France} is labelled \texttt{loc.adm.nat} (\textit{i.e.} the country) and not \texttt{org.adm} (\textit{i.e.} the French government).
 
-We have also started a first phase of semantic annotation, using Wikidata~\cite{vrandecic-krotzsch-2014-wikidata} identifiers, which remains imperfect. Due to the complexity of analysing certain entities, in particular personal names (e.g. \textit{Pope John}), it was decided to annotate them only very marginally, only in the event of the absence of ambiguity (e.g. \textit{Pope John V}). The annotation of place names, on the other hand, is more advanced and almost functional. 
+We have also started a first phase of semantic annotation, using Wikidata~\cite{vrandecic-krotzsch-2014-wikidata} identifiers, which remains imperfect. Due to the complexity of analyzing certain entities, in particular personal names (e.g. \textit{Pope John}), it was decided to annotate them only very marginally, only in the event of the absence of ambiguity (e.g. \textit{Pope John V}). The annotation of place names, on the other hand, is more advanced and almost functional. 
 
-A first layer of annotation was made using regular expressions, before moving on to a manual correction phase. Given the size of the corpus, it is obvious that each token has not been checked, and that the final result does not claim to be perfect. Occasional checks, however, concluded that the annotation was of high enough quality to move on to the training phase. All of the annotation work was carried out by a single person, in order to ensure the consistency of the data. The structure of the file and the form of the tags was controlled by a specific parser, designed specifically for this corpus.
+A first layer of annotation was made using regular expressions, before moving on to a manual correction phase. Given the size of the corpus, it is obvious that each token has not been checked, and that the final result does not claim to be perfect. Occasional checks, however, concluded that the annotation was of high enough quality to move on to the training phase. All the annotation work was carried out by a single person, in order to ensure the consistency of the data. The structure of the file and the form of the tags was controlled by a specific parser, designed specifically for this corpus.
