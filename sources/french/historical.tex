@@ -192,3 +192,103 @@ The \freemlpm (``Lemma, POS tags, Morphology'') has already been presented \cite
 On top of traditional in-domain tests, an out-of-domain testing dataset was prepared to control the capacity of the model to generalise to other genres and periods. Centuries covered are the 16\textsuperscript{th}, 17\textsuperscript{th}, 18\textsuperscript{th}, 19\textsuperscript{th} and 20\textsuperscript{th}. There are two test sets for each century: one made up only of theatre, the other of everything but theatre. Each test set comprises 10 short samples (c.\,100 tokens), as representative as possible of the linguistic production of the century (female and male authors, decade of publication, genre, etc.).
 
 All the data from \freemlpm (but almost none of the out-of-domain) can be found in \freemmax.
+
+\subsection{\texorpdfstring{\freemner}{FREEM NER}}\label{freem_ner}
+
+\begin{table}[!htp]
+    \centering\scriptsize
+    \begin{tabular}{@{}p{0.15\linewidth}p{0.15\linewidth}p{0.15\linewidth}p{0.15\linewidth}p{0.15\linewidth}p{0.15\linewidth}@{}}
+        \toprule
+                \rowcolor{lightgray}
+                \multicolumn{3}{c}{Personne} & \multicolumn{3}{c}{Fonction} \\
+                \multicolumn{3}{c}{\begin{tabular}{cc} \texttt{pers.ind} & \texttt{pers.coll} \end{tabular}} &
+                \multicolumn{3}{c}{\begin{tabular}{cc} \texttt{func.ind} & \texttt{func.coll} \end{tabular}} \\
+                \rowcolor{lightgray}
+                \multicolumn{3}{c}{Localisation} & \multicolumn{3}{c}{Production} \\
+                \texttt{loc.adm.town} & \texttt{loc.phys.geo} & \texttt{loc.fac} &
+                \texttt{prod.art} & \texttt{prod.rule} & \texttt{prod.object} \\
+                \texttt{loc.adm.reg} & \texttt{loc.phys.hydro} & \texttt{loc.oro} &
+                \multicolumn{3}{c}{\begin{tabular}{cc}  &  \end{tabular}} \\
+                \texttt{loc.adm.nat} &  &  &
+                \multicolumn{3}{c}{\begin{tabular}{cc}  &  \end{tabular}} \\
+                \texttt{loc.adm.sup} &  &  &
+                \multicolumn{3}{c}{\begin{tabular}{cc}  &  \end{tabular}} \\
+                \rowcolor{lightgray}
+                \multicolumn{2}{c}{Organisation} & \multicolumn{2}{c}{Temps} &
+                \multicolumn{1}{c}{Evénement} &
+                \multicolumn{1}{c}{Montant} \\
+                \texttt{org.adm} & \texttt{org.ent} & \multicolumn{2}{c}{\texttt{time.date.abs}} &
+                \multicolumn{1}{c}{\texttt{event}} &
+                \multicolumn{1}{c}{\texttt{amount}} \\
+                \multicolumn{2}{c}{} & \multicolumn{2}{c}{\texttt{time.date.rel}} &
+                \multicolumn{2}{c}{} \\
+            \end{tabular}
+            \caption{Types (en gris) et sous-types retenus de la typologie \textit{Quaero}.}
+            \label{tab:types}
+        \end{table}
+   
+\begin{figure}[!htp]
+    \centering
+    \includegraphics[width=0.6\linewidth]{static/media/mod_eval/dalembert/distribution_tokens_corpus.png}
+    \caption{Number of tokens per century.}
+    \label{fig:description}
+\end{figure}
+
+Rather than designing a new corpus, we have decided to use a subpart of the ``core corpus'' of the \textit{Presto} project~\cite{blumenthal-etal-2017-presto}, namely the text written during the French \textit{Ancien Régime} (c.15\textsuperscript{th}-18\textsuperscript{th}\,c., \textit{i.e.} 34 texts)\footnote{A text has been withdrawn: the \textit{Histoire d'un voyage faict en la terre du Brésil} by Jean de Léry, the transcription being too faulty to be able to correctly annotate the document.}. This choice is driven by our will to limit the number of annotated corpora for historical French, the same set of documents having already been abundantly corrected to train a lemmatizer~\cite{gabay-etal-2020-standardizing}, but also to avoid a complex selection of works supposed to ensure a relative representativeness of literary documents from the \textit{Ancien Régime}, already perfectly done by our colleagues.
+
+The number of genres covered is extremely large: poetry, drama, novel, correspondence, grammar, philosophy, short stories, encyclopedic literature, etc. and guarantees, here again, a reasonable representativeness of the range of possibilities of \textit{Belles-Lettres}\footnote{We do not offer a detailed description of the genres covered, these overlapping easily: poetry can be theological, political correspondence\dots}. The corpus is balanced regarding the distribution per century (c.\,10/century) but not regarding the length of the texts, which increases over time (cf.\,fig.~\ref{fig:description}), following a possible trend in literature.
+
+\subsubsection{Annotation}
+
+\begin{table}[!htp]
+\centering\scriptsize
+\begin{tabular}{@{}p{0.1\linewidth}p{0.1\linewidth}p{0.06\linewidth}p{0.08\linewidth}p{0.1\linewidth}p{0.13\linewidth}p{0.13\linewidth}p{0.1\linewidth}@{}}
+    \toprule
+Token & Lemma & POS & COARSE & FINE & FINE-COMP & NESTED & Wikidata ID \\
+    \midrule
+Les & le & Da & O & O & O & O & \_ \\ 
+allemands & allemand & Nc & O & O & O & O & \_ \\ 
+élurent & élire & Vvc & O & O & O & O & \_ \\ 
+pour & pour & S & O & O & O & O & \_ \\ 
+empereur & empereur & Nc & B-pers & B-pers.ind & B-comp.title & O & Q438435 \\ 
+Rodolphe & Rodolphe & Np & I-pers & I-pers.ind & B-comp.name & O & Q438435 \\ 
+duc & duc & Nc & I-pers & I-pers.ind & B-comp.title & O & Q438435 \\ 
+de & de & S & I-pers & I-pers.ind & I-comp.title & O & Q438435 \\ 
+Suabe & Souabe & Np & I-pers & I-pers.ind & I-comp.title & B-loc.adm.reg & Q438435 \\ 
+\bottomrule
+\end{tabular}
+\caption{NERC Fine-Grained annotation avec EL}
+    \label{tab:data}
+    \end{table}
+
+\begin{figure}[!htp]
+    \centering
+    \includegraphics[width=0.75\linewidth]{static/media/mod_eval/dalembert/corpus_desc_1.png}
+    \caption{Number of entities (\textit{$\log_{10}$} scale) per category.}
+    \label{fig:repartition}
+\end{figure}
+
+Because two important historical corpora presented \textit{supra} (\textit{Quaero} and \textit{Impresso}) have chosen to follow the \textit{Quaero} annotation guide~\cite{rosset-etal-2011-entites}, it seemed logical to use this same typology. Because our texts and interests diverge from those of the aforementioned corpora, only some types and subtypes have been kept (cf.\,tab.~\ref{tab:types}) from the \textit{Quaero} annotation scheme. The details of our annotation choices can be found in a dedicated annotation manual~\cite{gabay-etal-2020-manuel}. 
+
+The annotated texts are available in multi-columns \texttt{tsv} files (cf.\,tab.~\ref{tab:types}). Each token has a lemma (manually corrected) and a POS (produced by the \textit{Presto} project, non-systematically corrected but fairly reliable) using the MULTEXT tag set. We propose a coarse-grained annotation for high-level entity types and fine-grained annotation using subtypes using the following syntax:
+\begin{quote}
+    \texttt{\ora{BIO}}-\texttt{\purp{TYPE}}.\texttt{\teal{SUBTYPE}} \\
+    \textit{For instance: } \texttt{\ora{B}}-\texttt{\purp{loc}}.\texttt{\teal{adm.town}}
+\end{quote}
+
+\noindent Subtypes are sometimes simple (\texttt{B-org.\teal{town}}) sometimes double (\texttt{B-loc.\teal{phys.geo}}), depending of the complexity of the entity to annotate. Nested entities (\textit{i.e.} an entity in an entity, such as a place name in a person name in \textit{Henri d'\textbf{Angleterre}}, ``Henry of England``) follow exactly the same syntax, and components a similar one, using six transverse elements:
+
+\begin{itemize}
+    \item \texttt{name} to annotate tokens that are names (\textit{Louis}, \textit{Philippe}\dots)
+    \item \texttt{title}  to annotate tokens that are titles (\textit{sieur}, \textit{duc}, \textit{abbé}\dots)
+    \item \texttt{qualifier} to annotate tokens that are adjectives (\textit{l'Inde \textbf{orientale}}, \textit{l'Arabie \textbf{heureuse}}, \textit{la mer \textbf{athlantique}}, \textit{l'\textbf{ancienne} Colchide})… but also the generation (\textit{Henri \textbf{IV}}) or a cardinal position
+    \item \texttt{kind} to annotate tokens that are hyperonyms (\textit{l'\textbf{Empire} de Constantinople}, \textit{la \textbf{mer} du Japon}
+    \item \texttt{unit} to annotate tokens that are units (meters, league, inches, pounds…)
+    \item \texttt{val} to annotate tokens that are values (a number) that is linked to a unit to annotate an \texttt{amount}.
+\end{itemize}
+
+We have decided not to annotate metaphorical uses differently or in a separate column: everything is annotated in a literal sense. Thus, in \textit{\textbf{France} goes to war}, \textit{France} is labelled \texttt{loc.adm.nat} (\textit{i.e.} the country) and not \texttt{org.adm} (\textit{i.e.} the French government).
+
+We have also started a first phase of semantic annotation, using Wikidata~\cite{vrandecic-krotzsch-2014-wikidata} identifiers, which remains imperfect. Due to the complexity of analysing certain entities, in particular personal names (e.g. \textit{Pope John}), it was decided to annotate them only very marginally, only in the event of the absence of ambiguity (e.g. \textit{Pope John V}). The annotation of place names, on the other hand, is more advanced and almost functional. 
+
+A first layer of annotation was made using regular expressions, before moving on to a manual correction phase. Given the size of the corpus, it is obvious that each token has not been checked, and that the final result does not claim to be perfect. Occasional checks, however, concluded that the annotation was of high enough quality to move on to the training phase. All of the annotation work was carried out by a single person, in order to ensure the consistency of the data. The structure of the file and the form of the tags was controlled by a specific parser, designed specifically for this corpus.
