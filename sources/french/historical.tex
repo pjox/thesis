@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{Contemporary French Corpora}
+\chapter{Historical French Corpora}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{center}
@@ -11,3 +11,184 @@
     \vspace{0.5cm}
 \end{center}
 
+
+\section{Medieval French Corpus}
+\label{sec-data}
+
+This section describes the raw corpus of Medieval French we gathered in order to train unsupervised language models for Old French.
+To our knowledge, it is one of the largest such dataset gathered for Medieval French, although it remains quite small (\SI{55}{\mebi\byte} in total) relatively to the corpora usually used for pre-training contextual embeddings models.
+
+We chose to include a few texts from the early Middle French period (14th-15th c.) in this raw corpus, which brings a valuable complement of the prose documents that are lacking for Old French, while staying close enough to late Old French, the boundary between the two epochs being somewhat fuzzy.
+These texts precede the adoption of norms established by editors after the invention of Gutenberg's printing press. Middle French is more regular than Old French in some respects such as word order \citep{marchello-Nizia-etal-2020-grande} and less in others such as NP structure and pronouns system \citep{marchello-nizia-etal-1979-histoire}, but they share most of their lexicon and for these relatively early texts, the syntax is not too different from that of late Old French texts.
+
+%Corpora
+\begin{table}[thb]
+    \centering
+    \tablefontsize
+    \begin{tabular}{l S[table-format=2.1]}
+        \toprule
+        {\textbf{Corpus}}                              & {\textbf{Size / \si{\mebi\byte}}} \\ %& {\textbf{\# texts}}
+        \midrule
+        BFM \citep{guillot-etal-2018-base}             & 20.7                              \\ %139
+        AND \citep{rothwell-etal-2005-anglo}           & 17.2                              \\ %73
+        NCA \citep{kunstmann-stein-2007-le}            & 9.7                               \\ %271
+        Chartes Douai \citep{glessen-2003-elaboration} & 3.1                               \\ %1
+        OpenMedFr \citep{wrisley-2018-the}             & 1.7                               \\ %19
+        Geste \citep{camps-etal-2019-geste}            & 1.5                               \\ %32
+        MCVF \citep{martineau-2008-un}                 & 1.4                               \\ %17
+        Chartes Aube \citep{reenen-etal-2007-chartes}  & 0.2                               \\ %75
+        \midrule
+        Total                                          & 55.3                              \\ %627
+        \bottomrule
+    \end{tabular}
+    \caption{Data collection}
+    \label{tab:texts_train}
+\end{table}
+
+\begin{figure}[thb]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+                xbar,
+                colormap name=viridis,
+                cycle list={
+                        {color of colormap=200, draw=., preaction={fill=.}, pattern=grid},
+                        {color of colormap=800, draw=., preaction={fill=.}, pattern=dots},
+                    },
+                font=\footnotesize,
+                width=0.5\linewidth,
+                yticklabel style={
+                        xshift=0.5cm,
+                        align=right,
+                    },
+                y axis line style = { opacity = 0 },
+                xlabel = Datasize (\unit{\mebi\byte}),
+                %axis x line       = none,
+                tickwidth         = 0pt,
+                ytick             = data,
+                % enlarge y limits  = 0.15,
+                % enlarge x limits  = 0.2,
+                symbolic y coords = {Legal, Historical, Didactic, Religious, Literature},
+                nodes near coords,
+                nodes near coords style={black},
+                legend style={at={(0.95,0.6)}},
+                reverse legend,
+            ]
+            \addplot
+            coordinates {(13.3321,Literature) (4.35204,Religious)
+                    (4.35204,Didactic) (0.687576,Historical) (0,Legal)};
+            \addlegendentry{Verse}
+            \addplot
+            coordinates {(2.352817,Literature) (4.433186,Religious)
+                    (3.041925,Didactic) (8.362256,Historical) (15.705591,Legal)};
+            \addlegendentry{Prose}
+            % 			\legend{Verse,Prose}
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Distribution of form and domain, gathered from documents metadata and manual annotation.}
+    \label{fig:metadata}
+\end{figure}
+
+Medieval French has many factors of variation: language evolution, dialects, domains, forms of text (verse or prose) and lack of standard. Our dataset gives us a representation of Medieval French that is as accurate and diversified as possible, given the limited amount of material that survived to these days.
+The detailed instructions to replicate this dataset are described in the Appendix. No particular processing is done on the original documents.
+
+In order to get a sound evaluation of the contextual embeddings trained with this dataset, we filter out the documents that are also present in the SRCMF treebank used for evaluation purposes in section \ref{sec-experiments}\footnote{As noted by \citet{gururangan-etal-2020-dont}, pre-training on task specific data provides an additional boost, that would muddle our results, since our objective here is not so much task optimization as embeddings benchmarking.}.
+The resulting corpus is quite heterogeneous: legal texts and verse literature are in the majority, whereas other domains, such as historical and didactic texts, are under-represented, as can be seen in \cref{fig:metadata}.
+
+
+\section{Early Modern French Corpora}
+
+For the past few years, we have been involved in the development of linguistic resources for Early Modern French. The initiative, called \textsc{FreEM} (which stands for \emph{FREnch Early Modern}), aims to collect the corpora required for various NLP tasks such as lemmatisation, POS tagging, linguistic normalisation and named entity recognition. Two of these corpora are introduced here: \freemmax (see Section~\ref{freem_max}) and \freemlpm (see Section~\ref{freem_lpm}).
+
+\subsection{\texorpdfstring{\freemmax}{FREEM max}}\label{freem_max}
+
+Usable historical documents are difficult to find because, as previously mentioned, they are more rare than contemporary ones; editors tend to normalise the language (\emph{i.e.}~use the spelling conventions of contemporary French, see~\cite{gabay-2014-pourquoi}), transcriptions are not (always) distributed in a digital format. \freemmax \citep{gabay-etal-2022-FreEM} is an attempt to solve this problem, and the aim of this dataset is to group together the largest number or texts possible written in Early Modern French.
+%
+The texts have a variety of sources, which can be grouped into three main types:
+\begin{itemize}
+    \item Two institutional datasets have been used and are non open-sourced:
+          \begin{itemize}
+              \item \textsc{Frantext} \emph{intégral} \citep{atilf-1998-frantext}, the biggest database of French texts (only the texts between 1500 and 1800), a very small portion of which is open access: \textsc{Frantext} \emph{Démonstration} \citep{atilf-1998-frantext-d};
+              \item \emph{Electronic Enlightenment} \citep{bodleian-2008-electronic}, an online collection of edited correspondences of the Early Modern period;
+          \end{itemize}
+    \item Several come from research projects distributing transcriptions online:
+          \begin{itemize}
+              \item The \emph{Antonomaz project},  French \emph{mazarinades} (\url{https://cahier.hypotheses.org/antonomaz});
+              \item The II.B section (in French) of the \emph{Actis Pacis Westphalicae}, diplomatic letters for the Peace of Westphalia (\url{http://kaskade.dwds.de/dstar/apwcf/});
+              \item The Bibliothèques virtuelles humanistes, 16\textsuperscript{th}\,c.~French literature (\url{http://www.bvh.univ-tours.fr});
+              \item The \emph{Corpus électronique de la première modernité}, 17\textsuperscript{th}\,c.~French literature (\url{http://www.cepm.paris-sorbonne.fr})
+              \item The \emph{Condé} project, \emph{coutumiers normands} (\url{https://conde.hypotheses.org})
+              \item The Corpus Descartes, works of René Descartes (\url{https://www.unicaen.fr/puc/sources/prodescartes/});
+              \item The \emph{Bibliothèque dramatique} of the CELLF, 17\textsuperscript{th}\,c.~French plays (\url{http://bibdramatique.huma-num.fr});
+              \item The \emph{Fabula numerica} project, French fables (\url{https://obvil.sorbonne-universite.fr/projets/fabula-numerica});
+              \item The \emph{ Fonds Boissy}, plays of Louis de Boissy (\url{https://www.licorn-research.fr/Boissy.html});
+              \item The \emph{Mercure Galant} project, the famous French \emph{gazette} and literary magazine between 1672 and 1710 (\url{https://obvil.sorbonne-universite.fr/corpus/mercure-galant});
+              \item The \emph{Rousseau online} project, works of Jean-Jacques Rousseau (\url{https://www.rousseauonline.ch});
+              \item The \emph{Sermo} project, sermons of the 16\textsuperscript{th} and 17\textsuperscript{th}\,c. (\url{http://sermo.unine.ch});
+              \item The \emph{Théâtre classique} project, 17\textsuperscript{th} and 18\textsuperscript{th}\,c.~French plays (\url{http://www.theatre-classique.fr});
+          \end{itemize}
+    \item Additional sources come from researchers who kindly accepted to offer their personal transcriptions or data scrapped by our team:
+          \begin{itemize}
+              \item Transcriptions of Anne-Élisabeth Spica (17\textsuperscript{th}\,c. French novels);
+              \item Transcriptions found on \emph{Wikisource} (\url{https://fr.wikisource.org});
+              \item Transcriptions (ePub files) found on \emph{Gallica} (\url{https://gallica.bnf.fr});
+              \item Transcriptions found on various websites online.
+          \end{itemize}
+\end{itemize}
+
+Additional data for later states of the language, up to the 1920's (mainly from FRANTEXT \emph{intégral}), are also provided for two main reasons: on the one hand, it is common to normalise Early Modern French into Contemporary French \cite{gabay-2014-pourquoi} because of the linguistic proximity between these the two states of the language, and on the other hand, it helps to collect (precious) additional data to avoid ending up with with too small of a corpus for our needs.
+
+\begin{table}[ht]
+    \centering\small
+    \resizebox{\linewidth}{!}{
+        \begin{tabular}{lrrlr}
+            \toprule
+            Origin                      & \#Tokens  &  & Origin                                               & \#Tokens    \\
+            \midrule
+            Spica corpus                & 691,467   &  & \textsc{Frantext} \emph{intégral} ($>$1500, $<$1800) & 60,018,390  \\
+            Antonomaz project           & 119,194   &  & \textsc{Frantext} \emph{intégral} ($>$1800)          & 71,504,440  \\
+            Acta Pacis Westphlicae II B & 2,463,047 &  & \textsc{Frantext} \emph{Démonstration}               & 1,255,454   \\
+            Bibliothèque Bleue          & 776,838   &  & Gallica                                              & 5,212,333   \\
+            BVH                         & 2,434,657 &  & Boissy project                                       & 438,215     \\
+            CEPM                        & 2,707,432 &  & Mercure galant                                       & 5,427,469   \\
+            Condé project               & 3,173,845 &  & Rousseau Online project                              & 2,428,587   \\
+            Descartes                   & 1,025,337 &  & Scrapping                                            & 1,936,835   \\
+            CELLF                       & 1,873,772 &  & Sermo project                                        & 529,647     \\
+            Electronic enlightenment    & 6,568,047 &  & Théâtre classique project                            & 13,916,169  \\
+            Fabula project              & 145,978   &  & Wikisource                                           & 996,329     \\
+            \midrule
+            \textbf{TOTAL}              &           &  &                                                      & 185,643,482 \\
+            \bottomrule
+        \end{tabular}
+    }
+    \caption{Breakdown of the \freemmax corpus by text origin.}
+    \label{tab:my_label}
+\end{table}
+
+The final result is far from being balanced or representative (see Figure~\ref{fig:FreEMmax_desc}). 16\textsuperscript{th}\,c. French documents are under-represented, as well as 18\textsuperscript{th}\,c.~literature. The 17\textsuperscript{th}\,c. is clearly over-represented, especially its second half---probably one of the most important of French literature, which could explain this situation (on top of our personal interest for this specific period).
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.75\linewidth]{static/media/mod_eval/dalembert/desc_DalemBERT.png}
+    \caption{Distribution of the documents in the \freemmax corpus per year}
+    \label{fig:FreEMmax_desc}
+\end{figure}
+
+As some texts are still (partially) protected by restrictive licences, the \freemmax corpus exists in both open and non-open versions, only the open one being distributed. In order to limit the impact of licences forbidding the modification of files, we have designed a pipeline to distribute the data as it was found and recreate it (see Figure~\ref{fig:pipeline}).
+
+Metadata is prepared manually in order to have the same categories for each document, whatever its origin. As well as the author, the title and the date (where relevant), we also provide the genre (``theatre''), sometimes a subgenre (``tragedy''), the linguistic status (normalised or not) and the licence attached to the transcription.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.75\linewidth]{static/media/mod_eval/dalembert/corpus_trans.png}
+    \caption{\freemmax compilation pipeline. All files are kept in their original format. Metadata is manually prepared in separate files in order to automatically transform and clean (in blue) all the available documents into XML TEI files following the same encoding. It allows us to distribute open data (in green) but also data distributed with restrictions regarding the modification of the original format (in orange). Non-open texts (in red) are not distributed.}
+    \label{fig:pipeline}
+\end{figure}
+
+\subsection{\texorpdfstring{\freemlpm}{FREEM LPM}}\label{freem_lpm}
+
+The \freemlpm (``Lemma, POS tags, Morphology'') has already been presented \cite{gabay-etal-2020-standardizing}. The POS-annotated data, is a mixture of two different sources. On the one hand, there is the \emph{CornMol} corpus \cite{camps-etal-2021-corpus}, made up of normalised 17\textsuperscript{th}\,c.~French comedies. On the other hand, there is a gold subset of the \emph{Presto} corpus \cite{blumenthal-etal-2017-presto}, made up of texts of different genres written during the 16\textsuperscript{th}, 17\textsuperscript{th} and 18\textsuperscript{th}\,c., which have previously used to train annotation tools \cite{diwersy-etal-2017-ressources}, and was heavily corrected by us to match our annotation principles \cite{gabay-etal-2020-manuel}.
+
+On top of traditional in-domain tests, an out-of-domain testing dataset was prepared to control the capacity of the model to generalise to other genres and periods. Centuries covered are the 16\textsuperscript{th}, 17\textsuperscript{th}, 18\textsuperscript{th}, 19\textsuperscript{th} and 20\textsuperscript{th}. There are two test sets for each century: one made up only of theatre, the other of everything but theatre. Each test set comprises 10 short samples (c.\,100 tokens), as representative as possible of the linguistic production of the century (female and male authors, decade of publication, genre, etc.).
+
+All the data from \freemlpm (but almost none of the out-of-domain) can be found in \freemmax.

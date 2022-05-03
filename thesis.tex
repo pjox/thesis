@@ -65,24 +65,24 @@
 
 \renewcommand{\th}{\textsuperscript{\textup{th}}\xspace}
 
-\newacronym[description={Principal component analysis}]{PCA}{PCA}{principal component analysis}
-\newacronym                                            {SNF}{SNF}{Smith normal form}
-\newacronym[description={Topological data analysis}]   {TDA}{TDA}{topological data analysis}
+% \newacronym[description={Principal component analysis}]{PCA}{PCA}{principal component analysis}
+% \newacronym                                            {SNF}{SNF}{Smith normal form}
+% \newacronym[description={Topological data analysis}]   {TDA}{TDA}{topological data analysis}
 
-\newglossaryentry{LaTeX}{%
-  name        = {\LaTeX},
-  description = {A document preparation system},
-  sort        = {LaTeX},
-}
+% \newglossaryentry{LaTeX}{%
+%   name        = {\LaTeX},
+%   description = {A document preparation system},
+%   sort        = {LaTeX},
+% }
 
-\newglossaryentry{Real numbers}{%
-  name        = {$\real$},
-  description = {The set of real numbers},
-  sort        = {Real numbers},
-}
+% \newglossaryentry{Real numbers}{%
+%   name        = {$\real$},
+%   description = {The set of real numbers},
+%   sort        = {Real numbers},
+% }
 
-\makeindex
-\makeglossaries
+%\makeindex
+%\makeglossaries
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Custom Commands and Environments
@@ -241,7 +241,6 @@
 
 \part{French Corpora}
 \include{sources/french/contemporary}
-\chapter{Historical French Data}
 \include{sources/french/historical}
 
 \part{Models and Evaluation}
@@ -259,7 +258,9 @@
 \include{sources/appendix/oscar/quality}
 \include{sources/appendix/oscar/towards}
 
-\include{sources/appendix/mod_eval/dalembert.tex}
+\include{sources/appendix/mod_eval/camembert}
+\include{sources/appendix/mod_eval/bertrade}
+\include{sources/appendix/mod_eval/dalembert}
 
 
 % This ensures that the subsequent sections are being included as root
@@ -267,15 +268,15 @@
 \bookmarksetup{startatroot}
 \backmatter
 
-\begingroup
-\let\clearpage\relax
-\glsaddall
-\printglossary[type=\acronymtype]
-\newpage
-\printglossary
-\endgroup
+% \begingroup
+% \let\clearpage\relax
+% \glsaddall
+% \printglossary[type=\acronymtype]
+% \newpage
+% \printglossary
+% \endgroup
 
-\printindex
+% \printindex
 
 % Entries for the entire Anthology, followed by custom entries
 \bibliography{anthology, thesis}

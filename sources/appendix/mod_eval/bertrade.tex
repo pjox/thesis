@@ -1,0 +1,90 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{BERTrade}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Collecting the Data}
+\label{subsec:collectdata}
+The following data can be downloaded directly from their website:
+\begin{itemize}
+    \item Chartes de l'Aube: \\ \url{https://sites.google.com/site/achimstein/research/resources} \\
+          Extract raw text from XML files: <body>, then <s>, then <word>.
+    \item Geste: \\ \url{https://github.com/Jean-Baptiste-Camps/Geste} \\
+          Raw text is available under /txt/norm/.
+    \item OpenMedFr: \\ \url{https://github.com/OpenMedFr/texts} \\
+          Remove the header of each file (until \textit{*** START}), its last line (\textit{*** END}), paragraph breaks (\textit{\#|}) and folios or pages numbers.
+\end{itemize}
+
+Special permissions are required to access and use these sources:
+\begin{itemize}
+    \item AND: \\ \url{https://anglo-norman.net/project-members}
+    \item BFM: \\ \url{http://bfm.ens-lyon.fr/spip.php?article19} \\
+          Raw text is available.
+    \item Chartes Douai: \\
+          \url{https://www.rose.uzh.ch/docling}
+    \item MCVF: \url{http://www.voies.uottawa.ca}
+    \item NCA: \\ \url{https://sites.google.com/site/achimstein/research/resources} \\
+          Extract raw text from the XML files: <body> then <txm:form>.
+\end{itemize}
+
+
+\section{Details on the Models}
+
+\subsection{Models Trained From Scratch}
+
+These are trained for \num{32} epochs in a masked language modeling task using the same parameters as RoBERTa \citep{liu-etal-2019-roberta} but a smaller batch size of \num{256} samples\footnote{Preliminary experiments with larger batch sizes showed no significant improvement to compensate for the heavier computational load.}, which amounts to a magnitude of \num{e5} steps.
+We also use a smaller vocabulary size (\num{8192}) than other works, in line with the observations of \citet{ding-etal-2019-call} that learning large vocabularies on small corpora defeats the purpose of sub-word tokenization.
+Using a larger vocabulary size of \num{5e4} (like FlauBERT) also did not seem to bring any improvements in our preliminary experiments and made pre-training more expensive.
+
+\subsection{Post-training}
+
+The pretrained models we used in the post-training settings are those available in the 4.2.0 version of Huggingface Transformers \citep{wolf-etal-2020-transformers} and the exact handles are:
+
+\begin{description}
+    \item[mBERT] \href{https://huggingface.co/bert-base-multilingual-cased}{bert-base-multilingual-cased}
+    \item[flauBERT] \href{https://huggingface.co/flaubert/flaubert_base_cased}{flaubert/flaubert\_base\_cased}
+    \item[camemBERT] \href{https://huggingface.co/camembert-base}{camembert-base}
+    \item[finBERT] \href{https://huggingface.co/TurkuNLP/bert-base-finnish-cased-v1}{TurkuNLP/bert-base-finnish-cased-v1}
+\end{description}
+
+The post-trained models are those with MLM heads, which we did not reset before post-training, so the post-training phase can be seen as a language transfer task for masked language modeling out of which we extract a contextual word embeddings model.
+
+\section{Carbon Footprint}\label{carbon-footprint}
+
+\begin{table}[t]
+    \centering\small
+    \scalebox{0.89}{
+        \begin{tabular}{@{}lrrrrr@{}}
+            \toprule
+            \textbf{Model}  & {\textbf{Power (\unit{\watt})}} & {\textbf{\# Models}} & {\textbf{Duration (\unit{\hour})}} & {\textbf{Consumption (\unit{\kWh})}} & {\textbf{CO\textsubscript{2}e (\unit{\kilo\gram})}} \\
+            \midrule
+            Pre-train       & 10756                           & 11                   & 6                                  & 11216.36                             & 358.92                                              \\
+            Post-train      & 1520                            & 4                    & 20                                 & 192.13                               & 6.15                                                \\
+            \midrule
+            Total emissions &                                 &                      &                                    &                                      & 365.07                                              \\
+            \bottomrule
+        \end{tabular}
+    }
+    \caption{Average power draw, number of models trained, training times in hours, mean power consumption including power usage effectiveness (PUE), and CO\textsubscript{2} emissions; for each setting.}
+    \label{tab:carbon-bertrade}
+\end{table}
+
+We report the power consumption and carbon footprint of our main experiments following the approach of \citet{strubell-etal-2019-energy}. Two different configurations were used in our experiments, one for pre-training models from scratch (Pre-train) and another one for continuing the training of existing models (Post-train).
+
+\paragraph{Pre-train:} We use a cluster of 4 machines each one having \num{8} GPU Nvidia Tesla V100 SXM2 \qty{32}{\gibi\byte}, \qty{384}{\gibi\byte} of RAM, and two Intel Xeon Gold 6226 processors. One Nvidia Tesla V100 card is rated at around \qty{300}{\watt},\footnote{\href{https://www.nvidia.com/en-us/data-center/v100/}{ Nvidia Tesla V100 specification}} while the Xeon Gold 6226 processor is rated at \qty{125}{\watt},\footnote{\href{https://ark.intel.com/content/www/us/en/ark/products/193957/intel-xeon-gold-6226-processor-19-25m-cache-2-70-ghz.html}{Intel Xeon Gold 6226 specification}}. For the DRAM we can use the work of \citet{desrochers-etal-2016-a} to estimate the total power draw of \qty{384}{\gibi\byte} of RAM at around \qty{39}{\watt}. The total power draw of this setting adds up to around \qty{10756}{\watt}. We train \num{11} different models in this configuration.
+
+\paragraph{Post-train:} We use a single machine having \num{4} GPU Nvidia Tesla V100 SXM2 \qty{32}{\gibi\byte}, \qty{192}{\gibi\byte} of RAM and two Intel Xeon Gold 6248 processors. The Xeon Gold 6248 processor is rated at 150 W,\footnote{\href{https://ark.intel.com/content/www/us/en/ark/products/192446/intel-xeon-gold-6248-processor-27-5m-cache-2-50-ghz.html}{Intel Xeon Gold 6248 specification}}, and the DRAM total power draw can be estimated at around \qty{20}{\watt}. The total power draw of this setting adds up to around \qty{1520}{\watt}. We train \num{4} different models in this configuration.
+
+Having this information, we can now use the formula proposed by \citet{strubell-etal-2019-energy} in order to compute the total power required for each setting:
+
+\begin{equation*}
+    p_t = \frac{1.58t(cp_{c} + p_r + gp_g)}{1000}
+\end{equation*}
+
+Where $c$ and $g$ are the number of CPUs and GPUs respectively, $p_c$ is the average power draw (in \unit{\watt}) from all CPU sockets, $p_r$ the average power draw from all DRAM sockets, and $p_g$ the average power draw of a single GPU. We estimate the total power consumption by adding GPU, CPU and DRAM consumption, and then multiplying by the \emph{Power Usage Effectiveness} (PUE), which accounts for the additional energy required to support the compute infrastructure. We use a PUE coefficient of \num{1.58}, the 2018 global average for data centers \citep{strubell-etal-2019-energy}. In table \ref{tab:carbon-bertrade} we report the training times in hours, as well as the total power draw (in Watts) of the system used to train the models. We use this information to compute the total power consumption of each setting, also reported in table \ref{tab:carbon-bertrade}.
+
+We can further estimate the CO\textsubscript{2} emissions in kilograms of each single model by multiplying the total power consumption by the average CO\textsubscript{2} emissions per \unit{\kWh} in our region which were around \qty{32}{\gram\per\kWh} in January 2021,\footnote{\href{https://www.rte-france.com/eco2mix/les-emissions-de-co2-par-kwh-produit-en-france}{Rte - éCO\textsubscript{2}mix}.} when the models were trained. Thus the total CO\textsubscript{2} emissions in kg for one single model can be computed as:
+\begin{equation*}
+    \text{CO}_{2}\text{e} = 0.032 p_t
+\end{equation*}
+
+All emissions are also reported in table \ref{tab:carbon-bertrade}.
