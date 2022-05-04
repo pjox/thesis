@@ -165,7 +165,7 @@ on both train and dev dataset. We used the same hyperparameters as we did for ou
 
 In this article we presented three methods developed for the Named Entity Recognition task in French and German historical newspapers.
 The first method relied on linear-chain CRFs while the other two methods use a Bidirectional LSTM and a bidirectional Language Model (ELMo).
-The later outperformed the CRF model and achieved rank 3 on the NER task in both French and German.
+The latter outperformed the CRF model and achieved rank 3 on the NER task in both French and German.
 We also showed that the type of sequences used has a significant influence on the results. When we segment in sentences rather than using the segments of the dataset as it is the results are systematically much better, with an exception for locations where the gain is marginal. This proves that sentence segmentation remains a key component of efficient NLP architectures, in particular for models taking advantage of the context.
 
 As a future work it would be interesting to assess the importance of noise in the data. For instance, by comparing the results of NER on texts obtained via different OCR tools.
