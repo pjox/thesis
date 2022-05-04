@@ -161,12 +161,6 @@ We apply the aforementioned pipeline to the November/December 2021 crawl dump of
 \subsection{Comparison with OSCAR 21.09}
 \subsubsection{Size distribution}
 
-The data layout of OSCAR 22.01 may limit the relevance of raw size comparisons, since metadata are larger (annotations and line identifications were not present in previous OSCAR Corpora), and fused with textual data (metadata were distributed in separate files for OSCAR 21.09).
-
-However, comparing the distribution of corpus sizes may help us ensure that the new corpus has a size distribution similar to the older one.
-
-We compare the distribution of the sub-corpora sizes between OSCAR 21.09 and OSCAR 22.01 in figure \ref{fig.1}. We see that while the overall distribution is similar, the lower end of the distribution has more variance: The $[0\text{B}, 100\text{KB})$ range shows more corpora at its bounds than at its center. Furthermore, we also plot the empirical cumulative density function, that helps to assert the distribution similarity between OSCAR 21.09 and OSCAR 22.01.
-
 \begin{figure*}[!ht]
     \begin{center}
         \includegraphics[width=\linewidth]{static/media/oscar/towards/size-comp}
@@ -174,6 +168,12 @@ We compare the distribution of the sub-corpora sizes between OSCAR 21.09 and OSC
         \label{fig.1}
     \end{center}
 \end{figure*}
+
+The data layout of OSCAR 22.01 may limit the relevance of raw size comparisons, since metadata are larger (annotations and line identifications were not present in previous OSCAR Corpora), and fused with textual data (metadata were distributed in separate files for OSCAR 21.09).
+
+However, comparing the distribution of corpus sizes may help us ensure that the new corpus has a size distribution similar to the older one.
+
+We compare the distribution of the sub-corpora sizes between OSCAR 21.09 and OSCAR 22.01 in figure \ref{fig.1}. We see that while the overall distribution is similar, the lower end of the distribution has more variance: The $[0\text{B}, 100\text{KB})$ range shows more corpora at its bounds than at its center. Furthermore, we also plot the empirical cumulative density function, that helps to assert the distribution similarity between OSCAR 21.09 and OSCAR 22.01.
 
 We also select three low-resourced languages, three mid-resourced languages and three high-resources languages and compare their content (that is, textual data excluding metadata) between OSCAR 22.01 and OSCAR 21.09. Comparison is shown in figure \ref{fig.2}. While the overall sizes of these corpora  have slightly decreased, the sizes of the mid and high resource languages are similar enough.
 

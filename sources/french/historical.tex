@@ -5,11 +5,12 @@
 \begin{center}
     \begin{minipage}{0.66\textwidth}
         \begin{small}
-            In which we present a part of the work of \citet{popa-fabre-etal-2020-french} who construct a balanced corpus for contemporary French that could be used for language modeling; and of \citet{ortiz-suarez-etal-2020-establishing} who aligned both the Universal Dependencies and the TEI-annotated NER version of the French Treebank, correcting multiple annotation mistakes and discrepancies, and who then converted the NER annotations to a more machine-ready CoNLL-like format that is more often used for training neural models.
+            In which we present a part of the work of \citet{grobol-etal-2022-bertrade} who put together a raw corpus for Medieval French intended to pre-train language models. We also present part of the work of \citet{gabay-etal-2022-from} who construct a \freemmax,a corpus for Early Modern French for the pre-training of language models, as well as \freemlpm and \freemner two evaluation corpora annotated in part-of-speech tagging and named entity recognition respectively.
         \end{small}
     \end{minipage}
     \vspace{0.5cm}
 \end{center}
+
 
 
 \section{Medieval French Corpus}
@@ -196,34 +197,34 @@ All the data from \freemlpm (but almost none of the out-of-domain) can be found 
     \centering\scriptsize
     \begin{tabular}{@{}p{0.15\linewidth}p{0.15\linewidth}p{0.15\linewidth}p{0.15\linewidth}p{0.15\linewidth}p{0.15\linewidth}@{}}
         \toprule
-                \rowcolor{lightgray}
-                \multicolumn{3}{c}{Person} & \multicolumn{3}{c}{Function} \\
-                \multicolumn{3}{c}{\begin{tabular}{cc} \texttt{pers.ind} & \texttt{pers.coll} \end{tabular}} &
-                \multicolumn{3}{c}{\begin{tabular}{cc} \texttt{func.ind} & \texttt{func.coll} \end{tabular}} \\
-                \rowcolor{lightgray}
-                \multicolumn{3}{c}{Location} & \multicolumn{3}{c}{Production} \\
-                \texttt{loc.adm.town} & \texttt{loc.phys.geo} & \texttt{loc.fac} &
-                \texttt{prod.art} & \texttt{prod.rule} & \texttt{prod.object} \\
-                \texttt{loc.adm.reg} & \texttt{loc.phys.hydro} & \texttt{loc.oro} &
-                \multicolumn{3}{c}{\begin{tabular}{cc}  &  \end{tabular}} \\
-                \texttt{loc.adm.nat} &  &  &
-                \multicolumn{3}{c}{\begin{tabular}{cc}  &  \end{tabular}} \\
-                \texttt{loc.adm.sup} &  &  &
-                \multicolumn{3}{c}{\begin{tabular}{cc}  &  \end{tabular}} \\
-                \rowcolor{lightgray}
-                \multicolumn{2}{c}{Organization} & \multicolumn{2}{c}{Temps} &
-                \multicolumn{1}{c}{Event} &
-                \multicolumn{1}{c}{Quantity} \\
-                \texttt{org.adm} & \texttt{org.ent} & \multicolumn{2}{c}{\texttt{time.date.abs}} &
-                \multicolumn{1}{c}{\texttt{event}} &
-                \multicolumn{1}{c}{\texttt{amount}} \\
-                \multicolumn{2}{c}{} & \multicolumn{2}{c}{\texttt{time.date.rel}} &
-                \multicolumn{2}{c}{} \\
-            \end{tabular}
-            \caption{Types (in gray) and subtypes taken from the \emph{Quaero} typology.}
-            \label{tab:types}
-        \end{table}
-   
+        \rowcolor{lightgray}
+        \multicolumn{3}{c}{Person}                                                                   & \multicolumn{3}{c}{Function}                                                              \\
+        \multicolumn{3}{c}{\begin{tabular}{cc} \texttt{pers.ind} & \texttt{pers.coll} \end{tabular}} &
+        \multicolumn{3}{c}{\begin{tabular}{cc} \texttt{func.ind} & \texttt{func.coll} \end{tabular}}                                                                                             \\
+        \rowcolor{lightgray}
+        \multicolumn{3}{c}{Location}                                                                 & \multicolumn{3}{c}{Production}                                                            \\
+        \texttt{loc.adm.town}                                                                        & \texttt{loc.phys.geo}                      & \texttt{loc.fac}                           &
+        \texttt{prod.art}                                                                            & \texttt{prod.rule}                         & \texttt{prod.object}                         \\
+        \texttt{loc.adm.reg}                                                                         & \texttt{loc.phys.hydro}                    & \texttt{loc.oro}                           &
+        \multicolumn{3}{c}{\begin{tabular}{cc}  &  \end{tabular}}                                                                                                                                \\
+        \texttt{loc.adm.nat}                                                                         &                                            &                                            &
+        \multicolumn{3}{c}{\begin{tabular}{cc}  &  \end{tabular}}                                                                                                                                \\
+        \texttt{loc.adm.sup}                                                                         &                                            &                                            &
+        \multicolumn{3}{c}{\begin{tabular}{cc}  &  \end{tabular}}                                                                                                                                \\
+        \rowcolor{lightgray}
+        \multicolumn{2}{c}{Organization}                                                             & \multicolumn{2}{c}{Temps}                  &
+        \multicolumn{1}{c}{Event}                                                                    &
+        \multicolumn{1}{c}{Quantity}                                                                                                                                                             \\
+        \texttt{org.adm}                                                                             & \texttt{org.ent}                           & \multicolumn{2}{c}{\texttt{time.date.abs}} &
+        \multicolumn{1}{c}{\texttt{event}}                                                           &
+        \multicolumn{1}{c}{\texttt{amount}}                                                                                                                                                      \\
+        \multicolumn{2}{c}{}                                                                         & \multicolumn{2}{c}{\texttt{time.date.rel}} &
+        \multicolumn{2}{c}{}                                                                                                                                                                     \\
+    \end{tabular}
+    \caption{Types (in gray) and subtypes taken from the \emph{Quaero} typology.}
+    \label{tab:types}
+\end{table}
+
 \begin{figure}[!htp]
     \centering
     \includegraphics[width=0.6\linewidth]{static/media/mod_eval/dalembert/distribution_tokens_corpus.png}
@@ -238,27 +239,27 @@ The number of genres covered is extremely large: poetry, drama, novel, correspon
 \subsubsection{Annotation}
 
 \begin{table}[!htp]
-\centering\scriptsize
-\begin{tabular}{@{}p{0.1\linewidth}p{0.1\linewidth}p{0.06\linewidth}p{0.08\linewidth}p{0.1\linewidth}p{0.13\linewidth}p{0.13\linewidth}p{0.1\linewidth}@{}}
-    \toprule
-Token & Lemma & POS & COARSE & FINE & FINE-COMP & NESTED & Wikidata ID \\
-    \midrule
-Les & le & Da & O & O & O & O & \_ \\ 
-allemands & allemand & Nc & O & O & O & O & \_ \\ 
-élurent & élire & Vvc & O & O & O & O & \_ \\ 
-pour & pour & S & O & O & O & O & \_ \\ 
-empereur & empereur & Nc & B-pers & B-pers.ind & B-comp.title & O & Q438435 \\ 
-Rodolphe & Rodolphe & Np & I-pers & I-pers.ind & B-comp.name & O & Q438435 \\ 
-duc & duc & Nc & I-pers & I-pers.ind & B-comp.title & O & Q438435 \\ 
-de & de & S & I-pers & I-pers.ind & I-comp.title & O & Q438435 \\ 
-Suabe & Souabe & Np & I-pers & I-pers.ind & I-comp.title & B-loc.adm.reg & Q438435 \\ 
-\bottomrule
-\end{tabular}
-\caption{NERC Fine-Grained annotation avec EL}
+    \centering\scriptsize
+    \begin{tabular}{@{}p{0.1\linewidth}p{0.1\linewidth}p{0.06\linewidth}p{0.08\linewidth}p{0.1\linewidth}p{0.13\linewidth}p{0.13\linewidth}p{0.1\linewidth}@{}}
+        \toprule
+        Token     & Lemma    & POS & COARSE & FINE       & FINE-COMP    & NESTED        & Wikidata ID \\
+        \midrule
+        Les       & le       & Da  & O      & O          & O            & O             & \_          \\
+        allemands & allemand & Nc  & O      & O          & O            & O             & \_          \\
+        élurent   & élire    & Vvc & O      & O          & O            & O             & \_          \\
+        pour      & pour     & S   & O      & O          & O            & O             & \_          \\
+        empereur  & empereur & Nc  & B-pers & B-pers.ind & B-comp.title & O             & Q438435     \\
+        Rodolphe  & Rodolphe & Np  & I-pers & I-pers.ind & B-comp.name  & O             & Q438435     \\
+        duc       & duc      & Nc  & I-pers & I-pers.ind & B-comp.title & O             & Q438435     \\
+        de        & de       & S   & I-pers & I-pers.ind & I-comp.title & O             & Q438435     \\
+        Suabe     & Souabe   & Np  & I-pers & I-pers.ind & I-comp.title & B-loc.adm.reg & Q438435     \\
+        \bottomrule
+    \end{tabular}
+    \caption{NERC Fine-Grained annotation avec EL}
     \label{tab:data}
-    \end{table}
+\end{table}
 
-Because two important historical corpora presented \textit{supra} (\textit{Quaero} and \textit{Impresso}) have chosen to follow the \textit{Quaero} annotation guide~\cite{rosset-etal-2011-entites}, it seemed logical to use this same typology. Because our texts and interests diverge from those of the aforementioned corpora, only some types and subtypes have been kept (cf.\,tab.~\ref{tab:types}) from the \textit{Quaero} annotation scheme. The details of our annotation choices can be found in a dedicated annotation manual~\cite{gabay-etal-2020-manuel}. 
+Because two important historical corpora presented \textit{supra} (\textit{Quaero} and \textit{Impresso}) have chosen to follow the \textit{Quaero} annotation guide~\cite{rosset-etal-2011-entites}, it seemed logical to use this same typology. Because our texts and interests diverge from those of the aforementioned corpora, only some types and subtypes have been kept (cf.\,tab.~\ref{tab:types}) from the \textit{Quaero} annotation scheme. The details of our annotation choices can be found in a dedicated annotation manual~\cite{gabay-etal-2020-manuel}.
 
 The annotated texts are available in multi-columns \texttt{tsv} files (cf.\,tab.~\ref{tab:types}). Each token has a lemma (manually corrected) and a POS (produced by the \textit{Presto} project, non-systematically corrected but fairly reliable) using the MULTEXT tag set. We propose a coarse-grained annotation for high-level entity types and fine-grained annotation using subtypes using the following syntax:
 \begin{quote}
@@ -286,6 +287,6 @@ The annotated texts are available in multi-columns \texttt{tsv} files (cf.\,tab.
 
 We have decided not to annotate metaphorical uses differently or in a separate column: everything is annotated in a literal sense. Thus, in \textit{\textbf{France} goes to war}, \textit{France} is labelled \texttt{loc.adm.nat} (\textit{i.e.} the country) and not \texttt{org.adm} (\textit{i.e.} the French government).
 
-We have also started a first phase of semantic annotation, using Wikidata~\cite{vrandecic-krotzsch-2014-wikidata} identifiers, which remains imperfect. Due to the complexity of analyzing certain entities, in particular personal names (e.g. \textit{Pope John}), it was decided to annotate them only very marginally, only in the event of the absence of ambiguity (e.g. \textit{Pope John V}). The annotation of place names, on the other hand, is more advanced and almost functional. 
+We have also started a first phase of semantic annotation, using Wikidata~\cite{vrandecic-krotzsch-2014-wikidata} identifiers, which remains imperfect. Due to the complexity of analyzing certain entities, in particular personal names (e.g. \textit{Pope John}), it was decided to annotate them only very marginally, only in the event of the absence of ambiguity (e.g. \textit{Pope John V}). The annotation of place names, on the other hand, is more advanced and almost functional.
 
 A first layer of annotation was made using regular expressions, before moving on to a manual correction phase. Given the size of the corpus, it is obvious that each token has not been checked, and that the final result does not claim to be perfect. Occasional checks, however, concluded that the annotation was of high enough quality to move on to the training phase. All the annotation work was carried out by a single person, in order to ensure the consistency of the data. The structure of the file and the form of the tags was controlled by a specific parser, designed specifically for this corpus.
