@@ -2,6 +2,25 @@
 \chapter{D'AlemBERT}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\section{Entity Distribution by Text in NER Data}
+
+The following diagrams show the detail of the coarse entity distribution by text in \freemner.
+
+\begin{sidewaysfigure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{static/media/mod_eval/dalembert/freem_ner_entities_by_text.png}
+    \caption{Number of entities by text on a logarithmic scale.}
+    \label{fig:entities-by-text}
+\end{sidewaysfigure}
+
+\begin{sidewaysfigure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{static/media/mod_eval/dalembert/freem_ner_entity_type_by_text.png}
+    \caption{Entity types by text on a logarithmic scale.}
+    \label{fig:entity-type-per-text}
+\end{sidewaysfigure}
+\clearpage
+
 \section{Carbon Footprint}\label{carbon-footprint-dalembert}
 
 \begin{table}[th]
@@ -42,18 +61,3 @@ We can further estimate the CO\textsuperscript{2} emissions in kilograms of each
 
 All emissions are also reported in Table~\ref{tab:carbon-dalembert}.
 
-\section{\texorpdfstring{\freemner}{FREEM NER} entity distribution by text}
-
-\begin{figure}[!htp]
-    \centering
-    \includegraphics[width=\linewidth]{static/media/mod_eval/dalembert/freem_ner_entities_by_text.png}
-    \caption{Number of entities by text on a logarithmic scale.}
-    \label{fig:entities-by-text}
-\end{figure}
-
-\begin{figure}[!htp]
-    \centering
-    \includegraphics[width=\linewidth]{static/media/mod_eval/dalembert/freem_ner_entity_type_by_text.png}
-    \caption{Entity types per text on a logarithmic scale.}
-    \label{fig:entity-type-per-text}
-\end{figure}
