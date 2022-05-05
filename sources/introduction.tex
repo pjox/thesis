@@ -165,30 +165,6 @@ Pretrained word representations have a long history in Natural Language Processi
 These transfer learning methods exhibit clear advantages over more traditional task-specific approaches. In particular, they can be trained in an \emph{unsupervized} manner, thereby taking advantage of the information contained in large amounts of raw text.
 Yet they come with implementation challenges, namely the amount of data and computational resources needed for pretraining, which can reach hundreds of gigabytes of text and require hundreds of GPUs \citep{yang-etal-2019-xlnet,liu-etal-2019-roberta}. This has limited the availability of these state-of-the-art models to the English language, at least in the monolingual setting. This is particularly inconvenient as it hinders their practical use in NLP systems. It also prevents us from investigating their language modelling capacity, for instance in the case of morphologically rich languages.
 
-Although multilingual models give remarkable results, they are often larger, and their results, as we will observe for French, can lag behind their monolingual counterparts for high-resource languages. %\cite{conneau-lample-2019-cross,conneau-etal-2020-unsupervised}.
-
-In order to reproduce and validate results that have so far only been obtained for English, we take advantage of the newly available multilingual corpora OSCAR \cite{ortiz-suarez-etal-2019-asynchronous} to train a monolingual language model for French, dubbed \camembert. We also train alternative versions of \camembert on different smaller corpora with different levels of homogeneity in genre and style in order to assess the impact of these parameters on downstream task performance.
-\camembert uses the \roberta architecture \cite{liu-etal-2019-roberta}, an improved variant of the high-performing and widely used \bert architecture \cite{devlin-etal-2019-bert}.
-
-We evaluate our model on four different downstream tasks for French: part-of-speech (POS) tagging, dependency parsing, named entity recognition (NER) and natural language inference (NLI).
-\camembert improves on the state of the art in all four tasks compared to previous monolingual and multilingual approaches including \mbert, XLM and XLM-R, which confirms the effectiveness of large pretrained language models for French.
-
-%Our contributions can be summarized as follows:
-We make the following contributions:
-\begin{itemize}
-    \item First release of a monolingual \roberta model for the French language using recently introduced large-scale open source corpora from the Oscar collection and first outside the original \bert authors to release such a large model for an other language than English.\footnote{Released at:
-              \mbox{\url{https://camembert-model.fr}} under the MIT open-source license.}
-
-          %c'est déjà en conclusion
-          %\newline
-          %\mbox{\url{https://github.com/pytorch/fairseq}}\newline
-          %\mbox{\url{https://github.com/huggingface/transformers}}
-    \item We achieve state-of-the-art results on four downstream tasks: POS tagging, dependency parsing, NER and NLI, confirming the effectiveness of \bert-based language models for French.
-    \item We demonstrate that small and diverse training sets can achieve similar performance to large-scale corpora, by analysing the importance of the pretraining corpus in terms of size and domain.%show that for the evaluated tasks, the pretraining domain is more important than the size %more than the dataset size, t%run detailed ablation studies highlighting the importance of the pretraining corpora, the model size, the masking setting, and the number of pretraining steps. 
-          %\item We release several of our best-performing models\footnote{under MIT open-source license} %We make CamemBERT easy to use in a few line of codes and make it available in popular open-source libraries. 
-          %as well as fine-tuned versions for each downstream task so that they can serve as strong baselines for future research and be useful for French NLP applications.
-\end{itemize}
-
 %\lm{Clementine's version of the contributions:}
 
 %Our contribution can be summarised in the three following points. 

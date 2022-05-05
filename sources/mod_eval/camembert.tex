@@ -1,6 +1,27 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{CamemBERT}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{\camembert: a French Language Model}\label{sec:Camembert}
+\begin{center}
+    \begin{minipage}{0.66\textwidth}
+        \begin{small}
+            In which we present a part of the work of \citet{martin-etal-2020-camembert} who pre-trained the first transformer based language model for Contemporary French using the French subcorpus of OSCAR 2019 \citep{ortiz-suarez-etal-2019-asynchronous,ortiz-suarez-etal-2020-monolingual}. The model that we call \camembert is then evaluated in dependency parsing, part-of-speech tagging, named entity recognition and natural language inference. We also study the question of how corpus size and diversity affects the performance of an architecture like \roberta \citep{liu-etal-2019-roberta} in downstream tasks.
+        \end{small}
+    \end{minipage}
+    \vspace{0.5cm}
+\end{center}
+
+Having extensively worked into creating and curating textual resources in previous chapters and parts of this thesis, we wanted to use these resources in order to train a monolingual contextual language model for Contemporary French.
+
+When we started the experiments that will be discussed in this chapter, the availability of large monolingual transformer based models was limited to English-only models \citep{devlin-etal-2019-bert,radford-etal-2019-language,liu-etal-2019-roberta,yang-etal-2019-xlnet,raffel-etal-2020-exploring} and most of the work in other languages was being done through multilingual models like \mbert \citep{devlin-etal-2019-bert}. And even though multilingual models gave remarkable results at the time, they were often larger, and their results, as we will observe for French, could lag behind their monolingual counterparts for high-resource languages.
+
+In order to reproduce and validate results that had so far only been obtained for English, we took advantage of the first version of OSCAR\footnote{Now OSCAR 2019} \cite{ortiz-suarez-etal-2019-asynchronous} which had just been released at that time. We used the French subcorpus of OSCAR 2019 to train a monolingual language model for French, dubbed \camembert. We also trained alternative versions of \camembert on different smaller corpora with different levels of homogeneity in genre and style in order to assess the impact of these parameters on downstream task performance.
+\camembert used the \roberta architecture \cite{liu-etal-2019-roberta}.
+
+We then evaluated our model on four different downstream tasks for French: part-of-speech (POS) tagging, dependency parsing, named entity recognition (NER) and natural language inference (NLI).
+\camembert improved on the state of the art in all four tasks compared to previous monolingual and multilingual approaches including \mbert, XLM and XLM-R, which confirmed the effectiveness of large pre-trained language models for French.
+
+\section{\camembert: A Contemporary French Language Model}\label{sec:Camembert}
 In this section, we describe the pretraining data, architecture, training objective and optimisation setup we use for \camembert.
 
 \subsection{Training data}
