@@ -203,9 +203,9 @@ Table~\ref{table:corpora_statistics} summarizes statistics of these different co
     \centering\small
     \begin{tabular}{lcccccc}
         \toprule
-        Corpus     & Size  & \#tokens & \#docs & \multicolumn{3}{c}{Tokens/doc}                 \\
-                   &       &          &        & \multicolumn{3}{c}{Percentiles:}               \\
-                   &       &          &        & 5\%                              & 50\% & 95\% \\
+        Corpus     & Size   & \#tokens & \#docs & \multicolumn{3}{c}{Tokens/doc}                 \\
+                   &        &          &        & \multicolumn{3}{c}{Percentiles:}               \\
+                   &        &          &        & 5\%                              & 50\% & 95\% \\
         \midrule
         Wikipedia  & 4 GB   & 990M     & 1.4M   & 102                              & 363  & 2530 \\
         CCNet      & 135 GB & 31.9B    & 33.1M  & 128                              & 414  & 2869 \\
@@ -267,7 +267,7 @@ The downstream task performances of the models trained on the 4 GB version of \c
 \subsection{How much data do you need?}
 \label{subsec:sizeimpact}
 
-An unexpected outcome of our experiments is that the model trained ``only'' on the 4 GB sample of \oscar 2019 performs remarkably similarly to the standard \camembert trained on the whole 138 GB \oscar 2019. The only task with a large performance gap is NER, where  ``138 GB'' models are better by 0.9 F1 points. This could be due to the higher number of named entities present in the larger corpora, which is beneficial for this task. On the contrary, other tasks don't seem to gain from the additional data. 
+An unexpected outcome of our experiments is that the model trained ``only'' on the 4 GB sample of \oscar 2019 performs remarkably similarly to the standard \camembert trained on the whole 138 GB \oscar 2019. The only task with a large performance gap is NER, where  ``138 GB'' models are better by 0.9 F1 points. This could be due to the higher number of named entities present in the larger corpora, which is beneficial for this task. On the contrary, other tasks don't seem to gain from the additional data.
 
 In other words, when trained on corpora such as \oscar and \ccnet, which are heterogeneous in terms of genre and style, 4 GB of uncompressed text is large enough as pre-training corpus to reach state-of-the-art results with the BASE architecture, better than those obtained with \mbert (pre-trained on 60 GB of text).\footnote{The OSCAR-4 GB model gets slightly better XNLI accuracy than the full OSCAR-138 GB model (81.88 vs. 81.55). This might be due to the random seed used for pre-training, as each model is pre-trained only once.} This calls into question the need to use a very large corpus such as \oscar or \ccnet when training a monolingual Transformer-based language model such as BERT or \roberta. Not only does this mean that the computational (and therefore environmental) cost of training a state-of-the-art language model can be reduced, but it also means that \camembert-like models can be trained for all languages for which a Common-Crawl-based corpus of 4 GB or more can be created. \oscar is available in more than 150 languages, and provides such a corpus for around 38 languages. Moreover, it is possible that slightly smaller corpora (e.g.~down to 1 GB) could also prove sufficient to train high-performing language models. We obtained our results with BASE architectures. Further research is needed to confirm the validity of our findings on larger architectures and other more complex natural language understanding tasks. However, even with a BASE architecture and 4 GB of training data, the validation loss is still decreasing beyond 100k steps (and 400 epochs). This suggests that we are still under-fitting the 4 GB pre-training dataset, training longer might increase downstream performance.
 

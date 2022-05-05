@@ -1,20 +1,67 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{FrELMo}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\begin{center}
+    \begin{minipage}{0.66\textwidth}
+        \begin{small}
+            In which we present a part of the work of \citet{ortiz-suarez-etal-2020-establishing} who pre-train an ELMo model for Contemporary French and then evaluate its performance in the NER annotated FTB against all the available versions of CamemBERT. From these experiments \citet{ortiz-suarez-etal-2020-establishing} set a new state of the art for this corpus. We also present part of the work of \citet{popa-fabre-etal-2020-french} who further train pre-train ELMo models with the previously presented \Cabernet and CBT-fr and then evaluate them in multiple downstream tasks in order to assess the importance of representative and balanced corpora as pre-training datasets
+        \end{small}
+    \end{minipage}
+    \vspace{0.5cm}
+\end{center}
 
-%===============================================================================
+Having trained the \roberta \citep{liu-etal-2019-roberta} based \camembert \citep{martin-etal-2020-camembert} models in the previous chapter, we wanted to fairly compare the Transformer-based architecture with ELMo \citep{peters-etal-2018-deep}, the BiLSTM-based contextualized word representations that predated the BERT model \citep{devlin-etal-2019-bert}. Such a comparison had already been done to an extent in English by \citet{peters-etal-2019-tune}, but in that case, ELMo and BERT where pre-trained with different datasets, which as we saw in previous chapters, can have an enormous impact on the performance of these types of models. We thus decided to train an ELMo model with the French subcorpus of OSCAR 2019 to fairly compare with CamemBERT. We first compare these two models in a benchmarking experiment in named entity recognition that we do in order to find the best possible combination of embeddings and architectures for NER or at least for the NER annotated version of the FTB that we presented in subsection \ref{subsec:alignment}. We then expand our experiments by actually repeating most of the CamemBERT experiments but this for comparing the OSCAR pre-trained ELMo with \Cabernet and CBT-fr ELMos.
 
-% Corpus segmentation
-% train process
-% hyper-parameters optimization
-% results
-% analysis / comparison
-% Model description
-% Translate the article
+\section{FrELMo}
+
+We train an ELMo model for contemporary French using the French subcorpus of OSCAR 2019. Furthermore, we train each model for 10 epochs, as was done for the original English ELMo \citep{peters-etal-2018-deep}. We also use the same hyper-parameters and the same pre-processing as the originals ELMo authors, i.e., we shuffle the French subcorpus of OSCAR 2019 at a line level. In this case we do not bother to save checkpoints as we previously saw that training for longer produced better models (see \ref{chap:monolingual}), so we train for the full 10 epochs as the original authors suggested \citep{peters-etal-2018-deep}.
 
 \section{Benchmarking NER Models}
 
-\begin{table*}
-    %\ra{1.1}
+\subsection{Experiments}
+For our benchmark of NER models for French, we used SEM \citep{dupont-2017-exploration} as our strong baseline because, to the best of our knowledge, it was the previous state-of-the-art for named entity recognition on the FTB-NE corpus. Other French NER systems are available, such as the one given by SpaCy. However, it was trained on another corpus called WikiNER, making the results non-comparable. We can also cite the system of \citep{stern-etal-2012-joint}. This system was trained on another newswire (AFP) using the same annotation guidelines, so the results given in this article are not directly comparable. This model was trained on FTB-NE in \citet{stern-2013-identification} (table C.7, page 303), but the article is written in French. The model yielded an F1-score of 0.7564, which makes it a weaker baseline than SEM. We can cite yet another NER system, namely grobid-ner.\footnote{\url{https://github.com/kermitt2/grobid-ner\#corpus-lemonde-ftb-french}} It was trained on the FTB-NE and yields an F1-score of 0.8739, but two things are to be taken into consideration in grobid-ner's score: the tagset was slightly modified and scores were averaged over a 10-fold cross validation. To see why this is important for FTB-NE, see section \ref{subsubsec:shuffling}.
+
+In this section, we will compare our strong baseline with a series of neural models. We will use the two current state-of-the-art neural architectures for NER, namely seq2seq and LSTM-CRFs models. We will use various pre-trained embeddings in said architectures: fastText, \camembert and FrELMo embeddings.
+
+
+\subsubsection{SEM}
+SEM \citep{dupont-2017-exploration} is a tool that relies on linear-chain CRFs \citep{lafferty-etal-2001-conditional} to perform tagging. SEM uses Wapiti \citep{lavergne-etal-2010-practical} v1.5.0 as linear-chain CRFs implementation. SEM uses the following features for NER:
+\begin{itemize}
+    \item token, prefix/suffix from 1 to 5 and a Boolean isDigit features in a [-2, 2] window;
+    \item previous/next common noun in sentence;
+    \item 10 gazetteers (including NE lists and trigger words for NEs) applied with some priority rules in a [-2, 2] window;
+    \item a "fill-in-the-gaps" gazetteers feature where tokens not found in any gazetteer are replaced by their POS, as described in \citep{raymond-fayolle-2010-reconnaissance}. These features used token unigrams and token bigrams in a [-2, 2] a window.
+    \item tag unigrams and bigrams.
+\end{itemize}
+
+We trained our own SEM model by using SEM features on gold tokenization and optimized L1 and L2 penalties on the development set. The metric used to estimate convergence of the model is the error on the development set ($1 - accuracy$). Our best result on the development set was obtained using the rprop algorithm, a 0.1 L1 penalty and a 0.1 L2 penalty.
+
+SEM also uses an NE mention broadcasting post-processing (mentions found at least once are used as a gazetteer to tag unlabeled mentions), but we did not observe any improvement using this post-processing on the best hyperparameters on the development set.
+
+
+\subsubsection{Neural models}
+
+In order to study the relative impact of different word vector representations and different architectures, we trained a number of NER neural models that differ in multiple ways. They use zero to three of the following vector representations: FastText non-contextual embeddings \citep{bojanowski-etal-2017-enriching}, the FrELMo contextual language model, and one of multiple \camembert language models \citep{martin-etal-2020-camembert} (see Appendix \ref{appendix:camembert}). The \camembert models we use in our experiments differ in multiple ways:
+\begin{itemize}
+    \item Training corpus: OSCAR 2019 or CCNet \citep{wenzek-etal-2020-ccnet}, another Common-Crawl-based corpus classified by language, of an almost identical size ($\sim$32 billion tokens); although extracted using similar pipelines from Common Crawl, they differ slightly in so far that OSCAR better reflects the variety of genre and style found in Common Crawl, whereas CCNet was designed to better match the style of Wikipedia; moreover, OSCAR is freely available, whereas only the scripts necessary to rebuild CCNet can be downloaded freely. For comparison purposes, we also display the results of an experiment using the mBERT multilingual BERT model trained on the Wikpiedias for over 100 languages.
+    \item Model size: following \citet{devlin-etal-2019-bert}, we use both ``BASE'' and ``LARGE'' models; these models differ by their number of layers (12 vs.~24), hidden dimensions (768 vs.~1024), attention heads (12 vs.~16) and, as a result, their number of parameters (110M vs.~340M).
+    \item Masking strategy: the objective function used to train a \camembert model is a masked language model objective. However, BERT-like architectures like \camembert rely on a fixed vocabulary of explicitly predefined size obtained by an algorithm that splits rarer words into subwords, which are part of the vocabulary together with more frequent words. As a result, it is possible to use a whole-word masked language objective (the model is trained to guess missing words, which might be made of more than one subword) or a subword masked language objective (the model is trained to guess missing subwords). Our models use the acronyms WWM and SWM respectively to indicate the type of masking they used.
+\end{itemize}
+
+We use these word vector representations in three types of architectures:
+\begin{itemize}
+    \item Fine-tuning architectures: in this case, we add a dedicated linear layer to the first subword token of each word, and the whole architecture is then fine-tuned to the NER task on the training data.
+    \item Embedding architectures: word vectors produced by language models are used as word embeddings. We use such embeddings in two types of LSTM-based architectures: an LSTM fed to a seq2seq layer and an LSTM fed to a CRF layer. In such configurations, the use of several word representations at the same time is possible, using concatenation as a combination operator. For instance, in Table~\ref{tab:results_ordered}, the model FastText + CamemBERT\textsubscript{OSCAR-BASE-WWM} under the header ``\emph{LSTM-CRF + embeddings} corresponds to a model using the LSTM-CRF architecture and, as embeddings, the concatenation of FastText embeddings, the output of the \camembert ``BASE'' model trained on OSCAR with a whole-word masking objective, and the output of the FrELMo language model. For all LSTM-based architectures we use the implementation of \citet{strakova-etal-2019-neural}.
+\end{itemize}
+
+For our neural models, we optimized hyperparameters using F1-score on development set as our convergence metric.
+
+We train each model three times with three different seeds, select the best seed on the development set, and report the results of this seed on the test set in Table~\ref{tab:results_ordered}.
+
+\subsubsection{Results}
+
+\begin{table}[htp!]
     \centering\small
     \begin{tabular}{lrrr}
         \toprule
@@ -63,16 +110,26 @@
         CamemBERT\textsubscript{OSCAR-BASE-WWM}                        & 89.36              & 89.18             & 89.27             \\
         CamemBERT\textsubscript{CCNET-500K-WWM}                        & 89.35              & 88.81             & 89.08             \\
         CamemBERT\textsubscript{CCNET-LARGE-WWM}                       & 88.76              & \textbf{89.58}    & 89.39             \\
-        %CamemBERT\textsubscript{CCNet} & 88.32 & 86.87 & 87.59\\ 
-        %CamemBERT\textsubscript{OSCAR} & 86.79 & 87.91 & 87.34\\ 
         \bottomrule
     \end{tabular}
     \caption{Results on the test set for the best development set scores.}
     \label{tab:results_ordered}
-\end{table*}
+\end{table}
 
-\begin{table*}
-    %\ra{1.1}
+\paragraph{Word Embeddings:} Results obtained by SEM and by our neural models are shown in table \ref{tab:results_ordered}. First important result that should be noted is that LSTM+CRF and LSTM+seq2seq models have similar performances to that of the SEM (CRF) baseline when they are not augmented with any kind of embeddings. Just adding classical fastText word embeddings dramatically increases the performance of the model.
+
+\paragraph{ELMo Embeddings:} Adding contextualized ELMo embeddings increases again the performance for both architectures. However, we note that the difference is not as big as in the case of the pair with/without fastText word embeddings for the LSTM-CRF. For the seq2seq model, it is the contrary: adding ELMo gives a good improvement while fastText does not improve the results as much.
+
+\paragraph{\camembert Embeddings:} Adding the \camembert embeddings always increases the performance of the model LSTM based models. However, as opposed to adding ELMo, the difference with/without \camembert is equally considerable for both the LSTM-seq2seq and LSTM-CRF. In fact adding \camembert embeddings increases the original scores far more than ELMo embeddings does, so much so that the state-of-the-art model is the LSTM + CRF + FastText + CamemBERT\textsubscript{OSCAR-BASE-SWM}.
+
+\paragraph{\camembert + FrELMo:} Contrary to the results given in \citet{strakova-etal-2019-neural}, adding ELMo to \camembert did not have a positive impact on the performances of the models. Our hypothesis for these results is that, contrary to \citet{strakova-etal-2019-neural}, we trained ELMo and \camembert on the same corpus. We think that, in our case, ELMo either does not bring any new information or even interfere with \camembert.
+
+\paragraph{Base vs large:} an interesting observation is that using large model negatively impacts the performances of the models. One possible reason could be that, because the models are larger, the information is more sparsely distributed and that training on the FTB-NE, a relatively small corpus, is harder.
+
+\subsubsection{Impact of shuffling the data}
+\label{subsubsec:shuffling}
+
+\begin{table}
     \centering\small
     \begin{tabular}{lrrr}
         \toprule
@@ -99,75 +156,7 @@
     \end{tabular}
     \caption{Results on the test set for the best development set scores.}
     \label{tab:results_shuffled}
-\end{table*}
-
-
-\subsection{Experiments}
-% Yoann: write a short paragraph that says (i) that we use the SEM system described below as a strong baseline, and why it is a strong baseline (was SEM the state of the art before? how do you know it was?), and (ii) that we compare SEM to a series of neural models that use fastText, CamemBERT (a French BERT-like model) and/or FrELMo (a French EMLo model) embeddings.
-% done
-
-We used SEM \cite{dupont-2017-exploration} as our strong baseline because, to the best of our knowledge, it was the previous state-of-the-art for named entity recognition on the FTB-NE corpus.
-% TODO: I see reviewers claiming we could, therefore should, have retrained SpaCy.
-Other French NER systems are available, such as the one given by SpaCy. However, it was trained on another corpus called WikiNER, making the results non-comparable.
-We can also cite the system of \cite{stern-etal-2012-joint}. This system was trained on another newswire (AFP) using the same annotation guidelines, so the results given in this article are not directly comparable. This model was trained on FTB-NE in \newcite{stern-2013-identification} (table C.7, page 303), but the article is written in French. The model yielded an F1-score of 0.7564, which makes it a weaker baseline than SEM.
-We can cite yet another NER system, namely grobid-ner.\footnote{\url{https://github.com/kermitt2/grobid-ner\#corpus-lemonde-ftb-french}} It was trained on the FTB-NE and yields an F1-score of 0.8739. Two things are to be taken into consideration: the tagset was slightly modified and scores were averaged over a 10-fold cross validation. To see why this is important for FTB-NE, see section \ref{subsubsec:shuffling}.
-
-In this section, we will compare our strong baseline with a series of neural models. We will use the two current state-of-the-art neural architectures for NER, namely seq2seq and LSTM-CRFs models. We will use various pre-trained embeddings in said architectures: fastText, \camembert (a French BERT-like model) and FrELMo (a French ELMo model) embeddings.
-
-
-\subsubsection{SEM}
-SEM \cite{dupont-2017-exploration} is a tool that relies on linear-chain CRFs \cite{lafferty-etal-2001-conditional} to perform tagging. SEM uses Wapiti \cite{lavergne-etal-2010-practical} v1.5.0 as linear-chain CRFs implementation. SEM uses the following features for NER:
-\begin{itemize}
-    \item token, prefix/suffix from 1 to 5 and a Boolean isDigit features in a [-2, 2] window;
-    \item previous/next common noun in sentence;
-    \item 10 gazetteers (including NE lists and trigger words for NEs) applied with some priority rules in a [-2, 2] window;
-    \item a "fill-in-the-gaps" gazetteers feature where tokens not found in any gazetteer are replaced by their POS, as described in \cite{raymond-fayolle-2010-reconnaissance}. This features used token unigrams and token bigrams in a [-2, 2] a window.
-    \item tag unigrams and bigrams.
-\end{itemize}
-
-We trained our own SEM model by using SEM features on gold tokenization and optimized L1 and L2 penalties on the development set. The metric used to estimate convergence of the model is the error on the development set ($1 - accuracy$). Our best result on the development set was obtained using the rprop algorithm, a 0.1 L1 penalty and a 0.1 L2 penalty.
-
-SEM also uses an NE mention broadcasting post-processing (mentions found at least once are used as a gazetteer to tag unlabeled mentions), but we did not observe any improvement using this post-processing on the best hyperparameters on the development set.
-
-
-\subsubsection{Neural models}
-
-In order to study the relative impact of different word vector representations and different architectures, we trained a number of NER neural models that differ in multiple ways. They use zero to three of the following vector representations: FastText non-contextual embeddings \cite{bojanowski-etal-2017-enriching}, the FrELMo contextual language model obtained by training the ELMo architecture on the OSCAR large-coverage Common-Crawl-based corpus developed by \newcite{ortiz-suarez-etal-2019-asynchronous}, and one of multiple \camembert language models \cite{martin-etal-2020-camembert}. \camembert models are transformer-based models based on an architecture similar to that of RoBERTa \cite{liu-etal-2019-roberta}, an improvement over the widely used and successful BERT model \cite{devlin-etal-2019-bert}. The \camembert models we use in our experiments differ in multiple ways:
-\begin{itemize}
-    \item Training corpus: OSCAR (cited above) or CCNet, another Common-Crawl-based corpus \cite{wenzek-etal-2020-ccnet} classified by language, of an almost identical size ($\sim$32 billion tokens); although extracted using similar pipelines from Common Crawl, they differ slightly in so far that OSCAR better reflects the variety of genre and style found in Common Crawl, whereas CCNet was designed to better match the style of Wikipedia; moreover, OSCAR is freely available, whereas only the scripts necessary to rebuild CCNet can be downloaded freely. For comparison purposes, we also display the results of an experiment using the mBERT multilingual BERT model trained on the Wikpiedias for over 100 languages.
-    \item Model size: following \newcite{devlin-etal-2019-bert}, we use both ``BASE'' and ``LARGE'' models; these models differ by their number of layers (12 vs.~24), hidden dimensions (768 vs.~1024), attention heads (12 vs.~16) and, as a result, their number of parameters (110M vs.~340M).
-    \item Masking strategy: the objective function used to train a \camembert model is a masked language model objective. However, BERT-like architectures like \camembert rely on a fixed vocabulary of explicitly predefined size obtained by an algorithm that splits rarer words into subwords, which are part of the vocabulary together with more frequent words. As a result, it is possible to use a whole-word masked language objective (the model is trained to guess missing words, which might be made of more than one subword) or a subword masked language objective (the model is trained to guess missing subwords). Our models use the acronyms WWM and SWM respectively to indicate the type of masking they used.
-\end{itemize}
-
-We use these word vector representations in three types of architectures:
-\begin{itemize}
-    \item Fine-tuning architectures: in this case, we add a dedicated linear layer to the first subword token of each word, and the whole architecture is then fine-tuned to the NER task on the training data.
-    \item Embedding architectures: word vectors produced by language models are used as word embeddings. We use such embeddings in two types of LSTM-based architectures: an LSTM fed to a seq2seq layer and an LSTM fed to a CRF layer. In such configurations, the use of several word representations at the same time is possible, using concatenation as a combination operator. For instance, in Table~\ref{tab:results_ordered}, the model FastText + CamemBERT\textsubscript{OSCAR-BASE-WWM} under the header ``\emph{LSTM-CRF + embeddings} corresponds to a model using the LSTM-CRF architecture and, as embeddings, the concatenation of FastText embeddings, the output of the \camembert ``BASE'' model trained on OSCAR with a whole-word masking objective, and the output of the FrELMo language model.
-\end{itemize}
-
-For our neural models, we optimized hyperparameters using F1-score on development set as our convergence metric.
-
-We train each model three times with three different seeds, select the best seed on the development set, and report the results of this seed on the test set in Table~\ref{tab:results_ordered}.
-
-\subsubsection{Results}
-
-\paragraph{Word Embeddings:} Results obtained by SEM and by our neural models are shown in table \ref{tab:results_ordered}. First important result that should be noted is that LSTM+CRF and LSTM+seq2seq models have similar performances to that of the SEM (CRF) baseline when they are not augmented with any kind of embeddings. Just adding classical fastText word embeddings dramatically increases the performance of the model.
-
-\paragraph{ELMo Embeddings:} Adding contextualized ELMo embeddings increases again the performance for both architectures. However we note that the difference is not as big as in the case of the pair with/without fastText word embeddings for the LSTM-CRF. For the seq2seq model, it is the contrary: adding ELMo gives a good improvement while fastText does not improve the results as much.
-
-\paragraph{\camembert Embeddings:} Adding the \camembert embeddings always increases the performance of the model LSTM based models. However, as opposed to adding ELMo, the difference with/without \camembert is equally considerable for both the LSTM-seq2seq and LSTM-CRF. In fact adding \camembert embeddings increases the original scores far more than ELMo embeddings does, so much so that the state-of-the-art model is the LSTM + CRF + FastText + CamemBERT\textsubscript{OSCAR-BASE-SWM}.
-
-\paragraph{\camembert + FrELMo:} Contrary to the results given in \newcite{strakova-etal-2019-neural}, adding ELMo to \camembert did not have a positive impact on the performances of the models. Our hypothesis for these results is that, contrary to \newcite{strakova-etal-2019-neural}, we trained ELMo and \camembert on the same corpus. We think that, in our case, ELMo either does not bring any new information or even interfere with \camembert.
-% hyp: BERT pas entraîné avec le même corpus ==> ELMo n'apporte rien, voire crée des interférences
-
-\paragraph{Base vs large:} an interesting observation is that using large model negatively impacts the performances of the models. One possible reason could be that, because the models are larger, the information is more sparsely distributed and that training on the FTB-NE, a relatively small corpus, is harder.
-% While the the impact of SWM vs WWM is limited in seq2seq architecture, it has an importan t impact LSTM-CRF, be it positive (OSCAR-base) or negative (CCNET-base + FrELMo).
-
-% Pedro: Add commentary on the results
-
-
-\subsubsection{Impact of shuffling the data}
-\label{subsubsec:shuffling}
+\end{table}
 
 One important thing about the FTB is that the underlying text is made of articles from the newspaper Le Monde that are chronologically ordered. Moreover, the standard development and test sets are at the end of the corpus, which means that they are made of articles that are more recent than those found in the training set. This means that a lot of entities in the development and test sets may be new and therefore unseen in the training set. To estimate the impact of this distribution, we shuffled the data, created a new training/development/test split of the same lengths than in the standard split, and retrained and reevaluated our models. We repeated this process 3 times to avoid unexpected biases. The raw results of this experiment are given in table \ref{tab:results_shuffled}. We can see that the shuffled splits result in improvements on all metrics, the improvement in F1-score on the test set ranging from 4.04 to 5.75 (or 25\% to 35\% error reduction) for our SEM baseline, and from 1.73 to 3.21 (or 18\% to 30\% error reduction) for our LSTM-CRF architectures, reaching scores comparable to the English state-of-the-art. This highlights a specific difficulty of the FTB-NE corpus where the development and test sets seem to contain non-negligible amounts of unknown entities. This specificity, however, allows to have a quality estimation which is more in line with real use cases, where unknown NEs are frequent. This is especially the case when processing newly produced texts with models trained on FTB-NE, as the text annotated in the FTB is made of articles around 20 years old.
 
@@ -192,3 +181,345 @@ Integration of the NER annotations in the UD version of FTB would allow to train
 % perspective 2: investigate annotations?
 One interesting point to investigate is that using Large embeddings overall has a negative impact on the models performances. It could be because larger models store information relevant to NER more sparingly, making it harder for trained models to capitalize them. We would like to investigate this hypothesis in future research.
 
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%% section 4    Evaluation.    %%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Corpora Evaluation Tasks} \label{sect:EvalMethod}
+
+This section reports the method of experiments designed to better understand the computational impact of the quality, size and linguistic balance of ELMo's \citep{peters-etal-2018-deep} pre-training (§\ref{MethodTRAIN}) and their evaluations tasks (§\ref{MethodEVAL}).
+
+\paragraph{Embeddings from Language Models} ELMo is an LSTM-based language model. More precisely, it uses a bidirectional language model, which combines a both forward and a backward LSTM-based language models. ELMo also computes a context-independent token representation via a CNN over characters.
+Methodologically, we selected ELMo which not only performs generally better on sequence tagging than other architectures, but which is also better suited to pre-train on small corpora because of its smaller number of parameters (93.6 million) compared to the RoBERTa-base architecture used for CamBERT (BERTbase, 12,110 million - Transformer) \citep{martin-etal-2020-camembert}.
+
+\subsection{ELMo Pre-traing \& Fine-tuning Method}\label{MethodTRAIN}
+
+Two protocols were carried out to evaluate the impact of corpora characteristics on the tasks under analysis. \textit{Method 1} implies a full pre-training ELMo-based language models for each of the corpora mentioned in Table \ref{Table_nb_Words}. While \textit{Method 2} is based on pre-training OSCAR + fine-tuning with our French Balanced Reference Corpus \Cabernet, yielding \ELMocoscar.
+Hence, the pure pre-traing (i.e. Method 1) yields the following four language models which were pre-trained on the four corpora under comparison :  \ELMooscar, \ELMowiki, \ELMococa and \ELMocbt. %The fine-tuning method (i.e. Method 2) was applied only to \ELMooscar fine-tuned with \Cabernet.
+
+%we seek to understand if fine-tuning with resources that are up to 30 times smaller than pre-training corpora has a observable impact on NLP tasks scores. It is namely for this reason, w
+
+
+% \iffalse
+% \paragraph{Embeddings from Language Models} (ELMo) \citep{peters-etal-2018-deep} is a neurla Language Model, that is, a model that given a sequence of $N$ input tokens, $(t_1, t_2, ..., t_N)$, computes the probability of the sequence by modeling the probability of token $t_k$ given the history $(t_1, ..., t_{k-1})$:
+% \[
+%     p(t_1, t_2, \ldots, t_N) = \prod_{k=1}^N p({t_k} \mid t_1, t_2, \ldots, t_{k-1}).
+% \]
+% ELMo in particular uses a biLM consisting of LSTM layers, that is, it concatenates both a forward and a backward language model generating a contextualized bi-directional representation of each token in a given sentence.
+
+% All the training experiments are performed with a fully trained model for 10 epochs. As is was done for the original English ELMo \citep{peters-etal-2018-deep}.
+% Hence, all our FRrELMo-based language models build on top of the UDPipe Future parser and tagger \citep{straka-2018-udpipe} as implemented in \citet{straka2019evaluating} which is open source and freely available.\footnote{https://github.com/CoNLL-UD-2018/UDPipe-Future}
+% \fi
+
+%\paragraph{The UDPipe Future architecture} is a multi-task model that predicts POS tags, lemmas and dependency trees jointly. It consists of an embedding step containing: character level word-embeddings that are trained along the rest of the network, pre-trained word-embeddings\footnote{We use the French fastText embeddings distributed by \citep{Grave:2018}.}, a randomly initialized word embeddings that are trained along the rest of the network, and contextualized word-embeddings for which we plug our customly trained ELMos.
+
+%All these embeddings are then concatenated and are fed to two shared Bi-LSTMs that generate shared representations that are forwarded to two separate Bi-LSTMs; one that is followed by a softmax layer and predicts the POS tags, and another that is followed by a Deep Bi-Affine Attention Layer \citep{Dozat:2017b} that produces dependency trees.
+
+
+%To this formal reason an additional ecological one is to be considered. A recent paper (\textbf{cite ACL paper}) shows the environmental impact of ... \notemumu{do you remember the ACL paper about ecological reasons for ELMo ? }
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Base evaluation systems}
+
+\textbf{UDPipe Future} \citep{straka-2018-udpipe} is an LSTM based model ranked 3\textsuperscript{rd} in dependency parsing and 6\textsuperscript{th} in POS tagging during the CoNLL~2018 shared task \citep{seker-etal-2018-universal}. We report the scores as they appear in \citet{kondratyuk-straka-2019-75}'s paper.
+We add to UDPipe Future, five differently trained ELMo language model pre-trained on the qualitatively and quantitatively different corpora under comparison. Additionally, we also test the impact of the \Cabernet Corpus on ELMo fine-tuning.
+
+\textbf{The LSTM-CRF} is a model originally concived by \citet{lample-etal-2016-neural} is just a Bi-LSTM pre-appended by both character level word embeddings and pre-trained word embeddings and pos-appended by a CRF decoder layer. For our experiments, we use the implementation of \citep{strakova-etal-2019-neural} which is readily available\footnote{Available at \url{https://github.com/ufal/acl2019_nested_ner}.} and it is designed to easily pre-append contextualized word-embeddings to the model.
+
+\subsection{Evaluation Tasks}\label{MethodEVAL}
+
+We distinguish three main evaluation tasks that were performed
+to asses the lexical and syntactic quality of contextualized word-embeddings obtained from different pre-training corpora under comparison.% : ELMo pre-trained on OSCAR (\ELMooscar), frWIKI (\ELMowiki), \Cabernet (\ELMococa) and CBT-fr (\ELMocbt). 
+Crucially, comparing them with and ELMo pre-trained on OSCAR and fine-tuned with \Cabernet, i.e. \ELMocoscar, will allow to control for  the presence of oral transcriptions and proceeding in order to understand its impact on the accuracy of our language model and on the development experiments after fine-tuning.% Our development experiments compare the corpora presented in Table \ref{Table_nb_Words}.
+%by and comparing them with ELMo pre-trained on OSCAR and fine-tuned with \Cabernet, i.e. \ELMocoscar (see Results Table \ref{tab:fine-tuning_results}).
+%justifier les différentes taches :
+
+\paragraph{Syntactic tasks}
+The evaluation tasks were selected to probe to what extent corpus "representativeness" and balance is impacting syntactic representations, in both (1) low-level syntactic relations in POS-tagging tasks, and (2) higher level syntactic relations at constituent- and sentence-level thanks to dependency-parsing evaluation task. Namely, POS-tagging is a low-level syntactic task, which consists in assigning to each word its corresponding grammatical category. Dependency-parsing consists of higher order syntactic task like predicting the labeled syntactic tree capturing the syntactic relations between words.
+We evaluate the performance of our models using the standard UPOS accuracy for POS-tagging, and Unlabeled Attachment Score (UAS) and Labeled Attachment Score (LAS) for dependency parsing. We assume gold tokenisation and gold word segmentation as provided in the UD treebanks.
+%Additionally, we include a contrast for the two corpora that are comparable in size on Language model perplexities, namely FrWiki and \Cabernet.
+
+\paragraph{Lexical tasks}
+To test for word-level representation obtained through the different pre-training corpora and fine-tunings, Named Entity Recognition task (NER) was retained (\ref{ner-section}). As it involves a sequence labeling task that consists in predicting which words refer to real-world objects, such as people, locations, artifacts and organizations, it directly probes the quality and specificity of semantic representations issued by the more or less balanced corpora under comparison.
+
+%\notemumu{@All : est-ce qu eje peux dire ça ? Cette interprétation est-elle correcte ?}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{POS-tagging and dependency parsing}
+
+%To build a state-of-the at baseline, we fist evaluate \camembert 
+
+Experiments were run using the Universal Dependencies (UD) paradigm and its corresponding UD POS-tag set \citep{petrov-etal-2012-universal} and UD treebank collection version 2.2 \citep{nivre-etal-2018-universal}, which was used for the CoNLL 2018 shared task.
+
+Different terms of comparisons were considered on the two downstream tasks of part-of-speech (POS) tagging and dependency parsing.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{Treebanks test data-set}
+We perform our work on the four freely available French UD treebanks in UD~v2.2: GSD, Sequoia, Spoken, and ParTUT, presented in Table \ref{treebanks-tab-cabernet}.
+
+\textbf{GSD} treebank \citep{mcdonald-etal-2013-universal} is the second-largest tree-bank available for French after the FTB (described in subsection \ref{ner-section}), it contains data from blogs, news, reviews, and Wikipedia.
+
+\textbf{Sequoia} tree-bank %\footnote{\url{https://deep-sequoia.inria.fr}} %candito2012le,
+\citep{candito-etal-2014-deep} comprises more than 3000 sentences, from the French Europarl, the regional newspaper \emph{L’Est Républicain}, the French Wikipedia and documents from the European Medicines Agency.
+
+\textbf{Spoken} was automatically converted from the Rhapsodie tree-bank  %\footnote{\url{https://www.projet-rhapsodie.fr}} 
+\citep{lacheret-etal-2014-rhapsodie} with manual corrections. It consists of 57 sound samples of spoken French with phonetic transcription aligned with sound (word boundaries, syllables, and phonemes), syntactic and prosodic annotations.
+
+Finally, \textbf{ParTUT} is a conversion of a multilingual parallel treebank developed at the University of Turin, and consisting of a variety of text genres, including talks, legal texts, and Wikipedia articles, among others; ParTUT data is derived from the already-existing parallel treebank, Par(allel)TUT \citep{sanguinetti-Bosco-2015-parttut}. Table~\ref{treebanks-tab-cabernet} contains a summary comparing the sizes of the treebanks.%\footnote{\url{https://universaldependencies.org}}.
+
+\begin{table}
+    \centering
+    \begin{tabular}{lcccl}
+        \toprule
+        Treebank & Tokens  & Words   & Sentences & Genre                    \\
+        \midrule
+        GSD      & 389 363 & 400 387 & 16 342    & News Wiki. Blogs         \\
+        Sequoia  & 68 615  & 70 567  & 3 099     & Pop. Wiki. Med. EuroParl \\
+        Spoken   & 34 972  & 34 972  & 2 786     & Oral transcip.           \\
+        ParTUT   & 27 658  & 28 594  & 1 020     & Oral Wiki. Legal         \\
+        \bottomrule
+    \end{tabular}
+    \caption{Sizes of the 4 treebanks used in the evaluations of POS-tagging and dependency parsing. \label{treebanks-tab-cabernet}}
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{State-of-the-art}
+
+For POS-tagging and Parsing we select as a baseline UDPipe Future (2.0), without any additional contextualized embeddings \citep{straka-2018-udpipe}. This model was ranked 3rd in dependency parsing and 6th in POS-tagging during the CoNLL~2018 shared task \citep{seker-etal-2018-universal}. Notably, UDPipe Future provides us a strong baseline that does not make use of any pre-trained contextual embedding.
+
+We report on Table \ref{tab:fine-tuning_results} the published results on UDify by \\citep{kondratyuk-straka-2019-75}, a multitask and multilingual model based on \mbert that is near state-of-the-art on all UD languages including French for both POS-tagging and dependency parsing.
+
+%On the other hand, UDify, UDPipe Future + mBERT \citep{straka2019evaluating} and \camembert \citep{martin-etal-2020-camembert} represent different terms of comparison for state-of-the-art results on Parsing and POS-tagging.
+
+%We compare our models to  \citep{kondratyuk-straka-2019-75}, 
+
+Finally, it is also relevant to compare our results with \camembert on the selected tasks, because compared to UDify it is the work that pushed the furthest the performance in fine-tuning end-to-end a \bert-based model.
+
+%Finally, we compare our models to UDPipe Future 
+
+%To demonstrate the value of building a dedicated version of \bert for French, we first compare \camembert to the multilingual cased version of \bert (designated as \mbert).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%% BIG results table %%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table*}
+    \small\centering
+    \resizebox{\linewidth}{!}{
+        \begin{tabular}{ l  c  c  c @{\hspace{0.35cm}}  @{\hspace{0.35cm}} c  c  c @{\hspace{0.35cm}}  @{\hspace{0.35cm}} c  c  c  @{\hspace{0.35cm}}  @{\hspace{0.35cm}} c  c  c }
+            \toprule
+                                                        & \multicolumn{3}{c @{\hspace{0.5cm}}}{\textsc{GSD}} & \multicolumn{3}{c @{\hspace{0.7cm}}}{\textsc{Sequoia}} & \multicolumn{3}{c @{\hspace{0.7cm}}}{\textsc{Spoken}} & \multicolumn{3}{c @{\hspace{0.35cm}}}{\textsc{ParTUT}}                                                                                                                                                                                                                                                                                                                        \\
+            \cmidrule(l{2pt}r{0.4cm}){2-4}\cmidrule(l{-0.2cm}r{0.4cm}){5-7}\cmidrule(l{-0.2cm}r{0.4cm}){8-10}\cmidrule(l{-0.2cm}r{2pt}){11-13}
+            \multirow{-2}{*}[1pt]{\textsc{Model}}       & \textsc{UPOS}                                      & \textsc{UAS}                                           & \textsc{LAS}                                          & \textsc{UPOS}                                          & \textsc{UAS}                           & \textsc{LAS}                           & \textsc{UPOS}                              & \textsc{UAS}                           & \textsc{LAS}                           & \textsc{UPOS}     & \textsc{UAS}                           & \textsc{LAS}                           \\
+            \midrule
+            %\multicolumn{1}{c}{UDPipe Future + ELMo} & \multicolumn{12}{c}{}\\
+            %\cmidrule(lr){1-1}
+
+            %\multicolumn{13}{l}{\textit{Baseline}} \\
+            \underline{\textit{Baseline} UDPipe Future} & 97.63                                              & 90.65                                                  & 88.06                                                 & 98.79                                                  & 92.37                                  & 90.73                                  & 95.91                                      & 82.90                                  & 77.53                                  & 96.93             & 92.17                                  & 89.63                                  \\
+
+            \:+\ELMocbt                                 & 97.49                                              & 90.21                                                  & 87.37                                                 & 98.40                                                  & 92.18                                  & 90.56                                  & 96.60                                      & 85.05                                  & 79.82                                  & 97.27             & 92.55                                  & 90.44                                  \\
+
+            \:+\ELMowiki                                & \underline{97.92}                                  & 92.13                                                  & 89.77                                                 & 99.22                                                  & 94.28                                  & 92.97                                  & \underline{97.28}                          & 85.61                                  & 80.79                                  & \textbf{97.62}    & 94.01                                  & 91.78                                  \\
+
+            %-FrWak  & \underline{97.89} & 92.04 & 89.70 & 99.25 & 94.53 & 93.36 & 97.20 & \textbf{86.04} & \textbf{81.14} & 97.47 & \textbf{94.78} & 92.40\\ 
+
+            %\midrule 
+            %\:+\ELMococa  & 97.76 & 91.91 & 89.49 & \underline{99.27} & \underline{94.65} & \underline{93.40} & \cellcolor[gray]{0.7}\emph{\textbf{97.32}} & 85.63 & 80.61 & \underline{97.58} & 94.24 & 91.90\\ 
+
+            %%%%%%% new results on clean cabernet %%%%%%%%%%%%%%%%
+            \:+\ELMocaber                               & 97.87                                              & 92.02                                                  & 89.62                                                 & \underline{99.33}                                      & 94.42                                  & 93.14                                  & \cellcolor[gray]{0.7}\emph{\textbf{97.30}} & 85.39                                  & 80.63                                  & 97.43             & 94.02                                  & 91.86                                  \\
+            %\midrule 
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+            \:+\ELMooscar                               & 97.85                                              & \cellcolor[gray]{0.9}\underline{92.41}                 & \cellcolor[gray]{0.9}\underline{90.05}                & 99.30                                                  & \cellcolor[gray]{0.9}\underline{94.43} & \cellcolor[gray]{0.9}\underline{93.25} & 97.10                                      & \cellcolor[gray]{0.9}\underline{85.83} & \cellcolor[gray]{0.9}\textbf{80.94}    & 97.47             & \cellcolor[gray]{0.9}\textbf{94.74}    & \cellcolor[gray]{0.9}\textbf{92.55}    \\
+
+            \midrule
+            %\:+\ELMocoscar & \underline{97.88} & \cellcolor[gray]{0.9}\textbf{92.67} & \cellcolor[gray]{0.9} \textbf{90.34} & 99.26 & \cellcolor[gray]{0.9}\textbf{94.75} & \cellcolor[gray]{0.9}\textbf{93.54} & 97.22 & \cellcolor[gray]{0.9}\underline{85.77} & \cellcolor[gray]{0.9}\underline{80.80} & 97.50 & \cellcolor[gray]{0.9}\underline{94.66} & \cellcolor[gray]{0.9}\underline{92.43} \\ 
+
+            %%%%%%%new results on clean cabernet oscar %%%%%%%%%%%%%%%%
+
+            \:+\ELMocabercar                            & \textbf{97.98}                                     & \cellcolor[gray]{0.9}\textbf{92.57}                    & \cellcolor[gray]{0.9} \textbf{90.22}                  & \textbf{99.34}                                         & \cellcolor[gray]{0.9}\textbf{94.51}    & \cellcolor[gray]{0.9}\textbf{93.38}    & 97.24                                      & \cellcolor[gray]{0.9}\textbf{85.91}    & \cellcolor[gray]{0.9}\underline{80.93} & \underline{97.58} & \cellcolor[gray]{0.9}\underline{94.47} & \cellcolor[gray]{0.9}\underline{92.05} \\
+
+            \midrule %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            \multicolumn{13}{l}{\textit{State-of-the-art}}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    \\
+
+            \underline{UDify}                           & 97.83                                              & 93.60                                                  & 91.45                                                 & 97.89                                                  & 92.53                                  & 90.05                                  & 96.23                                      & 85.24                                  & 80.01                                  & 96.12             & 90.55                                  & 88.06                                  \\
+
+            UDPipe Future + mBERT                       & 97.98                                              & 92.55                                                  & 90.31                                                 & \emph{99.32}                                           & 94.88                                  & 93.81                                  & 97.23                                      & \emph{86.27}                           & \emph{81.40}                           & \emph{97.64}      & 94.51                                  & 92.47                                  \\
+
+            \camembert                                  & \emph{98.19}                                       & \emph{94.82}                                           & \emph{92.47}                                          & 99.21                                                  & \emph{95.56}                           & \emph{94.39}                           & 96.68                                      & 86.05                                  & 80.07                                  & 97.63             & 95.21                                  & \emph{92.90}                           \\
+
+            \bottomrule
+        \end{tabular}
+    }
+    \caption{Final POS and dependency parsing scores on 4 French treebanks (French GSD, Spoken, Sequoia and ParTUT), reported on test sets (4 averaged runs) assuming gold tokenisation. Best scores in bold, second to best underlined, state-of-the-art results in italics.}
+    %gray : 
+    %light gray :
+    %frwac et orscar (10 fois plus grand que FRWAc)
+
+    \label{tab:fine-tuning_results}
+\end{table*}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Named Entity Recognition}\label{ner-section}
+\label{evalner}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{Treebanks test data-set}
+The benchmark data set from the French Treebank (FTB)  \citep{abeille-etal-2003-building} was selected in its 2008 version, as introduced by \citet{candito-crabbe-2009-improving} and complemented with NER annotations by \citet{sagot-etal-2012-annotation}\footnote{The NER-annotated FTB contains approximately than 12k sentences, and more than 350k tokens were extracted from articles of \emph{Le Monde} newspaper (1989 - 1995). As a whole, it encompasses 11,636 entity mentions distributed among 7 different types : 2025 mentions of ``Person'', 3761 of ``Location'', 2382 of ``Organisation'', 3357 of ``Company'', 67 of ``Product'', 15 of ``POI'' (Point of Interest) and 29 of ``Fictional Character''.}.
+The tree-bank, shows a large proportion of the entity mentions that are multi-word entities. We therefore report the three metrics that are commonly used to evaluate models: precision, recall, and F1 score. %Specifically, (1) precision measures account for  the percentage of entities found by the system that are correctly tagged, (2) recall measures sand for the percentage of named entities present in the corpus that are found, and (3) F1 score measure combines both precision and recall measures giving a global measure of a model's performance.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{NER State-of-the-art} %baseline Dupont  + st ate of the art cambert 
+
+% Most of the advances in NER haven been achieved in English, particularly focusing on the CoNLL 2003 \citep{tjong2003introduction} and the Ontonotes v5 \citep{pradhan2012conll,pradhan2013towards} English corpora. 
+
+%Importantly, NER task was traditionally tackled using Conditional Random Fields (CRF) \citep{lafferty-etal-2001-conditional}, CRFs were later used as decoding layers for Bi-LSTM architectures \citep{huang2015bidirectional,lample-etal-2016-neural} showing considerable improvements over CRFs alone. Later, these Bi-LSTM-CRF architectures were enhanced with contextualised word-embeddings which yet again brought major improvements to the task \citep{peters-etal-2018-deep,akbik2018contextual}. Finally, large pre-trained architectures settled the current state of the art showing a small yet important improvement over previous NER-specific architectures \citep{devlin2019bert,baevski2019cloze}.
+
+%\notemumu{@Pedro : voir si ce paragraphe est necessaire ou pas : je l'ai commenté pour l'instant, OUI ! Ça m'interesse } ok ! on le remet !
+%In non-English NER the CoNLL 2002 shared task included NER corpora for Spanish and Dutch corpora \citep{tjong2002introduction} while the CoNLL 2003 included a German corpus \citep{tjong2003introduction}. Here the recent efforts of \citep{strakova-etal-2019-neural} settled the state of the art for Spanish and Dutch, while \citep{akbik2018contextual} did it for German.
+
+English has received the most attention in NER in the past, with some recent developments in German, Dutch and Spanish by \citet{strakova-etal-2019-neural}. In French, no extensive work has been done due to the limited availability of NER corpora. We compare our model with the stable baselines settled by \citep{dupont-2017-exploration}, who trained both CRF and BiLSTM-CRF architectures on the FTB and enhanced them using heuristics and pre-trained word-embeddings.
+
+And additional term of comparison was identified in a recently released state-of-the-art language model for French, CamemBERT \citep{martin-etal-2020-camembert}, based on the RoBERTa architecture pre-trained on the French sub-corpus of the newly available multilingual corpus OSCAR \citep{ortiz-suarez-etal-2019-asynchronous}.
+
+%Mumu add summary camembert ? Peut êtr epas nécessaire  à discuter vaec Pedro
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%  NER results table %%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{table}
+    \centering\small
+    \begin{tabular}{lccc}
+        \toprule
+        %\multicolumn{4}{c}{\textsc{NER - Results}}  \\\midrule
+        \textsc{NER - Results} on FTB                 & Precision                            & Recall                              & F1                                  \\
+        \midrule
+        \multicolumn{4}{l}{\textit{Baselines Models}}                                                                                                                    \\
+        SEM (CRF) \citep{dupont-2017-exploration}     & 87.89                                & 82.34                               & 85.02                               \\ %baseline 
+        LSTM-CRF \citep{dupont-2017-exploration}      & 87.23                                & 83.96                               & 85.57                               \\ \midrule %baseline 2
+        LSTM-CRF  test models                         & 85.87                                & 81.35                               & 83.55                               \\
+        \:+FastText                                   & 88.53                                & 84.63                               & 86.53                               \\
+        \:+FastText+\ELMocbt                          & 79.77                                & 77.63                               & 78.69                               \\
+        \:+FastText+\ELMowiki                         & 88.87                                & 87.56                               & 88.21                               \\
+        % \:+FastText+\ELMococa                  & 88.82                 & 87.82                 & 88.32                 \\
+        \:+FastText+\ELMocaber                        & \underline{88.91}                    & 87.22                               & 88.06                               \\
+        \:+FastText+\ELMooscar                        & 88.89                                & \underline{88.43}                   & \underline{88.66}                   \\\midrule %
+        %\:+FastText+\ELMocoscar                & \cellcolor[gray]{0.8} \emph{\textbf{88.93}} & \underline{88.08}     & \underline{88.50}     \\
+        \:+FastText+\ELMocabercar                     & \cellcolor[gray]{0.8} \textbf{90.70} & \cellcolor[gray]{0.8}\textbf{89.12} & \cellcolor[gray]{0.8}\textbf{89.93} \\
+        \midrule
+
+        \multicolumn{4}{l}{\textit{State-of-the-art Models}}                                                                                                             \\
+        \camembert \citep{martin-etal-2020-camembert} & 88.35                                & 87.46                               & 87.93                               \\ %baseline state of the art 
+        \bottomrule
+    \end{tabular}
+    \caption{NER Results on French Treebank (FTB): \textbf{best scores}, \underline{second to best}.}
+\end{table}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%% results section  %%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+\section{Results \& Discussion} \label{sect:ResultsCorpora}
+
+\subsection{Dependency Parsing and POS-tagging}\label{sect:ResultsParsePOS}
+
+\paragraph{\ELMococa : a test for balance}
+% balanced aspect of oral pays off 
+The word-embeddings representations offered by \ELMococa are not only competitive but sometimes better than Wikipedia ones. One should keep in mind that almost all of the four treebanks we use in this section include Wikipedia data.
+\ELMococa is reaching state-of-the-are results in POS-tagging on Spoken. Notably, it performs better than \camembert, the previous state of the art on this oral specialized tree-bank (cf. dark gray highlight on Table \ref{tab:fine-tuning_results}). We understand this results as a clear effect of balance when testing upon a purely spoken test-set. Importantly, this effect is difficultly explainable by the size of oral-style data in \Cabernet. The oral sub-part is only one fifth of the total, and in this one fifth, only an even smaller amount of data comes from purely oral transcripts comparable the ones in the Spoken tree-bank, namely 67,444 words from Rhapsodie corpus, and 575,894 words form \textsc{ORFEO}. Hence, \Cabernet's  balanced oral language use shows to pay off in POS-tagging. These results are extremely surprising especially given the fact that our evaluation method was aiming at comparing the quality of word-embedding representations and not beating the state-of-the-art.
+%We observe that compared to OSCAR \Cabernet on in Sequoia  !
+
+\paragraph{\ELMococa : a test for coverage}
+From Table \ref{tab:fine-tuning_results}, we discover that not only balance, but also the broad and diverse genre converge of \Cabernet may play a role in its POS-tagging success is we compare its results with \ELMocbt that also features oral dialogues in youth literature. The fact that \ELMocbt does not show a comparable performance in POS-tagging, can be interpreted as linked to its size, but possibly also to its lack of variety in genres, thus, suggesting the advantage of a comprehensive coverage of language use. This suggests that a balanced sample may enhance the convergence of generalization about oral-style from distinct genre that still imply oral-like dialogues like in fiction. In sum, broad coverage may contribute to enhancing representations about oral language.
+
+\paragraph{The effect of balance on Fine-tuning}
+For POS-tagging in GSD the results of \ELMooscar are in second place position compared to \ELMocoscar that is extremely close to \ELMowiki. While in POS-tagging in ParTUT, \ELMowiki exhibits better results than \ELMooscar, and \ELMocoscar is in second position.
+
+Further comparing GSD and Sequoia scores from \ELMooscar and \ELMocoscar, we observe that fine-tuning with \Cabernet the emdeddings that were pre-trained on OSCAR, yields better representations for the three tasks compared to both the original \ELMooscar and \ELMococa.
+However, fine-tuning does not always yield better findings than \ELMooscar on Spoken and ParTUT, where \ELMocoscar places in second after \ELMooscar for parsing scores UAS/LAS (cf. Table \ref{tab:fine-tuning_results}).
+
+A closer look on Parsing results reveals an interesting pattern of results across treebanks (see light gray highlights on Table \ref{tab:fine-tuning_results}). We see that for GSD and Sequoia the \Cabernet fine-tuned version \ELMocoscar compared to the pure OSCAR pre-trained \ELMooscar is achieving higher scores. While a reverse and less clear-cut pattern is observable for the other two treebanks, namely Spoken and ParTUT. This configuration can be explained if we understand this pattern as due to the reinforcement and unlearning of \ELMooscar representations during the process of fine-tuning. Specifically, we can observe that parsing scores are better on treebanks that share the kind of language use represented in \Cabernet, while they are worst on corpora that are closer in language sample to OSCAR corpus, like Spoken and ParTuT. This calls for further developments of \Cabernet (§\ref{sec:Concl}).
+%stucutre sytnaxique with hesitations dans Spoken
+
+\paragraph{\ELMocbt: small but relevant}
+\ELMocbt shows an intriguing pattern of results. Even if its scores are under the baseline on GSD and Sequoia, it yields over the baseline results for Spoken and ParTUT.
+%While the under the baseline results could be explained by over-fitting 
+Given its reduced size, one would expect it to overfit, this would explain the under baseline performance. However, this was not the case on Spoken and ParTUT treebanks, thus showing \ELMocbt contribution in generating representations that are useful to UDPipe model to achieve better results in POS-tagging and parsing tasks on the ParTUT and Spoken tree-banks. The presence of oral dialogues is certainly playing a role in this results' pattern.
+This unexpected result calls for further investigation on the impact of pre-training with reduced-size, noiseless, domain-specific corpora.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{NER} \label{sect:ResultsNER}
+
+For named entity recognition, LSTM-CRF +FastText +\ELMocabercar achieves a better precision, recall and F1 than the traditional CRF-based SEM architectures (§ \ref{evalner}) and \camembert, which is currently state-of-the-art.%(CRF and Bi-LSTM +CRF)
+Importantly, LSTM-CRF +FastText +\ELMocaber reaches better results in finding entity mentions, than Wikipedia which is a highly specialized corpus in terms of vocabulary variety and size, as can be seen in the overwhelming total number of unique forms it contains (see Table \ref{Table_MorphoRich}). We can conclude that both pre-training and fine-tuning with \Cabernet on ELMo OSCAR generates better word-embedding representations than Wikipedia in this downstream task.
+%Overall, NER scores shows improvements compared to \camembert. 
+
+%Overall, Fine-tuning with \Cabernet shows better results that \ELMocaber and \ELMooscar. %we understand this slight drop as possibly due to unlearning of the wide spectrum of vocabulary that is in OSCAR and not in \Cabernet. For instance the whole french Wikipedia is included in OSCAR and not in \Cabernet. Nonetheless, it has to be noted that these scores are still better than previous state-of-the-art, \camembert.
+
+%As for, fine-tuning with \Cabernet we observe a raise in Precision, but a negative impact on the recall. 
+
+CBT-fr NER results are under the LSTM-CRF baseline. This can possibly be explained by the distance in terms of topics and domain from FTB tree-bank (i.e. newspaper articles), or by the reduced-size of the corpus to yield good-enough representation to perform entity mentions recognition.
+
+All in all, our evaluations confirm the effectiveness of large ELMo-based language models fine-tuned or pre-trained with a balanced and linguistically representative corpus, like \Cabernet as opposed to domain-specific ones, or to an extra-large and noisy one like OSCAR.
+
+%out :
+%In sum, while the base model LSTM-CRF+Fastext is better than state-of-the-art \camembert, adding \Cabernet, OSCAR or both shows a dramatic improvement in finding entity mentions.
+
+%All in all, we showed that \Cabernet corpus can reliably be used as a basis for training neural language models that perform in down-stream tasks, as well as suited for the creation of balanced lexical frequency-based dictionary entries, grammar studies, other language reference materials.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%% STATS  %%%%%%%%%%%%%%%%%%%%%%% 
+
+%\subsection{Results - Statistics}\label{ssect:ResultsMethod}
+%We performed statistical comparison to test which method provided the better accuracy scores.
+%\notemumu{@Pedro : do we finally have any stats ? }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%% CONCL %%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+\section{Perspectives \& Conclusion} \label{sec:Concl}
+
+%summarize in one sentence the aim/scope of the paper
+
+The paper investigates the relevance of different types of corpora on ELMo's pre-training and fine-tuning. It confirms the effectiveness and quality of word-embeddings obtained through balanced and linguistically representative corpora. %while POS-tagging beats state-of-the art results.
+
+%All our FRrELMo-based language models build on UDPipe Future parser and tagger, 
+By adding to UDPipe Future 5 differently trained ELMo language models that were pre-trained on qualitatively and quantitatively different corpora, our French Balanced Reference Corpus \Cabernet unexpectedly establishes a new state-of-the-art for POS-tagging over previous monolingual \citep{straka-2018-udpipe} and multilingual approaches \citep{straka-strakova-2019-evaluating,kondratyuk-straka-2019-75}.
+
+The proposed evaluation methods are showing that the two newly built corpora that are published here are not only relevant for neural NLP and language modeling in French, but that corpus balance shows to be a significant predictor of ELMo's accuracy on Spoken test data-set and for NER tasks.
+
+Other perspective uses of \Cabernet involve it use as a corpus offering a reference point for lexical frequency measures, like association measures. Its comparability with English COCA further grants the cross-linguistic validity of measures like Point-wise Mutual Information or DICE's Coefficient. The representativeness probed through our experimental approach are key aspects that allow such measures to be tested against psycho-linguistic and neuro-linguistic data as shown in previous neuro-imaging studies \citep{bhattasali-etal-2018-processing}.
+
+The results obtained for the parsing tasks on ParTUT open a new perspective for the development of the French Balanced Reference Corpus, involving the enhancement of the terminological coverage of \Cabernet. A sixth sub-part could be included to cover technical domains like legal and medical ones, and thereby enlarge the specialized lexical coverage of \Cabernet.
+Further developments of this resource would involve an extension to cover user-generated content, ranging from well written blogs, tweets to more variable written productions like newspaper's comment or forums, as present in the CoMeRe corpus \citep{chanier-etal-2014-the}.%\footnote{More on CoMere corpus at \url{https://repository.ortolang.fr/api/content/comere/v2/comere.html}.}
+The computational experiments conducted here also show that pre-training language models like ELMo on a very small sample like the French Children Book Test corpus or \Cabernet yields unexpected results. This opens a perspective for languages that have smaller training corpora. ELMo could be a better suited language model for those languages than it is for others having larger size resources.
+
+Results on the NER task show that size - usually presented as the more important factor to enhance the precision of representation of word-embeddings - matters less than linguistic representativeness, as achieved through corpus linguistic balance. \ELMocoscar sets state-of-the art results in NER (i.e. Precision, Recall and F1) that are superior than those obtained with a 30 times larger corpus, like OSCAR.
+
+%,Fabre:2019,Fabre:2020}
+
+%\iffalse
+%In the same line, an additional perspective to this work is to better understand why we observe better NER scores with ELMo architecture than we do with BERT-base language model.
+%\fi
+
+%Computational big buttom line
+
+%The original methodology of fine-tuning neural language models with smaller, balanced and noiseless corpora presented in this paper paves the way for further computational work in evaluating corpora quality for parsing and other NLP tasks. 
+
+%We found out that both method  that is increasing accuracy of the Language model in both pure pre-training . \notemumu{check the results !!!} 
+%%%%%%%
+To conclude, our current evaluations show that linguistic quality in terms of \textit{representativeness} and balance is yielding better performing contextualized word-embeddings.
