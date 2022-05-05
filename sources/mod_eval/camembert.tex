@@ -187,6 +187,43 @@ On the XNLI benchmark, we compare \camembert to previous state-of-the-art multil
 \paragraph{Summary of \camembert's results}
 \camembert improves the state of the art for the 4 downstream tasks considered, thereby confirming the usefulness of a monolingual Transformer-based models for contemporary French. We obtain these results when using \camembert as a fine-tuned model or when used as contextual embeddings with task-specific architectures. This questions the need for more complex downstream architectures, similar to what was shown for English \citep{devlin-etal-2019-bert}. Additionally, this suggests that \camembert is also able to produce high-quality representations out-of-the-box without further tuning.
 
+\section{Impact of corpus origin and size}
+\label{sec:origin_and_size}
+
+In this section we investigate the influence of the homogeneity and size of the pre-training corpus on downstream task performance. With this aim, we train alternative version of \camembert by varying the pre-training datasets. For this experiment, we fix the number of pre-training steps to 100k, and allow the number of epochs to vary accordingly (more epochs for smaller dataset sizes). All models use the BASE architecture.
+
+In order to investigate the need for homogeneous clean data versus more diverse and possibly noisier data, we use alternative sources of pre-training data in addition to \oscar 2019:
+\begin{itemize}
+    \item \textbf{Wikipedia}, which is homogeneous in terms of genre and style. We use the official 2019 French Wikipedia dumps\footnote{ \url{https://dumps.wikimedia.org/backup-index.html}.}. We remove HTML tags and tables using Giuseppe Attardi's  \emph{WikiExtractor}.\footnote{ \url{https://github.com/attardi/wikiextractor}.}
+    \item \textbf{\ccnet} \citep{wenzek-etal-2020-ccnet}, a dataset extracted from Common Crawl with a different filtering process than for \oscar. It was built using a language model trained on Wikipedia, in order to filter out bad quality texts such as code or tables.\footnote{We use the \textsc{head} split, which corresponds to the top 33\% of documents in terms of filtering perplexity.} As this filtering step biases the noisy data from Common Crawl to more Wikipedia-like text, we expect \ccnet to act as a middle ground between the unfiltered ``noisy'' \oscar 2019 dataset, and the ``clean'' Wikipedia dataset. As a result of the different filtering processes, \ccnet contains longer documents on average compared to \oscar 2019 with smaller---and often noisier---documents weeded out.
+\end{itemize}
+Table~\ref{table:corpora_statistics} summarizes statistics of these different corpora.
+
+\begin{table}[ht]
+    \centering\small
+    \begin{tabular}{lcccccc}
+        \toprule
+        Corpus     & Size  & \#tokens & \#docs & \multicolumn{3}{c}{Tokens/doc}                 \\
+                   &       &          &        & \multicolumn{3}{c}{Percentiles:}               \\
+                   &       &          &        & 5\%                              & 50\% & 95\% \\
+        \midrule
+        Wikipedia  & 4 GB   & 990M     & 1.4M   & 102                              & 363  & 2530 \\
+        CCNet      & 135 GB & 31.9B    & 33.1M  & 128                              & 414  & 2869 \\
+        OSCAR 2019 & 138 GB & 32.7B    & 59.4M  & 28                               & 201  & 1946 \\
+        \bottomrule
+    \end{tabular}
+    \caption{Statistics on the pre-training datasets used.}
+    \label{table:corpora_statistics}
+\end{table}
+
+In order to make a fair comparison between these three sources of pre-training data, we randomly sample 4 GB (the size of Wikipedia) of text (at the document level) from \oscar and \ccnet, thereby creating samples of both Common-Crawl-based corpora of the same size as the French Wikipedia. These smaller 4GB samples also provides us a way to investigate the impact of pre-training data size. Downstream task performance for our alternative versions of \camembert are provided in Table~\ref{tab:ablation_data_size}.
+The upper section reports scores in the fine-tuning setting while the lower section reports scores for the embeddings.
+
+\subsection{Common Crawl vs.~Wikipedia?}
+\label{subsec:homogeneityimpact}
+
+Table~\ref{tab:ablation_data_size} clearly shows that models trained on the 4 GB versions of \oscar 2019 and \ccnet (Common Crawl) perform consistently better than the one trained on the French Wikipedia. This is true both in the fine-tuning and embeddings setting. Unsurprisingly, the gap is larger on tasks involving texts whose genre and style are more divergent from those of Wikipedia, such as tagging and parsing on the Spoken treebank. The performance gap is also very large on the XNLI task, probably as a consequence of the larger diversity of Common-Crawl-based corpora in terms of genres and topics. XNLI is indeed based on multiNLI which covers a range of genres of spoken and written text.
+
 \begin{table}[ht]
     \small\centering
     \resizebox{\textwidth}{!}{
@@ -224,115 +261,24 @@ On the XNLI benchmark, we compare \camembert to previous state-of-the-art multil
     \label{tab:ablation_data_size}
 \end{table}
 
-\section{Impact of corpus origin and size}
-\label{sec:origin_and_size}
-
-In this section we investigate the influence of the homogeneity and size of the pre-training corpus on downstream task performance. With this aim, we train alternative version of \camembert by varying the pre-training datasets. For this experiment, we fix the number of pre-training steps to 100k, and allow the number of epochs to vary accordingly (more epochs for smaller dataset sizes). All models use the BASE architecture.
-
-In order to investigate the need for homogeneous clean data versus more diverse and possibly noisier data, we use alternative sources of pre-training data in addition to \oscar 2019:
-\begin{itemize}
-    \item \textbf{Wikipedia}, which is homogeneous in terms of genre and style. We use the official 2019 French Wikipedia dumps\footnote{ \url{https://dumps.wikimedia.org/backup-index.html}.}. We remove HTML tags and tables using Giuseppe Attardi's  \emph{WikiExtractor}.\footnote{ \url{https://github.com/attardi/wikiextractor}.}
-    \item \textbf{\ccnet} \citep{wenzek-etal-2020-ccnet}, a dataset extracted from Common Crawl with a different filtering process than for \oscar. It was built using a language model trained on Wikipedia, in order to filter out bad quality texts such as code or tables.\footnote{We use the \textsc{head} split, which corresponds to the top 33\% of documents in terms of filtering perplexity.} As this filtering step biases the noisy data from Common Crawl to more Wikipedia-like text, we expect \ccnet to act as a middle ground between the unfiltered ``noisy'' \oscar 2019 dataset, and the ``clean'' Wikipedia dataset. As a result of the different filtering processes, \ccnet contains longer documents on average compared to \oscar 2019 with smaller---and often noisier---documents weeded out.
-\end{itemize}
-Table~\ref{table:corpora_statistics} summarizes statistics of these different corpora.
-
-\begin{table}[ht]
-    \centering\small
-    \begin{tabular}{lcccccc}
-        \toprule
-        Corpus     & Size  & \#tokens & \#docs & \multicolumn{3}{c}{Tokens/doc}                 \\
-                   &       &          &        & \multicolumn{3}{c}{Percentiles:}               \\
-                   &       &          &        & 5\%                              & 50\% & 95\% \\
-        \midrule
-        Wikipedia  & 4 GB   & 990M     & 1.4M   & 102                              & 363  & 2530 \\
-        CCNet      & 135 GB & 31.9B    & 33.1M  & 128                              & 414  & 2869 \\
-        OSCAR 2019 & 138 GB & 32.7B    & 59.4M  & 28                               & 201  & 1946 \\
-        \bottomrule
-    \end{tabular}
-    \caption{Statistics on the pre-training datasets used.}
-    \label{table:corpora_statistics}
-\end{table}
-
-In order to make a fair comparison between these three sources of pre-training data, we randomly sample 4 GB (the size of Wikipedia) of text (at the document level) from \oscar and \ccnet, thereby creating samples of both Common-Crawl-based corpora of the same size as the French Wikipedia. These smaller 4GB samples also provides us a way to investigate the impact of pre-training data size. Downstream task performance for our alternative versions of \camembert are provided in Table~\ref{tab:ablation_data_size}.
-The upper section reports scores in the fine-tuning setting while the lower section reports scores for the embeddings.
-
-\subsection{Common Crawl vs.~Wikipedia?}
-\label{subsec:homogeneityimpact}
-
-Table~\ref{tab:ablation_data_size} clearly shows that models trained on the 4GB versions of \oscar and \ccnet (Common Crawl) perform consistently better than the the one trained on the French Wikipedia. This is true both in the fine-tuning and embeddings setting. Unsurprisingly, the gap is larger on tasks involving texts whose genre and style are more divergent from those of Wikipedia, such as tagging and parsing on the Spoken treebank.
-The performance gap is also very large on the XNLI task, probably as a consequence of the larger diversity of Common-Crawl-based corpora in terms of genres and topics. XNLI is indeed based on multiNLI which covers a range of genres of spoken and written text.
-
-The downstream task performances of the models trained on the 4GB version of \ccnet and \oscar are much more similar.\footnote{We provide the results of a model trained on the whole \ccnet corpus in the Appendix. The conclusions are similar when comparing models trained on the full corpora: downstream results are similar when using \oscar or \ccnet.}
+The downstream task performances of the models trained on the 4 GB version of \ccnet and \oscar are much more similar.\footnote{We provide the results of a model trained on the whole \ccnet corpus in the Appendix. The conclusions are similar when comparing models trained on the full corpora: downstream results are similar when using \oscar or \ccnet.}
 
 
 \subsection{How much data do you need?}
 \label{subsec:sizeimpact}
 
-An unexpected outcome of our experiments is that the model trained ``only'' on the 4GB sample of \oscar performs similarly  to the standard \camembert trained on the whole 138GB \oscar.
-The only task with a large performance gap is NER, where  ``138GB'' models are better by 0.9 F1 points. This could be due to the higher number of named entities present in the larger corpora, which is beneficial for this task. On the contrary, other tasks don't seem to gain from the additional data.
-%In settings where the language model is used as embeddings, the ``4GB'' model actually performs better than the standard ``138GB'' \camembert more often than the other way round, although differences in scores are rarely striking. For fine-tuning settings, the standard \camembert usually performs better than the 4GB-based one, but here again, differences are always small. 
+An unexpected outcome of our experiments is that the model trained ``only'' on the 4 GB sample of \oscar 2019 performs remarkably similarly to the standard \camembert trained on the whole 138 GB \oscar 2019. The only task with a large performance gap is NER, where  ``138 GB'' models are better by 0.9 F1 points. This could be due to the higher number of named entities present in the larger corpora, which is beneficial for this task. On the contrary, other tasks don't seem to gain from the additional data. 
 
-In other words, when trained on corpora such as \oscar and \ccnet, which are heterogeneous in terms of genre and style, 4GB of uncompressed text is large enough as pretraining corpus to reach state-of-the-art results with the BASE architecure, better than those obtained with \mbert (pretrained on 60GB of text).\footnote{The OSCAR-4GB model gets slightly better XNLI accuracy than the full OSCAR-138GB model (81.88 vs. 81.55). This might be due to the random seed used for pretraining, as each model is pretrained only once.} This calls into question the need to use a very large corpus such as \oscar or \ccnet when training a monolingual Transformer-based language model such as BERT or \roberta.
-Not only does this mean that the computational (and therefore environmental) cost of training a state-of-the-art language model can be reduced, but it also means that \camembert-like models can be trained for all languages for which a Common-Crawl-based corpus of 4GB or more can be created. \oscar is available in 166 languages, and provides such a corpus for 38 languages. Moreover, it is possible that slightly smaller corpora (e.g.~down to 1GB) could also prove sufficient to train high-performing language models.
-We obtained our results with BASE architectures. Further research is needed to confirm the validity of our findings on larger architectures and other more complex natural language understanding tasks.
-However, even with a BASE architecture and 4GB of training data, the validation loss is still decreasing beyond 100k steps (and 400 epochs). This suggests that we are still under-fitting the 4GB pretraining dataset, training longer might increase downstream performance.
+In other words, when trained on corpora such as \oscar and \ccnet, which are heterogeneous in terms of genre and style, 4 GB of uncompressed text is large enough as pre-training corpus to reach state-of-the-art results with the BASE architecture, better than those obtained with \mbert (pre-trained on 60 GB of text).\footnote{The OSCAR-4 GB model gets slightly better XNLI accuracy than the full OSCAR-138 GB model (81.88 vs. 81.55). This might be due to the random seed used for pre-training, as each model is pre-trained only once.} This calls into question the need to use a very large corpus such as \oscar or \ccnet when training a monolingual Transformer-based language model such as BERT or \roberta. Not only does this mean that the computational (and therefore environmental) cost of training a state-of-the-art language model can be reduced, but it also means that \camembert-like models can be trained for all languages for which a Common-Crawl-based corpus of 4 GB or more can be created. \oscar is available in more than 150 languages, and provides such a corpus for around 38 languages. Moreover, it is possible that slightly smaller corpora (e.g.~down to 1 GB) could also prove sufficient to train high-performing language models. We obtained our results with BASE architectures. Further research is needed to confirm the validity of our findings on larger architectures and other more complex natural language understanding tasks. However, even with a BASE architecture and 4 GB of training data, the validation loss is still decreasing beyond 100k steps (and 400 epochs). This suggests that we are still under-fitting the 4 GB pre-training dataset, training longer might increase downstream performance.
 
 \section{Discussion}
 
-Since the pre-publication of this work \citep{martin-etal-2020-camembert},
-many monolingual language models have appeared, e.g.
-\citep{le-etal-2020-flaubert-unsupervised,virtanen-etal-2019-multilingual,delobelle-etal-2020-robbert}, for as much as 30
-languages \citep{nozza-etal-2020-what}. In almost all tested
-configurations they displayed better results than multilingual
-language models such as \mbert \citep{pires-etal-2019-multilingual}.
-Interestingly, \citet{le-etal-2020-flaubert-unsupervised} showed that using their
-FlauBert, a RoBERTa-based language model for French, which was trained on less
-but more edited data, in conjunction to \camembert in an ensemble
-system could improve the performance of a parsing model and  establish
-a new state-of-the-art in constituency parsing of French, highlighting thus
-the complementarity of both models.\footnote{We refer the reader to
-    \citep{le-etal-2020-flaubert-unsupervised} for a comprehensive benchmark and details
-    therein.}
-As it was the case for English when \bert was first released, the
-availability of similar scale language models for French enabled
-interesting applications, such as large scale anonymization of legal
-texts, where \camembert-based models established a new
-state-of-the-art on this task \citep{benesty-2019-ner}, or the first
-large question answering experiments on a French Squad data set that
-was released very recently \citep{dhoffschmidt-etal-2020-fquad} where the authors matched human performance using \camembertlarge.
-Being the first pre-trained language model that used the open-source Common Crawl Oscar
-corpus and given its impact on the community,
-\camembert paved the way for many works on monolingual language
-models that followed. Furthermore, the availability of all its
-training data favors reproducibility and is a step towards better
-understanding such models.
-In that spirit, we make the models used in our experiments available via our website and via the \texttt{huggingface} and \texttt{fairseq} APIs, in addition to the base \camembert model.
+Between the pre-publication of this work\footnote{\url{https://arxiv.org/abs/1911.03894}} and the publication of its peer-reviewed version\citep{martin-etal-2020-camembert}, many monolingual language models appeared, e.g. \citep{le-etal-2020-flaubert-unsupervised,virtanen-etal-2019-multilingual,delobelle-etal-2020-robbert}, and for as much as 30 languages \citep{nozza-etal-2020-what}. In almost all tested configurations they displayed better results than multilingual language models such as \mbert \citep{pires-etal-2019-multilingual}. Interestingly, \citet{le-etal-2020-flaubert-unsupervised} showed that using FlauBERT, a RoBERTa-based language model for Contemporary French, which was trained on less but more edited data, in conjunction to \camembert in an ensemble system could improve the performance of a parsing model and establish a new state-of-the-art in constituency parsing for Contemporary French, highlighting thus the complementarity of both models.\footnote{We refer the reader to \citep{le-etal-2020-flaubert-unsupervised} for a comprehensive benchmark and details therein.}
+
+As it was the case for English when \bert was first released, the availability of similar scale language models for Contemporary French enabled interesting applications, such as large scale anonymization of legal texts, where \camembert-based models established a new state-of-the-art on this task \citep{benesty-2019-ner}, or the first large question answering experiments on a French Squad data set that was released after the publication of \camembert \citep{dhoffschmidt-etal-2020-fquad} where the authors matched human performance using \camembertlarge. Being the first pre-trained Trasnformer-based language model that used the OSCAR corpus and given its impact on the community, \camembert paved the way for many works on monolingual language models that followed. Furthermore, the availability of all its training data favors reproducibility and is a step towards better understanding such models and the impact that the pre-training data has on them. In that spirit, we make the models used in our experiments available via our website\footnote{\url{https://camembert-model.fr}} and via the \texttt{huggingface} and \texttt{fairseq} APIs, in addition to the base \camembert model.
 
 \section{Conclusion}
-In this work, we investigated the feasibility of training a
-Transformer-based language model for languages other than English.
-Using French as an example, we trained \camembert, a language model
-based on \roberta.
-We evaluated \camembert on four downstream tasks
-(part-of-speech tagging, dependency parsing, named entity recognition
-and natural language inference) in which our best model reached or improved the state of the art in all tasks
-considered, even when compared to strong multilingual models such as
-\mbert, XLM and XLM-R, while also having fewer parameters.
+In this chapter we investigated the feasibility of training a Transformer-based language model for languages other than Contemporary English. Using Contemporary French as an example, we trained \camembert, a language model based on \roberta. We evaluated \camembert on four downstream tasks (part-of-speech tagging, dependency parsing, named entity recognition
+and natural language inference) in which our best model reached or improved the state of the art in all tasks considered, even when compared to strong multilingual models such as \mbert, XLM and XLM-R, while also having fewer parameters.
 
-Our experiments demonstrate that using web crawled
-data with high variability is preferable to using Wikipedia-based data.  In addition we
-showed that our models could reach surprisingly high performances with
-as low as 4GB of pretraining data, questioning thus the need for large
-scale pretraining corpora.  This shows that state-of-the-art
-Transformer-based language models can be trained on languages with far
-fewer resources than English, whenever a few gigabytes of data are
-available. This paves the way for the rise of monolingual contextual
-pre-trained language-models for under-resourced languages.  The
-question of knowing whether pretraining on small domain specific
-content will be a better option than transfer learning techniques such
-as fine-tuning remains open and we leave it for future work.
-
-Pretrained on pure open-source corpora, \camembert is freely available and distributed with the MIT license via popular NLP libraries (\href{https://github.com/pytorch/fairseq}{\texttt{fairseq}} and \href{https://github.com/huggingface/transformers}{\texttt{huggingface}}) as well as on our website \href{https://camembert-model.fr}{\texttt{camembert-model.fr}}.
-
-
-
+Our experiments confirm the previous findings presented in chapter \ref{chap:monolingual} that using web crawled data with high variability is preferable to using Wikipedia-based data. In addition, we showed that our models could reach surprisingly high performances with as low as 4 GB of pre-training data, questioning thus the need for large scale pre-training corpora. This shows that state-of-the-art Transformer-based language models can be trained on languages with far fewer resources than previously believed, and whenever a few gigabytes of data are available. This paves the way for the rise of monolingual contextual pre-trained language models for mid- and low-resourced languages. The question of knowing whether pre-training on small domain specific content will be a better option than transfer learning techniques such as fine-tuning remains open, and we will partially study it in the context of historical data in upcoming chapters.
