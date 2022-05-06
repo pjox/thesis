@@ -2,6 +2,19 @@
 \chapter{SinNer CLEF-HIPE2020}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\begin{center}
+    \begin{minipage}{0.66\textwidth}
+        \begin{small}
+            In which we present our participation \citep{ortiz-suarez-etal-2020-sinner} to the CLEF-HIPE 2020 shared task \citep{ehrmann-etal-2020-extended}. We actually use this NER shared task as an opportunity see how well the Contemporary French language models that we had trained could perform without any further pre-training or fine-tuning in a task that mainly used historical data.
+        \end{small}
+    \end{minipage}
+    \vspace{0.5cm}
+\end{center}
+
+Having participated in the pre-training of Contemporary French language models like \camembert \citep{martin-etal-2020-camembert} and FrELMo \citep{ortiz-suarez-etal-2020-establishing,popa-fabre-etal-2020-french}
+
+HIPE (Identifying Historical People, Places and other Entities) is a evaluation campaign on named entity processing on historical newspapers in French, German and English, which was organized in the context of the impresso project and run as a CLEF 2020 Evaluation Lab.
+
 \section{Dataset for the CLEF-HIPE shared task}
 \label{sec:dataset}
 
@@ -10,7 +23,7 @@ The corpus provided for French and German both contained training data (train) a
 %In the development stage, we tried to train our model with the training data and then to evaluate our model with labeled dev data. The submitted results are based on models only trained with the training data.
 Table \ref{stats} shows some statistics of this dataset. The size of the train dataset was twice higher for French than for German whereas the development sets have roughly the same size. As usual in NER, persons (Pers) and locations (Loc) are the most frequent entity types.
 
-\begin{table}[!h]
+\begin{table}[!ht]
     \centering\small
     \begin{tabular}{ @{\hspace{0.15cm}} l @{\hspace{0.15cm}}  @{\hspace{0.15cm}}  r @{\hspace{0.15cm}}  @{\hspace{0.15cm}} r @{\hspace{0.15cm}}  @{\hspace{0.15cm}} r  @{\hspace{0.2cm}}  @{\hspace{0.2cm}}  r @{\hspace{0.15cm}}  @{\hspace{0.15cm}} r @{\hspace{0.15cm}}  @{\hspace{0.15cm}} r @{\hspace{0.15cm}}  @{\hspace{0.15cm}} r @{\hspace{0.15cm}}  @{\hspace{0.15cm}} r @{\hspace{0.15cm}} }
         \toprule
