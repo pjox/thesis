@@ -53,6 +53,105 @@ In total, 5,890 of the 12,351 sentences contain at least a named entity mention.
 3,761 location names, 3,357 company names, 2,381 organization names, 2,025 person names, 67 product names, 29 fiction character names and 15 points of interest.
 
 
+\subsection{Evaluation Tasks}\label{MethodEVAL}
+
+We distinguish three main evaluation tasks that were performed
+to assess the lexical and syntactic quality of contextualized word-embeddings obtained from different pre-training corpora under comparison.% : ELMo pre-trained on OSCAR (\ELMooscar), frWIKI (\ELMowiki), \Cabernet (\ELMococa) and CBT-fr (\ELMocbt). 
+Crucially, comparing them with and ELMo pre-trained on OSCAR and fine-tuned with \Cabernet, i.e. \ELMocoscar, will allow to control for  the presence of oral transcriptions and proceeding in order to understand its impact on the accuracy of our language model and on the development experiments after fine-tuning.% Our development experiments compare the corpora presented in Table \ref{Table_nb_Words}.
+%by and comparing them with ELMo pre-trained on OSCAR and fine-tuned with \Cabernet, i.e. \ELMocoscar (see Results Table \ref{tab:fine-tuning_results}).
+%justifier les différentes taches :
+
+\paragraph{Syntactic tasks}
+The evaluation tasks were selected to probe to what extent corpus "representativeness" and balance is impacting syntactic representations, in both (1) low-level syntactic relations in POS-tagging tasks, and (2) higher level syntactic relations at constituent- and sentence-level thanks to dependency-parsing evaluation task. Namely, POS-tagging is a low-level syntactic task, which consists in assigning to each word its corresponding grammatical category. Dependency-parsing consists of higher order syntactic task like predicting the labeled syntactic tree capturing the syntactic relations between words.
+We evaluate the performance of our models using the standard UPOS accuracy for POS-tagging, and Unlabeled Attachment Score (UAS) and Labeled Attachment Score (LAS) for dependency parsing. We assume gold tokenisation and gold word segmentation as provided in the UD treebanks.
+%Additionally, we include a contrast for the two corpora that are comparable in size on Language model perplexities, namely FrWiki and \Cabernet.
+
+\paragraph{Lexical tasks}
+To test for word-level representation obtained through the different pre-training corpora and fine-tunings, Named Entity Recognition task (NER) was retained (\ref{ner-section}). As it involves a sequence labeling task that consists in predicting which words refer to real-world objects, such as people, locations, artifacts and organizations, it directly probes the quality and specificity of semantic representations issued by the more or less balanced corpora under comparison.
+
+%\notemumu{@All : est-ce qu eje peux dire ça ? Cette interprétation est-elle correcte ?}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{POS-tagging and dependency parsing}
+
+%To build a state-of-the at baseline, we fist evaluate \camembert 
+
+
+
+Different terms of comparisons were considered on the two downstream tasks of part-of-speech (POS) tagging and dependency parsing.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{Treebanks test data-set}
+We perform our work on the four freely available French UD treebanks in UD~v2.2: GSD, Sequoia, Spoken, and ParTUT, presented in Table \ref{treebanks-tab-cabernet}.
+
+\textbf{GSD} treebank \citep{mcdonald-etal-2013-universal} is the second-largest tree-bank available for French after the FTB (described in subsection \ref{ner-section}), it contains data from blogs, news, reviews, and Wikipedia.
+
+\textbf{Sequoia} tree-bank %\footnote{\url{https://deep-sequoia.inria.fr}} %candito2012le,
+\citep{candito-etal-2014-deep} comprises more than 3000 sentences, from the French Europarl, the regional newspaper \emph{L’Est Républicain}, the French Wikipedia and documents from the European Medicines Agency.
+
+\textbf{Spoken} was automatically converted from the Rhapsodie tree-bank  %\footnote{\url{https://www.projet-rhapsodie.fr}} 
+\citep{lacheret-etal-2014-rhapsodie} with manual corrections. It consists of 57 sound samples of spoken French with phonetic transcription aligned with sound (word boundaries, syllables, and phonemes), syntactic and prosodic annotations.
+
+Finally, \textbf{ParTUT} is a conversion of a multilingual parallel treebank developed at the University of Turin, and consisting of a variety of text genres, including talks, legal texts, and Wikipedia articles, among others; ParTUT data is derived from the already-existing parallel treebank, Par(allel)TUT \citep{sanguinetti-Bosco-2015-parttut}. Table~\ref{treebanks-tab-cabernet} contains a summary comparing the sizes of the treebanks.%\footnote{\url{https://universaldependencies.org}}.
+
+\begin{table}
+    \centering
+    \begin{tabular}{lcccl}
+        \toprule
+        Treebank & Tokens  & Words   & Sentences & Genre                    \\
+        \midrule
+        GSD      & 389 363 & 400 387 & 16 342    & News Wiki. Blogs         \\
+        Sequoia  & 68 615  & 70 567  & 3 099     & Pop. Wiki. Med. EuroParl \\
+        Spoken   & 34 972  & 34 972  & 2 786     & Oral transcip.           \\
+        ParTUT   & 27 658  & 28 594  & 1 020     & Oral Wiki. Legal         \\
+        \bottomrule
+    \end{tabular}
+    \caption{Sizes of the 4 treebanks used in the evaluations of POS-tagging and dependency parsing. \label{treebanks-tab-cabernet}}
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{State-of-the-art}
+
+For POS-tagging and Parsing we select as a baseline UDPipe Future (2.0), without any additional contextualized embeddings \citep{straka-2018-udpipe}. This model was ranked 3rd in dependency parsing and 6th in POS-tagging during the CoNLL~2018 shared task \citep{seker-etal-2018-universal}. Notably, UDPipe Future provides us a strong baseline that does not make use of any pre-trained contextual embedding.
+
+We report on Table \ref{tab:fine-tuning_results} the published results on UDify by \citep{kondratyuk-straka-2019-75}, a multitask and multilingual model based on \mbert that is near state-of-the-art on all UD languages including French for both POS-tagging and dependency parsing.
+
+%On the other hand, UDify, UDPipe Future + mBERT \citep{straka2019evaluating} and \camembert \citep{martin-etal-2020-camembert} represent different terms of comparison for state-of-the-art results on Parsing and POS-tagging.
+
+%We compare our models to  \citep{kondratyuk-straka-2019-75}, 
+
+Finally, it is also relevant to compare our results with \camembert on the selected tasks, because compared to UDify it is the work that pushed the furthest the performance in fine-tuning end-to-end a \bert-based model.
+
+%Finally, we compare our models to UDPipe Future 
+
+%To demonstrate the value of building a dedicated version of \bert for French, we first compare \camembert to the multilingual cased version of \bert (designated as \mbert).
+
+\subsubsection{Named Entity Recognition}\label{ner-section}
+\label{evalner}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{Treebanks test data-set}
+The benchmark data set from the French Treebank (FTB)  \citep{abeille-etal-2003-building} was selected in its 2008 version, as introduced by \citet{candito-crabbe-2009-improving} and complemented with NER annotations by \citet{sagot-etal-2012-annotation}\footnote{The NER-annotated FTB contains approximately than 12k sentences, and more than 350k tokens were extracted from articles of \emph{Le Monde} newspaper (1989 - 1995). As a whole, it encompasses 11,636 entity mentions distributed among 7 different types : 2025 mentions of ``Person'', 3761 of ``Location'', 2382 of ``Organisation'', 3357 of ``Company'', 67 of ``Product'', 15 of ``POI'' (Point of Interest) and 29 of ``Fictional Character''.}.
+The tree-bank, shows a large proportion of the entity mentions that are multi-word entities. We therefore report the three metrics that are commonly used to evaluate models: precision, recall, and F1 score. %Specifically, (1) precision measures account for  the percentage of entities found by the system that are correctly tagged, (2) recall measures sand for the percentage of named entities present in the corpus that are found, and (3) F1 score measure combines both precision and recall measures giving a global measure of a model's performance.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{NER State-of-the-art} %baseline Dupont  + st ate of the art cambert 
+
+% Most of the advances in NER haven been achieved in English, particularly focusing on the CoNLL 2003 \citep{tjong2003introduction} and the Ontonotes v5 \citep{pradhan2012conll,pradhan2013towards} English corpora. 
+
+%Importantly, NER task was traditionally tackled using Conditional Random Fields (CRF) \citep{lafferty-etal-2001-conditional}, CRFs were later used as decoding layers for Bi-LSTM architectures \citep{huang2015bidirectional,lample-etal-2016-neural} showing considerable improvements over CRFs alone. Later, these Bi-LSTM-CRF architectures were enhanced with contextualised word-embeddings which yet again brought major improvements to the task \citep{peters-etal-2018-deep,akbik2018contextual}. Finally, large pre-trained architectures settled the current state of the art showing a small yet important improvement over previous NER-specific architectures \citep{devlin2019bert,baevski2019cloze}.
+
+%\notemumu{@Pedro : voir si ce paragraphe est necessaire ou pas : je l'ai commenté pour l'instant, OUI ! Ça m'interesse } ok ! on le remet !
+%In non-English NER the CoNLL 2002 shared task included NER corpora for Spanish and Dutch corpora \citep{tjong2002introduction} while the CoNLL 2003 included a German corpus \citep{tjong2003introduction}. Here the recent efforts of \citep{strakova-etal-2019-neural} settled the state of the art for Spanish and Dutch, while \citep{akbik2018contextual} did it for German.
+
+English has received the most attention in NER in the past, with some recent developments in German, Dutch and Spanish by \citet{strakova-etal-2019-neural}. In French, no extensive work has been done due to the limited availability of NER corpora. We compare our model with the stable baselines settled by \citep{dupont-2017-exploration}, who trained both CRF and BiLSTM-CRF architectures on the FTB and enhanced them using heuristics and pre-trained word-embeddings.
+
+And additional term of comparison was identified in a recently released state-of-the-art language model for French, CamemBERT \citep{martin-etal-2020-camembert}, based on the RoBERTa architecture pre-trained on the French sub-corpus of the newly available multilingual corpus OSCAR \citep{ortiz-suarez-etal-2019-asynchronous}.
+
+%Mumu add summary camembert ? Peut êtr epas nécessaire  à discuter vaec Pedro
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{SinNER Related Work}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -5,7 +5,7 @@
 \section{Dataset for the CLEF-HIPE shared task}
 \label{sec:dataset}
 
-The dataset of the CLEF-HIPE shared task contains newspaper articles of 17th-20th century. The text is an output of an OCR software, then tokenised and annotated with labels corresponding to each sub-task. This pecularity of historical documents will be detailed later in this section.
+The dataset of the CLEF-HIPE shared task contains newspaper articles of 17th-20th century. The text is an output of an OCR software, then tokenized and annotated with labels corresponding to each sub-task. This peculiarity of historical documents will be detailed later in this section.
 The corpus provided for French and German both contained training data (train) and development data (dev) whereas, for English only development data was provided for the shared task. For this reason, we chose to work on French and German only.
 %In the development stage, we tried to train our model with the training data and then to evaluate our model with labeled dev data. The submitted results are based on models only trained with the training data.
 Table \ref{stats} shows some statistics of this dataset. The size of the train dataset was twice higher for French than for German whereas the development sets have roughly the same size. As usual in NER, persons (Pers) and locations (Loc) are the most frequent entity types.
@@ -29,7 +29,7 @@ Table \ref{stats} shows some statistics of this dataset. The size of the train d
 \end{table}
 
 Table \ref{extraitCorpus} shows an excerpt of the train dataset (CoNLL format).
-For each document, general information were provided. Among them, newspaper and date may have been features useful for recognising entities but we did not take advantage of it.
+For each document, general information were provided. Among them, newspaper and date may have been features useful for recognizing entities but we did not take advantage of it.
 Each document was composed of segments, starting with "\# segment \dots" corresponding to lines in the original documents. Each segment is tokenized in order to correspond to the CoNLL format with one token per line.
 These two notions, segments and tokens, are very important since they do not always match the type of unit usually processed in NLP pipelines.
 Segments seldom correspond to sentences so that there is a need to concatenate the segments to get the raw text and then segment it into sentences. This is very interesting since it gets us close to real-world conditions rather than laboratory conditions, and we show in Section \ref{sec:sequence_seg} that this segment vs. sentence question has an important influence on the results.
