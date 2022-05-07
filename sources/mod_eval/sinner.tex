@@ -5,23 +5,20 @@
 \begin{center}
     \begin{minipage}{0.66\textwidth}
         \begin{small}
-            In which we present our participation \citep{ortiz-suarez-etal-2020-sinner} to the CLEF-HIPE 2020 shared task \citep{ehrmann-etal-2020-extended}. We actually use this NER shared task as an opportunity see how well the Contemporary French language models that we had trained could perform without any further pre-training or fine-tuning in a task that mainly used historical data.
+            In which we present our participation \citep{ortiz-suarez-etal-2020-sinner} to the CLEF-HIPE 2020 shared task \citep{ehrmann-etal-2020-extended}. We actually use this NER shared task as an opportunity see how well the Contemporary French language models that we had trained could perform without any further pre-training or fine-tuning in a task that mainly used historical data. Here we also evaluate the impact that pre-processing has on the models' performance.
         \end{small}
     \end{minipage}
     \vspace{0.5cm}
 \end{center}
 
-Having participated in the pre-training of Contemporary French language models like \camembert \citep{martin-etal-2020-camembert} and FrELMo \citep{ortiz-suarez-etal-2020-establishing,popa-fabre-etal-2020-french}
-
-HIPE (Identifying Historical People, Places and other Entities) is a evaluation campaign on named entity processing on historical newspapers in French, German and English, which was organized in the context of the impresso project and run as a CLEF 2020 Evaluation Lab.
+Having participated in the pre-training of Contemporary French language models like \camembert \citep{martin-etal-2020-camembert} and FrELMo \citep{ortiz-suarez-etal-2020-establishing,popa-fabre-etal-2020-french} we wanted to better asses how these models would perform in downstream tasks without any further fine-tuning or additional pre-training data. We wanted to assess in particular how much effective would be a transfer learning technique between different states of the French language. The CLEF-HIPE 2020 shared task \citep{ehrmann-etal-2020-extended} seemed then like a good opportunity to test this, as HIPE (Identifying Historical People, Places and other Entities) was an evaluation campaign on named entity processing on historical newspapers in French, German and English, which was organized in the context of the impresso project and run as a CLEF 2020 Evaluation Lab. In this study we also evaluate the impact that pre-processing has on the performance of our models, specially when the training data comes from OCRized text.
 
 \section{Dataset for the CLEF-HIPE shared task}
 \label{sec:dataset}
 
-The dataset of the CLEF-HIPE shared task contains newspaper articles of 17th-20th century. The text is an output of an OCR software, then tokenized and annotated with labels corresponding to each sub-task. This peculiarity of historical documents will be detailed later in this section.
-The corpus provided for French and German both contained training data (train) and development data (dev) whereas, for English only development data was provided for the shared task. For this reason, we chose to work on French and German only.
-%In the development stage, we tried to train our model with the training data and then to evaluate our model with labeled dev data. The submitted results are based on models only trained with the training data.
-Table \ref{stats} shows some statistics of this dataset. The size of the train dataset was twice higher for French than for German whereas the development sets have roughly the same size. As usual in NER, persons (Pers) and locations (Loc) are the most frequent entity types.
+The dataset of the CLEF-HIPE shared task contains newspaper articles of 17th-20th century. The text is an output of an OCR software, then tokenized and annotated with labels corresponding to each sub-task. This peculiarity of historical documents will be detailed later in this section. The corpus provided for French and German both contained training data (train) and development data (dev) whereas, for English only development data was provided for the shared task. For this reason, we chose to work on French and German only.
+
+Table \ref{stats} shows some statistics of this dataset. The size of the training dataset for French was twice as big as for German, whereas the development sets had roughly the same size. As usual in NER, persons (Pers) and locations (Loc) were the most frequent entity types.
 
 \begin{table}[!ht]
     \centering\small
@@ -40,16 +37,6 @@ Table \ref{stats} shows some statistics of this dataset. The size of the train d
     \caption{Statistics on the training and development data in French and German}
     \label{stats}
 \end{table}
-
-Table \ref{extraitCorpus} shows an excerpt of the train dataset (CoNLL format).
-For each document, general information were provided. Among them, newspaper and date may have been features useful for recognizing entities but we did not take advantage of it.
-Each document was composed of segments, starting with "\# segment \dots" corresponding to lines in the original documents. Each segment is tokenized in order to correspond to the CoNLL format with one token per line.
-These two notions, segments and tokens, are very important since they do not always match the type of unit usually processed in NLP pipelines.
-Segments seldom correspond to sentences so that there is a need to concatenate the segments to get the raw text and then segment it into sentences. This is very interesting since it gets us close to real-world conditions rather than laboratory conditions, and we show in Section \ref{sec:sequence_seg} that this segment vs. sentence question has an important influence on the results.
-Regarding tokens, the tokenization is obviously not perfect.
-We can see that there are non-standard words and bad tokenization due to the OCR output (in red in Table \ref{extraitCorpus}).
-If we concatenate the tokens we get the sequence "Su. \_sss allemands" instead of "Suisse allemande". These non-standard words make the Named Entity Recognition task more complicated and, again, more realistic.
-
 
 \begin{table}[!htbp]
     \centering
@@ -100,49 +87,44 @@ If we concatenate the tokens we get the sequence "Su. \_sss allemands" instead o
     \label{extraitCorpus}
 \end{table}
 
+Table \ref{extraitCorpus} shows an excerpt of the train dataset (CoNLL format). For each document, general information were provided. Among them, newspaper and date may have been features useful for recognizing entities, but we did not take advantage of it. Each document was composed of segments, starting with "\# segment \dots" corresponding to lines in the original documents. Each segment is tokenized in order to correspond to the CoNLL format with one token per line. These two notions, segments and tokens, are very important since they do not always match the type of unit usually processed in NLP pipelines. Segments seldom correspond to sentences, so there is a need to concatenate the segments to get the raw text and then segment it into sentences. This is very interesting since it gets us close to real-world conditions rather than laboratory conditions, and as we show in Section \ref{sec:sequence_seg}, that this segment vs. sentence question has an important influence on the results. Regarding tokens, the tokenization is obviously not perfect. We can see that there are non-standard words and bad tokenization due to the OCR output (in red in Table \ref{extraitCorpus}). If we concatenate the tokens we get the sequence "Su. \_sss allemands" instead of "Suisse allemande". These non-standard words make the Named Entity Recognition task more complicated and, again, more realistic.
+
 \section{CRFs and Contextualized Word Embeddings for NER}
 \label{sec:method}
 
+Here we present the different models that we use for the shared-tasks, which are again some of the architectures used in the previous chapter for the NER benchmark.
 
 \subsection{CRF model (run3)}
 
-SEM (Segmenteur-Étiqueteur Markovien)\footnote{available at: \url{https://github.com/YoannDupont/SEM}}\footnote{translates to: Markovian Tokenizer-Tagger (MTT).} \cite{dupont-2017-exploration} is a free NLP tool that relies on linear-chain CRFs \cite{lafferty-etal-2001-conditional} to perform tagging. SEM uses \textsc{Wapiti} \cite{lavergne-etal-2010-practical} v1.5.0\footnote{available at: \url{https://github.com/Jekub/Wapiti}} as linear-chain CRFs implementation. For this particular NER task, SEM uses the following features:
+SEM (Segmenteur-Étiqueteur Markovien)\footnote{available at: \url{https://github.com/YoannDupont/SEM}}\footnote{translates to: Markovian Tokenizer-Tagger (MTT).} \citep{dupont-2017-exploration} is a free NLP tool that relies on linear-chain CRFs \citep{lafferty-etal-2001-conditional} to perform tagging. SEM uses \textsc{Wapiti} \citep{lavergne-etal-2010-practical} v1.5.0\footnote{available at: \url{https://github.com/Jekub/Wapiti}} as linear-chain CRFs implementation. For this particular NER task, SEM uses the following features:
 \begin{itemize}
     \item token, prefix/suffix from 1 to 5 and a Boolean isDigit features in a [-2, 2] window; %TODO: prefix, character ?
     \item previous/next common noun in sentence;
     \item 10 gazetteers (including NE lists and trigger words for NEs) applied with some priority rules in a [-2, 2] window;
-    \item a ``fill-in-the-gaps'' gazetteers feature where tokens not found in any gazetteer are replaced by their POS, as described in \cite{raymond-fayolle-2010-reconnaissance}. This feature used token unigrams and token bigrams in a [-2, 2] a window.
+    \item a ``fill-in-the-gaps'' gazetteers feature where tokens not found in any gazetteer are replaced by their POS, as described in \citet{raymond-fayolle-2010-reconnaissance}. This feature used token unigrams and token bigrams in a [-2, 2] a window.
     \item tag unigrams and bigrams.
 \end{itemize}
 
-We trained a CLEF HIPE specific model by optimizing L1 and L2 penalties on the development set. The metric used to estimate convergence of the model is the error on the development set ($1 - accuracy$).
-% Our best result on the development set was obtained using the rprop algorithm, a 0.1 L1 penalty and a 0.1 L2 penalty.
-For French, our optimal L1 and L2 penalties were 0.5 and 0.0001 respectively (default Wapiti parameters).
-For German, our optimal L1 and L2 penalties were 1.0 and 0.0001 respectively.
+We trained a CLEF HIPE specific model by optimizing L1 and L2 penalties on the development set. The metric used to estimate convergence of the model is the error on the development set ($1 - accuracy$). For French, our optimal L1 and L2 penalties were 0.5 and 0.0001 respectively (default Wapiti parameters). For German, our optimal L1 and L2 penalties were 1.0 and 0.0001 respectively.
 
-One interest of SEM is that it has a built-in sentence tokenizer for French using a rule-based approach. By default, CLEF-HIPE provides a newline segmentation that is the output of the OCR. As a result, some NE mentions span across multiple segments, making it very hard to identify them correctly. It is to be expected that models trained (and labelling on) sentences would yield better performances than those trained (and labelling on) segments. SEM makes it simple to switch between different sequence segmentations, which allowed us to label sentences and output segments.
-SEM's sentence segmentation engine works using mainly local rules to determine whether a token is the last of a sequence (eg: is a dot preceded by a known title abbreviation?). It also uses non-local rules to remember whether a token is between parentheses or French quotes to not segment automatically within them. Since we work at token level, we had to adapt some rules to fit CLEF-HIPE tokenization. For example, SEM decides at tokenization stage whether a dot is a strong punctuation or part of a larger token, as for abbreviations. This has the advantage of making sentence segmentation easier. CLEF-HIPE tokenization systematically separates dots, so we adapted some sentence segmentation rules, for example: we decided not to consider a dot as a sentence terminator if the previous token was in a lexica of titles or functions. No specific handling of OCR errors were done.
-Another interest is that SEM has an NE mention broadcasting process. Mentions found at least once in a document are used as a gazetteer to tag unlabeled mentions within said document. When a new mention overlaps and is strictly longer than an already found mention, the new mention will replace the previous one in the document.
+One interest of SEM is that it has a built-in sentence tokenizer for French using a rule-based approach. By default, CLEF-HIPE provides a newline segmentation that is the output of an OCR engine. As a result, some NE mentions span across multiple segments, making it very hard to identify them correctly. It is to be expected that models trained (and labelling on) sentences would yield better performances than those trained (and labelling on) segments. SEM makes it simple to switch between different sequence segmentations, which allowed us to label sentences and output segments. SEM's sentence segmentation engine works using mainly local rules to determine whether a token is the last of a sequence (e.g.: is a dot preceded by a known title abbreviation?). It also uses non-local rules to remember whether a token is between parentheses or French quotes to not segment automatically within them. Since we work at token level, we had to adapt some rules to fit CLEF-HIPE tokenization. For example, SEM decides at tokenization stage whether a dot is a strong punctuation or part of a larger token, as for abbreviations. This has the advantage of making sentence segmentation easier. CLEF-HIPE tokenization systematically separates dots, so we adapted some sentence segmentation rules, for example: we decided not to consider a dot as a sentence terminator if the previous token was in a lexicon of titles or functions. No specific handling of OCR errors were done. Another interest is that SEM has an NE mention broadcasting process. Mentions found at least once in a document are used as a gazetteer to tag unlabeled mentions within said document. When a new mention overlaps and is strictly longer than an already found mention, the new mention will replace the previous one in the document.
 
 \subsection{ELMo-LSTM-CRF (run1 and run2)}
 
-The LSTM-CRF is a model originally proposed by Lample et al. \cite{lample-etal-2016-neural} it consists of a Bi-LSTM encoder pre-appended by both character level word embeddings and pre-trained word embeddings, and a CRF decoder layer. For our experiments, we follow the same approach as Ortiz Suárez et al. \cite{ortiz-suarez-etal-2020-establishing} by using the Bi-LSTM-CRF implementation of Straková et al. \cite{strakova-etal-2019-neural} which is open source and readily available\footnote{Available at: \url{https://github.com/ufal/acl2019_nested_ner}.}, and pre-appending contextualized word-embeddings to the model. For French we pre-append the FrELMo model \cite{ortiz-suarez-etal-2020-establishing}, which is the standard ELMo \cite{peters-etal-2018-deep} implementation\footnote{Available at: \url{https://github.com/allenai/bilm-tf}} trained on the French OSCAR\footnote{Available at: \url{https://oscar-corpus.com}} corpus \cite{ortiz-suarez-etal-2020-monolingual} \cite{ortiz-suarez-etal-2019-asynchronous}. For German we pre-append the German ELMo \cite{may-2019-german}, which is again the standard ELMo implementation but trained on the German Wikipedia.
+The LSTM-CRF is a model originally proposed by \citet{lample-etal-2016-neural} consists of a Bi-LSTM encoder pre-appended by both character level word embeddings and pre-trained word embeddings, and a CRF decoder layer. For our experiments, we follow the same approach as \citet{ortiz-suarez-etal-2020-establishing} by using the Bi-LSTM-CRF implementation of \citet{strakova-etal-2019-neural} which is open source and readily available\footnote{Available at: \url{https://github.com/ufal/acl2019_nested_ner}.}, and pre-appending contextualized word-embeddings to the model. For French we pre-append the FrELMo model \citet{ortiz-suarez-etal-2020-establishing}, which as we saw in the previous chapter, is the standard ELMo \citep{peters-etal-2018-deep} implementation\footnote{Available at: \url{https://github.com/allenai/bilm-tf}} trained on the French subcorpus of OSCAR 2019\footnote{Available at: \url{https://oscar-corpus.com}} \citep{ortiz-suarez-etal-2019-asynchronous,ortiz-suarez-etal-2020-monolingual}. For German we pre-append the German ELMo \citep{may-2019-german}, which is again the standard ELMo implementation but trained on the German Wikipedia.
 
-Contrary to the approach of Ortiz Suárez et al. \cite{ortiz-suarez-etal-2020-establishing}, we do not use the CamemBERT model \cite{martin-etal-2020-camembert} for French or the German BERT \cite{chan-etal-2019-german}. Both of these models are BERT-based and as such they are limited to a 512-token contextualized window. Moreover, they both use SentencePiece \cite{kudo-richardson-2018-sentencepiece} meaning that tokens are actually subwords, which considerably increases the number of tokens per sentence, specially for the longer ones, thus decreasing the contextual windows of both CamemBERT and the German BERT. SentencePiece also introduces the problem of a fixed-size vocabulary, which in the case of this shared task might negatively impact the performance of said models, as they could struggle handling OCR problems or just non-standard vocabulary. Since our main goal was to reconstruct the sentences and use long contextualized sequences we opted to use ELMo which can easily handle longer sequences with it's standard implementation and actually has a dynamic vocabulary thanks to the CNN character embedding layer, thus it might be better equipped to handle non-standard orthography and OCR problems.
+Contrary to the approach of \citet{ortiz-suarez-etal-2020-establishing}, we do not use the CamemBERT model \citep{martin-etal-2020-camembert} for French or the German BERT \citep{chan-etal-2019-german}. Both of these models are BERT-based and as such they are limited to a 512-token contextualized window. Moreover, they both use SentencePiece \citep{kudo-richardson-2018-sentencepiece} meaning that tokens are actually subwords, which considerably increases the number of tokens per sentence, specially for the longer ones, thus decreasing the contextual windows of both CamemBERT and the German BERT. SentencePiece also introduces the problem of a fixed-size vocabulary, which in the case of this shared task might negatively impact the performance of said models, as they could struggle to handle OCR problems or just non-standard vocabulary. Since our main goal was to reconstruct the sentences and use long contextualized sequences we opted to use ELMo which can easily handle longer sequences with its standard implementation and actually has a dynamic vocabulary thanks to the CNN character embedding layer, thus it might be better equipped to handle non-standard orthography and OCR problems. We actually did a preliminary experiment for French with CamemBERT, but the results were even worse than our baselines, so we decided to scrap it. We will see this phenomenon again on chapter \ref{chap:dalembert} where we will actually report it and study it more in depth.
 
-For the fixed word embeddings we used the Common Crawl-based FastText embeddings \cite{grave-etal-2018-learning} originally trained by Facebook as opposed to the embeddings provided by the HIPE shared task, as we obtained better dev scores using the original FastText embeddings for both French and German.
+For the fixed word embeddings we used the Common Crawl-based FastText embeddings \citep{grave-etal-2018-learning} originally trained by Facebook as opposed to the embeddings provided by the HIPE shared task, as we obtained better dev scores using the original FastText embeddings for both French and German.
 
-We used the standard hyperparameters originally\footnote{\url{https://github.com/ufal/acl2019_nested_ner/blob/master/tagger.py\#L484}.} used by Straková et al. \cite{strakova-etal-2019-neural}. Namely a batch size of 8, a dropout of 0.5, a learning rate of 0.001 and 10 epochs. The difference between run 1 and 2, is that run 1 uses the data as is, while run 2 uses the reconstructed sentences.
+We used the standard hyperparameters originally \footnote{\url{https://github.com/ufal/acl2019_nested_ner/blob/master/tagger.py\#L484}.} used by \citet{strakova-etal-2019-neural}. Namely a batch size of 8, a dropout of 0.5, a learning rate of 0.001 and 10 epochs. The difference between run 1 and 2, is that run 1 uses the data as is, while run 2 uses the reconstructed sentences.
 
 \section{Results and Discussion}
 \label{sec:results}
 
 \subsection{Official shared task results}
 
-The results of our 3 runs compared to the best run on the NERC-coarse shared-task for French and German are given in Table \ref{tab:results-raw} (strict scenario).
-For both tasks, we are the third best ranking team.
-% We are happy about those results as we
-We only did very minimal adaptation of existing systems. We did not modify tokenization for any language. The most notable change was to use custom sentence segmentation instead of given segments for French and using some additional lexica as features for our CRF model in German (for French, we only used existing SEM lexica). Other than that, we only optimized hyper-parameters on the dev set. This clearly illustrates the power of contextual embeddings and today's neural network architectures. This is encouraging in terms of usability of SotA models on real-world data.
+The results of our 3 runs compared to the best run on the NERC-coarse shared-task for French and German are given in Table \ref{tab:results-raw} (strict scenario). For both tasks, we are the third best ranking team. We only did very minimal adaptation of existing systems. We did not modify tokenization for any language. The most notable change was to use custom sentence segmentation instead of given segments for French and using some additional lexica as features for our CRF model in German (for French, we only used existing SEM lexica). Other than that, we only optimized hyperparameters on the dev set. This clearly illustrates the power of contextual embeddings and today's neural network architectures. This is encouraging in terms of usability of state-of-the-art models on real-world data.
 
 \begin{table}
     \centering\small
@@ -168,50 +150,9 @@ We only did very minimal adaptation of existing systems. We did not modify token
 \subsection{Study of sequence segmentation}
 \label{sec:sequence_seg}
 
-%~ segments
-%~ processed 29854 tokens with 1532 phrases; found: 1476 phrases; correct: 1196.
-%~ accuracy: 96.58%; precision: 81.03%; recall: 78.07%; FB1: 79.52
-%~  loc: precision: 85.21%; recall: 87.52%; FB1: 86.35 568
-%~  org: precision: 70.62%; recall: 62.78%; FB1: 66.47 160
-%~  pers: precision: 80.24%; recall: 76.88%; FB1: 78.52 663
-%~  prod: precision: 62.96%; recall: 39.53%; FB1: 48.57 27
-%~  time: precision: 86.21%; recall: 78.12%; FB1: 81.97 58
+In this section, we evaluate the influence of sequence segmentation on system performances. This evaluation is done for French only, as we used SEM to provide sentence segmentation and SEM could only provide a proper sentence segmentation for that language. As can be seen in table \ref{tab:segment-vs-sentences}, sentence segmentation allows us to improve results by 3.5 F1 points. This is due to the fact that some entities were split across multiple segments in the original data. Using a custom sentence segmentation allows to have entities in a single sequence. This segmentation is applied both with training data and evaluation data, so that our systems can access a more proper context for named entities. The cost of using another segmentation is relatively cheap, as SEM can process nearly 1 GB of raw text per hour.
 
-%~ sentences
-%~ processed 29854 tokens with 1365 phrases; found: 1319 phrases; correct: 1114.
-%~ accuracy: 97.61%; precision: 84.46%; recall: 81.61%; FB1: 83.01
-%~  loc: precision: 87.73%; recall: 87.08%; FB1: 87.41 538
-%~  org: precision: 71.33%; recall: 65.64%; FB1: 68.37 150
-%~  pers: precision: 84.64%; recall: 82.09%; FB1: 83.35 547
-%~  prod: precision: 75.86%; recall: 56.41%; FB1: 64.71 29
-%~  time: precision: 90.91%; recall: 87.72%; FB1: 89.29 55
-
-% \begin{table}
-% \centering
-% \begin{tabular}{|l|ccc|}
-% \hline
-% segmentation & P     & R     & F1    \\
-% \hline
-% segments     & 81.03 & 81.61 & 79.52 \\
-% sentences    & 84.46 & 84.46 & 83.01 \\
-% \hline
-% \end{tabular}
-% \caption{result difference between segments and SEM sentence segmentation on dev}
-% \label{tab:segment-vs-sentences}
-% \end{table}
-
-In this section, we evaluate the influence of sequence segmentation on system performances. This evaluation is done for French only, as we used SEM to provide sentence segmentation and SEM could only provide a proper sentence segmentation for that language. As can be seen in table \ref{tab:segment-vs-sentences}, sentence segmentation allows to improve results by 3.5 F1 points. This is due to the fact that some entities were split across multiple segments in the original data. Using a custom sentence segmentation allows to have entities in a single sequence. This segmentation is applied both with training data and evaluation data, so that our systems can access a more proper context for named entities. The cost of using another segmentation is relatively cheap, as SEM can process nearly 1GB of raw text per hour.
-
-A per entity comparison is also available in Table \ref{tab:segment-vs-sentences}.
-One can see that the improvement of sentence segmentation is not very significant for locations (Loc). It is due to two facts : (i) locations are usually small in number of tokens and therefore less prone to be separated in two segments and (ii) there was less room from improvement since they were the easiest entity type to detect (86.35\% F1-score).
-To the contrary, entities of type ``product'' (Prod), usually longer in tokens, were very hard to predict with only 48.57\% F1-measure and benefited the most from segmentation in sentences (+16 percentage points in F1-measure).
-
-
-%~ 2.52 -0.44  1.06
-%~ 0.71  2.86  1.90
-%~ 4.40  5.21  4.83
-%~ 12.90 16.88 16.14
-%~ 4.70  9.60  7.32
+Per entity comparison is also available in Table \ref{tab:segment-vs-sentences}. One can see that the improvement of sentence segmentation is not very significant for locations (Loc). This is due to two facts : (i) locations are usually small in terms of tokens and therefore less prone to be separated in two segments and (ii) there was less room from improvement since they were the easiest entity type to detect (86.35\% F1-score). In contrast, entities of type ``product'' (Prod), usually longer in tokens, were very hard to predict with only 48.57\% F1-measure and benefited the most from segmentation in sentences (+16 percentage points in F1-measure).
 
 \begin{table}
     \centering\small
@@ -241,8 +182,7 @@ To the contrary, entities of type ``product'' (Prod), usually longer in tokens, 
 \subsection{To dev or not to dev?}
 \label{sec:todev-ornot}
 
-In Table \ref{tab:to-dev} we show the results that could have been obtained by training the Bi-LSTM model %TODO: checker si je dis pas de conneries
-on both train and dev dataset. We used the same hyperparameters as we did for our official run. Despite the fact that it does not ensure the robustness of the system, the added-value seem to be quite disappointing\footnote{In particular, if we consider that it would not have given us a better ranking on any language.}. In German the gain may be a bit more significant, probably due to the smaller size of the training dataset.
+In Table \ref{tab:to-dev} we show the results that could have been obtained by training the Bi-LSTM model on both train and dev dataset. We used the same hyperparameters as we did for our official run. Despite the fact that it does not ensure the robustness of the system, the added-value seem to be quite disappointing\footnote{In particular, if we consider that it would not have given us a better ranking on any language.}. In German the gain may be a bit more significant, probably due to the smaller size of the training dataset.
 
 \begin{table}
     \centering\small
@@ -264,11 +204,4 @@ on both train and dev dataset. We used the same hyperparameters as we did for ou
 \section{Conclusion}
 \label{sec:concl}
 
-In this article we presented three methods developed for the Named Entity Recognition task in French and German historical newspapers.
-The first method relied on linear-chain CRFs while the other two methods use a Bidirectional LSTM and a bidirectional Language Model (ELMo).
-The latter outperformed the CRF model and achieved rank 3 on the NER task in both French and German.
-We also showed that the type of sequences used has a significant influence on the results. When we segment in sentences rather than using the segments of the dataset as it is the results are systematically much better, with an exception for locations where the gain is marginal. This proves that sentence segmentation remains a key component of efficient NLP architectures, in particular for models taking advantage of the context.
-
-As a future work it would be interesting to assess the importance of noise in the data. For instance, by comparing the results of NER on texts obtained via different OCR tools.
-The influence of the qualitative jumps in the data, which is common in Digital Humanities, is an important aspect to evaluate the robustness of the system in real-world conditions rather than laboratory conditions.
-We also plan to provide an in-depth analysis of the impact of word embeddings and neural architecture, as we only provided our best results in this paper.
+In this chapter we presented three methods developed for the Named Entity Recognition task in French and German historical newspapers. The first method relied on linear-chain CRFs while the other two methods use a Bidirectional LSTM and a bidirectional Language Model (ELMo). The latter outperformed the CRF model and achieved rank 3 on the NER task in both French and German. We also showed that the type of sequences used has a significant influence on the results. When we segment in sentences rather than using the segments of the dataset as it is the results are systematically much better, with an exception for locations where the gain is marginal. This suggests that sentence segmentation remains a key component of efficient NLP architectures, in particular for models taking advantage of the context.

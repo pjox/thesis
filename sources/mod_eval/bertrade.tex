@@ -1,9 +1,35 @@
-\chapter{BERTrade}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{BERTrade}\label{chap:bertrade}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{center}
+    \begin{minipage}{0.66\textwidth}
+        \begin{small}
+            In which we present part of the work of \citet{grobol-etal-2022-bertrade} who pre-train and develop RoBERTa-based \citep{liu-etal-2019-roberta} models for Medieval French and subsequently evaluate them on POS tagging and dependency parsing on the SRCMF treebank \citep{prevost-stein-2013-syntactic}. Most notably, \citet{grobol-etal-2022-bertrade} try to transfer knowledge from contemporary French to Old French by post-training existing Contemporary French language models with a small Medieval French corpus.
+        \end{small}
+    \end{minipage}
+    \vspace{0.5cm}
+\end{center}
+
+Having successfully pre-trained and 
+
+Old French is a particularly interesting language for this kind of study, since relatively to its limited amount of available raw text, its volume of \emph{annotated} linguistic data is quite high, due to the existence of the SRCMF dependency treebank \citep{prevost-stein-2013-syntactic} and its latest incarnation in the Universal Dependency project \citep{nivre-etal-2020-universal}, which boasts around \SI{17.7}{K\quantity} sentences\footnote{Putting it in the second place of all French language treebanks in number of sentences.} for around \SI{171}{K\quantity} words.
+
+Another interesting property of Old French is its proximity to a well-resourced language, namely contemporary French, for which monolingual contextual embeddings models exist and have been shown to be relevant for dependency parsing  \citep{le-etal-2020-flaubert,martin-etal-2020-camembert}. Last, but certainly not least, the design of an accurate syntactic parser for Old French would be a very valuable tool for computer-assisted linguistic studies. Indeed, studying the historical variation of syntax in a language that lacks both native speakers and centralized standard variants can be very challenging, due to the prohibitive cost of manual annotation. Automatic syntactic annotations, either as a \enquote{silver-standard} truth or as a bootstrapping step towards manual annotation, can drastically reduce that cost.
+
+In this chapter, exploiting this currently unique situation of Old French among lesser-resourced and historical languages, we use dependency parsing and POS-tagging of Old French as probes of the relevance of contextual embeddings in a context of high heterogeneity and relative scarcity of data. More precisely, we consider several neural language models, some of which trained or fine-tuned on a new corpus of raw Old and Middle French texts, and use their internal representations of words as inputs to train taggers and parsers on the SRCMF treebank. The resulting tagging and parsing scores then serve as an evaluation of the quality and usefulness of these representations.
+We claim the following contributions:
+
+\begin{itemize}
+    \item We provide empirical evidence that contextual embeddings are relevant for historical language processing, even when no data is available beyond the treebank used to train a parser.
+    \item We provide a comparative study of several strategies for obtaining such contextual embeddings. Specifically, we compare cases where raw data is available in the target language and cases where existing contextual embeddings are available for the contemporary counterpart of a historical language.
+    \item We release two publicly\footnote{\url{https://url.retained/for/anonymous/review}} available resources for Old French: BERTrade,\footnote{\emph{Bertrade de Laon}, also known as \emph{Berthe au Grand Pied} was the mother of Charlemagne.} a set of contextual word embedding models and a state-of-the-art POS-tagging and dependency parsing model.
+\end{itemize}
 
 \section{Experiments}
 \label{sec-experiments}
 We evaluate a set of alternative word representations on Old French, using their usefulness for POS-tagging and dependency parsing as a downstream evaluation.
-To that end, we use the annotated treebank of Old French (SRCMF,  \citet{prevost-stein-2013-syntactic}) as provided by the 2.7 version of the UD dataset \citep{zeman-etal-2020-universal} as a reference treebank.
+To that end, we use the annotated treebank of Old French (SRCMF)  \citep{prevost-stein-2013-syntactic} as provided by the 2.7 version of the UD dataset \citep{zeman-etal-2020-universal} as a reference treebank.
 
 Our parser/tagger probe uses \citet{dozat-manning-2018-simpler}'s neural graph parser made as reimplemented by \citet{le-etal-2020-flaubert} and \citet{grobol-crabbe-2021-analyse}, using the same hyperparameters.
 Word representations are obtained by concatenating subword embeddings, averaged over transformer layers together with character embeddings and non contextualized word embeddings.  %without weighting or scaling. 
