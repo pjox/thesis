@@ -11,41 +11,27 @@
     \vspace{0.5cm}
 \end{center}
 
-Having successfully pre-trained and 
+Having successfully pre-trained and evaluated state-of-the-art language models for Contemporary French, we wanted to finally develop these kinds of resources for Historical French. To this end, we believed Old French to be a particularly interesting language for this kind of study, since relatively to its limited amount of available raw text, its volume of \emph{annotated} linguistic data is quite high, due to the existence of the SRCMF dependency treebank \citep{prevost-stein-2013-syntactic} and its latest incarnation in the Universal Dependency project \citep{nivre-etal-2020-universal}, which boasts around \SI{17.7}{K\quantity} sentences\footnote{Putting it in the second place of all French language treebanks in number of sentences.} for around \SI{171}{K\quantity} words.
 
-Old French is a particularly interesting language for this kind of study, since relatively to its limited amount of available raw text, its volume of \emph{annotated} linguistic data is quite high, due to the existence of the SRCMF dependency treebank \citep{prevost-stein-2013-syntactic} and its latest incarnation in the Universal Dependency project \citep{nivre-etal-2020-universal}, which boasts around \SI{17.7}{K\quantity} sentences\footnote{Putting it in the second place of all French language treebanks in number of sentences.} for around \SI{171}{K\quantity} words.
+Another interesting property of Old French is its proximity to a well-resourced language, namely contemporary French, for which we had previously developed monolingual contextual embeddings models (and for which other language models had also been developed at this point) that had been shown to be relevant for dependency parsing \citep{martin-etal-2020-camembert,le-etal-2020-flaubert}. Last, but certainly not least, the design of an accurate syntactic parser for Old French would be a very valuable tool for computer-assisted linguistic studies. Indeed, studying the historical variation of syntax in a language that lacks both native speakers and centralized standard variants can be very challenging, due to the prohibitive cost of manual annotation. Automatic syntactic annotations, either as a \enquote{silver-standard} truth or as a bootstrapping step towards manual annotation, can drastically reduce that cost.
 
-Another interesting property of Old French is its proximity to a well-resourced language, namely contemporary French, for which monolingual contextual embeddings models exist and have been shown to be relevant for dependency parsing  \citep{le-etal-2020-flaubert,martin-etal-2020-camembert}. Last, but certainly not least, the design of an accurate syntactic parser for Old French would be a very valuable tool for computer-assisted linguistic studies. Indeed, studying the historical variation of syntax in a language that lacks both native speakers and centralized standard variants can be very challenging, due to the prohibitive cost of manual annotation. Automatic syntactic annotations, either as a \enquote{silver-standard} truth or as a bootstrapping step towards manual annotation, can drastically reduce that cost.
-
-In this chapter, exploiting this currently unique situation of Old French among lesser-resourced and historical languages, we use dependency parsing and POS-tagging of Old French as probes of the relevance of contextual embeddings in a context of high heterogeneity and relative scarcity of data. More precisely, we consider several neural language models, some of which trained or fine-tuned on a new corpus of raw Old and Middle French texts, and use their internal representations of words as inputs to train taggers and parsers on the SRCMF treebank. The resulting tagging and parsing scores then serve as an evaluation of the quality and usefulness of these representations.
-We claim the following contributions:
+In this chapter, exploiting this currently unique situation of Old French among lesser-resourced and historical languages, we use dependency parsing and POS-tagging of Old French as probes of the relevance of contextual embeddings in a context of high heterogeneity and relative scarcity of data. More precisely, we consider several neural language models, some of which trained or fine-tuned on a new corpus of raw Old and Middle French texts, and use their internal representations of words as inputs to train taggers and parsers on the SRCMF treebank. The resulting tagging and parsing scores then serve as an evaluation of the quality and usefulness of these representations. In particular:
 
 \begin{itemize}
     \item We provide empirical evidence that contextual embeddings are relevant for historical language processing, even when no data is available beyond the treebank used to train a parser.
     \item We provide a comparative study of several strategies for obtaining such contextual embeddings. Specifically, we compare cases where raw data is available in the target language and cases where existing contextual embeddings are available for the contemporary counterpart of a historical language.
-    \item We release two publicly\footnote{\url{https://url.retained/for/anonymous/review}} available resources for Old French: BERTrade,\footnote{\emph{Bertrade de Laon}, also known as \emph{Berthe au Grand Pied} was the mother of Charlemagne.} a set of contextual word embedding models and a state-of-the-art POS-tagging and dependency parsing model.
+    \item We develop BERTrade,\footnote{\emph{Bertrade de Laon}, also known as \emph{Berthe au Grand Pied} was the mother of Charlemagne.} a set of contextual word embedding models and a state-of-the-art POS-tagging and dependency parsing model.
 \end{itemize}
 
 \section{Experiments}
 \label{sec-experiments}
-We evaluate a set of alternative word representations on Old French, using their usefulness for POS-tagging and dependency parsing as a downstream evaluation.
-To that end, we use the annotated treebank of Old French (SRCMF)  \citep{prevost-stein-2013-syntactic} as provided by the 2.7 version of the UD dataset \citep{zeman-etal-2020-universal} as a reference treebank.
+We evaluate a set of alternative word representations on Old French, using their usefulness for POS-tagging and dependency parsing as a downstream evaluation. To that end, we use the annotated treebank of Old French (SRCMF)  \citep{prevost-stein-2013-syntactic} as provided by the 2.7 version of the UD dataset \citep{zeman-etal-2020-universal} as a reference treebank. We note however that a more recent version of the SRCMF has been recently published \citep{zeman-etal-2021-universal} after we did these experiments, this new version introduces most notably the punctuation to the SRCMF treebank.
 
-Our parser/tagger probe uses \citet{dozat-manning-2018-simpler}'s neural graph parser made as reimplemented by \citet{le-etal-2020-flaubert} and \citet{grobol-crabbe-2021-analyse}, using the same hyperparameters.
-Word representations are obtained by concatenating subword embeddings, averaged over transformer layers together with character embeddings and non contextualized word embeddings.  %without weighting or scaling. 
-%returned by the various models with character embeddings and word embeddings learned together with the parsing model on the treebank train set.
-This representation is similar to those used by \citet{straka-strakova-2019-evaluating,ling-etal-2015-finding}.
-In all of our experiments, the contextual embeddings are fine-tuned while training the parser.
-%\footnote{For a more comprehensive review of the hyperparameters, see the appendix.}.
-Unlike the recent CoNLL challenges settings, we assume gold tokenization, since the syntactic annotations we target provide a reference word-based segmentation. Using a predicted one could only add noise to our experiments.
-Furthermore, for most European languages using a Latin script---including Old and Middle French---, word segmentation is acceptably approximated by simple typographic tokenization.
+Our parser/tagger probe uses \citet{dozat-manning-2018-simpler}'s neural graph parser made as reimplemented by \citet{le-etal-2020-flaubert} and \citet{grobol-crabbe-2021-analyse}, using the same hyperparameters. Word representations are obtained by concatenating subword embeddings, averaged over transformer layers together with character embeddings and non contextualized word embeddings. This representation is similar to those used by \citet{straka-strakova-2019-evaluating,ling-etal-2015-finding}. In all of our experiments, the contextual embeddings are fine-tuned while training the parser. Unlike the recent CoNLL challenges settings, we assume gold tokenization, since the syntactic annotations we target provide a reference word-based segmentation. Using a predicted one could only add noise to our experiments. Furthermore, for most European languages using a Latin script---including Old and Middle French---, word segmentation is acceptably approximated by simple typographic tokenization.
 
-The remaining of this section presents our experimental results, sorted by nature of required data.
-We report UPOS POS-tagging scores as well as unlabeled and labeled attachment scores for dependency parsing (respectively UAS and LAS), as given by the CoNLL-2018 scorer, computed on the development set of SRCMF to avoid overfitting the architecture and transfer learning procedure to the test set.
-Results on the test set are provided only for the dev-best models to allow us to compare our results to the state of the art.
+The remaining of this section presents our experimental results, sorted by nature of required data. We report UPOS POS-tagging scores as well as unlabeled and labeled attachment scores for dependency parsing (respectively UAS and LAS), as given by the CoNLL-2018 scorer, computed on the development set of SRCMF to avoid overfitting the architecture and transfer learning procedure to the test set. Results on the test set are provided only for the dev-best models to allow us to compare our results to the state of the art.
 
-Due to the number of costly experiments,\footnote{See the Appendix for elements on the carbon footprint of our experiments.} the results are reported on single runs.
-The results should therefore be interpreted  only with respects to the broad trends: small score differences between competing settings should be taken with care.
+Due to the number of costly experiments,\footnote{See the Appendix \ref{carbon-footprint} for elements on the carbon footprint of our experiments.} the results are reported on single runs. The results should therefore be interpreted only with respects to the broad trends: small score differences between competing settings should be taken with care.
 
 \subsection{Baselines}\label{sec|baselines}
 \begin{table}[thb]
@@ -63,13 +49,9 @@ The results should therefore be interpreted  only with respects to the broad tre
     \caption{Results on SRCMF dev — no additional data.}\label{tab|nodata}
 \end{table}
 
-We first compare a baseline where contextual embeddings are not used at all (Vanilla) with two settings using models with no preexisting knowledge of Old French: Random-base, a randomly initialized model using the same architecture and model size as RoBERTa-base \citep{liu-etal-2019-roberta} %and CamemBERT-base \citep{martin-etal-2020-camembert}, 
-and finBERT \citep{virtanen-etal-2019-multilingual}, a contextual embedding model from Finnish, a Uralic language that is unrelated to Old French.
-These baselines are meant to check that the gain in performances observed when using models with some (possibly indirect) knowledge of Old French are linked to this knowledge and not simply due to an increase in the number of trainable parameters (for the random baseline) or to a weight distribution induced by training on a language modeling task that would be universally good for all languages (for the finBERT baseline, which can thus be seen as a different kind of weight initialization).
+We first compare a baseline where contextual embeddings are not used at all (Vanilla) with two settings using models with no preexisting knowledge of Old French: Random-base, a randomly initialized model using the same architecture and model size as RoBERTa-base \citep{liu-etal-2019-roberta} and finBERT \citep{virtanen-etal-2019-multilingual}, a contextual embedding model from Finnish, a Uralic language that is unrelated to Old French. These baselines are meant to check that the gain in performances observed when using models with some (possibly indirect) knowledge of Old French are linked to this knowledge and not simply due to an increase in the number of trainable parameters (for the random baseline) or to a weight distribution induced by training on a language modeling task that would be universally good for all languages (for the finBERT baseline, which can thus be seen as a different kind of weight initialization).
 
-\Cref{tab|nodata} shows the results obtained in these configurations, which show that using a model with random weights, even fine-tuned for these tasks, does not bring any improvement, and is in fact even worse than using no contextual embeddings at all.
-In contrast, using a model that has been pretrained for language modeling---even for an unrelated language---brings some modest improvements.
-This suggests that pretraining gives a structure to this kind of model that makes it suitable for fine-tuning on the downstream task, but the impact of this gain is clearly---and predictably---very limited compared to what can be expected for representations that have been trained on relevant linguistic data.
+\Cref{tab|nodata} shows the results obtained in these configurations, which show that using a model with random weights, even fine-tuned for these tasks, does not bring any improvement, and is in fact even worse than using no contextual embeddings at all. In contrast, using a model that has been pre-trained for language modeling---even for an unrelated language---brings some modest improvements. This suggests that pre-training gives a structure to this kind of model that makes it suitable for fine-tuning on the downstream task, but the impact of this gain is clearly---and predictably---very limited compared to what can be expected for representations that have been trained on relevant linguistic data.
 
 \subsection{With related contextual embeddings}\label{sec|related}
 
@@ -88,19 +70,13 @@ This suggests that pretraining gives a structure to this kind of model that make
     \caption{Results on SRCMF dev — monolingual models.}\label{tab|pre-trained}
 \end{table}
 
-When a low-resource language is close to a well-resourced one, it is possible to leverage models designed for the latter.
-For Old French, contemporary French is an obvious candidate and two contextual embeddings models are available: FlauBERT \citep{le-etal-2020-flaubert} and CamemBERT \citep{martin-etal-2020-camembert}.
-Furthermore, mBERT \citep{devlin-etal-2019-bert}, a model trained on a multilingual corpus which does not include Old French (possibly apart from some fragments in its contemporary French training data), has been shown to be suitable for many languages, and in particular for Indo-European and Romance languages \citep{straka-strakova-2019-evaluating,muller-etal-2021-unseen}.
-We report in \cref{tab|pre-trained} the results obtained when using these language models directly, without additional fine-tuning involving Old French data.
+When a low-resource language is close to a well-resourced one, it is possible to leverage models designed for the latter. For Old French, contemporary French is an obvious candidate and two contextual embeddings models are available: FlauBERT \citep{le-etal-2020-flaubert} and CamemBERT \citep{martin-etal-2020-camembert}. Furthermore, mBERT \citep{devlin-etal-2019-bert}, a model trained on a multilingual corpus which does not include Old French (possibly apart from some fragments in its contemporary French training data), has been shown to be suitable for many languages, and in particular for Indo-European and Romance languages \citep{straka-strakova-2019-evaluating,muller-etal-2021-unseen}. We report in \cref{tab|pre-trained} the results obtained when using these language models directly, without additional fine-tuning involving Old French data.
 
-As expected, these results show significant improvements over the baselines, confirming that using contextual embeddings for a related language works better than both randomly initialized embeddings and embeddings pretrained for an unrelated language---even after fine-tuning.
-More surprisingly, the best results here are obtained with mBERT.
-This could mean that mBERT benefits from having been pretrained for a wider range of languages, including in particular other Romance languages that share with Old French some features,% lost in contemporary French---
-for instance null subjects.
+As expected, these results show significant improvements over the baselines, confirming that using contextual embeddings for a related language works better than both randomly initialized embeddings and embeddings pre-trained for an unrelated language---even after fine-tuning. More surprisingly, the best results here are obtained with mBERT. This could mean that mBERT benefits from having been pre-trained for a wider range of languages, including in particular other Romance languages that share with Old French some features, for instance null subjects.
 
 \subsection{With raw linguistic data}\label{sec|withraw}
 
-\begin{table*}[ht]
+\begin{table}[ht]
     \centering
     \tablefontsize
     \begin{tabular}{
@@ -124,7 +100,13 @@ for instance null subjects.
         \bottomrule
     \end{tabular}
     \caption{Results on SRCMF dev — Performances of different model sizes when training from scratch}\label{tab|fromscratch}
-\end{table*}
+\end{table}
+
+We now try to take advantage of the raw Medieval French data described in section \ref{sec-data}. To that end, we explore two strategies: training a model from scratch and refining existing models by \enquote{post-training} them---running a few more training epochs on the Medieval French raw data.
+
+In the \enquote{from scratch} strategy we first train a BBPE sub-word tokenizer \citep{wang-cho-etal-2020-neural} on our raw corpus, then train a RoBERTa \citep{liu-etal-2019-roberta} masked language model. Taking inspiration from \citet{micheli-etal-2020-importance}, who worked in a setting close to ours: a small and noisy pre-training corpus used to create a model from scratch, we used a RoBERTa architecture. As reported in \cref{tab|fromscratch}, we tested several parametrizations of the architecture also inspired by \citet{turc-etal-2019-well}. Out of these alternatives, the \enquote{BERTrade-petit} configuration was the most successful and this is the one we keep for the following experiments.
+
+For the \enquote{post-training} strategy, we continue the training of the pre-trained models used in \cref{sec|baselines,sec|related}, for \num{12} epochs on our raw corpus. We used the same RoBERTa masked language modeling task, using the same parameters as \citet{wang-etal-2020-extending} (but without vocabulary modifications), resulting in the BERTrade-X models, where X is the name of the base model.
 
 \begin{table}[tbh]
     \centering
@@ -144,23 +126,7 @@ for instance null subjects.
     \caption{Results on SRCMF dev — using raw data.}\label{tab|post-train}
 \end{table}
 
-We now try to take advantage of the raw Medieval French data described in section \ref{sec-data}.
-To that end, we explore two strategies: training a model from scratch and refining existing models by \enquote{post-training} them---running a few more training epochs on the Medieval French raw data.
-
-In the \enquote{from scratch} strategy we first train a BBPE sub-word tokenizer \citep{wang-cho-etal-2020-neural}
-on our raw corpus, then train a RoBERTa \citep{liu-etal-2019-roberta} masked language model.
-Taking inspiration from \citet{micheli-etal-2020-importance}, who worked in a setting close to ours: a small and noisy pre-training corpus used to create a model from scratch, we used a RoBERTa architecture.
-%Since there are no clear silver bullets when it comes to Transformer-based contextual embedding models, the RoBERTa architecture is chosen mostly for comparison with 
-As reported in \cref{tab|fromscratch}, we tested several parametrizations of the architecture
-also inspired by \citet{turc-etal-2019-well}.
-Out of these alternatives, the \enquote{BERTrade-petit} configuration was the
-most successful and this is the one we keep for the following experiments.
-
-For the \enquote{post-training} strategy, we continue the training of the pre-trained models used in \cref{sec|baselines,sec|related}, for \num{12} epochs on our raw corpus. We used the same RoBERTa masked language modeling task, using the same parameters as \citet{wang-etal-2020-extending} (but without vocabulary modifications), resulting in the BERTrade-X models, where X is the name of the base model.
-
-The results of these experiments are reported in \Cref{tab|post-train}.
-Comparing these to our results of \cref{sec|related} shows that training a model from scratch, even on such limited amounts of data, yields a better model than a simple task-specific fine-tuning of mBERT.
-However, post-training mBERT yields even better results, and the best ones are obtained by post-training the models for contemporary French.
+The results of these experiments are reported in \Cref{tab|post-train}. Comparing these to our results of \cref{sec|related} shows that training a model from scratch, even on such limited amounts of data, yields a better model than a simple task-specific fine-tuning of mBERT. However, post-training mBERT yields even better results, and the best ones are obtained by post-training the models for contemporary French.
 
 \begin{table}[thb]
     \centering
@@ -182,18 +148,12 @@ However, post-training mBERT yields even better results, and the best ones are o
 \end{table}
 
 \subsection{Putting it all together}
-Finally, in \cref{tab|sota}, we compare the performances of our models on the test set of SRCMF with those obtained by  \citet{straka-strakova-2019-evaluating}, with similar methods. The difference between the models is that we fine-tune the word embeddings, while
-\citet{straka-strakova-2019-evaluating} keep them frozen.
+Finally, in \cref{tab|sota}, we compare the performances of our models on the test set of SRCMF with those obtained by  \citet{straka-strakova-2019-evaluating}, with similar methods. The difference between the models is that we fine-tune the word embeddings, while \citet{straka-strakova-2019-evaluating} keep them frozen.
 
 Our mBERT baseline, which is the closest to their configuration, shows that even without any additional data, task-specific fine-tuning already brings significant improvements, while our models refined using our raw corpus of Medieval French bring further improvements, leading to state-of-the-art results that are consistent with their results on the development set.
 
 \section{Conclusion}
 
-In this work, we have shown that building a monolingual contextual word embeddings model for Medieval French is possible even with limited and heterogeneous linguistic data and that it can bring significant performance gains in parsing and POS-tagging.
-To that end, the best strategy seems to be post-training a contextual word embedding model for contemporary French on raw Medieval French documents.
-We have not directly addressed the internal heterogeneity issue in both our pretraining and fine-tuning data, relying instead on the versatility of the representation models we considered to bypass it, but it seems a promising perspective for future work---for instance by using finer-grained post-training, concentrating on specific linguistic sub-periods or genres.
+In this chapter, we have shown that building a monolingual contextual word embeddings model for Medieval French is possible even with limited and heterogeneous linguistic data and that it can bring significant performance gains in parsing and POS-tagging. To that end, the best strategy seems to be post-training a contextual word embedding model for contemporary French on raw Medieval French documents. We have not directly addressed the internal heterogeneity issue in both our pre-training and fine-tuning data, relying instead on the versatility of the representation models that we considered can bypass it, but it seems a promising perspective for future work---for instance by using finer-grained post-training, concentrating on specific linguistic sub-periods or genres.
 
-For historical languages in general, this suggests that language-specific fine-tuning is more efficient when applied to a model pre-trained for their contemporary counterpart than when applied to a multilingual model.
-While this study is not currently easy to replicate for other languages due to the lack of annotated data for a suitable downstream task, it suggests that the considerable amount of work required to gather even a small amount of raw texts in the target language is a sound investment, given the significant improvements it can bring to contextual word representations.
-Beyond historical languages, these findings could also help for processing minority dialectal variants and contact languages of well-resourced languages, and we leave for future work the exploration of these generalizations.
-
+For historical languages in general, where not a lot of data is available, this suggests that language-specific fine-tuning is more efficient when applied to a model pre-trained for their contemporary counterpart than when applied to a multilingual model. While this study is not currently easy to replicate for other languages due to the lack of annotated data for a suitable downstream task, it suggests that the considerable amount of work required to gather even a small amount of raw texts in the target language is a sound investment, given the significant improvements it can bring to contextual word representations. Beyond historical languages, these findings could also help for processing minority dialectal variants and contact languages of well-resourced languages, and we leave for future work the exploration of these generalizations.
