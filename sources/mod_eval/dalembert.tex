@@ -2,34 +2,46 @@
 \chapter{D'AlemBERT}\label{chap:dalembert}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\begin{center}
+    \begin{minipage}{0.66\textwidth}
+        \begin{small}
+            In which we present part of the work of \citet{gabay-etal-2022-from} who pre-train and develop RoBERTa-based \citep{liu-etal-2019-roberta} models for Early Modern French from scratch with the \freemmax corpus, and subsequently evaluate it on POS tagging and named entity recognition on the \freemlpm and the \freemner corpora respectively.
+        \end{small}
+    \end{minipage}
+    \vspace{0.5cm}
+\end{center}
 
+After having successfully pre-trained and evaluated a Transformer-based language model for Medieval French, we wanted to develop such a model for Early Modern French, the state of language corresponding to that of the \emph{Dictionnaire Universel} in its 1701 edition \citep{furetiere-1701-dictionnaire}, the main text of study of the ANR BASNUM (ANR-18-CE38-0003) that funded this Ph.D. thesis. Thus, in this chapter we develop \dalembert a neural language model for Early Modern French, and we evaluate it in POS tagging and NER on the \freemlpm and the \freemner corpora respectively. Contrary to the approach used in the previous chapter, we only pre-train \dalembert from scratch, and we do not post-train any of the Contemporary French models. We decided to do this mainly because that our \freemmax, our pre-training dataset is around 1.2 GB in size which is around 20 times the size of the corpus used in the BERTrade experiments for Medieval French, we also thought that 1.2 GB would be enough to properly train a RoBERTa-based architecture in light of the results obtained for \camembert in subsection \ref{subsec:sizeimpact}.
 
 \section{D'AlemBERT: a neural language model for Early Modern French}\label{sec:dAlemBERT}
-In this section, we describe the pretraining data, architecture, training objective and optimisation setup we use for \dalembert, our new neural language model for Early Modern French.
-
+In this section, we describe the pre-training data, architecture, training objective and optimization setup we use for \dalembert, our new neural language model for Early Modern French.
 
 \subsection{Pre-processing}
-Similar to \roberta \cite{liu-etal-2019-roberta} we segment the input text data into subword units using Byte-Pair encoding (BPE) \cite{sennrich-etal-2016-neural} in the implementation proposed by \cite{radford-etal-2019-language} that uses bytes instead of unicode characters as the base subword units. The BPE encoding does not require pre-tokenisation (at the word or token level), thus removing the need to develop a specific tokeniser for Early Modern French. We use a vocabulary size of 32,768 subword tokens. These subwords are learned on the entire \freemmax dataset.
-
+Similar to \roberta \citep{liu-etal-2019-roberta} we segment the input text data into subword units using Byte-Pair encoding (BPE) \citep{sennrich-etal-2016-neural} in the implementation proposed by \citep{radford-etal-2019-language} that uses bytes instead of unicode characters as the base subword units. The BPE encoding does not require pre-tokenization (at the word or token level), thus removing the need to develop a specific tokenizer for Early Modern French. We use a vocabulary size of 32,768 subword tokens. These subwords are learned on the entire \freemmax dataset.
 
 \subsection{Language Modelling}
 
 \paragraph{Transformer}
-\dalembert uses the exact same architecture as \roberta, which is a multi-layer bidirectional Transformer \cite{vaswani-etal-2017-attention}.
-\dalembert uses the original \emph{base} architecture of \roberta (12 layers, 768 hidden dimensions, 12 attention heads, 110M parameters).
+\dalembert uses the exact same architecture as \roberta, which is a multi-layer bidirectional Transformer \citep{vaswani-etal-2017-attention}. \dalembert uses the original \emph{base} architecture of \roberta (12 layers, 768 hidden dimensions, 12 attention heads, 110M parameters).
 
-\paragraph{Pretraining Objective}
-We train our model on the Masked Language Modelling (MLM) task as proposed by RoBERTa's authors \cite{liu-etal-2019-roberta}: given an input text sequence composed of $N$ tokens $x_1, ..., x_N$, we select 15\% of tokens for possible replacement. Among those selected tokens, 80\% are replaced with the special \texttt{<MASK>} token, 10\% are left unchanged and 10\% are replaced by a random token. The model is then trained to predict the masked tokens using cross-entropy loss.
+\paragraph{Pre-training Objective}
+We train our model on the Masked Language Modelling (MLM) task as proposed by RoBERTa's authors \citep{liu-etal-2019-roberta}: given an input text sequence composed of $N$ tokens $x_1, ..., x_N$, we select 15\% of tokens for possible replacement. Among those selected tokens, 80\% are replaced with the special \texttt{<MASK>} token, 10\% are left unchanged and 10\% are replaced by a random token. The model is then trained to predict the masked tokens using cross-entropy loss.
 
-Again, following the \roberta approach, we dynamically mask tokens instead of fixing them statically for the whole dataset during preprocessing. We also choose not to use the next sentence prediction (NSP) task originally used in \bert \cite{devlin-etal-2019-bert}, as it has been shown that it does not improve downstream task performance \cite{conneau-lample-2019-cross,liu-etal-2019-roberta}.
+Again, following the \roberta approach, we dynamically mask tokens instead of fixing them statically for the whole dataset during preprocessing. We also choose not to use the next sentence prediction (NSP) task originally used in \bert \citep{devlin-etal-2019-bert}, as it has been shown that it does not improve downstream task performance \citep{conneau-lample-2019-cross,liu-etal-2019-roberta}.
 
-\paragraph{Optimisation}
-We optimise our model in the exact same way as \cite{liu-etal-2019-roberta} using Adam \cite{kingma-ba-2015-adam} ($\beta_1 = 0.9$, $\beta_2 = 0.98$) for 100k steps with large batch sizes of 8,192 sequences, each sequence containing at most 512 tokens.
+\paragraph{Optimization}
+Optimization for our model in the exact same way as \citep{liu-etal-2019-roberta} using Adam \citep{kingma-ba-2015-adam} ($\beta_1 = 0.9$, $\beta_2 = 0.98$) for 100k steps with large batch sizes of 8,192 sequences, each sequence containing at most 512 tokens.
 
 \paragraph{Pre-training}
-We use the \roberta implementation in the Zelda Rose library,\footnote{\url{https://github.com/LoicGrobol/zeldarose}} and again, in the same way as \newcite{liu-etal-2019-roberta} our learning rate is warmed up for 10k steps up to a peak value of $0.0003$ instead of the original $0.0001$ used by the original implementation of \roberta \cite{liu-etal-2019-roberta}, as our model diverged with the $0.0001$ value. We hypothesise that this is either due to the smaller size of \freemmax (compared to the corpora used for \roberta or \camembert) or to our large batch size. We train our model for 31k steps, which amounts to 41 epochs. The total pre-training times, the details of the infrastructure we used and even the carbon emissions of our model are reported in Appendix~\ref{carbon-footprint-dalembert}.
+We use the \roberta implementation in the Zelda Rose library,\footnote{\url{https://github.com/LoicGrobol/zeldarose}} and again, in the same way as \citet{liu-etal-2019-roberta} our learning rate is warmed up for 10k steps up to a peak value of $0.0003$ instead of the original $0.0001$ used by the original implementation of \roberta \citep{liu-etal-2019-roberta}, as our model diverged with the $0.0001$ value. Furthermore, we hypothesize that this is either due to the smaller size of \freemmax (compared to the corpora used for \roberta or \camembert) or to our large batch size. We train our model for 31k steps, which amounts to 41 epochs. The total pre-training times, the details of the infrastructure we used and even the carbon emissions of our model are reported in Appendix~\ref{carbon-footprint-dalembert}.
 
 \section{Evaluation and Discussion}
+
+\subsection{Part-Of-Speech Tagging}
+
+In order to evaluate our \dalembert model, we first fine-tune it for POS tagging on the \freemlpm corpus. We use the \texttt{flair} framework\footnote{\url{https://github.com/flairNLP/flair}} for sequence tagging \citep{akbik-etal-2019-flair}. To fine-tune \dalembert for POS we follow the same approach as \citet{schweter-akbik-2020-flert} with some modifications: we append a linear layer of size 256 that takes as input the last hidden representation of the \texttt{<s>} special token and the mean of the last hidden representation of the subword units of each token (token as defined for \freemlpm), that is, we use a \emph{``mean''} subword pooling strategy. We fine-tune \dalembert with a learning rate of 0.000005 for a total of 10 epochs. We also fine-tune \camembert using the exact same hyperparameters as that we use for \dalembert.
+
+\freemlpm provides a standard split (train, dev, test), however it also proposes an evaluation on a \emph{out-of-domain} subcorpus that is not contained in the standard split and that is separated by century (from the 16\textsuperscript{th} to the 20\textsuperscript{th} century) and that also contains both the \emph{Normalized} and \emph{Original} versions of the texts for the 16\textsuperscript{th}, 17\textsuperscript{th} and 18\textsuperscript{th} centuries. The idea of this out-of-domain evaluation corpus is to have a fine-grained evaluation of the models to better assess their performance in all the different types of text that one might encounter when working with Early Modern French data.
 
 \begin{table}[ht]
     \centering\small
@@ -56,7 +68,7 @@ We use the \roberta implementation in the Zelda Rose library,\footnote{\url{http
         \end{tabular}
         \begin{tabular}{lrrrrrr}
             \toprule
-            \multicolumn{7}{c}{\textsc{Normalised or Contemporary}}                                                            \\
+            \multicolumn{7}{c}{\textsc{Normalized or Contemporary}}                                                            \\
             \midrule
             Model        & 16             & 17             & 18             & 19             & 20             & Avg            \\
             \midrule
@@ -75,13 +87,17 @@ We use the \roberta implementation in the Zelda Rose library,\footnote{\url{http
             \bottomrule
         \end{tabular}
     }
-    \caption{Comparison between \dalembert, \camembert and \pieextended performance on \freemlpm.}
+    \caption{Comparison between \dalembert, \camembert and \pieextended performance on the test set, out-of-domian data of \freemlpm.}
     \label{tab:POS}
 \end{table}
 
-In order to evaluate our \dalembert model, we fine-tune it for POS tagging on the \freemlpm corpus. We use the \texttt{flair} framework\footnote{\url{https://github.com/flairNLP/flair}} for sequence tagging \cite{akbik-etal-2019-flair}. To fine-tune \dalembert for POS we follow the same approach as \newcite{schweter-akbik-2020-flert} with some modifications: we append a linear layer of size 256 that takes as input the last hidden representation of the \texttt{<s>} special token and the mean of the last hidden representation of the subword units of each token (token as defined for \freemlpm), that is, we use a \emph{``mean''} subword pooling strategy. We fine-tune \dalembert with a learning rate of 0.000005 for a total of 10 epochs. We also fine-tune \camembert using the exact same hyperparameters as that we use for \dalembert.
+Following the approach of \citet{clerice-2020-pie}, we report the scores obtained on the out-of-domain testing dataset of \freemlpm in Table~\ref{tab:POS}. We use the scores previously reported by \citet{clerice-2020-pie} using \emph{Pie Extended}, a stacked BiLSTM-CRF model, as our first baseline as well as the fine-tuned \camembert that serves as a second baseline as well as a rough estimation of how much knowledge can \dalembert transfer from the \freemmax corpus into this task.
 
-\freemlpm provides a standard split (train, dev, test), however it also proposes an evaluation on a \emph{out-of-domain} subcorpus that is not contained in the standard split and that is separated by century (from the 16\textsuperscript{th} to the 20\textsuperscript{th} century) and that also contains both the \emph{Normalised} and \emph{Original} versions of the texts for the 16\textsuperscript{th}, 17\textsuperscript{th} and 18\textsuperscript{th} centuries. The idea of this out-of-domain evaluation corpus is to have a fine-grained evaluation of the models to better assess their performance in all the different types of text that one might encounter when working with Early Modern French data.
+We can see that \dalembert consistently outperforms \pieextended and \camembert in both the normalized and original versions of our out-of-domain testing data and for all different periods by a considerable margin. Furthermore, we can also see that on average the difference in score between \dalembert and \pieextended is greater for the original split than the normalized one. This suggests that \dalembert can generalize more effectively to non-normalized data than the more traditional architecture used by \pieextended. Moreover, we can also see that the difference in scores is also greater for the 16\textsuperscript{th}\,c. and 17\textsuperscript{th}\,c. data. This is interesting, especially for the 16\textsuperscript{th}\,c, because, as we can see in Figure~\ref{fig:FreEMmax_desc}, this is the least represented period in the \freemmax corpus. This result actually suggests that \dalembert might be able to do effective transfer learning from the 18\textsuperscript{th}\,c., 19\textsuperscript{th}\,c. and 20\textsuperscript{th}\,c. data to the 16\textsuperscript{th}\,c. and 17\textsuperscript{th}\,c. data.
+
+As for \camembert, we can see that it consistently scores lower than both \dalembert and \pieextended. Moreover, we can see that it struggles particularly with the non-normalized data of the 16\textsuperscript{th}\,c., 17\textsuperscript{th}\,c. and 18\textsuperscript{th}\,c.. This results clearly shows that \camembert cannot easily generalize to these earlier states of languages, or at least not with the quantity of data found in the training set of \freemlpm. These results also show the impressive capacity of \dalembert of quickly generalizing to diverse set of states of language, as well as its capacity to transfer knowledge from the \freemmax corpus into this task. The obtained results are also a testament to the importance of the pre-training data, specially taking in account that the pre-training set of \camembert is more than 100 times bigger than that of \dalembert.
+
+\subsection{Named Entity Recognition}
 
 \begin{table}[ht]
     \centering\small
@@ -94,16 +110,18 @@ In order to evaluate our \dalembert model, we fine-tune it for POS tagging on th
         \dalembert & \textbf{0.9329}  &  \textbf{0.9323}  &  \textbf{0.9326}\\
         \bottomrule
     \end{tabular}
-    \caption{Comparison between \dalembert, \camembert and \pieextended performance on \freemlpm.}
+    \caption{Comparison between \dalembert, \camembert and an LSTM-CRF-based model performance on the test set of \freemner.}
     \label{tab:dalembert-ner}
 \end{table}
 
-Following the approach of \newcite{clerice-2020-pie}, we report the scores obtained on the out-of-domain testing dataset of \freemlpm in Table~\ref{tab:POS}. We use the scores previously reported by \newcite{clerice-2020-pie} using \emph{Pie Extended} as our baseline as well as the fine-tuned \camembert that serves as a second baseline as well as a rough estimation of how much knowledge can \dalembert transfer from the \freemmax into this task.
+Now we fine-tune \dalembert on NER with the \freemner corpus. We use once again the \texttt{flair} framework\footnote{\url{https://github.com/flairNLP/flair}} for sequence tagging \citep{akbik-etal-2019-flair} and we follow the same approach as \citet{schweter-akbik-2020-flert} with the exact same modifications as in the previous subsection. We also fine-tune \camembert using the exact same hyperparameters as that we use for \dalembert. For a baseline we use the BiLSTM-CRF implementation provided by the \texttt{flair} library, and we couple it with character embeddings as well as the Common Crawl-based FastText embeddings \citep{grave-etal-2018-learning} originally trained by Facebook.
 
-We can see that \dalembert consistently outperforms \pieextended and \camembert in both the normalised and original versions of our out-of-domain testing data and for all different periods by a considerable margin. We can also see that on average the difference in score between \dalembert and \pieextended is greater for the original split than the normalised one. This suggests that \dalembert can generalise more effectively to non-normalised data than the more traditional architecture used by \pieextended. Moreover we can also see that the difference in scores is also greater for the 16\textsuperscript{th}\,c. and 17\textsuperscript{th}\,c. data. This is interesting, especially for the 16\textsuperscript{th}\,c, because, as we can see in Figure~\ref{fig:FreEMmax_desc}, this is the least represented period in the \freemmax corpus. This result actually suggests that \dalembert might be able to do effective transfer learning from the 18\textsuperscript{th}\,c., 19\textsuperscript{th}\,c. and 20\textsuperscript{th}\,c. data to the 16\textsuperscript{th}\,c. and 17\textsuperscript{th}\,c. data.
+In contrast to our POS tagging experiments, here we see \dalembert getting marginally better scores than \dalembert, we believe that this is due to the striking size of \freemner which has more than 5 million annotated tokens, that is, we believe that in this case \camembert has enough training data in order to properly fine-tune to this task in Early Modern French and in particular to potentially overcome the poor representations given by the SentencePiece \citep{kudo-richardson-2018-sentencepiece} trained on Contemporary French for the out-of-vocabulary words found in the Early Modern French data. \footnote{We observe that SentencePiece tends to split OOV words by characters which might not be ideal for sequence-tagging tasks, specially for NER.} We believe that to a certain extent, given the size of \freemner, \camembert might be \enquote{\emph{forgetting}} its pre-training contemporary data and \enquote{\emph{re-learning}} the Early Modern French data in \freemner.
 
-As for \camembert, we can see that it consistently scores lower than both \dalembert and \pieextended. Moreover, we can see that it struggles particularly with the non-normalised data of the 16\textsuperscript{th}\,c., 17\textsuperscript{th}\,c. and 18\textsuperscript{th}\,c.. This results clearly shows that \camembert cannot easily generalised to these earlier states of languages, or at least not with the quantity of data found in the training set of \freemlpm. These results also show the impressive capacity of \dalembert of quickly generalising to diverse set of states of language, as well as its capacity to transfer knowledge from the \freemmax corpus into this task. The obtained results are also a testament to the importance of the pre-training data, specially taking in account that the pre-training set of \camembert is more than 100 times bigger than that of \dalembert.
+In any case, the results obtained here by \dalembert are on par with the state-of-the-art NER models for Contemporary English \citep{wang-etal-2021-automated} while using a much simpler architecture. The results obtained by both Transformer-based models largely outperform those obtained by our LSTM-CRF based baseline, which shows how well the Transformer-based models respond to large quantities of annotated data. We report the results by entity type on the appendix section \ref{dalembert-entity-results}.
 
 \section{Conclusion}
 
-In this paper we presented the manually curated \freemmax corpus of Early Modern French as well as \dalembert, a RoBERTa-based language model trained on \freemmax. With \dalembert, we showed that it is possible to successfully train a transformer-based language model for historical French with even less data than originally shown in previous works \cite{martin-etal-2020-camembert}. Moreover with our POS tagging evaluation we were able to observe some form of transfer learning and generalisation across multiple states of the language corresponding to different periods of time. Both our corpus and our model will be of use to digital humanists and linguists interested in Early Modern French. For our future work, we hope that will be able to study the application of our \dalembert model to other NLP tasks such as text normalisation, named entity recognition and even document structuring, where we hope to more extensively study the transfer learning capabilities of our approach.
+In this chapter we showed that it is possible to successfully train a Transformer-based language model for Early Modern French from scratch with even less data than originally shown in previous works \citep{martin-etal-2020-camembert}. Moreover, with our POS tagging evaluation we were able to observe some form of transfer learning and generalization across multiple states of the language corresponding to different periods of time, while in our experiments in named entity recognition we observed the type of performance one can get when given a big enough annotated corpus, even when the models are not particularly fine-tuned to the specific period of time of the annotated data.
+
+We believe that \dalembert will be of use not only to the BASNUM project, but also to all digital humanists and linguists interested in Early Modern French. For our future work, we hope that we will be able to study the application of our \dalembert model to other NLP tasks such as text normalization or even document structuring, where we hope to more extensively study the transfer learning capabilities of our approach.
