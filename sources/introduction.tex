@@ -16,6 +16,28 @@ thesis. While originally meant to be used for a Ph.\,D.\ thesis, you can
 equally well use it for your honour thesis, bachelor thesis, and so
 on---some adjustments may be necessary, though.
 
+\section{The BASNUM Project}
+
+Cette thèse s'inscrit dans le cadre du projet ANR BASNUM (ANR-18-CE38-0003), qui avait comme objectif principal de numériser le Dictionnaire Universel (DU) d'Antoine Furetière, dans sa version de 1701 revue et corrigée par Basnage de Beauval \citep{furetiere-1701-dictionnaire}, et de l'analyser avec des outils numériques, afin de faire apparaître l'importance de cet ouvrage pour l'évolution des sciences et des mentalités au XVIIIe siècle. Le projet visait également à contribuer au mouvement actuel de conception de méthodes innovantes de numérisation, encodage et analyse des textes.
+
+D'un point vue purement informatique le projet BASNUM comptait réaliser deux types de tâches :
+\begin{enumerate}
+  \item une première tâche de structuration où la macrostructure du dictionnaire serait annoté;
+  \item une deuxième tâche d'enrichissement qui consistait à réaliser un large éventail de tâches d'extraction d'informations, d'annotation de la microstructure du dictionnaire et même de normalisation et modernisation du texte.
+\end{enumerate}
+
+La première tâche de structuration automatique des dictionnaires était déjà partiellement couverte par les travaux de \citet{khemakhem-etal-2017-automatic,khemakhem-etal-2018-enhancing} qui développent \emph{GROBID-dictionaries}, un sous-module de \emph{GROBID}\footnote{Bibliothèque d'apprentissage automatique pour extraire, analyser et restructurer des documents bruts tels que PDF, en documents structurés et encodés en TEI.} \citep{lopez-etal-2018-grobid} implémentant une bibliothèque d'apprentissage automatique Java pour la structuration de ressources lexicales numérisées au format \emph{TEI} \citep{tei-2018-guidelines}, afin de permettre l'analyse, l'extraction et la structuration d'informations textuelles dans de telles ressources. \emph{GROBID-dictionaries} avait déjà obtenu des résultats et des performances prometteurs \citep{khemakhem-2020-standard}, à tel point qu'il a été utilisé pour faire une première annotation de la macrostructure du Dictionnaire Universel.
+
+Étant donnés les travaux réalisés par \citet{khemakhem-2020-standard}, nous avons décidé de nous concentrer sur la deuxième tâche d'enrichissement des dictionnaires, qui à l'époque restait assez générale et abstraite, notamment par contraste avec la première tâche de structuration. Pour aborder cette tâche, nous avions deux options: soit nous développions de multiples modèles et systèmes d'annotation dédiés à chacune des sous-tâches impliquées dans cet \emph{enrichissement} et ciblant très spécifiquement le Dictionnaire Universel, soit nous développions un seul modèle d'annotation générique capable d'aborder toutes les sous-tâches d'enrichissement et capable de traiter non seulement le Dictionnaire Universel, mais aussi d'autres textes et ressources de l'époque moderne\footnote{Entre le 16e et le 18e siècle.}.
+
+Étant donnée la nature de la tâche d'enrichissement et le fait que de nouveaux modèles de langue neuronaux capables transférer des connaissances entre différentes tâches en traitement automatique du langage naturel (TALN) venaient d'être publiés au début de cette thèse \cite{peters-etal-2018-deep,devlin-etal-2019-bert}, nous avons décidé de nous concentrer sur la deuxième option et, en conséquence, de développer un seul modèle général que nous espérions capable d'être utilisé pour toutes ces tâches d'enrichissement et pour n'importe quel type de document en français moderne ou contemporain.
+
+En choisissant cette approche, nous voulions aussi aborder d'une façon indirecte la première tâche de structuration automatique, parce que nous croyons qu'il était possible d'améliorer les premiers résultats de GROBID-dictionaries en utilisant des nouveaux modèles neuronaux. En effet GROBID-dictionaries reposait sur des modèles CRF (Champ aléatoire conditionnel) \cite{lafferty-etal-2001-conditional} qui étaient largement utilisés pour l'étiquetage et la classification des tokens, mais qui ont été remplacés par ces modèles neuronaux au cours des dernières années \citep{lample-etal-2016-neural,devlin-etal-2019-bert}. En outre, nous savions que les développeurs de GROBID avaient commencé à travailler avec certains de ces modèles neuronaux en écrivant \emph{DeLFT}, une bibliothèque pour le traitement de texte, couvrant l'étiquetage et la classification de tokens. Cette bibliothèque réimplémente les derniers modèles d'apprentissage automatique en TALN \citep{lopez-etal-2018-delft} et vise à améliorer les pipelines de \emph{GROBID}. Ce sont des outils et des idées comme ceux contenus dans \emph{DeLFT} qui pouvaient être appliqués à \emph{GROBID}-Dictionaries pour améliorer et étendre considérablement ses capacités au profit du projet \emph{BASNUM}, surtout en plus des ressources que nous avions décidé de développer.
+
+Ayant choisi de développer ces nouveaux modèles pour le français, tels que \emph{ELMo} \citep{peters-etal-2018-deep} ou \emph{BERT} \cite{devlin-etal-2019-bert}, nous devions commencer par construire et rassembler notre propre corpus pour le pre-entraînement de ces architectures, puisque les corpus en français contemporain librement disponibles à l'époque, tels que Wikipedia ou frWAC \citep{baroni-etal-2009-the}, n'étaient pas considérés comme étant suffisamment grands pour cela \citep{liu-etal-2019-roberta}.
+
+Notre plan était alors de développer un corpus de pre-entraînement en français contemporain, puis de pre-entraîner un modèle de langue pour le français contemporain et enfin d'utiliser les capacités de transfert de connaissances de ces architectures pour l'adapter au français moderne, au cas où nous ne serions pas en mesure de trouver assez de ressources textuelles pour pre-entrainer directement un tel modèle de langue pour le français moderne. Au cours de cette thèse, nous voulions également étudier la question de la quantité minimale de ressources requise pour pre-entraîner avec succès de telles modèles, quantité qui, à l'époque, était considérée comme plus élevée que ce qui est disponible pour les langues historiques \citep{peters-etal-2018-deep,liu-etal-2019-roberta}.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Goclassy}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -30,22 +52,7 @@ Even though these models have clear advantages, their main drawback is the amoun
 
 While Wikipedia is freely available, and multiple pipelines exist\footnote{\url{https://github.com/attardi/wikiextractor}}\textsuperscript{,}\footnote{\url{https://github.com/hghodrati/wikifil}} to extract plain text from it, some of the bigger corpora mentioned above are not made available by the authors either due to copyright issues or probably because of the infrastructure needed to serve and distribute such big corpora. Moreover the vast majority of both these models and the corpora they are trained with are in English, meaning that the availability of high quality NLP for other languages, specially for low-resource languages, is rather limited.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Monolingual approach}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-One of the key elements that has pushed the state of the art considerably in neural NLP in recent years has been the introduction and spread of transfer learning methods to the field. These methods can normally be classified in two categories according to how they are used:
-\begin{itemize}
-    \item \emph{Feature-based} methods, which involve pre-training real-valued vectors (``embeddings'') at the word, sentence, or paragraph level; and using them in conjunction with a specific architecture for each individual downstream task.
-    \item \emph{Fine-tuning} methods, which introduce a minimal number of task-specific parameters, and instead copy the weights from a pre-trained network and then tune them to a particular downstream task.
-\end{itemize}
-Embeddings or language models can be divided into \emph{fixed}, meaning that they generate a single representation for each word in the vocabulary; and \emph{contextualized}, meaning that a representation is generated based on both the word and its surrounding context, so that a single word can have multiple representations, each one depending on how it is used.
-
-In practice, most fixed embeddings are used as feature-based models. The most notable examples are \emph{word2vec} \citep{mikolov-etal-2013-distributed}, \emph{GloVe} \citep{pennington-etal-2014-glove} and \emph{fastText} \citep{mikolov-etal-2018-advances}. All of them are extensively used in a variety of applications nowadays. On the other hand, contextualized word representations and language models have been developed using both feature-based architectures, the most notable examples being ELMo and Flair \citep{peters-etal-2018-deep,akbik-etal-2018-contextual}, and transformer based architectures, that are commonly used in a fine-tune setting, as is the case of GPT-1, GPT-2 \citep{radford-etal-2018-improving,radford-etal-2019-language}, BERT and its derivatives \citep{devlin-etal-2019-bert,liu-etal-2019-roberta,lan-etal-2020-albert} and more recently T5 \citep{raffel-etal-2020-exploring}. All of them have repeatedly improved the state-of-the art in many downstream NLP tasks over the last year.
-
-In general, the main advantage of using language models is that they are mostly built in an \emph{unsupervised} manner and they can be trained with raw, unannotated plain text. Their main drawback is that enormous quantities of data seem to be required to properly train them especially in the case of contextualized models, for which larger corpora are thought to be needed to properly address polysemy and cover the wide range of uses that commonly exist within languages.
-
-For gathering data in a wide range of languages, Wikipedia is a commonly used option. It has been used to train fixed embeddings \citep{al-rfou-etal-2013-polyglot,bojanowski-etal-2017-enriching} and more recently the multilingual BERT \citep{devlin-etal-2019-bert}, hereafter mBERT. However, for some languages, Wikipedia might not be large enough to train good quality contextualized word embeddings. Moreover, Wikipedia data all belong to the same specific genre and style. To address this problem, one can resort to crawled text from the internet; the largest and most widespread dataset of crawled text being Common Crawl.\footnote{\url{https://commoncrawl.org}} Such an approach generally solves the quantity and genre/style coverage problems but might introduce noise in the data, an issue which has earned the corpus some criticism, most notably by \citet{trinh-le-2018-a} and \citet{radford-etal-2019-language}. Using Common Crawl also leads to data management challenges as the corpus is distributed in the form of a large set of plain text each containing a large quantity of unclassified multilingual documents from different websites.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Quality at Glance}
@@ -53,25 +60,15 @@ For gathering data in a wide range of languages, Wikipedia is a commonly used op
 
 Access to multilingual datasets for NLP research has vastly improved over the past years. A variety of web-derived collections for hundreds of languages is available for anyone to download, such as ParaCrawl~\citep{espla-etal-2019-paracrawl, banon-etal-2020-paracrawl}, WikiMatrix~\citep{schwenk-etal-2021-wikimatrix} CCAligned~\citep{el-kishky-etal-2020-ccaligned}, \mbox{OSCAR}~\citep{ortiz-suarez-etal-2019-asynchronous, ortiz-suarez-etal-2020-monolingual}, and several others.
 These have in turn enabled a variety of highly multilingual models, like mT5 \citep{xue-etal-2021-mt5}, M2M\nobreakdash-100 \citep{fan-etal-2020-beyond}, M4 \citep{arivazhagan-etal-2019-massively}.
-% Recent approaches that employ large-scale multilingual systems have shown potential for some generalization across typologically different languages \cite{pires-etal-2019-multilingual,papadimitriou-etal-2021-deep}. .
+
 
 Curating such datasets relies on the websites giving clues about the language of their contents (e.g. a language identifier in the URL) and on automatic language classification (LangID).
-%and filtering tools, and a range of evaluation sets and metrics to compile high-quality datasets. 
+
 It is commonly known that these automatically crawled and filtered datasets tend to have overall lower quality than hand-curated collections~\citep{koehn-etal-2020-findings}, but their quality is rarely measured directly, and is rather judged through the improvements they bring to downstream applications~\citep{schwenk-etal-2021-wikimatrix}.
 
 Building NLP technologies with automatically crawled datasets is promising. This is especially true for low-resource languages, because data scarcity is one of the major bottlenecks for deep learning approaches.
 However, there is a problem: There exists very little research on evaluating both data collections and automatic crawling and filtering tools for low-resource languages.
 As a result, although many low-resource languages are covered by the latest multilingual crawl data releases, their quality and thus usability is unknown.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Towards}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-The demand for large corpora has considerably increased in recent years with the advent of semi-supervised learning methods in Natural Language Processing (NLP), such as \emph{word embeddings} \cite{mikolov-etal-2013-distributed,pennington-etal-2014-glove,mikolov-etal-2018-advances}, \emph{contextualized word representations} \cite{howard-ruder-2018-universal,peters-etal-2018-deep,devlin-etal-2019-bert} and more recently \emph{very large generative language models} like GPT-3, T5, GPT-Neo \cite{raffel-etal-2020-exploring,brown-etal-2020-language,black-etal-2021-gpt}. While there have been some recent efforts to manually curate such corpora\footnote{\url{https://bigscience.huggingface.co}} \cite{gao-etal-2020-pile}, the common approach to collect large amounts of raw textual data still relies primarily on crawled web text \cite{ortiz-suarez-etal-2019-asynchronous,ortiz-suarez-etal-2020-monolingual,xue-etal-2021-mt5,el-kishky-etal-2020-ccaligned,espla-etal-2019-paracrawl,banon-etal-2020-paracrawl,gao-etal-2020-pile}, and although some of the initial concerns of using crawled data \cite{trinh-le-2018-a,radford-etal-2019-language} have been addressed in recent years \cite{ortiz-suarez-etal-2020-monolingual,martin-etal-2020-camembert} there a many concerns that still need to be tackled \cite{caswell-etal-2020-language} specially for multilingual data \cite{kreutzer-etal-2021-quality}.
-
-In this demand for large raw textual corpora we can observe a clear back and forth in the type of data used to pre-train these models. On one hand some authors have opted for highly curated or edited data like Wikipedia such as \newcite{al-rfou-etal-2013-polyglot} and \newcite{bojanowski-etal-2017-enriching} for static word embeddings, the 1B Word Benchmark \cite{chelba-etal-2014-one} for ELMo \cite{peters-etal-2018-deep}, and the BookCorpus \cite{zhu-etal-2015-aligning} and Wikipedia for BERT \cite{devlin-etal-2019-bert}. On the other hand projects like those of \newcite{pennington-etal-2014-glove} or \newcite{grave-etal-2018-learning} used crawled data for the pre-training of fixed word embeddings, CamemBERT \cite{martin-etal-2020-camembert} a contextualized model for French successfully used only Crawled data for pre-training, and even large generative language models like T5 have used mainly crawled data successfully \cite{raffel-etal-2020-exploring}. We can of course also see examples of projects successfully using a mix of both manually curated and automatically crawled data such as RoBERTa \cite{liu-etal-2019-roberta}, XLNet \cite{yang-etal-2019-xlnet} and GPT-Neo \cite{black-etal-2021-gpt,gao-etal-2020-pile}. However, no matter the chosen approach to build these large corpora, there are in every case concerns that have been expressed, specially for the datasets used in very large generative language models \cite{bender-etal-2021-on}, even when using manually edited resources like Wikipedia \cite{barera-2020-mind}.
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{CamemBERT}
@@ -97,24 +94,6 @@ As for many other tasks, NER was first addressed using rule-based approaches, fo
 Unfortunately, most named entity annotated French corpora are oral transcripts, and they are not always freely available. The ESTER and ESTER2 corpora (60 plus 150 hours of NER-annotated broadcast transcripts)
 \cite{galliano-etal-2005-the,galliano-etal-2009-the}, as well as the Quaero
 \cite{grouin-etal-2011-proposal} corpus are based on oral transcripts (radio broadcasts). Interestingly, the Quaero corpus relies on an original, very rich and structured  definition of the notion of named entity \cite{rosset-etal-2011-entites}. It contains both the intrinsic and the contextual types of each mention, whereas the ESTER and ESTER2 corpora only provide the contextual type.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{SinNER}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-Among the aspects for which Natural Language Processing (NLP) can be useful for Digital Humanities (DH) figures prominently Named Entity Recognition. This task interests researchers for numerous reasons since the application can be pretty wide.
-We can cite genealogy or history for which finding mentions of persons and places in texts is very useful. Researchers in digital literature have shown a great interest in NER since it can help for instance to highlight the path of different characters in a book or in a book series. There can be cross-fertilization between NER and DH since some researchers showed that some particular properties of literature can help to build better NER systems \cite{brooke-etal-2016-bootstrapped}.
-Apart from literature, NER can also be used more generally to help refine queries to assist browsing in newspaper collections \cite{neudecker-etal-2014-large}.
-Like other NLP tasks, NER quality will suffer from different problems related to variations in the input data: variation in languages (multilinguality), variation in the quality of the data (OCR errors mainly) and specificity of the application domain (literature vs. epidemic surveillance for instance). These difficulties can be connected with the challenges for low-level NLP tasks highlighted by Dale \textit{et al.} \cite{dale-etal-2000-handbook}. In CLEF-HIPE shared task \cite{ehrmann-etal-2020-extended}, the variation in language and in text quality will be the main problems even if the specificity of the application can be of great interest.
-
-NER in old documents represent an interesting challenge for NLP since it is usually necessary to process documents that show different kind of variations as compared to the particular laboratory conditions on which NER systems are trained.
-Most NER systems are usually designed to process clean data.
-Additionally, there is the multilingual issue since NER systems have been designed primarily for English, with assumptions on the availability of data on the one hand and on the universal nature of some linguistic properties on the other hand.
-
-The fact that the texts processed in Digital Humanities are usually not born-digital is very important since, even after OCR post-correction, it is very likely that some noise would be found in the text.
-Other difficulties will arise as well in those type of documents. The variation in language is one of them since contemporary English will clearly not be the most frequent language.  It is interesting for researchers to check how much diachronic variation has an influence on NER systems \cite{ehrmann-etal-2016-diachronic}.
-It makes it even more important to work on multilingual NER and to build architectures that need less training data \cite{rahimi-etal-2019-massively}.
-More generally, NER in ancient texts represents a great opportunity for NLP to compare to main approaches to handle variation in texts: adapting the texts to an existing architecture via modernization or normalization \cite{leaman-etal-2016-taggerone} or adapting the pipeline to non standard data (OCR noise, language variants\dots) via domain adaptation or data augmentation techniques \cite{ghannay-etal-2018-end}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

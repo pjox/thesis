@@ -1,6 +1,86 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{On Language Models and Downstram Tasks}
+\chapter{On Language Models and Downstream Tasks}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Monolingual approach}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+One of the key elements that has pushed the state of the art considerably in neural NLP in recent years has been the introduction and spread of transfer learning methods to the field. These methods can normally be classified in two categories according to how they are used:
+\begin{itemize}
+    \item \emph{Feature-based} methods, which involve pre-training real-valued vectors (``embeddings'') at the word, sentence, or paragraph level; and using them in conjunction with a specific architecture for each individual downstream task.
+    \item \emph{Fine-tuning} methods, which introduce a minimal number of task-specific parameters, and instead copy the weights from a pre-trained network and then tune them to a particular downstream task.
+\end{itemize}
+Embeddings or language models can be divided into \emph{fixed}, meaning that they generate a single representation for each word in the vocabulary; and \emph{contextualized}, meaning that a representation is generated based on both the word and its surrounding context, so that a single word can have multiple representations, each one depending on how it is used.
+
+In practice, most fixed embeddings are used as feature-based models. The most notable examples are \emph{word2vec} \citep{mikolov-etal-2013-distributed}, \emph{GloVe} \citep{pennington-etal-2014-glove} and \emph{fastText} \citep{mikolov-etal-2018-advances}. All of them are extensively used in a variety of applications nowadays. On the other hand, contextualized word representations and language models have been developed using both feature-based architectures, the most notable examples being ELMo and Flair \citep{peters-etal-2018-deep,akbik-etal-2018-contextual}, and transformer based architectures, that are commonly used in a fine-tune setting, as is the case of GPT-1, GPT-2 \citep{radford-etal-2018-improving,radford-etal-2019-language}, BERT and its derivatives \citep{devlin-etal-2019-bert,liu-etal-2019-roberta,lan-etal-2020-albert} and more recently T5 \citep{raffel-etal-2020-exploring}. All of them have repeatedly improved the state-of-the art in many downstream NLP tasks over the last year.
+
+In general, the main advantage of using language models is that they are mostly built in an \emph{unsupervised} manner and they can be trained with raw, unannotated plain text. Their main drawback is that enormous quantities of data seem to be required to properly train them especially in the case of contextualized models, for which larger corpora are thought to be needed to properly address polysemy and cover the wide range of uses that commonly exist within languages.
+
+For the first English version of word2vec, \citet{mikolov-etal-2013-distributed} used a one billion word dataset consisting of various news articles. Later \citet{al-rfou-etal-2013-polyglot} and then \citet{bojanowski-etal-2017-enriching} used the plain text from Wikipedia to train distributions of word2vec and fastText respectively, for languages other than English. Now, the problem of obtaining large quantities of data aggravates even more for contextual models, as they normally need multiple instances of a given word in order to capture all its different uses and in order to avoid overfitting due to the large quantity of hyperparameters that these models have. \citet{peters-etal-2018-deep} for example use a 5.5 billion token\footnote{Punctuation marks are counted as tokens.} dataset comprised of crawled news articles plus the English Wikipedia in order to train ELMo, \citet{devlin-etal-2019-bert} use a 3.3 billion word\footnote{Space sparated tokens.} corpus made by merging the English Wikipedia with the BooksCorpus \citep{zhu-etal-2015-aligning}, and \citet{radford-etal-2019-language} use a 40GB English corpus created by scraping outbound links from Reddit.\footnote{\url{https://www.reddit.com/}}
+
+
+For gathering data in a wide range of languages, Wikipedia is a commonly used option. It has been used to train fixed embeddings \citep{al-rfou-etal-2013-polyglot,bojanowski-etal-2017-enriching} and more recently the multilingual BERT \citep{devlin-etal-2019-bert}, hereafter mBERT. However, for some languages, Wikipedia might not be large enough to train good quality contextualized word embeddings. Moreover, Wikipedia data all belong to the same specific genre and style. To address this problem, one can resort to crawled text from the internet; the largest and most widespread dataset of crawled text being Common Crawl.\footnote{\url{https://commoncrawl.org}} Such an approach generally solves the quantity and genre/style coverage problems but might introduce noise in the data, an issue which has earned the corpus some criticism, most notably by \citet{trinh-le-2018-a} and \citet{radford-etal-2019-language}. Using Common Crawl also leads to data management challenges as the corpus is distributed in the form of a large set of plain text each containing a large quantity of unclassified multilingual documents from different websites.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Monolingual Related Work}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Since the introduction of \emph{word2vec} \citep{mikolov-etal-2013-distributed}, many attempts have been made to create multilingual language representations; for fixed word embeddings the most remarkable works are those of \citep{al-rfou-etal-2013-polyglot} and \citep{bojanowski-etal-2017-enriching} who created word embeddings for a large quantity of languages using Wikipedia, and later \citep{grave-etal-2018-learning} who trained the fastText word embeddings for 157 languages using Common Crawl and who in fact showed that using crawled data significantly increased the performance of the embeddings especially for mid- to low-resource languages.
+
+Regarding contextualized models, the most notable non-English contribution has been that of the mBERT \citep{devlin-etal-2019-bert}, which is distributed as (i)~a single multilingual model for 100 different languages trained on Wikipedia data, and as (ii)~a single multilingual model for both Simplified and Traditional Chinese. Four monolingual fully trained ELMo models have been distributed for Japanese, Portuguese, German and Basque\footnote{\url{https://allennlp.org/elmo}}; 44 monolingual ELMo models\footnote{\url{https://github.com/HIT-SCIR/ELMoForManyLangs}} where also released by the \emph{HIT-SCIR} team \citep{che-etal-2018-towards} during the \emph{CoNLL 2018 Shared Task} \citep{zeman-etal-2018-conll}, but their training sets where capped at 20 million words.
+
+For dependency parsing and POS tagging the most notable non-English specific contribution is that of the \emph{CoNLL 2018 Shared Task} \citep{zeman-etal-2018-conll}, where the 1\textsuperscript{st} place (LAS Ranking) was awarded to the \emph{HIT-SCIR} team \citep{che-etal-2018-towards} who used \citet{dozat-manning-2017-deep}'s \emph{Deep Bi-affine parser} and its extension described in \citep{dozat-etal-2017-stanfords}, coupled with deep contextualized ELMo embeddings \citep{peters-etal-2018-deep} (capping the training set at 20 million words). The 1\textsuperscript{st} place in universal POS tagging was awarded to \citet{smith-etal-2018-82} who used two separate instances of \citet{bohnet-etal-2018-morphosyntactic}'s tagger.
+
+More recent developments in POS tagging and parsing include those of \citet{straka-strakova-2019-evaluating} which couples another CoNLL 2018 shared task participant, UDPipe 2.0 \citep{straka-2018-udpipe}, with mBERT greatly improving the scores of the original model, and UDify \citep{kondratyuk-straka-2019-75}, which adds an extra attention layer on top of mBERT plus a Deep Bi-affine attention layer for dependency parsing and a Softmax layer for POS tagging. UDify is actually trained by concatenating the training sets of 124 different UD treebanks, creating a single POS tagging and dependency parsing model that works across 75 different languages.
+
+Concerning contextual models, \citet{baevski-etal-2019-cloze} trained a BERT-like bi-directional Transformer for English using Common Crawl. They followed the ``fastText pre-processing pipeline'' but they removed all copies of Wikipedia inside Common Crawl. They also trained their model using News Crawl \citep{bojar-etal-2018-findings} and using Wikipedia + BooksCorpus, they compared three models and showed that Common Crawl gives the best performance out of the three corpora.
+
+The XLNet model was trained for English by joining the BookCorpus, English Wikipedia, Giga5 \citep{parker-etal-2011-english}, ClueWeb 2012-B \citep{callan-etal-2009-clueweb09} and Common Crawl. Particularly for Common Crawl, \citet{yang-etal-2019-xlnet} say they use ``heuristics to aggressively filter out short or low-quality articles'' from Common Crawl, however they don't give any detail about these ``heuristics'' nor about the pipeline they use to classify and extract the English part of Common Crawl.
+
+It is important to note that none of these projects distributed their classified, filtered and cleaned versions of Common Crawl, making it difficult in general to faithfully reproduce their results.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{ELMo: Contextualized word embeddings}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\emph{Embeddings from Language Models} (ELMo) \cite{peters-etal-2018-deep} is a Language Model, i.e, a model that given a sequence of $N$ tokens, $(t_1, t_2, ..., t_N)$, computes the probability of the sequence
+by modeling the probability of token $t_k$ given the history $(t_1, ..., t_{k-1})$:
+\[
+    p(t_1, t_2, \ldots, t_N) = \prod_{k=1}^N p({t_k} \mid t_1, t_2, \ldots, t_{k-1}).
+\]
+However, ELMo in particular uses a bidirectional language model (biLM) consisting of $L$ LSTM layers, that is, it combines both a forward and a backward language model jointly maximizing the log likelihood of the forward and backward directions:
+\begin{align*}
+     & \sum_{k=1}^N \left( \right. \log p({t_k} \mid t_1, \ldots, t_{k-1}; \Theta_x, \overrightarrow{\Theta}_{LSTM}, \Theta_s) \\
+     & + \log p({t_k} \mid t_{k+1}, \ldots, t_{N}; \Theta_x, \overleftarrow{\Theta}_{LSTM}, \Theta_s)
+    \left. \right).
+\end{align*}
+where at each position $k$, each LSTM layer $l$ outputs a context-dependent representation $\overrightarrow{\mathbf{h}}^{LM}_{k,l}$ with $l=1, \ldots, L$ for a forward LSTM, and $\overleftarrow{\mathbf{h}}^{LM}_{k,l}$ of $t_k$ given $(t_{k+1}, \ldots, t_N)$ for a backward LSTM.
+
+ELMo also computes a context-independent token representation $\mathbf{x}^{LM}_{k}$ via token embeddings or via a CNN over characters. ELMo then ties the parameters for the token representation ($\Theta_x$) and Softmax layer ($\Theta_s$) in the forward and backward direction while maintaining separate parameters for the LSTMs in each direction.
+
+ELMo is a task specific combination of the intermediate layer representations in the biLM, that is,
+for each token $t_k$, a $L$-layer biLM computes a set of $2L + 1$ representations
+\begin{align*}
+    R_k & =  \{\mathbf{x}^{LM}_{k}, \overrightarrow{\mathbf{h}}^{LM}_{k,l}, \overleftarrow{\mathbf{h}}^{LM}_{k,l} \ |\  l =1, \ldots, L \} \\
+        & =  \{\mathbf{h}^{LM}_{k,l}\ | \ l=0, \ldots, L\},
+\end{align*}
+where $\mathbf{h}^{LM}_{k,0}$ is the token layer and
+\[
+    \mathbf{h}^{LM}_{k,l} = [\overrightarrow{\mathbf{h}}^{LM}_{k,l}; \overleftarrow{\mathbf{h}}^{LM}_{k,l}],
+\]
+for each biLSTM layer.
+
+
+When included in a downstream model, as it is the case in this paper, ELMo collapses all $L$ layers in $R$ into a single vector $\mathbf{ELMo}_k = E(R_k; \mathbf{\Theta}_e)$, generally computing a task specific weighting of all biLM layers:
+\begin{align*}
+    \mathbf{ELMo}^{task}_k & = E(R_k; \Theta^{task})                                       \\
+                           & =\gamma^{task} \sum_{l=0}^L s^{task}_l \mathbf{h}^{LM}_{k,l}.
+\end{align*}
+applying layer normalization to each biLM layer before weighting.
+
+Following \cite{peters-etal-2018-deep}, we use in this paper ELMo models where $L=2$, i.e., the ELMo architecture involves a character-level CNN layer followed by a 2-layer biLSTM.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -28,9 +108,7 @@ A few non-English monolingual models have been released: ELMo models for Japanes
 However, to the best of our knowledge, no particular effort has been made toward training models for languages other than English at a scale similar to the latest English models (e.g.~\roberta trained on more than 100GB of data).
 
 \paragraph{BERT and RoBERTa}
-Our approach is based on \roberta \cite{liu-etal-2019-roberta} which itself is based on \bert \cite{devlin-etal-2019-bert}.
-\bert is a multi-layer bidirectional Transformer encoder trained with a masked language modeling (MLM) objective, inspired by the Cloze task \cite{taylor-1953-cloze}.
-It comes in two sizes: the \bertbase architecture and the \bertlarge architecture. The \bertbase architecture is 3 times smaller and therefore faster and easier to use while \bertlarge achieves increased performance on downstream tasks.
+Our approach is based on \roberta \cite{liu-etal-2019-roberta} which itself is based on \bert \cite{devlin-etal-2019-bert}. \bert is a multi-layer bidirectional Transformer encoder trained with a masked language modeling (MLM) objective, inspired by the Cloze task \cite{taylor-1953-cloze}. It comes in two sizes: the \bertbase architecture and the \bertlarge architecture. The \bertbase architecture is 3 times smaller and therefore faster and easier to use while \bertlarge achieves increased performance on downstream tasks.
 \roberta improves the original implementation of \bert by identifying key design choices for better performance, using dynamic masking, removing the next sentence prediction task, training with larger batches, on more data, and for longer.
 
 \paragraph{Baselines}
@@ -46,29 +124,7 @@ In dependency parsing and POS-tagging we compare our model with:
 
 In French, no extensive work has been done on NER due to the limited availability of annotated corpora. Thus we compare our model with the only recent available baselines set by \citet{dupont-2017-exploration}, who trained both CRF \citep{lafferty-etal-2001-conditional} and BiLSTM-CRF \citep{lample-etal-2016-neural} architectures on the FTB and enhanced them using heuristics and pretrained word embeddings. Additionally, as for POS and dependency parsing, we compare our model to a fine-tuned version of \mbert for the NER task.
 
-For XNLI, we provide the scores of \mbert which has been reported for French by \citet{wu-dredze-2019-beto}.
-We report scores from \xlmmlmtlm (described above), the best model from \citet{conneau-lample-2019-cross}. %\xlmmlmtlm is smaller than \xlmmultimlm from the same authors (12 layers, hidden size 1024, 8 attention heads, 270M parameters vs.~550M parameters) but authors did not report scores for \xlmmultimlm on XNLI.
-We also report the results of \mbox{XLM-R} \cite{conneau-etal-2020-unsupervised}.
-
-%and the English and French Masked Language Model \footnote{we plan to release experiments on XLM-17 and XLM-R} version of XLM referred as \xlmEnFr \cite{conneau-lample-2019-cross}, in order to demonstrate the usefulness of a dedicated version of \bert for French. \xlmEnFr provides us the performance of a multilingual masked language model pretrained on a smaller corpora which is the concatenation of Wikipedia English and French. We finetune those models using the same architecture enhancement and optimization process as we do on \camembert. We then compare our models to UDify \cite{kondratyuk-straka-2019-75} and UDPipe Future+\mbert+Flair \cite{straka-strakova-2019-evaluating}. UDify is a multitask and multilingual model based on \mbert while UDPipe Future+\mbert+Flair is just the original UDPipe Future implementation using \mbert and Flair as contextualized word embeddings. UDify pushed dependency parsing and POS to the extreme case of training one single model based on \mbert for all UD languages reaching state-of-the-art results for many treebanks. 
-
-%Most of the advances in NER have been achieved on English, particularly focusing on the CoNLL 2003 \cite{tjong2003introduction} and the Ontonotes v5 \cite{pradhan2012conll,pradhan2013towards} English corpora. NER is a task that was traditionally tackled using Conditional Random Fields (CRF) \cite{lafferty-etal-2001-conditional} which are quite suited for NER; CRFs were later used as decoding layers for Bi-LSTM architectures \cite{huang2015bidirectional,lample-etal-2016-neural} showing considerable improvements over CRFs alone. These Bi-LSTM-CRF architectures were later enhanced with contextualised word embeddings which yet again brought major improvements to the task \cite{peters-etal-2018-deep,akbik-etal-2018-contextual}. Finally, large pretrained architectures settled the current state of the art showing a small yet important improvement over previous NER-specific architectures \cite{devlin-etal-2019-bert,baevski2019cloze}.
-
-% In non-English NER the CoNLL 2002 shared task included NER corpora for Spanish and Dutch corpora \cite{tjong2002introduction} while the CoNLL 2003 included a German corpus \cite{tjong2003introduction}. Here the recent efforts of \cite{strakova-etal-2019-neural} settled the state of the art for Spanish and Dutch, while \cite{akbik-etal-2018-contextual} did it for German.
-
-%The NER-annotated FTB contains more than 12k sentences and more than 350k tokens extracted from articles of the newspaper \textit{Le Monde} published between 1989 and 1995. In total, it contains 11,636 entity mentions distributed among 7 different types of entities, namely: 2025 mentions of ``Person'', 3761 of ``Location'', 2382 of ``Organisation'', 3357 of ``Company'', 67 of ``Product'', 15 of ``POI'' (Point of Interest) and 29 of ``Fictional Character''. 
-
-%GSD \cite{mcdonald13} is the second-largest treebank available for French after the FTB (described in subsection \ref{ner-section}), it contains data from blogs, news articles, reviews, and Wikipedia. The Sequoia treebank\footnote{\url{https://deep-sequoia.inria.fr}} \cite{candito-seddah-2012-le,candito-etal-2014-deep} contains more than 3000 sentences, from the French Europarl, the regional newspaper \emph{L’Est Républicain}, the French Wikipedia and documents from the European Medicines Agency. Spoken is a corpus converted automatically from the Rhapsodie treebank\footnote{\url{https://www.projet-rhapsodie.fr}} \cite{lacheret-etal-2014-rhapsodie,bawden-etal-2014-correcting} with manual corrections. It consists of 57 sound samples of spoken French with orthographic transcription and phonetic transcription aligned with sound (word boundaries, syllables, and phonemes), syntactic and prosodic annotations. 
-%Finally, ParTUT is a conversion of a multilingual parallel treebank developed at the University of Turin, and consisting of a variety of text genres, including talks, legal texts, and Wikipedia articles, among others; ParTUT data is derived from the already-existing parallel treebank Par(allel)TUT \cite{sanguinetti-Bosco-2015-parttut}. Treebanks statistics are summarized in Table~\ref{treebanks-tab}.
-
-%We evaluate the performance of our models using the standard UPOS accuracy for POS tagging, and Unlabeled Attachment Score (UAS) and Labeled Attachment Score (LAS) for dependency parsing. We assume gold tokenisation and gold word segmentation as provided in the UD treebanks. (Move to section 4, or section 3 baselines)
-
-
-%\lm{I think we should still be very clear why we don't compare to SOTA}
-
-
-%\lm{Is that still true?}
-%We will compare to the more recent cross-lingual language model XLM \cite{conneau-lample-2019-cross}, as well as the state-of-the-art CoNLL 2018 shared task results with predicted tokenisation and segmentation in an updated version of the paper.
+For XNLI, we provide the scores of \mbert which has been reported for French by \citet{wu-dredze-2019-beto}. We report scores from \xlmmlmtlm (described above), the best model from \citet{conneau-lample-2019-cross}. We also report the results of \mbox{XLM-R} \cite{conneau-etal-2020-unsupervised}.
 
 
 % \subsection{Named Entity Recognition}\label{ner-section}
@@ -85,40 +141,6 @@ We also report the results of \mbox{XLM-R} \cite{conneau-etal-2020-unsupervised}
 % The English training set is machine translated for all languages.
 % The dataset is composed of 122k train, 2490 valid and 5010 test examples.
 % As usual, NLI performance is evaluated using accuracy.
-
-% To evaluate a model on a language other than English (such as French), we consider the two following settings:
-% \lm{Remove translate-test, it was originally included only to put RoBERTa in the table which was state of the art at the time in this setting. Not true anymore with XLM-R}
-% \paragraph{TRANSLATE-TEST:} The French test set is machine translated into English, and then used with an English classification model.
-% This setting provides a reasonable, although imperfect, way to circumvent the absence of data set for French, and results in strong baseline scores.
-% \paragraph{TRANSLATE-TRAIN:} The French model is fine-tuned on the machine-translated French training set and then evaluated on the French test set.
-% This is the setting that we use with our \camembert models.
-
-%{\color{red} Add analysis on tokenization differences between OSCAR and CCNet}
-%\bm{former previous work for 'as embedding' is commented here : SHOULD BE INTEGRATED SOMEWHERE IN PART 3}
-%As it is the case with contextualized word embeddings like ELMo \cite{peters-etal-2018-deep} and Flair \cite{akbik-etal-2018-contextual}, one can use a frozen version of transformer models like BERT or RoBERTa as if they were feature based embeddings, notable examples of this type of utilization are the original BERT paper, in which the authors use BERT in this way to do NER \cite{devlin-etal-2019-bert}; the work of \newcite{straka-strakova-2019-evaluating} in which the English BERT and \mbert are plugged as feature-based embeddings to the UDPipe Future architecture obtaining state-of-the-art for part-of-speech tagging and dependency parsing across a wide range of languages; and the work of \newcite{strakova-etal-2019-neural} which again uses both the English BERT and \mbert as feature based embeddings coupled with \newcite{lample-etal-2016-neural} architecture. \bm{I remove the SOTA mention here as it's not the right place} % obtaining state-of-the-art results for both flat and nested NER in 5 different languages. 
-%In order to obtain a representation for a given token, all these implementations first compute the representations of the subwords of a token by taking the mean of the representations given by the four last layers, and then generate the representation for the token by taking the mean of the representations of the subwords of a given token.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{D'AlemBERT Related Work}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-Large datasets for historical states of languages or  extinct languages do exist. The \emph{Corpus Middelnederlands} for Medieval Dutch \citep{reenen-etal-1998-corpus} and the \emph{Base Geste} for Medieval French \citep{camps-etal-2019-geste} are freely available online, encoded in TEI. It is also the case for other corpora for later states of language, such as the \emph{Reference corpus of historical Slovene}, covering approximately three centuries of Slovene (1584--1899)  \citep{erjavec-2015-reference}, and the ``corpus noyau'' of \emph{Presto} \citep{blumenthal-2018-presto}. This last corpus, in its extended version, uses other French corpora such as \emph{Espistemon} for Renaissance French \citep{demonet-1998-epistemon} and the University of Chicago's \emph{American and French Research on the Treasury of the French Language} (ARTFL) \citep{morrissey-olsen-1991-american}; or like \textsc{Frantext} \citep{atilf-1998-frantext}, which is a generalist French corpus, covering the different states of the French language between the 11\textsuperscript{th} and the 21\textsuperscript{st} century. Although most of these text collections are free, the two biggest ones, \textsc{Frantext} and ARTFL, are not freely available or open-sourced.
-
-Concerning language modelling in French, two main models are available for contemporary French, \camembert \cite{martin-etal-2020-camembert} and FlauBERT \cite{le-etal-2020-flaubert}. \camembert was trained on a freely available, automatically web-crawled corpus called OSCAR \cite{ortiz-suarez-etal-2019-asynchronous,ortiz-suarez-etal-2020-monolingual} while FlauBERT was trained on a mix of web-crawled data and manually curated (partly non freely available) contemporary French corpora. Neither of these models was explicitly pre-trained for historical French.\footnote{Note however that texts in Old, Middle and Modern French do exist in the internet, and might have found their way to the training corpus of these two models. This is especially the case for Modern French texts, which automatic language classification tools can easily classify as Contemporary French.} However efficient language models have been trained for less-resourced or extinct Languages such as Latin \cite{bamman-burns-2020-latin}, following the approach of \newcite{martin-etal-2020-camembert} for training language models with less data than was previously thought. There have also been some recent projects that specifically target Early Modern French such as that of \pieextended \cite{clerice-2020-pie} that uses the hierarchical encoding architecture originally proposed by \newcite{manjavacas-etal-2019-improving} which itself is constructed by stacking multiple Bi-LSTM-CRFs. \newcite{clerice-2020-pie} distributes pre-trained models for POS tagging and lemmatisation.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{BERTrade Related Work}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\label{sec-related}
-Since the introduction of contextualized word representations \citep{peters-etal-2018-deep,akbik-etal-2018-contextual,devlin-etal-2019-bert} and the many improvements proposed for them in the consumption of computational resources \citep{clark-etal-2020-electra}, in the amount of data required to fine-tune them \citep{raffel-etal-2020-exploring}, and more recently in the length of the contextual window \citep{xiong-etal-2021-nystromformer}; there have also been important advancements from a digital humanities point of view on \emph{unsupervised domain adaptation} \citep{ramponi-plank-2020-neural}. In this case, one specializes a language model to a particular domain with unlabeled data in order to improve performance in downstream tasks. This can be achieved by  pre-training the models from scratch with specialized data \citep{beltagy-etal-2019-scibert} or by continuing the training of a general model with a new corpus \citep{lee-etal-2019-BioBERT, peng-etal-2019-transfer}. This last method has already been successfully implemented in the context of historical languages, in particular \citet{han-eisenstein-2019-unsupervised} showed that one can successfully adapt the original BERT \citep{devlin-etal-2019-bert} to Early Modern English by continuing the pre-training on historical raw texts.
-
-In a multilingual context, transformer-based models such as mBERT have been adapted to low-resource languages and evaluated in dependency parsing and POS-tagging showing promising results \citep{chau-etal-2020-parsing, muller-etal-2021-unseen, gururangan-etal-2020-dont, wang-etal-2020-extending}. However, this multilingual approach has also been criticized for favoring monolingual pre-training even when data is scarce \citep{virtanen-etal-2019-multilingual, ortiz-suarez-etal-2020-monolingual}. Indeed, even when only small pre-training corpora are available, BERT-like models have also been successfully pre-trained, resulting in well-performing models \citep{micheli-etal-2020-importance}. Furthermore, compact BERT-like models have also been studied \citep{turc-etal-2019-well} and might prove useful in data constrained conditions, such as monolingual pre-training of contextualized word representation for low-resource languages.
-
-Regarding corpora for historical languages, very few of them have manually annotated syntactical resources for their medieval states. English has three such treebanks \citep{oxford-2001-the,kroch-etal-2000-the,traugott-pintzuk-2008-coding} for Old and Middle English. The TOROT treebank for Old Church Slavonic, Old East Slavonic and Middle Russian is another large resource \citep{berdicevskis-eckhoff-2020-diachronic}. There is a treebank for Medieval Latin as well, the \emph{Index Thomisticus Treebank} \citep{passarotti-2019-project}. To our knowledge, the last large treebank containing medieval texts is IcePaHC for Icelandic \citep{rognvaldsson-etal-2012-icelandic}. Some other corpora were annotated automatically in order to reduce the cost of annotation. For example, \citet{rocio-etal-2003-automated} adapted a parsing pipeline for contemporary Portuguese and \citet{lee-kong-2014-a} used a previously annotated treebank \citep{lee-kong-2012-dependency} to parse a larger medieval Chinese corpus. Concerning contemporary regional Romance languages, \citet{miletic-etal-2020-building} also used a smaller treebank to generate new annotations, and concluded that using similar languages to train a model does not improve parsing. Although there are many resources for Latin, and some for Ancient Greek, we do not include them here, because they do not face the same challenges as medieval states of language, in particular the high level of spelling variability.
-
-Lastly, concerning dependency parsing and POS-tagging of Old French in particular, the works of \citet{guibon-etal-2014-parsing} and \citet{stein-2014-parsing, stein-2016-old} are noteworthy. However, they use very different approaches to the one used in this paper and evaluate on previous versions of SRCMF, with incompatible annotation choices and slightly different texts. For the UD version of SRCMF, the most notable work is that of the winner of the \emph{CoNLL 2018 Shared Task} \citep{zeman-etal-2018-conll}, UDPipe 2.0 \citep{straka-2018-udpipe}, which was later enhanced by including contextualized word embeddings \citep{straka-strakova-2019-evaluating}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -181,84 +203,17 @@ To test for word-level representation obtained through the different pre-trainin
 Different terms of comparisons were considered on the two downstream tasks of part-of-speech (POS) tagging and dependency parsing.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{Treebanks test data-set}
-We perform our work on the four freely available French UD treebanks in UD~v2.2: GSD, Sequoia, Spoken, and ParTUT, presented in Table \ref{treebanks-tab-cabernet}.
+We perform our work on the four freely available French UD treebanks in UD~v2.2: GSD, Sequoia, Spoken, and ParTUT, presented in Table \ref{treebanks-tab}.
 
 \textbf{GSD} treebank \citep{mcdonald-etal-2013-universal} is the second-largest tree-bank available for French after the FTB (described in subsection \ref{ner-section}), it contains data from blogs, news, reviews, and Wikipedia.
 
-\textbf{Sequoia} tree-bank %\footnote{\url{https://deep-sequoia.inria.fr}} %candito2012le,
-\citep{candito-etal-2014-deep} comprises more than 3000 sentences, from the French Europarl, the regional newspaper \emph{L’Est Républicain}, the French Wikipedia and documents from the European Medicines Agency.
+\textbf{Sequoia} tree-bank \citep{candito-etal-2014-deep} comprises more than 3000 sentences, from the French Europarl, the regional newspaper \emph{L’Est Républicain}, the French Wikipedia and documents from the European Medicines Agency.
 
-\textbf{Spoken} was automatically converted from the Rhapsodie tree-bank  %\footnote{\url{https://www.projet-rhapsodie.fr}} 
-\citep{lacheret-etal-2014-rhapsodie} with manual corrections. It consists of 57 sound samples of spoken French with phonetic transcription aligned with sound (word boundaries, syllables, and phonemes), syntactic and prosodic annotations.
+\textbf{Spoken} was automatically converted from the Rhapsodie tree-bank \citep{lacheret-etal-2014-rhapsodie} with manual corrections. It consists of 57 sound samples of spoken French with phonetic transcription aligned with sound (word boundaries, syllables, and phonemes), syntactic and prosodic annotations.
 
-Finally, \textbf{ParTUT} is a conversion of a multilingual parallel treebank developed at the University of Turin, and consisting of a variety of text genres, including talks, legal texts, and Wikipedia articles, among others; ParTUT data is derived from the already-existing parallel treebank, Par(allel)TUT \citep{sanguinetti-Bosco-2015-parttut}. Table~\ref{treebanks-tab-cabernet} contains a summary comparing the sizes of the treebanks.%\footnote{\url{https://universaldependencies.org}}.
-
-\begin{table}
-    \centering
-    \begin{tabular}{lcccl}
-        \toprule
-        Treebank & Tokens  & Words   & Sentences & Genre                    \\
-        \midrule
-        GSD      & 389 363 & 400 387 & 16 342    & News Wiki. Blogs         \\
-        Sequoia  & 68 615  & 70 567  & 3 099     & Pop. Wiki. Med. EuroParl \\
-        Spoken   & 34 972  & 34 972  & 2 786     & Oral transcip.           \\
-        ParTUT   & 27 658  & 28 594  & 1 020     & Oral Wiki. Legal         \\
-        \bottomrule
-    \end{tabular}
-    \caption{Sizes of the 4 treebanks used in the evaluations of POS-tagging and dependency parsing. \label{treebanks-tab-cabernet}}
-\end{table}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Finally, \textbf{ParTUT} is a conversion of a multilingual parallel treebank developed at the University of Turin, and consisting of a variety of text genres, including talks, legal texts, and Wikipedia articles, among others; ParTUT data is derived from the already-existing parallel treebank, Par(allel)TUT \citep{sanguinetti-Bosco-2015-parttut}. Table~\ref{treebanks-tab} contains a summary comparing the sizes of the treebanks.
 
 
-
-%and the English and French Masked Language Model \footnote{we plan to release experiments on XLM-17 and XLM-R} version of XLM referred as \xlmEnFr \cite{conneau-lample-2019-cross}, in order to demonstrate the usefulness of a dedicated version of \bert for French. \xlmEnFr provides us the performance of a multilingual masked language model pretrained on a smaller corpora which is the concatenation of Wikipedia English and French. We finetune those models using the same architecture enhancement and optimization process as we do on \camembert. We then compare our models to UDify \cite{kondratyuk-straka-2019-75} and UDPipe Future+\mbert+Flair \cite{straka-strakova-2019-evaluating}. UDify is a multitask and multilingual model based on \mbert while UDPipe Future+\mbert+Flair is just the original UDPipe Future implementation using \mbert and Flair as contextualized word embeddings. UDify pushed dependency parsing and POS to the extreme case of training one single model based on \mbert for all UD languages reaching state-of-the-art results for many treebanks. 
-
-%Most of the advances in NER have been achieved on English, particularly focusing on the CoNLL 2003 \cite{tjong2003introduction} and the Ontonotes v5 \cite{pradhan2012conll,pradhan2013towards} English corpora. NER is a task that was traditionally tackled using Conditional Random Fields (CRF) \cite{lafferty-etal-2001-conditional} which are quite suited for NER; CRFs were later used as decoding layers for Bi-LSTM architectures \cite{huang2015bidirectional,lample-etal-2016-neural} showing considerable improvements over CRFs alone. These Bi-LSTM-CRF architectures were later enhanced with contextualised word embeddings which yet again brought major improvements to the task \cite{peters-etal-2018-deep,akbik-etal-2018-contextual}. Finally, large pretrained architectures settled the current state of the art showing a small yet important improvement over previous NER-specific architectures \cite{devlin-etal-2019-bert,baevski2019cloze}.
-
-% In non-English NER the CoNLL 2002 shared task included NER corpora for Spanish and Dutch corpora \cite{tjong2002introduction} while the CoNLL 2003 included a German corpus \cite{tjong2003introduction}. Here the recent efforts of \cite{strakova-etal-2019-neural} settled the state of the art for Spanish and Dutch, while \cite{akbik-etal-2018-contextual} did it for German.
-
-%The NER-annotated FTB contains more than 12k sentences and more than 350k tokens extracted from articles of the newspaper \textit{Le Monde} published between 1989 and 1995. In total, it contains 11,636 entity mentions distributed among 7 different types of entities, namely: 2025 mentions of ``Person'', 3761 of ``Location'', 2382 of ``Organisation'', 3357 of ``Company'', 67 of ``Product'', 15 of ``POI'' (Point of Interest) and 29 of ``Fictional Character''. 
-
-%GSD \cite{mcdonald13} is the second-largest treebank available for French after the FTB (described in subsection \ref{ner-section}), it contains data from blogs, news articles, reviews, and Wikipedia. The Sequoia treebank\footnote{\url{https://deep-sequoia.inria.fr}} \cite{candito-seddah-2012-le,candito-etal-2014-deep} contains more than 3000 sentences, from the French Europarl, the regional newspaper \emph{L’Est Républicain}, the French Wikipedia and documents from the European Medicines Agency. Spoken is a corpus converted automatically from the Rhapsodie treebank\footnote{\url{https://www.projet-rhapsodie.fr}} \cite{lacheret-etal-2014-rhapsodie,bawden-etal-2014-correcting} with manual corrections. It consists of 57 sound samples of spoken French with orthographic transcription and phonetic transcription aligned with sound (word boundaries, syllables, and phonemes), syntactic and prosodic annotations. 
-%Finally, ParTUT is a conversion of a multilingual parallel treebank developed at the University of Turin, and consisting of a variety of text genres, including talks, legal texts, and Wikipedia articles, among others; ParTUT data is derived from the already-existing parallel treebank Par(allel)TUT \cite{sanguinetti-Bosco-2015-parttut}. Treebanks statistics are summarized in Table~\ref{treebanks-tab}.
-
-%We evaluate the performance of our models using the standard UPOS accuracy for POS tagging, and Unlabeled Attachment Score (UAS) and Labeled Attachment Score (LAS) for dependency parsing. We assume gold tokenisation and gold word segmentation as provided in the UD treebanks. (Move to section 4, or section 3 baselines)
-
-
-%\lm{I think we should still be very clear why we don't compare to SOTA}
-
-
-%\lm{Is that still true?}
-%We will compare to the more recent cross-lingual language model XLM \cite{conneau-lample-2019-cross}, as well as the state-of-the-art CoNLL 2018 shared task results with predicted tokenisation and segmentation in an updated version of the paper.
-
-
-% \subsection{Named Entity Recognition}\label{ner-section}
-% Named Entity Recognition (NER) is a sequence labeling task that consists in predicting which words refer to real-world objects, such as people, locations, artifacts and organisations. We use the French Treebank\footnote{This dataset has only been stored and used on Inria's servers after signing the research-only agreement.} (FTB)  \cite{abeille-etal-2003-building} in its 2008 version introduced by \newcite{candito-crabbe-2009-improving} and with NER annotations by \newcite{sagot-etal-2012-annotation}.
-% The NER-annotated FTB contains more than 12k sentences and more than 350k tokens extracted from articles of the newspaper \textit{Le Monde} published between 1989 and 1995. In total, it contains 11,636 entity mentions distributed among 7 different types of entities, namely: 2025 mentions of ``Person'', 3761 of ``Location'', 2382 of ``Organisation'', 3357 of ``Company'', 67 of ``Product'', 15 of ``POI'' (Point of Interest) and 29 of ``Fictional Character''. 
-
-% A large proportion of the entity mentions in the treebank are multi-word entities. We therefore report the 3 metrics that are commonly used to evaluate models: precision, recall, and F1 score. Here precision measures the percentage of entities found by the system that are correctly tagged, recall measures the percentage of named entities present in the corpus that are found and the F1 score combines both precision and recall measures giving a general idea of a model's performance.
-
-% \subsection{Natural Language Inference}
-% We evaluate our model on Natural Language Inference (NLI), using the French part of the XNLI dataset \cite{conneau-etal-2018-xnli}.
-% NLI consists in predicting whether a hypothesis sentence is entailed, neutral or contradicts a premise sentence.
-
-% The XNLI dataset is the extension of the Multi-Genre NLI (MultiNLI) corpus \cite{williams-etal-2018-broad} to 15 languages by translating the validation and test sets manually into each of those languages.
-% The English training set is machine translated for all languages.
-% The dataset is composed of 122k train, 2490 valid and 5010 test examples.
-% As usual, NLI performance is evaluated using accuracy.
-
-% To evaluate a model on a language other than English (such as French), we consider the two following settings:
-% \lm{Remove translate-test, it was originally included only to put RoBERTa in the table which was state of the art at the time in this setting. Not true anymore with XLM-R}
-% \paragraph{TRANSLATE-TEST:} The French test set is machine translated into English, and then used with an English classification model.
-% This setting provides a reasonable, although imperfect, way to circumvent the absence of data set for French, and results in strong baseline scores.
-% \paragraph{TRANSLATE-TRAIN:} The French model is fine-tuned on the machine-translated French training set and then evaluated on the French test set.
-% This is the setting that we use with our \camembert models.
-
-%{\color{red} Add analysis on tokenization differences between OSCAR and CCNet}
-%\bm{former previous work for 'as embedding' is commented here : SHOULD BE INTEGRATED SOMEWHERE IN PART 3}
-%As it is the case with contextualized word embeddings like ELMo \cite{peters-etal-2018-deep} and Flair \cite{akbik-etal-2018-contextual}, one can use a frozen version of transformer models like BERT or RoBERTa as if they were feature based embeddings, notable examples of this type of utilization are the original BERT paper, in which the authors use BERT in this way to do NER \cite{devlin-etal-2019-bert}; the work of \newcite{straka-strakova-2019-evaluating} in which the English BERT and \mbert are plugged as feature-based embeddings to the UDPipe Future architecture obtaining state-of-the-art for part-of-speech tagging and dependency parsing across a wide range of languages; and the work of \newcite{strakova-etal-2019-neural} which again uses both the English BERT and \mbert as feature based embeddings coupled with \newcite{lample-etal-2016-neural} architecture. \bm{I remove the SOTA mention here as it's not the right place} % obtaining state-of-the-art results for both flat and nested NER in 5 different languages. 
-%In order to obtain a representation for a given token, all these implementations first compute the representations of the subwords of a token by taking the mean of the representations given by the four last layers, and then generate the representation for the token by taking the mean of the representations of the subwords of a given token.
 
 
 \subsection{Downstream evaluation tasks}
@@ -303,7 +258,6 @@ The dataset is composed of 122k train, 2490 development and 5010 test examples f
 
 \subsection{Brief state of the art of NER}
 \label{subsec:sota}
-%BS: this section is heavily inspired (understand: partly copy-pasted) from the \camembert paper. Maybe some rewriting could be a good idea.
 
 As mentioned above, NER was first addressed using rule-based approaches, followed by statistical and now neural machine learning techniques. In addition, many systems use a lexicon of named entity mentions, usually called a ``gazetteer'' in this context.
 
@@ -340,41 +294,20 @@ During a time, most of promising approaches involved an addition to improve CRFs
 or contextual embeddings \cite{peters-etal-2018-deep}.
 More recently, the improvements in contextual word embeddings made the CRFs disappear as standalone models for systems reaching state-of-the-art results, see \cite{stanislawek-etal-2019-named} for a review on the subject and a very interesting discussion on the limits attained by state-of-the-art systems, the \textit{Glass Ceiling}.
 
-\subsubsection{Contextualized word embeddings}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{D'AlemBERT Related Work}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\emph{Embeddings from Language Models} (ELMo) \cite{peters-etal-2018-deep} is a Language Model, i.e, a model that given a sequence of $N$ tokens, $(t_1, t_2, ..., t_N)$, computes the probability of the sequence
-by modeling the probability of token $t_k$ given the history $(t_1, ..., t_{k-1})$:
-\[
-    p(t_1, t_2, \ldots, t_N) = \prod_{k=1}^N p({t_k} \mid t_1, t_2, \ldots, t_{k-1}).
-\]
-However, ELMo in particular uses a bidirectional language model (biLM) consisting of $L$ LSTM layers, that is, it combines both a forward and a backward language model jointly maximizing the log likelihood of the forward and backward directions:
-\begin{align*}
-     & \sum_{k=1}^N \left( \right. \log p({t_k} \mid t_1, \ldots, t_{k-1}; \Theta_x, \overrightarrow{\Theta}_{LSTM}, \Theta_s) \\
-     & + \log p({t_k} \mid t_{k+1}, \ldots, t_{N}; \Theta_x, \overleftarrow{\Theta}_{LSTM}, \Theta_s)
-    \left. \right).
-\end{align*}
-where at each position $k$, each LSTM layer $l$ outputs a context-dependent representation $\overrightarrow{\mathbf{h}}^{LM}_{k,l}$ with $l=1, \ldots, L$ for a forward LSTM, and $\overleftarrow{\mathbf{h}}^{LM}_{k,l}$ of $t_k$ given $(t_{k+1}, \ldots, t_N)$ for a backward LSTM.
+Concerning language modelling in French, two main models are available for contemporary French, \camembert \cite{martin-etal-2020-camembert} and FlauBERT \cite{le-etal-2020-flaubert}. \camembert was trained on a freely available, automatically web-crawled corpus called OSCAR \cite{ortiz-suarez-etal-2019-asynchronous,ortiz-suarez-etal-2020-monolingual} while FlauBERT was trained on a mix of web-crawled data and manually curated (partly non freely available) contemporary French corpora. Neither of these models was explicitly pre-trained for historical French.\footnote{Note however that texts in Old, Middle and Modern French do exist on the internet, and might have found their way to the training corpus of these two models. This is especially the case for Modern French texts, which automatic language classification tools can easily classify as Contemporary French.} However efficient language models have been trained for less-resourced or extinct Languages such as Latin \cite{bamman-burns-2020-latin}, following the approach of \newcite{martin-etal-2020-camembert} for training language models with less data than was previously thought. There have also been some recent projects that specifically target Early Modern French such as that of \pieextended \cite{clerice-2020-pie} that uses the hierarchical encoding architecture originally proposed by \newcite{manjavacas-etal-2019-improving} which itself is constructed by stacking multiple Bi-LSTM-CRFs. \newcite{clerice-2020-pie} distributes pre-trained models for POS tagging and lemmatisation.
 
-ELMo also computes a context-independent token representation $\mathbf{x}^{LM}_{k}$ via token embeddings or via a CNN over characters. ELMo then ties the parameters for the token representation ($\Theta_x$) and Softmax layer ($\Theta_s$) in the forward and backward direction while maintaining separate parameters for the LSTMs in each direction.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{BERTrade Related Work}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\label{sec-related}
+Since the introduction of contextualized word representations \citep{peters-etal-2018-deep,akbik-etal-2018-contextual,devlin-etal-2019-bert} and the many improvements proposed for them in the consumption of computational resources \citep{clark-etal-2020-electra}, in the amount of data required to fine-tune them \citep{raffel-etal-2020-exploring}, and more recently in the length of the contextual window \citep{xiong-etal-2021-nystromformer}; there have also been important advancements from a digital humanities point of view on \emph{unsupervised domain adaptation} \citep{ramponi-plank-2020-neural}. In this case, one specializes a language model to a particular domain with unlabeled data in order to improve performance in downstream tasks. This can be achieved by  pre-training the models from scratch with specialized data \citep{beltagy-etal-2019-scibert} or by continuing the training of a general model with a new corpus \citep{lee-etal-2019-BioBERT, peng-etal-2019-transfer}. This last method has already been successfully implemented in the context of historical languages, in particular \citet{han-eisenstein-2019-unsupervised} showed that one can successfully adapt the original BERT \citep{devlin-etal-2019-bert} to Early Modern English by continuing the pre-training on historical raw texts.
 
-ELMo is a task specific combination of the intermediate layer representations in the biLM, that is,
-for each token $t_k$, a $L$-layer biLM computes a set of $2L + 1$ representations
-\begin{align*}
-    R_k & =  \{\mathbf{x}^{LM}_{k}, \overrightarrow{\mathbf{h}}^{LM}_{k,l}, \overleftarrow{\mathbf{h}}^{LM}_{k,l} \ |\  l =1, \ldots, L \} \\
-        & =  \{\mathbf{h}^{LM}_{k,l}\ | \ l=0, \ldots, L\},
-\end{align*}
-where $\mathbf{h}^{LM}_{k,0}$ is the token layer and
-\[
-    \mathbf{h}^{LM}_{k,l} = [\overrightarrow{\mathbf{h}}^{LM}_{k,l}; \overleftarrow{\mathbf{h}}^{LM}_{k,l}],
-\]
-for each biLSTM layer.
+In a multilingual context, transformer-based models such as mBERT have been adapted to low-resource languages and evaluated in dependency parsing and POS-tagging showing promising results \citep{chau-etal-2020-parsing, muller-etal-2021-unseen, gururangan-etal-2020-dont, wang-etal-2020-extending}. However, this multilingual approach has also been criticized for favoring monolingual pre-training even when data is scarce \citep{virtanen-etal-2019-multilingual, ortiz-suarez-etal-2020-monolingual}. Indeed, even when only small pre-training corpora are available, BERT-like models have also been successfully pre-trained, resulting in well-performing models \citep{micheli-etal-2020-importance}. Furthermore, compact BERT-like models have also been studied \citep{turc-etal-2019-well} and might prove useful in data constrained conditions, such as monolingual pre-training of contextualized word representation for low-resource languages.
 
+Regarding corpora for historical languages, very few of them have manually annotated syntactical resources for their medieval states. English has three such treebanks \citep{oxford-2001-the,kroch-etal-2000-the,traugott-pintzuk-2008-coding} for Old and Middle English. The TOROT treebank for Old Church Slavonic, Old East Slavonic and Middle Russian is another large resource \citep{berdicevskis-eckhoff-2020-diachronic}. There is a treebank for Medieval Latin as well, the \emph{Index Thomisticus Treebank} \citep{passarotti-2019-project}. To our knowledge, the last large treebank containing medieval texts is IcePaHC for Icelandic \citep{rognvaldsson-etal-2012-icelandic}. Some other corpora were annotated automatically in order to reduce the cost of annotation. For example, \citet{rocio-etal-2003-automated} adapted a parsing pipeline for contemporary Portuguese and \citet{lee-kong-2014-a} used a previously annotated treebank \citep{lee-kong-2012-dependency} to parse a larger medieval Chinese corpus. Concerning contemporary regional Romance languages, \citet{miletic-etal-2020-building} also used a smaller treebank to generate new annotations, and concluded that using similar languages to train a model does not improve parsing. Although there are many resources for Latin, and some for Ancient Greek, we do not include them here, because they do not face the same challenges as medieval states of language, in particular the high level of spelling variability.
 
-When included in a downstream model, as it is the case in this paper, ELMo collapses all $L$ layers in $R$ into a single vector $\mathbf{ELMo}_k = E(R_k; \mathbf{\Theta}_e)$, generally computing a task specific weighting of all biLM layers:
-\begin{align*}
-    \mathbf{ELMo}^{task}_k & = E(R_k; \Theta^{task})                                       \\
-                           & =\gamma^{task} \sum_{l=0}^L s^{task}_l \mathbf{h}^{LM}_{k,l}.
-\end{align*}
-applying layer normalization to each biLM layer before weighting.
-
-Following \cite{peters-etal-2018-deep}, we use in this paper ELMo models where $L=2$, i.e., the ELMo architecture involves a character-level CNN layer followed by a 2-layer biLSTM.
+Lastly, concerning dependency parsing and POS-tagging of Old French in particular, the works of \citet{guibon-etal-2014-parsing} and \citet{stein-2014-parsing, stein-2016-old} are noteworthy. However, they use very different approaches to the one used in this paper and evaluate on previous versions of SRCMF, with incompatible annotation choices and slightly different texts. For the UD version of SRCMF, the most notable work is that of the winner of the \emph{CoNLL 2018 Shared Task} \citep{zeman-etal-2018-conll}, UDPipe 2.0 \citep{straka-2018-udpipe}, which was later enhanced by including contextualized word embeddings \citep{straka-strakova-2019-evaluating}.
