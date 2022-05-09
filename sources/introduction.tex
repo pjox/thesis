@@ -3,43 +3,39 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{center}
-  \begin{minipage}{0.5\textwidth}
-    \begin{small}
-      In which the reasons for doing this Ph.D. are laid bare for the whole world to see and we encounter some answers to questions in which, frankly, only an extremely small number of people were interested in the first place.
-    \end{small}
-  \end{minipage}
-  \vspace{0.5cm}
+    \begin{minipage}{0.5\textwidth}
+        \begin{small}
+            In which the reasons for doing this Ph.D. are laid bare for the whole world to see and we encounter some answers to questions in which, frankly, only an extremely small number of people were interested in the first place.
+        \end{small}
+    \end{minipage}
+    \vspace{0.5cm}
 \end{center}
-
-\noindent This package contains a minimal, modern template for writing your
-thesis. While originally meant to be used for a Ph.\,D.\ thesis, you can
-equally well use it for your honour thesis, bachelor thesis, and so
-on---some adjustments may be necessary, though.
 
 \section{The BASNUM Project}
 
-Cette thèse s'inscrit dans le cadre du projet ANR BASNUM (ANR-18-CE38-0003), qui avait comme objectif principal de numériser le Dictionnaire Universel (DU) d'Antoine Furetière, dans sa version de 1701 revue et corrigée par Basnage de Beauval \citep{furetiere-1701-dictionnaire}, et de l'analyser avec des outils numériques, afin de faire apparaître l'importance de cet ouvrage pour l'évolution des sciences et des mentalités au XVIIIe siècle. Le projet visait également à contribuer au mouvement actuel de conception de méthodes innovantes de numérisation, encodage et analyse des textes.
+This thesis is part of the ANR BASNUM project (ANR-18-CE38-0003), which had as its main objective to digitize the \enquote{\emph{Dictionnaire Universel}} (DU) of Antoine Furetière, in its 1701 version reviewed and corrected by Basnage from Beauval \citep{furetiere-1701-dictionnaire}, and to analyze it with digital tools, in order to reveal the importance of this work for the evolution of science and mentalities in the 18\textsuperscript{th} century. The project also aimed to contribute to the current movement to design innovative methods for digitizing, encoding and analyzing texts.
 
-D'un point vue purement informatique le projet BASNUM comptait réaliser deux types de tâches :
+From a purely computational point of view, the BASNUM project intended to carry out two types of tasks:
 \begin{enumerate}
-  \item une première tâche de structuration où la macrostructure du dictionnaire serait annoté;
-  \item une deuxième tâche d'enrichissement qui consistait à réaliser un large éventail de tâches d'extraction d'informations, d'annotation de la microstructure du dictionnaire et même de normalisation et modernisation du texte.
+    \item a first structuring task where the macrostructure of the dictionary would be annotated,
+    \item a second enrichment task which consisted in carrying out a wide range of tasks of information extraction, annotation of the dictionary microstructure and even normalization and modernization of the text.
 \end{enumerate}
 
-La première tâche de structuration automatique des dictionnaires était déjà partiellement couverte par les travaux de \citet{khemakhem-etal-2017-automatic,khemakhem-etal-2018-enhancing} qui développent \emph{GROBID-dictionaries}, un sous-module de \emph{GROBID}\footnote{Bibliothèque d'apprentissage automatique pour extraire, analyser et restructurer des documents bruts tels que PDF, en documents structurés et encodés en TEI.} \citep{lopez-etal-2018-grobid} implémentant une bibliothèque d'apprentissage automatique Java pour la structuration de ressources lexicales numérisées au format \emph{TEI} \citep{tei-2018-guidelines}, afin de permettre l'analyse, l'extraction et la structuration d'informations textuelles dans de telles ressources. \emph{GROBID-dictionaries} avait déjà obtenu des résultats et des performances prometteurs \citep{khemakhem-2020-standard}, à tel point qu'il a été utilisé pour faire une première annotation de la macrostructure du Dictionnaire Universel.
+The first task of automatically structuring dictionaries had been already partially covered by the work of \citet{khemakhem-etal-2017-automatic,khemakhem-etal-2018-enhancing} who developed \emph{GROBID-dictionaries}, a submodule of \emph{GROBID}\footnote{Machine learning library to extract, analyze and restructure raw documents such as PDFs into structured and TEI-encoded documents.} \citep{lopez-etal-2018-grobid} implementing a Java machine learning library for structuring digitized lexical resources in TEI \emph{TEI} format \citep{tei-2018-guidelines}, to enable analysis, extraction and structuring of textual information in such resources. \emph{GROBID-dictionaries} had already obtained promising results and performances \citep{khemakhem-2020-standard}, so much so that it was used to make a first annotation of the \emph{Dictionnaire Universel} macrostructure.
 
-Étant donnés les travaux réalisés par \citet{khemakhem-2020-standard}, nous avons décidé de nous concentrer sur la deuxième tâche d'enrichissement des dictionnaires, qui à l'époque restait assez générale et abstraite, notamment par contraste avec la première tâche de structuration. Pour aborder cette tâche, nous avions deux options: soit nous développions de multiples modèles et systèmes d'annotation dédiés à chacune des sous-tâches impliquées dans cet \emph{enrichissement} et ciblant très spécifiquement le Dictionnaire Universel, soit nous développions un seul modèle d'annotation générique capable d'aborder toutes les sous-tâches d'enrichissement et capable de traiter non seulement le Dictionnaire Universel, mais aussi d'autres textes et ressources de l'époque moderne\footnote{Entre le 16e et le 18e siècle.}.
+Given the work done by \citet{khemakhem-2020-standard}, we decided to concentrate on the second task of enriching the dictionaries, which at the time remained quite general and abstract, in particular in contrast to the first task of structuring. To approach this task, we had two options: either we develop multiple models and annotation systems dedicated to each of the subtasks involved in this \emph{enrichment} and solely targeting the \emph{Dictionnaire Universel}, or we developed a single generic annotation model capable of addressing all enrichment subtasks and capable of handling not only the \emph{Dictionnaire Universel}, but also other texts and resources from the modern period.\footnote{Between the 16th and 18th century.}
 
-Étant donnée la nature de la tâche d'enrichissement et le fait que de nouveaux modèles de langue neuronaux capables transférer des connaissances entre différentes tâches en traitement automatique du langage naturel (TALN) venaient d'être publiés au début de cette thèse \cite{peters-etal-2018-deep,devlin-etal-2019-bert}, nous avons décidé de nous concentrer sur la deuxième option et, en conséquence, de développer un seul modèle général que nous espérions capable d'être utilisé pour toutes ces tâches d'enrichissement et pour n'importe quel type de document en français moderne ou contemporain.
+Given the nature of the enrichment task and the fact that new neural language models able to transfer knowledge between different tasks in natural language processing (NLP) had just been published at the beginning of this thesis \cite{peters-etal-2018-deep,devlin-etal-2019-bert}, we decided to focus on the second option and, accordingly, to develop a single general model that we hoped would be able to be used for all these enrichment tasks and for any type of document in Modern or Contemporary French.
 
-En choisissant cette approche, nous voulions aussi aborder d'une façon indirecte la première tâche de structuration automatique, parce que nous croyons qu'il était possible d'améliorer les premiers résultats de GROBID-dictionaries en utilisant des nouveaux modèles neuronaux. En effet GROBID-dictionaries reposait sur des modèles CRF (Champ aléatoire conditionnel) \cite{lafferty-etal-2001-conditional} qui étaient largement utilisés pour l'étiquetage et la classification des tokens, mais qui ont été remplacés par ces modèles neuronaux au cours des dernières années \citep{lample-etal-2016-neural,devlin-etal-2019-bert}. En outre, nous savions que les développeurs de GROBID avaient commencé à travailler avec certains de ces modèles neuronaux en écrivant \emph{DeLFT}, une bibliothèque pour le traitement de texte, couvrant l'étiquetage et la classification de tokens. Cette bibliothèque réimplémente les derniers modèles d'apprentissage automatique en TALN \citep{lopez-etal-2018-delft} et vise à améliorer les pipelines de \emph{GROBID}. Ce sont des outils et des idées comme ceux contenus dans \emph{DeLFT} qui pouvaient être appliqués à \emph{GROBID}-Dictionaries pour améliorer et étendre considérablement ses capacités au profit du projet \emph{BASNUM}, surtout en plus des ressources que nous avions décidé de développer.
+By choosing this approach, we also wanted to approach in an indirect way the first task of automatic structuring, this is because we believed that it was possible to improve the first results of \emph{GROBID}-dictionaries by using new neural models. Indeed, \emph{GROBID}-dictionaries relied on CRF models (Conditional Random Fields) \cite{lafferty-etal-2001-conditional} which were widely used for token labeling and classification, but that had been superseded by these neural models in recent years \citep{lample-etal-2016-neural,devlin-etal-2019-bert}. Furthermore, we knew that the developers of \emph{GROBID} had started working with some of these neural models by writing \emph{DeLFT}, a library for text processing, covering token labeling and classification. This library reimplements the latest machine learning models in NLP \citep{lopez-etal-2018-delft} and aims to improve \emph{GROBID}'s pipelines. It is tools and ideas like those contained in \emph{DeLFT} that could be applied to \emph{GROBID}-Dictionaries to significantly improve and expand its capabilities for the benefit of the \emph{BASNUM} project, especially in addition to resources that we had decided to develop.
 
-Ayant choisi de développer ces nouveaux modèles pour le français, tels que \emph{ELMo} \citep{peters-etal-2018-deep} ou \emph{BERT} \cite{devlin-etal-2019-bert}, nous devions commencer par construire et rassembler notre propre corpus pour le pre-entraînement de ces architectures, puisque les corpus en français contemporain librement disponibles à l'époque, tels que Wikipedia ou frWAC \citep{baroni-etal-2009-the}, n'étaient pas considérés comme étant suffisamment grands pour cela \citep{liu-etal-2019-roberta}.
 
-Notre plan était alors de développer un corpus de pre-entraînement en français contemporain, puis de pre-entraîner un modèle de langue pour le français contemporain et enfin d'utiliser les capacités de transfert de connaissances de ces architectures pour l'adapter au français moderne, au cas où nous ne serions pas en mesure de trouver assez de ressources textuelles pour pre-entrainer directement un tel modèle de langue pour le français moderne. Au cours de cette thèse, nous voulions également étudier la question de la quantité minimale de ressources requise pour pre-entraîner avec succès de telles modèles, quantité qui, à l'époque, était considérée comme plus élevée que ce qui est disponible pour les langues historiques \citep{peters-etal-2018-deep,liu-etal-2019-roberta}.
+Having chosen to develop these new models for French, such as \emph{ELMo} \citep{peters-etal-2018-deep} or \emph{BERT} \cite{devlin-etal-2019-bert}, we had to start by building and collecting our own corpus for the pre-training of these architectures, since the contemporary French corpora freely available at the time, such as Wikipedia or frWAC \citep{baroni-etal-2009-the}, were not considered to be large enough for this \citep{liu-etal-2019-roberta}.
+
+Our plan then was to develop a pre-training corpus for Contemporary French, then to pre-train a language model for Contemporary French and finally to use the knowledge transfer capabilities of these architectures to adapt it to Early Modern French, in case we were unable to find enough textual resources to directly pre-train such a language model for Early Modern French. During this thesis, we also wanted to investigate the question of the minimum amount of resources required to successfully pre-train such models, an amount which, at the time, was considered higher than what was available for historical languages \citep{peters-etal-2018-deep,liu-etal-2019-roberta}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Language Modeling}
+\section{Transfer Learning in NLP}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 In recent years neural methods for Natural Language Processing (NLP) have consistently and repeatedly improved the state-of-the-art in a wide variety of NLP tasks such as parsing, PoS-tagging, named entity recognition, machine translation, text classification and reading comprehension among others. Probably the main contributing factor in this steady improvement for NLP models is the raise in usage of \emph{transfer learning} techniques in the field. These methods normally consist of taking a pre-trained model and reusing it, with little to no retraining, to solve a different task from the original one it was intended to solve; in other words, one \emph{transfers} the \emph{knowledge} from one task to another.
@@ -81,25 +77,23 @@ On top of this first linguistic problem, a second issue appears: because the pro
 
 \subsection{Medeival French}
 
+Medieval French covers both Old French (9th-13th c.) and Middle French (14th-15th c.). These stages are linguistically close and both precede the adoption of spelling norms. Middle French is more regular than Old French in some respects such as word order \citep{marchello-Nizia-etal-2020-grande} and less in others such as NP structure and pronouns system \citep{marchello-nizia-etal-1979-histoire}. Medieval French covers a set of \textit{Oïl} Romance languages spoken in the kingdom of France between the 9th and the 15th century (\cref{fig:map-dialects}). \footnote{Figure drawn by hand by Mathilde Regnault.} There are around twenty such languages.
+
+Older texts are close to Late Latin, and verse is prevalent until the end of the 13th century. Old French has a relatively free word order. Until the mid-11th century, the prevalent order is \textit{Subject-Object-Verb} (SOV), which is then gradually supplanted by SVO, which is the default order in contemporary French. Unlike most languages with free word order, the functions of verbal arguments are not always given away by morphological clues, the already simplistic case system of Old French disappears progressively through the covered period.
+
 \begin{figure}[thb]
-  \centering
-  \includegraphics[scale=0.29]{static/media/mod_eval/bertrade/map-dialects2.png}
-  \caption{Oïl languages}
-  \label{fig:map-dialects}
+    \centering
+    \includegraphics[scale=0.29]{static/media/mod_eval/bertrade/map-dialects2.png}
+    \caption{Oïl languages}
+    \label{fig:map-dialects}
 \end{figure}
-
-Medieval French covers both Old French (9th-13th c.) and Middle French (14th-15th c.). These stages are linguistically close and both precede the adoption of spelling norms. Middle French is more regular than Old French in some respects such as word order \citep{marchello-Nizia-etal-2020-grande} and less in others such as NP structure and pronouns system \citep{marchello-nizia-etal-1979-histoire}. Medieval French covers a set of \textit{Oïl} Romance languages spoken in the kingdom of France between the 9th and the 15th century (\cref{fig:map-dialects}).
-There are around twenty such languages.
-
-Older texts are close to Late Latin, and verse is prevalent until the end of the 13th century. Old French has a relatively free word order.
-Until the mid-11th century, the prevalent order is \textit{Subject-Object-Verb} (SOV), which is then gradually supplanted by SVO, which is the default order in contemporary French. Unlike most languages with free word order, the functions of verbal arguments are not always given away by morphological clues, the already simplistic case system of Old French disappears progressively through the covered period.
 
 There are also many cases of syntactic ambiguity. For example, in the following quote from \emph{Lancelot},\footnote{In the edition from Pierre Kunstmann, from the online \textit{Base de français médiéval}: \url{http://catalog.bfm-corpus.org/CharretteKu}.} (verse ~5436),
 both \enquote{la dame} and \enquote{Lancelot} could be the subject or the object of \enquote{Vit} and only the context enables the reader to understand that \enquote{la dame} is the subject.
 
-\digloss{Dolant et pansif Lancelot Vit la dame}
-{Mournful and meditative Lancelot saw the lady}
-{The lady saw that Lancelot was mournful and meditative.}
+    \digloss{Dolant et pansif Lancelot Vit la dame}
+    {Mournful and meditative Lancelot saw the lady}
+    {The lady saw that Lancelot was mournful and meditative.}
 
 Word order is also relatively free within constituents. For example, a noun modifier can be on the left or on the right of its governor, and it is not necessarily preceded by a preposition. In contemporary French, it can only appear on the right, and it is found without a preposition only in some cases like named entities. Because of the general free word order and the absence of punctuation in our treebank, this adds up to the ambiguity of the analysis.
 
