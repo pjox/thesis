@@ -48,7 +48,7 @@ WWM is implemented by first randomly sampling 15\% of the words in the sequence 
 
 Subsequent work has shown that the next sentence prediction (NSP) task originally used in \bert does not improve downstream task performance \citep{conneau-lample-2019-cross,liu-etal-2019-roberta}, thus we also remove it.
 
-\paragraph{Optimisation}
+\paragraph{Optimization}
 Following \citep{liu-etal-2019-roberta}, we optimize the model using Adam \citep{kingma-ba-2015-adam} ($\beta_1 = 0.9$, $\beta_2 = 0.98$) for 100k steps with large batch sizes of 8192 sequences, each sequence containing at most 512 tokens. We enforce each sequence to only contain complete paragraphs (which correspond to lines in the pre-training dataset).
 
 \paragraph{Pre-training}
