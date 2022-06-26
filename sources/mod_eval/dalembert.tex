@@ -5,11 +5,13 @@
 \begin{center}
     \begin{minipage}{0.66\textwidth}
         \begin{small}
-            In which we present part of the work of \citet{gabay-etal-2022-from} who pre-train and develop RoBERTa-based \citep{liu-etal-2019-roberta} models for Early Modern French from scratch with the \freemmax corpus, and subsequently evaluate it on POS tagging and named entity recognition on the \freemlpm and the \freemner corpora respectively.
+            In which we present part of the work of \citet{gabay-etal-2022-from} who pre-train and develop RoBERTa-based \citep{liu-etal-2019-roberta} models for Early Modern French from scratch with the \freemmax corpus, and subsequently evaluate it on POS tagging and named entity recognition on the \freemlpm and the \freemner corpora respectively.\footnotemark
         \end{small}
     \end{minipage}
     \vspace{0.5cm}
 \end{center}
+
+\footnotetext{Contributions: I pre-trained \dalembert and did all the experiments in downstream tasks as well as the fine-tuning of \camembert. I also actively participated in writing the scientific article.}
 
 After having successfully pre-trained and evaluated a Transformer-based language model for Medieval French, we wanted to develop such a model for Early Modern French, the state of language corresponding to that of the \emph{Dictionnaire Universel} in its 1701 edition \citep{furetiere-1701-dictionnaire}, the main text of study of the ANR BASNUM (ANR-18-CE38-0003) that funded this Ph.D. thesis. Thus, in this chapter we develop \dalembert a neural language model for Early Modern French, and we evaluate it in POS tagging and NER on the \freemlpm and the \freemner corpora respectively. Contrary to the approach used in the previous chapter, we only pre-train \dalembert from scratch, and we do not post-train any of the Contemporary French models. We decided to do this mainly because that our \freemmax, our pre-training dataset is around 1.2 GB in size which is around 20 times the size of the corpus used in the BERTrade experiments for Medieval French, we also thought that 1.2 GB would be enough to properly train a RoBERTa-based architecture in light of the results obtained for \camembert in subsection \ref{subsec:sizeimpact}.
 

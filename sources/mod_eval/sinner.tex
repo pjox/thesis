@@ -5,11 +5,13 @@
 \begin{center}
     \begin{minipage}{0.66\textwidth}
         \begin{small}
-            In which we present our participation \citep{ortiz-suarez-etal-2020-sinner} to the CLEF-HIPE 2020 shared task \citep{ehrmann-etal-2020-extended}. We actually use this NER shared task as an opportunity see how well the Contemporary French language models that we had trained could perform without any further pre-training or fine-tuning in a task that mainly used historical data. Here we also evaluate the impact that pre-processing has on the models' performance.
+            In which we present our participation \citep{ortiz-suarez-etal-2020-sinner} to the CLEF-HIPE 2020 shared task \citep{ehrmann-etal-2020-extended}. We actually use this NER shared task as an opportunity see how well the Contemporary French language models that we had trained could perform without any further pre-training or fine-tuning in a task that mainly used historical data. Here we also evaluate the impact that pre-processing has on the models' performance.\footnotemark
         \end{small}
     \end{minipage}
     \vspace{0.5cm}
 \end{center}
+
+\footnotetext{Contributions: I made all the experiments for French and German involving the ELMo models and the LSTM-CRFs. Notably the runs 1 and 2. I also actively contributed to writing the scientific article.}
 
 Having participated in the pre-training of Contemporary French language models like \camembert \citep{martin-etal-2020-camembert} and FrELMo \citep{ortiz-suarez-etal-2020-establishing,popa-fabre-etal-2020-french} we wanted to better asses how these models would perform in downstream tasks without any further fine-tuning or additional pre-training data. We wanted to assess in particular how much effective would be a transfer learning technique between different states of the French language. The CLEF-HIPE 2020 shared task \citep{ehrmann-etal-2020-extended} seemed then like a good opportunity to test this, as HIPE (Identifying Historical People, Places and other Entities) was an evaluation campaign on named entity processing on historical newspapers in French, German and English, which was organized in the context of the impresso project and run as a CLEF 2020 Evaluation Lab. In this study we also evaluate the impact that pre-processing has on the performance of our models, specially when the training data comes from OCRized text.
 

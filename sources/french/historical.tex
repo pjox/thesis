@@ -5,11 +5,13 @@
 \begin{center}
     \begin{minipage}{0.66\textwidth}
         \begin{small}
-            In which we present a part of the work of \citet{grobol-etal-2022-bertrade} who put together a raw corpus for Medieval French intended to pre-train language models. We also present part of the work of \citet{gabay-etal-2022-from} who construct a \freemmax,a corpus for Early Modern French for the pre-training of language models, as well as \freemner an evaluation corpus annotated in named entity recognition. We also briefly present \freemlpm an evaluation corpus annotated in part-of-speech tagging.
+            In which we present a part of the work of \citet{grobol-etal-2022-bertrade} who put together a raw corpus for Medieval French intended to pre-train language models. We also present part of the work of \citet{gabay-etal-2022-from} who construct a \freemmax,a corpus for Early Modern French for the pre-training of language models, as well as \freemner an evaluation corpus annotated in named entity recognition. We also briefly present \freemlpm an evaluation corpus annotated in part-of-speech tagging.\footnotemark
         \end{small}
     \end{minipage}
     \vspace{0.5cm}
 \end{center}
+
+\footnotetext{Contributions: For the part of \citep{grobol-etal-2022-bertrade} presented in this chapter, I just helped with the statistics presented in table \ref{tab:texts_train} and figure \ref{fig:metadata}. For the part \citep{gabay-etal-2022-from} presented here, I helped in the crawling of some of the Wikisource transcriptions and some transcriptions found online. For the subsection \ref{freem_ner} I coded a script that allows to parse the corpus into a machine-readable format, find some common mistakes in annotations and generate the final split; I also made some manual corrections to the training corpus itself.}
 
 Having extensively worked in Contemporary French corpora, we wanted to refocus and develop some historical French resources. As mentioned in the introduction of this thesis, this Ph.D. project was conceived and financed by ANR BASNUM (ANR-18-CE38-0003) project, whose main objective was to digitize and enrich Antoine Furetière's \emph{Dictionnaire Universel} (DU), in its 1701 version reviewed and corrected by Basnage de Beauval \citep{furetiere-1701-dictionnaire}; A text written in its entirety in Early Modern French. As such, in section \ref{data-freem} we develop resources for Early Modern French intended for both the pre-training and the evaluation of neural language models. This will allow us to develop in the next part, state-of-the-art models capable of conducting the dictionary enriching task originally planned by the BASNUM project.
 

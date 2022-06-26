@@ -4,11 +4,12 @@
 \begin{center}
     \begin{minipage}{0.66\textwidth}
         \begin{small}
-            In which we present the work of \citet{ortiz-suarez-etal-2020-monolingual}, who propose the first evaluation of OSCAR 2019 as a pre-training corpus for language modeling. This evaluation was done by selecting OSCAR subcorpora for 5 morphologically and tipologically different mid-resource languages and pre-training monolingual ELMo models \citep{peters-etal-2018-deep} for each of them. These ELMo models are then attached to the UDPipe 2.0 architecture \citep{straka-2018-udpipe,straka-strakova-2019-evaluating} and evaluated in dependency parsing and POS tagging.
+            In which we present the work of \citet{ortiz-suarez-etal-2020-monolingual}, who propose the first evaluation of OSCAR 2019 as a pre-training corpus for language modeling. This evaluation was done by selecting OSCAR subcorpora for 5 morphologically and tipologically different mid-resource languages and pre-training monolingual ELMo models \citep{peters-etal-2018-deep} for each of them. These ELMo models are then attached to the UDPipe 2.0 architecture \citep{straka-2018-udpipe,straka-strakova-2019-evaluating} and evaluated in dependency parsing and POS tagging.\footnotemark
         \end{small}
     \end{minipage}
-    \vspace{0.5cm}
 \end{center}
+
+\footnotetext{Contributions: I did the concrete work and designed most of it under the supervision of my coauthors and Ph.D. supervisors.}
 
 Having released OSCAR 2019, the first thing that we wanted to do with it was to evaluate how good it actually was for what it was mainly intended, that is, the pre-training of contextualized word embeddings that had just become available at the time we started working on OSCAR 2019. Such models included ULMFiT \citep{howard-ruder-2018-universal}, ELMo \citep{peters-etal-2018-deep} and BERT \citep{devlin-etal-2019-bert} among others at that time. For this first evaluation we decided to train ELMo contextualized word embeddings for 5 languages: Bulgarian, Catalan, Danish, Finnish and Indonesian. We train one set of embeddings using only Wikipedia data, and another set using only OSCAR 2019 data. We chose these languages primarily because they are morphologically and typologically different from one another, but also because all the OSCAR 2019 subcorpora for these languages were of a sufficiently manageable size such that the ELMo pre-training was doable in less than one month. Contrary to \emph{HIT-SCIR} team \citep{che-etal-2018-towards}, we do not impose any cap on the amount of data, and instead use the entirety of Wikipedia or OSCAR 2019 for each of our 5 chosen languages.
 

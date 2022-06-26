@@ -5,11 +5,13 @@
 \begin{center}
     \begin{minipage}{0.66\textwidth}
         \begin{small}
-            In which we present the work of \citet{abadji-etal-2022-towards}, who continued improving over the second OSCAR pipeline \emph{Ungoliant} by adding mechanisms to ensure document integrity, specially for multilingual records of Common Crawl, and also by adding the first methods for simple annotations of the OSCAR corpus that would allow users to more easily filter the data and obtain a cleaner dataset specially for language modeling applications.
+            In which we present the work of \citet{abadji-etal-2022-towards}, who continued improving over the second OSCAR pipeline \emph{Ungoliant} by adding mechanisms to ensure document integrity, specially for multilingual records of Common Crawl, and also by adding the first methods for simple annotations of the OSCAR corpus that would allow users to more easily filter the data and obtain a cleaner dataset specially for language modeling applications.\footnotemark
         \end{small}
     \end{minipage}
     \vspace{0.5cm}
 \end{center}
+
+\footnotetext{Contributions: I devised the length based filter and the length based annotations, as well as the adult annotations based on a blocklist. I also came up with the method for document label language identification as well as the formalism presented in section \ref{towards-sec:identification}. I proposed some of the comparisons we did between OSCAR versions. Finally, I actively participated in the writing of the scientific article.}
 
 In this final chapter about the OSCAR project we present the first methods for adding simple annotators to the Ungoliant pipeline that build upon the improvements presented in the previous chapter and that actually allow us to finally start addressing some problems exposed in chapter \ref{chap:quality} and in far more detail in \citep{caswell-etal-2020-language,kreutzer-etal-2021-quality}. Moreover, we also introduce a new method for document level language classification that:
 
@@ -57,7 +59,7 @@ In order to refine the filtering process, we use a count-based filter that separ
 This filter may limit the impact of documents containing low-quality long lines at the head/tail, then a high number of short lines.
 
 
-\section{Identification}
+\section{Identification}\label{towards-sec:identification}
 
 The backbone of the language identification process is similar to the one used in \goclassy \cite{ortiz-suarez-etal-2019-asynchronous} for the generation of OSCAR 2019 and Ungoliant \cite{abadji-etal-2021-ungoliant} for the generation of OSCAR 21.09. However, shifting to a document oriented corpus (with a single top-level identification per document) requires to infer the document identification, based on line identifications.
 

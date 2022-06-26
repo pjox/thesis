@@ -5,11 +5,13 @@
 \begin{center}
     \begin{minipage}{0.66\textwidth}
         \begin{small}
-            In which we present the work of \citet{ortiz-suarez-etal-2019-asynchronous}, introducing the first OSCAR corpus, now known as \emph{OSCAR 2019}, as well as asynchronous pipeline \goclassy that was used to produce OSCAR 2019 and that was specically conceived to be used in low resource infrastructures.
+            In which we present the work of \citet{ortiz-suarez-etal-2019-asynchronous}, introducing the first OSCAR corpus, now known as \emph{OSCAR 2019}, as well as asynchronous pipeline \goclassy that was used to produce OSCAR 2019 and that was specifically conceived to be used in low resource infrastructures.\footnotemark
         \end{small}
     \end{minipage}
     \vspace{0.5cm}
 \end{center}
+
+\footnotetext{Contributions: I did the concrete work and designed most of it under the supervision of my coauthors and Ph.D. supervisors.}
 
 As previously mentioned, back in the fall of 2018 when this Ph.D. started, there was no freely available contemporary French corpus of the size that was thought to be needed at that time in order to train a state-of-the art language model. The only available resources were the French Wikipedia and frWAC \citep{baroni-etal-2009-the}. At the time, the original fastText's language classification pipeline \citep{grave-etal-2018-learning} was recently published, but while \citet{grave-etal-2018-learning} published word embeddings for a wide range of languages using the produced corpus, the corpus itself was never published. We thus decided to reproduce and improve \citet{grave-etal-2018-learning} in order to get enough raw textual French data to train a language model. Given that our pipeline ended up being capable of classifying text in a wide range of languages, we decided to publish a multilingual corpus instead of a monolingual French one. In this chapter we thus lay the details of the \goclassy as well as the first version of the OSCAR corpus. 
 

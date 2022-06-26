@@ -5,11 +5,13 @@
 \begin{center}
     \begin{minipage}{0.66\textwidth}
         \begin{small}
-            In which we present a part of the work of \citet{popa-fabre-etal-2020-french} who construct a balanced corpus for contemporary French that could be used for language modeling; and of \citet{ortiz-suarez-etal-2020-establishing} who aligned both the Universal Dependencies and the TEI-annotated NER version of the French Treebank, correcting multiple annotation mistakes and discrepancies, and who then converted the NER annotations to a more machine-ready CoNLL-like format that is more often used for training neural models.
+            In which we present a part of the work of \citet{popa-fabre-etal-2020-french} who construct a balanced corpus for contemporary French that could be used for language modeling; and of \citet{ortiz-suarez-etal-2020-establishing} who aligned both the Universal Dependencies and the TEI-annotated NER version of the French Treebank, correcting multiple annotation mistakes and discrepancies, and who then converted the NER annotations to a more machine-ready CoNLL-like format that is more often used for training neural models.\footnotemark
         \end{small}
     \end{minipage}
     \vspace{0.5cm}
 \end{center}
+
+\footnotetext{Contributions: For the part of \citep{popa-fabre-etal-2020-french} presented here, I prepared and helped with the cleaning of the Wikipedia section of \Cabernet, I also prepared and tokenized all the corpora for the descriptive comparison. For the part of \citep{ortiz-suarez-etal-2020-establishing} presented here I devised a small part of the alignment script and did some manual corrections on the NER annotations of the FTB.}
 
 Having constructed a multilingual corpus out of web data that was in theory big enough to train a state-of-the-art language model \citep{liu-etal-2019-roberta} for a wide range of languages, and having addressed some of the quality concerns that some researchers had expressed about this type of corpus. We wanted to focus a little more on constructing resources specifically for Contemporary and Historical French, as this was the originally intended task when we first started working on OSCAR, which was always intended to be a French corpus only, but that ended being multilingual due to the multilingual nature of Common Crawl.
 
