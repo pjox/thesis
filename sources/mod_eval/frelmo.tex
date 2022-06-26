@@ -17,9 +17,9 @@ Having trained the \roberta \citep{liu-etal-2019-roberta} based \camembert \cite
 
 We train an ELMo model for contemporary French using the French subcorpus of OSCAR 2019. Furthermore, we train each model for 10 epochs, as was done for the original English ELMo \citep{peters-etal-2018-deep}. We also use the same hyper-parameters and the same pre-processing as the originals ELMo authors, i.e., we shuffle the French subcorpus of OSCAR 2019 at a line level. In this case we do not bother to save checkpoints as we previously saw that training for longer produced better models (see \ref{chap:monolingual}), so we train for the full 10 epochs as the original authors suggested \citep{peters-etal-2018-deep}.
 
-\section{Benchmarking NER Models}
+\subsection{Benchmarking NER Models}
 
-\subsection{Experiments}
+\subsubsection{Experiments}
 For our benchmark of NER models for French, we used SEM \citep{dupont-2017-exploration} as our strong baseline because, to the best of our knowledge, it was the previous state-of-the-art for named entity recognition on the FTB-NE corpus. Other French NER systems are available, such as the one given by SpaCy. However, it was trained on another corpus called WikiNER, making the results non-comparable. We can also cite the system of \citep{stern-etal-2012-joint}. This system was trained on another newswire (AFP) using the same annotation guidelines, so the results given in this article are not directly comparable. This model was trained on FTB-NE in \citet{stern-2013-identification} (table C.7, page 303), but the article is written in French. The model yielded an F1-score of 0.7564, which makes it a weaker baseline than SEM. We can cite yet another NER system, namely grobid-ner.\footnote{\url{https://github.com/kermitt2/grobid-ner\#corpus-lemonde-ftb-french}} It was trained on the FTB-NE and yields an F1-score of 0.8739, but two things are to be taken into consideration in grobid-ner's score: the tagset was slightly modified and scores were averaged over a 10-fold cross validation. To see why this is important for FTB-NE, see section \ref{subsubsec:shuffling}.
 
 In this section, we will compare our strong baseline with a series of neural models. We will use the two current state-of-the-art neural architectures for NER, namely seq2seq and LSTM-CRFs models. We will use various pre-trained embeddings in said architectures: fastText, \camembert and FrELMo embeddings.
@@ -59,7 +59,7 @@ For our neural models, we optimized hyperparameters using F1-score on developmen
 
 We train each model three times with three different seeds, select the best seed on the development set, and report the results of this seed on the test set in Table~\ref{tab:results_ordered}.
 
-\subsubsection{Results}
+\subsection{Results}
 
 \begin{table}[htp!]
     \centering\small
@@ -126,7 +126,7 @@ We train each model three times with three different seeds, select the best seed
 
 \paragraph{Base vs large:} an interesting observation is that using large model negatively impacts the performances of the models. One possible reason could be that, because the models are larger, the information is more sparsely distributed and that training on the FTB-NE, a relatively small corpus, is harder.
 
-\subsubsection{Impact of shuffling the data}
+\subsection{Impact of shuffling the data}
 \label{subsubsec:shuffling}
 
 \begin{table}
@@ -160,7 +160,7 @@ We train each model three times with three different seeds, select the best seed
 
 One important thing about the FTB is that the underlying text is made of articles from the newspaper Le Monde that are chronologically ordered. Moreover, the standard development and test sets are at the end of the corpus, which means that they are made of articles that are more recent than those found in the training set. This means that a lot of entities in the development and test sets may be new and therefore unseen in the training set. To estimate the impact of this distribution, we shuffled the data, created a new training/development/test split of the same lengths as in the standard split, and retrained and reevaluated our models. We repeated this process 3 times to avoid unexpected biases. The raw results of this experiment are given in table \ref{tab:results_shuffled}. We can see that the shuffled splits result in improvements on all metrics, the improvement in F1-score on the test set ranging from 4.04 to 5.75 (or 25\% to 35\% error reduction) for our SEM baseline, and from 1.73 to 3.21 (or 18\% to 30\% error reduction) for our LSTM-CRF architectures, reaching scores comparable to the English state-of-the-art. This highlights a specific difficulty of the FTB-NE corpus where the development and test sets seem to contain non-negligible amounts of unknown entities. This specificity, however, allows to have a quality estimation which is more in line with real use cases, where unknown NEs are frequent. This is especially the case when processing newly produced texts with models trained on FTB-NE, as the text annotated in the FTB is made of articles around 20 years old.
 
-\section{Conclusions of the Benchmark}
+\subsection{Conclusions of the Benchmark}
 \label{sec:conclusion}
 
 We establish a new state-of-the-art for French NER using state-of-the-art neural techniques and recently produced neural language models for French. Our best neural model reaches an F1-score which is 6.55 points higher (a 40\% error reduction) than the strong baseline provided by the SEM system.
@@ -179,9 +179,9 @@ Two protocols were carried out to evaluate the impact of corpora characteristics
 
 We conduct the same experiments that we did for CamemBERT in dependency parsing, POS tagging and NER. We also coupled our ELMo models with the same tasks specific architectures as before, namely textbf{UDPipe Future} \citep{straka-2018-udpipe} for POS tagging and dependency parsing and \citep{strakova-etal-2019-neural} for NER. Experiments were run using the Universal Dependencies (UD) paradigm and its corresponding UD POS-tag set \citep{petrov-etal-2012-universal} and UD treebank collection version 2.2 \citep{nivre-etal-2018-universal}, which was used for the CoNLL 2018 shared task.
 
-\section{Results \& Discussion} \label{sect:ResultsCorpora}
+\subsection{Results \& Discussion} \label{sect:ResultsCorpora}
 
-\subsection{Dependency Parsing and POS-tagging}\label{sect:ResultsParsePOS}
+\subsubsection{Dependency Parsing and POS-tagging}\label{sect:ResultsParsePOS}
 
 \begin{table}[htp!]
     \small\centering
@@ -256,7 +256,7 @@ A closer look on Parsing results reveals an interesting pattern of results acros
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{NER} \label{sect:ResultsNER}
+\subsubsection{NER} \label{sect:ResultsNER}
 
 \begin{table}[htp!]
     \centering\small
@@ -292,7 +292,7 @@ CBT-fr NER results are under the LSTM-CRF baseline. This can possibly be explain
 
 All in all, our evaluations confirm the effectiveness of large ELMo-based language models fine-tuned or pre-trained with a balanced and linguistically representative corpus, like \Cabernet as opposed to domain-specific ones.
 
-\section{Conclusion} \label{sec:Concl}
+\subsection{Conclusion} \label{sec:Concl}
 
 We investigated the relevance of different types of corpora on ELMo's pre-training and fine-tuning. It confirms the effectiveness and quality of word-embeddings obtained through balanced and linguistically representative corpora.
 

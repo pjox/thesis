@@ -62,17 +62,17 @@ This filter may limit the impact of documents containing low-quality long lines 
 The backbone of the language identification process is similar to the one used in \goclassy \cite{ortiz-suarez-etal-2019-asynchronous} for the generation of OSCAR 2019 and Ungoliant \cite{abadji-etal-2021-ungoliant} for the generation of OSCAR 21.09. However, shifting to a document oriented corpus (with a single top-level identification per document) requires to infer the document identification, based on line identifications.
 
 
-We define a document $\mathcal{D}$ as a pair $\mathcal{D}=(\mathcal{L}, \mathscr{L})$ where $\mathcal{L}=\{l_1,\ldots,l_n\}$ is the set of lines (strings separated by \texttt{\textbackslash n}) that constitute the document and $\mathscr{L} = \{g_1, \ldots, g_m\}$\footnote{Note that since FastText identifies one language by line, we have always have $m\le n$ for every document $\mathcal{D}$.} is the set of languages identified by FastText for the document $\mathcal{D}$. When FastText is not able to identify a language for a specific line, for instance because the confidence isn't higher than $0.8$, we tag said line with the \emph{No Identification Language} that we simply note by $g_0$. Furthermore, we define each line $l_i$ in a document $\mathcal{D}$ as a triplet $l_k=(g_i, p_i, s_i)$ where $g_i$ is the language identified by FastText with the highest confidence for the line $l_i$, $p_i$ is said confidence and $s_i$ is the size in bytes of the line $l_i$. We also note $|l_i|=s_i$, and we thus define the size $|\mathcal{D}|$ of a document $\mathcal{D}$ as
+We define a document $\mathcal{D}$ as a pair $\mathcal{D}=(\mathcal{L}, \mathcal{G})$ where $\mathcal{L}=\{l_1,\ldots,l_n\}$ is the set of lines (strings separated by \texttt{\textbackslash n}) that constitute the document and $\mathcal{G} = \{g_1, \ldots, g_m\}$\footnote{Note that since FastText identifies one language by line, we have always have $m\le n$ for every document $\mathcal{D}$.} is the set of languages identified by FastText for the document $\mathcal{D}$. When FastText is not able to identify a language for a specific line, for instance because the confidence isn't higher than $0.8$, we tag said line with the \emph{No Identification Language} that we simply note by $g_0$. Furthermore, we define each line $l_i$ in a document $\mathcal{D}$ as a triplet $l_k=(g_i, p_i, s_i)$ where $g_i$ is the language identified by FastText with the highest confidence for the line $l_i$, $p_i$ is said confidence and $s_i$ is the size in bytes of the line $l_i$. We also note $|l_i|=s_i$, and we thus define the size $|\mathcal{D}|$ of a document $\mathcal{D}$ as
 \[
     |\mathcal{D}| = \sum_{i=0}^{n} |l_i| = \sum_{i=0}^{n} s_i.
 \]
-Moreover, for each identified language $g_j \in \mathscr{L}$ in a document containing $n$ lines, we define its size $|g_j|$ as
+Moreover, for each identified language $g \in \mathcal{G}$ in a document containing $n$ lines, we define its size $|g|$ as
 \[
-    |g_j| = \sum_{\mathclap{\{s_i \mid g_i = g_j\}}} s_i.
+    |g| = \sum_{\mathclap{\{i \mid g_i = g\}}} s_i.
 \]
-Finally, for each language $g_j \in \mathscr{L}$ we can also compute its \emph{overall weighted confidence} $P_j$ throughout the document $\mathcal{D}$ as the following weighted mean:
+Finally, for each language $g \in \mathcal{G}$ we can also compute its \emph{overall weighted confidence} $P$ throughout the document $\mathcal{D}$ as the following weighted mean:
 \[
-    P_j = |D|^{-1}\sum_{\mathclap{\{s_i|g_i=g_j\}}} s_jp_j.
+    P = |\mathcal{D}|^{-1}\sum_{\mathclap{\{i|g_i=g\}}} s_ip_i.
 \]
 
 \subsection{Multilingual document identification}
@@ -89,9 +89,9 @@ In these examples, we should aim to limit the presence of 1. and 2., while maxim
     \item Have at least $5$ lines,
     \item Have at most $5$ different languages.
 \end{itemize}
-Next, we compute the \emph{proportion} for each language $g_j \in \mathscr{L}$ in the document $\mathcal{D}$ defined as follows
+Next, we compute the \emph{proportion} for each language $g_j \in \mathcal{G}$ in the document $\mathcal{D}$ defined as follows
 \[
-    \mathrm{Pr}_g = \frac{|g|}{|\mathcal{D}|},
+    \mathrm{Pr}_{g_j} = \frac{|g_j|}{|\mathcal{D}|},
 \]
 including for the no identification language $g_0$.
 
