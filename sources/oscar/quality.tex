@@ -237,7 +237,7 @@ Overall, the sampled sentences did not contain a large amount of offensive conte
             \bottomrule
         \end{tabular}%
     }
-    \caption{Rater evaluation for a subset of audits from \textbf{CCAligned} (translated from English) measured by the accuracy (Acc-$n$) of annotations by non-proficient speaker against annotations by proficient speakers.
+    \caption{Rater evaluation for a subset of audits from \textbf{CCAligned} (aligned with English) measured by the accuracy (Acc-$n$) of annotations by non-proficient speaker against annotations by proficient speakers.
         %$n$ indicates the granularity of the classes.  For $n=6$ all classes of the taxonomy were distinguished, for $n=4$ the \texttt{C} subclasses were combined, and for $n=2$ it is binary decision between \texttt{C} and the rest of the error classes.
     }
     \label{tab:agreement_ccaligned}
@@ -295,7 +295,7 @@ We find a variety of errors and inconsistencies in language code usage, ranging 
 In summary, we find 8 nonstandard codes in CCAligned, 3 in OSCAR 2019, 1 in mC4, 1 in WikiMatrix, and 70 in JW300, for 83 in total. This does not include the 59 codes affected by superset issues. %0 in ParaCrawl, 
 Full details are given in Appendix~\ref{app:jw300}.
 
-\paragraph{Inconsistent Language Codes} One common issue is simply using nonstandard or invented codes. For example, CCAligned uses only two-letter codes, so when the BCP-47 code for a language is three letters it is either shortened (e.g. \texttt{zza} $\rightarrow$ \texttt{zz}) or invented (\texttt{shn}  $\rightarrow$ \texttt{qa}). Similarly, OSCAR 2019 contains data labeled as \texttt{als} (BCP-47 for Tosk Albanian) that is actually in \texttt{gsw} (Allemannic).\footnote{This is a result of the language code used by the \href{https://en.wikipedia.org/wiki/Alemannic\_Wikipedia}{Alemannic Wikipedia} and affects any corpus or tool that uses Wikipedia data without correcting for this, like FastText.} 22 additional language codes in JW300 have similar issues, including 12 codes that start with \texttt{jw\_} but are not Javanese.
+\paragraph{Inconsistent Language Codes} One common issue is simply using nonstandard or invented codes. For example, CCAligned uses only two-letter codes, so when the BCP-47 code for a language is three letters it is either shortened (e.g. \texttt{zza} $\rightarrow$ \texttt{zz}) or invented (\texttt{shn}  $\rightarrow$ \texttt{qa}). Similarly, OSCAR 2019 contains data labeled as \texttt{als} (BCP-47 for Tosk Albanian) that is actually in \texttt{gsw} (Alemannic).\footnote{This is a result of the language code used by the \href{https://en.wikipedia.org/wiki/Alemannic\_Wikipedia}{Alemannic Wikipedia} and affects any corpus or tool that uses Wikipedia data without correcting for this, like FastText.} 22 additional language codes in JW300 have similar issues, including 12 codes that start with \texttt{jw\_} but are not Javanese.
 
 \paragraph{False Sign Languages}
 12\% (48/417) of JW300

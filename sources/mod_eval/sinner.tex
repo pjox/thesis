@@ -18,7 +18,7 @@ Having participated in the pre-training of Contemporary French language models l
 \section{Dataset for the CLEF-HIPE shared task}
 \label{sec:dataset}
 
-The dataset of the CLEF-HIPE shared task contains newspaper articles of 17th-20th century. The text is an output of an OCR software, then tokenized and annotated with labels corresponding to each sub-task. This peculiarity of historical documents will be detailed later in this section. The corpus provided for French and German both contained training data (train) and development data (dev) whereas, for English only development data was provided for the shared task. For this reason, we chose to work on French and German only.
+The dataset of the CLEF-HIPE shared task contains newspaper articles of 17\textsuperscript{th}-20\textsuperscript{th} century. The text is an output of an OCR software, then tokenized and annotated with labels corresponding to each sub-task. This peculiarity of historical documents will be detailed later in this section. The corpus provided for French and German both contained training data (train) and development data (dev) whereas, for English only development data was provided for the shared task. For this reason, we chose to work on French and German only.
 
 Table \ref{stats} shows some statistics of this dataset. The size of the training dataset for French was twice as big as for German, whereas the development sets had roughly the same size. As usual in NER, persons (Pers) and locations (Loc) were the most frequent entity types.
 
@@ -119,7 +119,7 @@ Contrary to the approach of \citet{ortiz-suarez-etal-2020-establishing}, we do n
 
 For the fixed word embeddings we used the Common Crawl-based FastText embeddings \citep{grave-etal-2018-learning} originally trained by Facebook as opposed to the embeddings provided by the HIPE shared task, as we obtained better dev scores using the original FastText embeddings for both French and German.
 
-We used the standard hyperparameters originally \footnote{\url{https://github.com/ufal/acl2019_nested_ner/blob/master/tagger.py\#L484}.} used by \citet{strakova-etal-2019-neural}. Namely a batch size of 8, a dropout of 0.5, a learning rate of 0.001 and 10 epochs. The difference between run 1 and 2, is that run 1 uses the data as is, while run 2 uses the reconstructed sentences.
+We used the standard hyperparameters originally\footnote{\url{https://github.com/ufal/acl2019_nested_ner/blob/master/tagger.py\#L484}.} used by \citet{strakova-etal-2019-neural}. Namely a batch size of 8, a dropout of 0.5, a learning rate of 0.001 and 10 epochs. The difference between run 1 and 2, is that run 1 uses the data as is, while run 2 uses the reconstructed sentences.
 
 \section{Results and Discussion}
 \label{sec:results}

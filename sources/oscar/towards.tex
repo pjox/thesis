@@ -23,7 +23,7 @@ In this final chapter about the OSCAR project we present the first methods for a
 
 \section{Filtering}
 
-Previous OSCAR pipelines were line-oriented (where a line is defined as a string separated by \texttt{\textbackslash n}), which meant that the highest filtering granularity were lines.
+Previous OSCAR pipelines were line-oriented (where a line is defined as a string separated by \texttt{\textbackslash n}, and often correspond to a paragraph), which meant that the highest filtering granularity were lines.
 Having a document-oriented corpus implies that:
 \begin{itemize}
     \item We must try to keep the document integrity, by altering it in a way that does not completely destroy its coherence.
@@ -61,10 +61,10 @@ This filter may limit the impact of documents containing low-quality long lines 
 
 \section{Identification}\label{towards-sec:identification}
 
-The backbone of the language identification process is similar to the one used in \goclassy \cite{ortiz-suarez-etal-2019-asynchronous} for the generation of OSCAR 2019 and Ungoliant \cite{abadji-etal-2021-ungoliant} for the generation of OSCAR 21.09. However, shifting to a document oriented corpus (with a single top-level identification per document) requires to infer the document identification, based on line identifications.
+The backbone of the language identification process is similar to the one used in \goclassy (Chapter \ref{chap:goclassy}) for the generation of OSCAR 2019 and Ungoliant (Chapter \ref{chap:ungoliant}) for the generation of OSCAR 21.09. However, shifting to a document oriented corpus (with a single top-level identification per document) requires to infer the document identification, based on line identifications.
 
 
-We define a document $\mathcal{D}$ as a pair $\mathcal{D}=(\mathcal{L}, \mathcal{G})$ where $\mathcal{L}=\{l_1,\ldots,l_n\}$ is the set of lines (strings separated by \texttt{\textbackslash n}) that constitute the document and $\mathcal{G} = \{g_1, \ldots, g_m\}$\footnote{Note that since FastText identifies one language by line, we have always have $m\le n$ for every document $\mathcal{D}$.} is the set of languages identified by FastText for the document $\mathcal{D}$. When FastText is not able to identify a language for a specific line, for instance because the confidence isn't higher than $0.8$, we tag said line with the \emph{No Identification Language} that we simply note by $g_0$. Furthermore, we define each line $l_i$ in a document $\mathcal{D}$ as a triplet $l_k=(g_i, p_i, s_i)$ where $g_i$ is the language identified by FastText with the highest confidence for the line $l_i$, $p_i$ is said confidence and $s_i$ is the size in bytes of the line $l_i$. We also note $|l_i|=s_i$, and we thus define the size $|\mathcal{D}|$ of a document $\mathcal{D}$ as
+We define a document $\mathcal{D}$ as a pair $\mathcal{D}=(\mathcal{L}, \mathcal{G})$ where $\mathcal{L}=\{l_1,\ldots,l_n\}$ is the set of lines (strings separated by \texttt{\textbackslash n}) that constitute the document and $\mathcal{G} = \{g_1, \ldots, g_m\}$\footnote{Note that since FastText identifies one language by line, we always have $m\le n$ for every document $\mathcal{D}$.} is the set of languages identified by FastText for the document $\mathcal{D}$. When FastText is not able to identify a language for a specific line, for instance because the confidence isn't higher than $0.8$, we tag said line with the \emph{No Identification Language} that we simply note by $g_0$. Furthermore, we define each line $l_i$ in a document $\mathcal{D}$ as a triplet $l_k=(g_i, p_i, s_i)$ where $g_i$ is the language identified by FastText with the highest confidence for the line $l_i$, $p_i$ is said confidence and $s_i$ is the size in bytes of the line $l_i$. We also note $|l_i|=s_i$, and we thus define the size $|\mathcal{D}|$ of a document $\mathcal{D}$ as
 \[
     |\mathcal{D}| = \sum_{i=0}^{n} |l_i| = \sum_{i=0}^{n} s_i.
 \]
@@ -74,7 +74,7 @@ Moreover, for each identified language $g \in \mathcal{G}$ in a document contain
 \]
 Finally, for each language $g \in \mathcal{G}$ we can also compute its \emph{overall weighted confidence} $P$ throughout the document $\mathcal{D}$ as the following weighted mean:
 \[
-    P = |\mathcal{D}|^{-1}\sum_{\mathclap{\{i|g_i=g\}}} s_ip_i.
+    P = |\mathcal{D}|^{-1}\sum_{\mathclap{\{i \mid g_i=g\}}} s_ip_i.
 \]
 
 \subsection{Multilingual document identification}
@@ -140,16 +140,14 @@ Some documents make their way into the corpus while being extremely noisy or non
 
 We use a filter that computes a ratio between letters and non-letters.
 
-This filter is based on Unicode categories. We use categories \emph{Lu, Ll, Lt, Lm, Lo}\footnote{Lu: Uppercase letter, Ll: Lowercase letter, Lt: Titlecase, Lm: Modifier, Lo: Other} for letters, and we add categories \emph{Mn, Mc, Me}\footnote{Mn: Nonspacing mark, Ms: Spacing mark, Me: Enclosing mark} for accents and diacritics.
+This filter is based on Unicode categories. We use categories \emph{Lu, Ll, Lt, Lm, Lo}\footnote{Lu: Uppercase letter, Ll: Lowercase letter, Lt: Titlecase, Lm: Modifier, Lo: Other.} for letters, and we add categories \emph{Mn, Mc, Me}\footnote{Mn: Nonspacing mark, Ms: Spacing mark, Me: Enclosing mark.} for accents and diacritics.
 
 A \emph{noisy} annotation is added if the ratio passes a certain threshold, set to $0.5$.
 
 
 \subsection{Adult documents}
 
-We use the UT1 blocklist\footnote{\url{https://dsi.ut-capitole.fr/blacklists/}} as a base for adult content filtering.
-
-The UT1 blocklist is a collection of thematic blocklists (adult, gambling, blogs, ...), usually utilized in internet access control for schools. The list is constituted and extended by both human and robots contributions (known indexes, search engines, exploration of already known addresses). The blocklist is updated twice to thrice a week by Fabrice Prigent.
+We use the UT1 blocklist\footnote{\url{https://dsi.ut-capitole.fr/blacklists/}.} as a base for adult content filtering. The UT1 blocklist is a collection of thematic blocklists (adult, gambling, blog, among others), usually utilized in internet access control for schools. The list is constituted and extended by both human and robots contributions (known indexes, search engines, exploration of already known addresses). The blocklist is updated twice to thrice a week by Fabrice Prigent.
 
 Each folder contains URL and domain blocklists, enabling filtering of both websites that are centered around adult content, and websites hosting user-generated content that can be of adult nature (several social networks...).
 
@@ -160,9 +158,6 @@ The adult blocklist comprises roughly 3.7M records.
 
 We apply the aforementioned pipeline to the November/December 2021 crawl dump of Common Crawl. The result is a new corpus, OSCAR 22.01. While its structure is different from the previous OSCAR corpora (due to the choice of generating a document oriented corpus), we have attempted to compare the two corpora, especially in terms of size and news-related topic presence and recall. We also evaluate the occurrence and pertinence of the annotations.
 
-\subsection{Comparison with OSCAR 21.09}
-\subsubsection{Size distribution}
-
 \begin{figure*}[!ht]
     \begin{center}
         \includegraphics[width=\linewidth]{static/media/oscar/towards/size-comp}
@@ -171,13 +166,14 @@ We apply the aforementioned pipeline to the November/December 2021 crawl dump of
     \end{center}
 \end{figure*}
 
+\subsection{Comparison with OSCAR 21.09}
+\subsubsection{Size distribution}
+
 The data layout of OSCAR 22.01 may limit the relevance of raw size comparisons, since metadata are larger (annotations and line identifications were not present in previous OSCAR Corpora), and fused with textual data (metadata were distributed in separate files for OSCAR 21.09).
 
 However, comparing the distribution of corpus sizes may help us ensure that the new corpus has a size distribution similar to the older one.
 
 We compare the distribution of the sub-corpora sizes between OSCAR 21.09 and OSCAR 22.01 in figure \ref{fig.1}. We see that while the overall distribution is similar, the lower end of the distribution has more variance: The $[0\text{B}, 100\text{KB})$ range shows more corpora at its bounds than at its center. Furthermore, we also plot the empirical cumulative density function, that helps to assert the distribution similarity between OSCAR 21.09 and OSCAR 22.01.
-
-We also select three low-resourced languages, three mid-resourced languages and three high-resources languages and compare their content (that is, textual data excluding metadata) between OSCAR 22.01 and OSCAR 21.09. Comparison is shown in figure \ref{fig.2}. While the overall sizes of these corpora  have slightly decreased, the sizes of the mid and high resource languages are similar enough.
 
 \begin{figure}[!ht]
     \begin{center}
@@ -187,11 +183,13 @@ We also select three low-resourced languages, three mid-resourced languages and 
     \end{center}
 \end{figure}
 
+We also select three low-resourced languages, three mid-resourced languages and three high-resources languages and compare their content (that is, textual data excluding metadata) between OSCAR 22.01 and OSCAR 21.09. Comparison is shown in figure \ref{fig.2}. While the overall sizes of these corpora  have slightly decreased, the sizes of the mid and high resource languages are similar enough.
+
 \subsubsection{Size differences in low-resource languages}
 
 The low-sized corpora exhibit important size changes. As an example, the Alemannic German corpus went from 7MB to 360KB between OSCAR 21.09 and OSCAR 22.01. This size decrease can be explained by the way the document identification works: by reasoning at a document level, documents containing a majority of German identified lines and a minority of Alemannic German identified lines will be identified as a German document, whereas previous OSCAR pipelines would have separated the lines and increase the size of the Alemannic German corpus.
 
-By extracting the lines identified as Alemannic from the German corpus, we get around 30 MB of data, which could constitute an Alemannic corpus with a size comparable to the OSCAR 21.09 Alemannic corpus after confidence and length based filtering.
+By extracting the lines identified as Alemannic from the German corpus, we get around 30MB of data, which could constitute an Alemannic corpus with a size comparable to the OSCAR 21.09 Alemannic corpus after confidence and length based filtering.
 
 
 This situation can, in a way, help us investigate the cases of linguistic proximity, where languages have a lexical overlap: When a line identified as Alemannic German is found inside a document that has been identified as German:
@@ -203,10 +201,9 @@ This situation can, in a way, help us investigate the cases of linguistic proxim
 
 Those three cases can arise and may help to enhance the detection of a said language, by finding (\ref{one}) identification mismatches, hoping that these cases would improve identification after training, or (\ref{three}), after verification by a speaker of the language, state that the whole document is in Alemannic. The new data collected could in turn be used to improve language detection.
 
-
 \subsubsection{New themes}
 
-As OSCAR 22.01 is based on a November/December 2021 dump (compared to OSCAR 21.09, based on a February 2021 dump), the corpus should include data related to events contemporary to February 2021. We conduct a simple word search similar to the one conducted for the generation of OSCAR 21.09 \cite{abadji-etal-2021-ungoliant}, using both old and new events, in order to give a rough idea of both the actuality and the memory of the corpus.
+As OSCAR 22.01 is based on the November/December 2021 dump (compared to OSCAR 21.09, based on the February 2021 dump), the corpus should include data related to events contemporary to February 2021. We conduct a simple word search similar to the one conducted for the generation of OSCAR 21.09 \cite{abadji-etal-2021-ungoliant}, using both old and new events, in order to give a rough idea of both the actuality and the memory of the corpus.
 
 \begin{table}[t]
     \centering\small
@@ -223,7 +220,7 @@ As OSCAR 22.01 is based on a November/December 2021 dump (compared to OSCAR 21.0
         \multirow{1}{*}{Spanish}  & Aborto                & 1504  & 572   \\
         \bottomrule
     \end{tabular}
-    \caption{Comparison of occurrences of news-related terms between OSCAR and our corpus in a sample of 100 Common Crawl shards. \\ *: For the Burmese language, we use the whole 21.09 and 22.01 corpus since it is a low resource language. Terms are translated in the corpus language.}
+    \caption{Comparison of occurrences of news-related terms between OSCAR and our corpus in a sample of 100 Common Crawl shards. \\ *: For the Burmese language, we use the whole 21.09 and 22.01 corpus since it has less than 100 sentences in both subcorpora. Terms are translated in the corpus language.}
     \label{tab:word_frequency_towards}
 \end{table}
 
@@ -250,7 +247,7 @@ Annotations help us to infer the composition of the corpora: The \textit{tiny}, 
 
 Also, comparing corpora annotation distributions, especially related to their size, could highlight potentially very low quality corpora. This semi-automated quality checking process could be used to label corpora where data quality is bad.
 
-We select 3 low-resource ($\simeq100KB$), 3 mid-resource ($\simeq100MB$) and 3 high-resource ($\simeq100GB$) languages and plot the number of documents per annotation, adding a \textit{total} legend for the total document count and a \textit{clean} legend for documents that do not have any annotation. We then plot the counts for each resource group using adapted scales.
+We select 3 low-resource ($\simeq$100KB), 3 mid-resource ($\simeq$100MB) and 3 high-resource ($\simeq$100GB) languages and plot the number of documents per annotation, adding a \textit{total} legend for the total document count and a \textit{clean} legend for documents that do not have any annotation. We then plot the counts for each resource group using adapted scales.
 
 We observe that the annotation distribution is similar for each resource group, but that the lower resourced languages have a higher proportion of documents annotated with \textit{short\_sentences} and \textit{tiny}.
 
@@ -278,7 +275,7 @@ A very large proportion of the low resource group is annotated as \textit{tiny} 
 
 The OSCAR 22.01 Corpus also contains a multilingual corpus, composed of documents holding lines in multiple languages. Each document contains at least 2 languages, and at most 5.
 
-We check the co-occurrence of languages, highlighting the coupling of language tuples. These tuples may highlight either linguistic similarity (Czech and Slovak, Russian and Uzbek) and subsequent poor classification, errors or languages commonly found together on documents. Due to the number of languages and the sparsity of the data, we show the language couples with a number of documents greater than 20 000 (Figure \ref{multi-confusion}).
+We check the co-occurrence of languages, highlighting the coupling of language tuples. These tuples may highlight either linguistic similarity (Czech and Slovak, Russian and Belarusian) and subsequent poor classification, errors or languages commonly found together on documents. Due to the number of languages and the sparsity of the data, we show the language couples with a number of documents greater than 20 000 (Figure \ref{multi-confusion}).
 
 We also note the presence of English in a high number of documents. This could be explained by boilerplate content in web pages, such as menu headers or footers.
 
@@ -329,21 +326,21 @@ We take the first 100 adult documents of the French corpus and check whether the
 We separately count websites that are simultaneously non-explicit and from LGBTQI+ websites.
 
 We find:
-\begin{itemize}
+\begin{enumerate}
     \item $77$ true positives,
     \item $2$ false positives belonging to LGBTQI+ websites,
     \item $21$ false positives
-\end{itemize}
+\end{enumerate}
 
-While the majority of true positives are properly classified, numerous educational documents do appear: These type of documents exhibit an explicit language, but does feature a good document quality, and a better representation of sexuality that is less offensive compared to the usual associations between sexually explicit content and hate speech.  \cite{luccioni-viviano-2021-whats}.
+While the majority of true positives are properly classified, numerous educational documents do appear: These type of documents exhibit an explicit language, but does feature a good document quality, and a better representation of sexuality that is less offensive compared to the usual associations between sexually explicit content and hate speech \cite{luccioni-viviano-2021-whats}.
 
-The false positives are, for the majority, websites that do not belong in the blocklist in the first place. We suppose that the addresses were previously used as adult websites.
+The false positives are, for the majority, websites that do not belong in the blocklist in the first place. We assume that the addresses were previously used as adult websites.
 
-\subsubsection{Hard bounds problems}
+\subsubsection{Hard bound problems}
 
 Several pipeline steps (especially annotators), work using hard thresholds. As an example, any document that is less than 5 lines is considered to be \textit{tiny}. However, when exploring data, we can see that there is a number of documents whose number of lines is in the neighboring of the threshold, and quality is similar to the documents labeled as \textit{tiny}.
 
-When plotting the distribution of clean and annotated corpus data, we can notice that a very high number of documents are of a tiny ($10^2 B$) size, which coincidentally happens to be the minimum size for a document to be accepted, since the first filter removes lines that are shorter than 100 characters $(\geq 10^2 B)$.
+When plotting the distribution of clean and annotated corpus data, we can notice that a very high number of documents are of a tiny (100B) size, which coincidentally happens to be the minimum size for a document to be accepted, since the first filter removes lines that are shorter than 100 characters ($\geq$ 100B).
 
 
 \section{Discussion}
@@ -365,16 +362,16 @@ The selected annotations exhibit numerous caveats that have to be addressed in t
 The length-based annotations are widespread in the corpus, especially in mid to high resource languages ($\sim50\%$ in Czech) highlighting the potential low quality of a high number of documents as well as the need of better characterizing the nature of these line length discrepancies. Web crawls often contain boilerplate content extracted from headers, footers and sidebars, and these lines are present in the Common Crawl dumps.
 Another solution would be to base the whole OSCAR generation pipeline on raw HTML files, potentially multiplying the computational cost and complexity of generating corpora.
 
-The \textit{adult} annotation, based from an adult URL blocklist, is present on a very limited set of documents. However, studies have shown that adult content has been present in a previous version of OSCAR in a larger proportion than the one measured here \cite{kreutzer-etal-2021-quality}, hinting at a bad performance of the blocklist based adult content filtering approach. Moreover, we noticed that the blocklist contained websites representing LGBTQI+ related topics, which damages the representation of the LGBTQI+ (association with adult content, filtering out LGBTQI+ documents, which in turn could limit the representation in downstream tasks...).
-Model-based approaches may help in improving the \textit{adult} annotation, and should be the next step towards a better annotation of adult content \cite{luccioni-viviano-2021-whats}.
+The \textit{adult} annotation, based from an adult URL blocklist, is present on a very limited set of documents. However, studies have shown that adult content has been present in a previous version of OSCAR in a larger proportion than the one measured here \citep{kreutzer-etal-2021-quality} (and Chapter \ref{chap:quality}), hinting at a bad performance of the blocklist based adult content filtering approach. Moreover, we noticed that the blocklist contained websites representing LGBTQI+ related topics, which damages the representation of the LGBTQI+ (association with adult content, filtering out LGBTQI+ documents, which in turn could limit the representation in downstream tasks...).
+Model-based approaches may help in improving the \textit{adult} annotation, and should be the next step towards a better annotation of adult content \citep{luccioni-viviano-2021-whats}.
 
 
 \section{Conclusion}
 
 With the improvements to the Ungoliant pipeline described in this chapter and the release of OSCAR 22.01, we believe we are moving the OSCAR project in a direction were we are capable of distributing high quality up-to-date textual data for a wide range of NLP and Digital Humanities applications.
 
-While we're aware that not all the problems and concerns around the OSCAR corpus have been addressed, we hope we can continue working on this project as it has already had a significant impact on the NLP community, specially for studies in previously underrepresented languages.
+While we are aware that not all the problems and concerns around the OSCAR corpus have been addressed, we hope we can continue working on this project as it has already had a significant impact on the NLP community, especially for studies in underrepresented languages.
 
 We believe however that the next steps in improving our corpus will require a more close involvement and participation of the OSCAR users. We thus hope that in the coming months and years we will be able to build an active open source community around the OSCAR project where people will be able to collaborate and contribute directly to the development of future versions of OSCAR and its pipeline Ungoliant.
 
-While this chapter marks the end of the multilingual discussion of this thesis, the French sub-corpus of OSCAR will be consequential to the development of our models and resources for both contemporary and historical French, as we will see in the coming chapters.
+While this chapter marks the end of the multilingual discussion of this thesis, the French sub-corpus of OSCAR will be instrumental to the development of our models and resources for both contemporary and historical French, as we will see in the coming chapters.
