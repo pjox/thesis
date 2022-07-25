@@ -15,9 +15,9 @@
 
 Having successfully pre-trained and evaluated state-of-the-art language models for Contemporary French, we wanted to finally develop these kinds of resources for Historical French. To this end, we believed Old French to be a particularly interesting language for this kind of study, since relatively to its limited amount of available raw text, its volume of \emph{annotated} linguistic data is quite high, due to the existence of the SRCMF dependency treebank \citep{prevost-stein-2013-syntactic} and its latest incarnation in the Universal Dependency project \citep{nivre-etal-2020-universal}, which boasts around \SI{17.7}{K\quantity} sentences\footnote{Putting it in the second place of all French language treebanks in number of sentences.} for around \SI{171}{K\quantity} words.
 
-Another interesting property of Old French is its proximity to a well-resourced language, namely contemporary French, for which we had previously developed monolingual contextual embeddings models (and for which other language models had also been developed at this point) that had been shown to be relevant for dependency parsing \citep{martin-etal-2020-camembert,le-etal-2020-flaubert}. Last, but certainly not least, the design of an accurate syntactic parser for Old French would be a very valuable tool for computer-assisted linguistic studies. Indeed, studying the historical variation of syntax in a language that lacks both native speakers and centralized standard variants can be very challenging, due to the prohibitive cost of manual annotation. Automatic syntactic annotations, either as a \enquote{silver-standard} truth or as a bootstrapping step towards manual annotation, can drastically reduce that cost.
+Another interesting property of Old French is its proximity to a well-resourced language, namely contemporary French, for which we had previously developed monolingual contextual embeddings models (and for which other language models had also been developed at this point) that had been shown to be relevant for dependency parsing as discussed in Chapters \ref{chap:monolingual}, \ref{chap:camembert},\ref{chap:frelmo} and on \citep{martin-etal-2020-camembert,le-etal-2020-flaubert}. Last, but certainly not least, the design of an accurate syntactic parser for Old French would be a very valuable tool for computer-assisted linguistic studies. Indeed, studying the historical variation of syntax in a language that lacks both native speakers and centralized standard variants can be very challenging, due to the prohibitive cost of manual annotation. Automatic syntactic annotations, either as a \enquote{silver-standard} truth or as a bootstrapping step towards manual annotation, can drastically reduce that cost.
 
-In this chapter, exploiting this currently unique situation of Old French among lesser-resourced and historical languages, we use dependency parsing and POS-tagging of Old French as probes of the relevance of contextual embeddings in a context of high heterogeneity and relative scarcity of data. More precisely, we consider several neural language models, some of which trained or fine-tuned on a new corpus of raw Old and Middle French texts, and use their internal representations of words as inputs to train taggers and parsers on the SRCMF treebank. The resulting tagging and parsing scores then serve as an evaluation of the quality and usefulness of these representations. In particular:
+In this chapter, exploiting this currently unique situation of Old French among lesser-resourced and historical languages, we use dependency parsing and POS-tagging of Old French as probes of the relevance of contextual embeddings in a context of high heterogeneity and relative scarcity of data. More precisely, we consider several neural language models, some of which we train or fine-tuned on the corpus of raw Old and Middle French texts presented in Section \ref{sec-data}, and use their internal representations of words as inputs to train taggers and parsers on the SRCMF treebank. The resulting tagging and parsing scores then serve as an evaluation of the quality and usefulness of these representations. In particular:
 
 \begin{itemize}
     \item We provide empirical evidence that contextual embeddings are relevant for historical language processing, even when no data is available beyond the treebank used to train a parser.
@@ -45,7 +45,7 @@ Due to the number of costly experiments,\footnote{See the Appendix \ref{carbon-f
         \midrule
         Vanilla               & 93.51           & 87.60          & 81.54          \\
         Random-base           & 93.17           & 86.97          & 80.71          \\
-        finBERT               & 94.44           & 88.44          & 82.47          \\
+        finBERT               & \textbf{94.44}  & \textbf{88.44} & \textbf{82.47} \\
         \bottomrule
     \end{tabular}
     \caption{Results on SRCMF dev — no additional data.}\label{tab|nodata}
@@ -66,7 +66,7 @@ We first compare a baseline where contextual embeddings are not used at all (Van
         \midrule
         FlauBERT              & 95.70           & 90.43          & 85.45          \\
         CamemBERT             & 95.86           & 91.15          & 86.31          \\
-        mBERT                 & 96.06           & 91.52          & 86.83          \\
+        mBERT                 & \textbf{96.06}  & \textbf{91.52} & \textbf{86.83} \\
         \bottomrule
     \end{tabular}
     \caption{Results on SRCMF dev — monolingual models.}\label{tab|pre-trained}
@@ -94,7 +94,7 @@ As expected, these results show significant improvements over the baselines, con
         BERTrade-tiny   & 2                 & 128                   & 2                & 94.03           & 88.66          & 82.79          \\
         % mini    & 4  & 256 & 4  & 92.60 & 86.48 & 80.12\\
         BERTrade-small  & 4                 & 512                   & 8                & 96.53           & 86.30          & 87.49          \\
-        BERTrade-petit  & 12                & 256                   & 4                & 97.14           & 91.90          & 89.18          \\
+        BERTrade-petit  & 12                & 256                   & 4                & \textbf{97.14}  & \textbf{91.90} & \textbf{89.18} \\
         BERTrade-medium & 8                 & 512                   & 8                & 96.62           & 91.92          & 87.60          \\
         BERTrade-base   & 12                & 768                   & 12               & 96.74           & 92.37          & 88.42          \\
         % \midrule
@@ -106,7 +106,7 @@ As expected, these results show significant improvements over the baselines, con
 
 We now try to take advantage of the raw Medieval French data described in section \ref{sec-data}. To that end, we explore two strategies: training a model from scratch and refining existing models by \enquote{post-training} them---running a few more training epochs on the Medieval French raw data.
 
-In the \enquote{from scratch} strategy we first train a BBPE sub-word tokenizer \citep{wang-cho-etal-2020-neural} on our raw corpus, then train a RoBERTa \citep{liu-etal-2019-roberta} masked language model. Taking inspiration from \citet{micheli-etal-2020-importance}, who worked in a setting close to ours: a small and noisy pre-training corpus used to create a model from scratch, we used a RoBERTa architecture. As reported in \cref{tab|fromscratch}, we tested several parametrizations of the architecture also inspired by \citet{turc-etal-2019-well}. Out of these alternatives, the \enquote{BERTrade-petit} configuration was the most successful and this is the one we keep for the following experiments.
+In the \enquote{from scratch} strategy we first train a BPE sub-word tokenizer \citep{wang-cho-etal-2020-neural} on our raw corpus, then train a RoBERTa \citep{liu-etal-2019-roberta} masked language model. We take inspiration from \citet{micheli-etal-2020-importance}, who worked in a setting close to ours: a small and noisy pre-training corpus used to create a model from scratch, we used a RoBERTa architecture. As reported in \cref{tab|fromscratch}, we tested several parametrizations of the architecture also inspired by \citet{turc-etal-2019-well}. Out of these alternatives, the \enquote{BERTrade-petit} configuration was the most successful and this is the one we keep for the following experiments.
 
 For the \enquote{post-training} strategy, we continue the training of the pre-trained models used in \cref{sec|baselines,sec|related}, for \num{12} epochs on our raw corpus. We used the same RoBERTa masked language modeling task, using the same parameters as \citet{wang-etal-2020-extending} (but without vocabulary modifications), resulting in the BERTrade-X models, where X is the name of the base model.
 
@@ -121,8 +121,8 @@ For the \enquote{post-training} strategy, we continue the training of the pre-tr
         \midrule
         BERTrade-finBERT      & 96.28           & 92.12          & 87.92          \\
         BERTrade-mBERT        & 96.95           & 93.33          & 89.60          \\
-        BERTrade-CamemBERT    & 97.16           & 93.75          & 90.06          \\
-        BERTrade-FlauBERT     & 96.94           & 93.75          & 90.07          \\
+        BERTrade-CamemBERT    & \textbf{97.16}  & \textbf{93.75} & 90.06          \\
+        BERTrade-FlauBERT     & 96.94           & \textbf{93.75} & \textbf{90.07} \\
         \bottomrule
     \end{tabular}
     \caption{Results on SRCMF dev — using raw data.}\label{tab|post-train}
@@ -143,7 +143,7 @@ The results of these experiments are reported in \Cref{tab|post-train}. Comparin
         BERTrade-petit                          & 96.60           & 92.20          & 87.95          \\
         BERTrade-mBERT                          & 97.11           & 93.86          & 90.37          \\
         BERTrade-FlauBERT                       & 97.15           & 93.96          & 90.57          \\
-        BERTrade-CamemBERT                      & 97.29           & 94.36          & 90.90          \\
+        BERTrade-CamemBERT                      & \textbf{97.29}  & \textbf{94.36} & \textbf{90.90} \\
         \bottomrule
     \end{tabular}
     \caption{Results on SRCMF test}\label{tab|sota}

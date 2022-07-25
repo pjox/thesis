@@ -17,7 +17,7 @@ Having extensively worked into creating and curating textual resources in previo
 
 When we started the experiments that will be discussed in this chapter, the availability of large monolingual transformer based models was limited to English-only models \citep{devlin-etal-2019-bert,radford-etal-2019-language,liu-etal-2019-roberta,yang-etal-2019-xlnet,raffel-etal-2020-exploring} and most of the work in other languages was being done through multilingual models like \mbert \citep{devlin-etal-2019-bert}. And even though multilingual models gave remarkable results at the time, they were often larger, and their results, as we will observe for French, could lag behind their monolingual counterparts for high-resource languages.
 
-In order to reproduce and validate results that had so far only been obtained for English, we took advantage of the first version of OSCAR\footnote{Now OSCAR 2019} \citep{ortiz-suarez-etal-2019-asynchronous} which had just been released at that time. We used the French subcorpus of OSCAR 2019 to train a monolingual language model for French, dubbed \camembert. We also trained alternative versions of \camembert on different smaller corpora with different levels of homogeneity in genre and style in order to assess the impact of these parameters on downstream task performance.
+In order to reproduce and validate results that had so far only been obtained for English, we took advantage of the first version of OSCAR\footnote{Now OSCAR 2019.} \citep{ortiz-suarez-etal-2019-asynchronous} which had just been released at that time. We used the French subcorpus of OSCAR 2019 to train a monolingual language model for French, dubbed \camembert. We also trained alternative versions of \camembert on different smaller corpora with different levels of homogeneity in genre and style in order to assess the impact of these parameters on downstream task performance.
 \camembert used the \roberta architecture \citep{liu-etal-2019-roberta}.
 
 We then evaluated our model on four different downstream tasks for French: part-of-speech (POS) tagging, dependency parsing, named entity recognition (NER) and natural language inference (NLI). \camembert improved on the state of the art in all four tasks compared to previous monolingual and multilingual approaches including \mbert, XLM and XLM-R, which confirmed the effectiveness of pre-trained contextual language models for French.
@@ -75,9 +75,9 @@ We evaluate \camembert in the embeddings setting for POS tagging, dependency par
 
 \paragraph{Dowstream Tasks}
 
-For POS tagging and dependency parsing, we run our experiments using the Universal Dependencies (UD)\footnote{\url{https://universaldependencies.org}} framework and its corresponding UD POS tag set \citep{petrov-etal-2012-universal} and UD treebank collection \citep{nivre-etal-2018-universal}, which was used for the CoNLL 2018 shared task \citep{seker-etal-2018-universal}. We perform our evaluations on the four freely available French UD treebanks in UD~v2.2: GSD \citep{mcdonald-etal-2013-universal}, Sequoia\footnote{\url{https://deep-sequoia.inria.fr}} \citep{candito-seddah-2012-le,candito-etal-2014-deep}, Spoken \citep{lacheret-etal-2014-rhapsodie,bawden-etal-2014-correcting},\footnote{Speech transcript uncased that includes annotated disfluencies without punctuation} and ParTUT \cite{sanguinetti-Bosco-2015-parttut}.
+For POS tagging and dependency parsing, we run our experiments using the Universal Dependencies (UD)\footnote{\url{https://universaldependencies.org}.} framework and its corresponding UD POS tag set \citep{petrov-etal-2012-universal} and UD treebank collection \citep{nivre-etal-2018-universal}, which was used for the CoNLL 2018 shared task \citep{seker-etal-2018-universal}. We perform our evaluations on the four freely available French UD treebanks in UD~v2.2: GSD \citep{mcdonald-etal-2013-universal}, Sequoia\footnote{\url{https://deep-sequoia.inria.fr}.} \citep{candito-seddah-2012-le,candito-etal-2014-deep}, Spoken \citep{lacheret-etal-2014-rhapsodie,bawden-etal-2014-correcting},\footnote{Speech transcript uncased that includes annotated disfluencies without punctuation.} and ParTUT \cite{sanguinetti-Bosco-2015-parttut}.
 
-For NER, we use the French Treebank (FTB) \citep{abeille-etal-2003-building} in its 2008 version introduced by \citet{candito-crabbe-2009-improving} and with NER annotations by \citet{sagot-etal-2012-annotation}. In particular we used the corrected and synchronized version \citep{ortiz-suarez-etal-2020-establishing} presented in subsection \ref{subsec:alignment}.
+For NER, we use the French Treebank (FTB) \citep{abeille-etal-2003-building} in its 2008 version introduced by \citet{candito-crabbe-2009-improving} and with NER annotations by \citet{sagot-etal-2012-annotation}. More precisely, we used the corrected and synchronized version \citep{ortiz-suarez-etal-2020-establishing} presented in subsection \ref{subsec:alignment}.
 
 Finally, we evaluate our model on NLI, using the French part of the XNLI dataset \cite{conneau-etal-2018-xnli}. The XNLI dataset is the extension of the Multi-Genre NLI (MultiNLI) corpus \cite{williams-etal-2018-broad} to 15 languages by translating the validation and test sets manually into each of those languages. The English training set is machine translated for all languages other than English.
 
@@ -85,7 +85,7 @@ Finally, we evaluate our model on NLI, using the French part of the XNLI dataset
 
 In this section, we measure the performance of our models by evaluating them on the four aforementioned tasks: POS tagging, dependency parsing, NER and NLI.
 
-\paragraph{POS tagging and dependency parsing}
+\paragraph{POS Tagging and Dependency Parsing}
 For POS tagging and dependency parsing, we compare \camembert with other models in the two settings: \textit{fine-tuning} and as \textit{feature-based embeddings}. We report the results in Table~\ref{tab:pos_and_dp_results}.
 
 \begin{table}[ht]
@@ -117,32 +117,29 @@ For POS tagging and dependency parsing, we compare \camembert with other models 
 
 Despite a much simpler optimization process and no task specific architecture, fine-tuning \camembert outperforms UDify on all treebanks and sometimes by a large margin (e.g. +4.15\% LAS on Sequoia and +5.37 LAS on ParTUT). \camembert also reaches better performance  than other multilingual pre-trained models such as \mbert and \xlmmlmtlm on all treebanks.
 
-\camembert achieves overall slightly better results than the previous state-of-the-art and task-specific architecture UDPipe Future+\mbert+Flair, except for POS tagging on Sequoia and POS tagging on Spoken, where \camembert lags by 0.03\% and 0.14\% UPOS respectively.
-UDPipe Future+\mbert+Flair uses the contextualized string embeddings Flair \citep{akbik-etal-2018-contextual}, which are in fact pre-trained contextualized character-level word embeddings specifically designed to handle misspelled words as well as subword structures such as prefixes and suffixes. This design choice might explain the difference in score for POS tagging with CamemBERT, especially for the Spoken treebank where words are not capitalized, a factor that might pose a problem for CamemBERT which was trained on capitalized data, but that might be properly handle by Flair on the UDPipe Future+\mbert+Flair model.
+\camembert achieves overall slightly better results than the previous state-of-the-art and task-specific architecture UDPipe Future+mBERT+Flair, except for POS tagging on Sequoia and POS tagging on Spoken, where \camembert lags by 0.03\% and 0.14\% UPOS respectively.
+UDPipe Future+mBERT+Flair uses the contextualized string embeddings Flair \citep{akbik-etal-2018-contextual}, which are in fact pre-trained contextualized character-level word embeddings specifically designed to handle misspelled words as well as subword structures such as prefixes and suffixes. This design choice might explain the difference in score for POS tagging with CamemBERT, especially for the Spoken treebank where words are not capitalized, a factor that might pose a problem for CamemBERT which was trained on capitalized data, but that might be properly handle by Flair on the UDPipe Future+mBERT+Flair model.
 
 \paragraph{Named-Entity Recognition}
 For NER, we similarly evaluate \camembert in the fine-tuning setting and as input embeddings to the task specific architecture LSTM+CRF. We report these scores in Table~\ref{table:ner_ablation}.
 
 \begin{table}[ht]
     \centering \small
-    %        \resizebox{\columnwidth}{!}{
-    \scalebox{0.9}{
-        \begin{tabu}{lc}
-            \toprule
-            Model                                     & F1                \\
-            \midrule
-            SEM (CRF) \citep{dupont-2017-exploration} & 85.02             \\
-            LSTM-CRF \citep{dupont-2017-exploration}  & 85.57             \\
-            \mbert (fine-tuned)                       & 87.35             \\
-            \tabucline[\hbox {$\scriptstyle \cdot$}]{-}
-            \camembert (fine-tuned)                   & \underline{89.08} \\% 10129644  %91.30 dev 10129153 (2 seeds only)
-            LSTM+CRF+\camembert (embeddings)          & \textbf{89.55}    \\
-            %            \midrule
-            %            \multicolumn{2}{c}{\em Supplement: subword masking model}\\
-            %            LSTM+CRF+\camembertoscarswm (embeddings)  & \textbf{90.25} \\
-            \bottomrule
-        \end{tabu}
-    }
+    \begin{tabu}{lc}
+        \toprule
+        Model                                     & F1                \\
+        \midrule
+        SEM (CRF) \citep{dupont-2017-exploration} & 85.02             \\
+        LSTM-CRF \citep{dupont-2017-exploration}  & 85.57             \\
+        \mbert (fine-tuned)                       & 87.35             \\
+        \tabucline[\hbox {$\scriptstyle \cdot$}]{-}
+        \camembert (fine-tuned)                   & \underline{89.08} \\% 10129644  %91.30 dev 10129153 (2 seeds only)
+        LSTM+CRF+\camembert (embeddings)          & \textbf{89.55}    \\
+        %            \midrule
+        %            \multicolumn{2}{c}{\em Supplement: subword masking model}\\
+        %            LSTM+CRF+\camembertoscarswm (embeddings)  & \textbf{90.25} \\
+        \bottomrule
+    \end{tabu}
     \caption{\textbf{NER} scores on the FTB (best model selected on validation out of 4). Best scores in bold, second best underlined.
         \label{table:ner_ablation}}
 \end{table}
@@ -157,26 +154,23 @@ On the XNLI benchmark, we compare \camembert to previous state-of-the-art multil
 
 \begin{table}[ht]
     \centering\small
-    %    \resizebox{\columnwidth}{!}{
-    \scalebox{0.89}{
-        \begin{tabu}{lcc}
-            \toprule
-            Model                                                             & Acc.             & \#Params \\
-            \midrule
-            %BiLSTM-max \citep{conneau-etal-2018-xnli} & 68.3 & - \\
-            \mbert \citep{devlin-etal-2019-bert}                              & 76.9             & 175M     \\
-            \xlmmlmtlm \citep{conneau-lample-2019-cross}                      & \underline{80.2} & 250M     \\
-            XLM-R\textsubscript{BASE} \citep{conneau-etal-2020-unsupervised}  & 80.1             & 270M     \\
-            \tabucline[\hbox {$\scriptstyle \cdot$}]{-}
-            \camembert (fine-tuned)                                           & \textbf{82.5}    & 110M     \\
-            \midrule
-            \multicolumn{3}{c}{\em Supplement: LARGE models}                                                \\
-            XLM-R\textsubscript{LARGE} \citep{conneau-etal-2020-unsupervised} & \underline{85.2} & 550M     \\
-            \tabucline[\hbox {$\scriptstyle \cdot$}]{-}
-            \camembertccnetlarge (fine-tuned)                                 & \textbf{85.7}    & 335M     \\
-            \bottomrule
-        \end{tabu}
-    }
+    \begin{tabu}{lcc}
+        \toprule
+        Model                                                             & Acc.             & \#Params \\
+        \midrule
+        %BiLSTM-max \citep{conneau-etal-2018-xnli} & 68.3 & - \\
+        \mbert \citep{devlin-etal-2019-bert}                              & 76.9             & 175M     \\
+        \xlmmlmtlm \citep{conneau-lample-2019-cross}                      & \underline{80.2} & 250M     \\
+        XLM-R\textsubscript{BASE} \citep{conneau-etal-2020-unsupervised}  & 80.1             & 270M     \\
+        \tabucline[\hbox {$\scriptstyle \cdot$}]{-}
+        \camembert (fine-tuned)                                           & \textbf{82.5}    & 110M     \\
+        \midrule
+        \multicolumn{3}{c}{\em Supplement: LARGE models}                                                \\
+        XLM-R\textsubscript{LARGE} \citep{conneau-etal-2020-unsupervised} & \underline{85.2} & 550M     \\
+        \tabucline[\hbox {$\scriptstyle \cdot$}]{-}
+        \camembertccnetlarge (fine-tuned)                                 & \textbf{85.7}    & 335M     \\
+        \bottomrule
+    \end{tabu}
     \caption{\textbf{NLI} accuracy on the French XNLI test set (best model selected on validation out of 10). Best scores in bold, second best underlined.\label{table:xnli}}
 \end{table}
 
@@ -196,7 +190,7 @@ In this section we investigate the influence of the homogeneity and size of the 
 
 In order to investigate the need for homogeneous clean data versus more diverse and possibly noisier data, we use alternative sources of pre-training data in addition to \oscar 2019:
 \begin{itemize}
-    \item \textbf{Wikipedia}, which is homogeneous in terms of genre and style. We use the official 2019 French Wikipedia dumps\footnote{ \url{https://dumps.wikimedia.org/backup-index.html}.}. We remove HTML tags and tables using Giuseppe Attardi's  \emph{WikiExtractor}.\footnote{ \url{https://github.com/attardi/wikiextractor}.}
+    \item \textbf{Wikipedia}, which is homogeneous in terms of genre and style. We use the official 2019 French Wikipedia dumps.\footnote{ \url{https://dumps.wikimedia.org/backup-index.html}.} We remove HTML tags and tables using Giuseppe Attardi's  \emph{WikiExtractor}.\footnote{ \url{https://github.com/attardi/wikiextractor}.}
     \item \textbf{\ccnet} \citep{wenzek-etal-2020-ccnet}, a dataset extracted from Common Crawl with a different filtering process than for \oscar. It was built using a language model trained on Wikipedia, in order to filter out bad quality texts such as code or tables.\footnote{We use the \textsc{head} split, which corresponds to the top 33\% of documents in terms of filtering perplexity.} As this filtering step biases the noisy data from Common Crawl to more Wikipedia-like text, we expect \ccnet to act as a middle ground between the unfiltered ``noisy'' \oscar 2019 dataset, and the ``clean'' Wikipedia dataset. As a result of the different filtering processes, \ccnet contains longer documents on average compared to \oscar 2019 with smaller---and often noisier---documents weeded out.
 \end{itemize}
 Table~\ref{table:corpora_statistics} summarizes statistics of these different corpora.
@@ -275,7 +269,7 @@ In other words, when trained on corpora such as \oscar and \ccnet, which are het
 
 \section{Discussion}
 
-Between the pre-publication of this work\footnote{\url{https://arxiv.org/abs/1911.03894}} and the publication of its peer-reviewed version\citep{martin-etal-2020-camembert}, many monolingual language models appeared, e.g. \citep{le-etal-2020-flaubert-unsupervised,virtanen-etal-2019-multilingual,delobelle-etal-2020-robbert}, and for as much as 30 languages \citep{nozza-etal-2020-what}. In almost all tested configurations they displayed better results than multilingual language models such as \mbert \citep{pires-etal-2019-multilingual}. Interestingly, \citet{le-etal-2020-flaubert-unsupervised} showed that using FlauBERT, a RoBERTa-based language model for Contemporary French, which was trained on less but more edited data, in conjunction to \camembert in an ensemble system could improve the performance of a parsing model and establish a new state-of-the-art in constituency parsing for Contemporary French, highlighting thus the complementarity of both models.\footnote{We refer the reader to \citep{le-etal-2020-flaubert-unsupervised} for a comprehensive benchmark and details therein.}
+Between the pre-publication of this work\footnote{\url{https://arxiv.org/abs/1911.03894v1} (First ArXiv version).} and the publication of its peer-reviewed version \citep{martin-etal-2020-camembert}, many monolingual language models appeared, e.g. \citep{le-etal-2020-flaubert-unsupervised,virtanen-etal-2019-multilingual,delobelle-etal-2020-robbert}, and for as much as 30 languages \citep{nozza-etal-2020-what}. In almost all tested configurations they displayed better results than multilingual language models such as \mbert \citep{pires-etal-2019-multilingual}. Interestingly, \citet{le-etal-2020-flaubert-unsupervised} showed that using FlauBERT, another RoBERTa-based language model for Contemporary French, which was trained on less but more edited data, in conjunction to \camembert in an ensemble system could improve the performance of a parsing model and establish a new state-of-the-art in constituency parsing for Contemporary French, highlighting thus the complementarity of both models.\footnote{We refer the reader to \citep{le-etal-2020-flaubert-unsupervised} for a comprehensive benchmark and details therein.}
 
 As it was the case for English when \bert was first released, the availability of similar scale language models for Contemporary French enabled interesting applications, such as large scale anonymization of legal texts, where \camembert-based models established a new state-of-the-art on this task \citep{benesty-2019-ner}, or the first large question answering experiments on a French Squad data set that was released after the publication of \camembert \citep{dhoffschmidt-etal-2020-fquad} where the authors matched human performance using \camembertlarge. Being the first pre-trained Trasnformer-based language model that used the OSCAR corpus and given its impact on the community, \camembert paved the way for many works on monolingual language models that followed. Furthermore, the availability of all its training data favors reproducibility and is a step towards better understanding such models and the impact that the pre-training data has on them. In that spirit, we make the models used in our experiments available via our website\footnote{\url{https://camembert-model.fr}} and via the \texttt{huggingface} and \texttt{fairseq} APIs, in addition to the base \camembert model.
 
